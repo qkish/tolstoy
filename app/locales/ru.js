@@ -87,7 +87,7 @@ const ru = {
 	keep_me_logged_in: 'Оставлять меня залогиненным',
 	// this are used mainly in "submit a story" form
 	title: "Заголовок",
-	write_your_story: 'Написать свою историю',
+	write_your_story: 'Написать отчет за сегодня',
 	editor: 'Редактор',
 	reply: 'Ответить',
 	edit: 'Редактировать',
@@ -591,6 +591,7 @@ const ru = {
 	author_rewards_by_user_name: 'Авторские награды {user_name}',
 	replies_by_user_name: 'Ответы {user_name}',
 	comments_by_user_name: 'Комментарии {user_name}',
+	like: 'Нравится',
 }
 
 export { ru }

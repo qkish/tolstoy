@@ -549,4 +549,5 @@ export const ua = {
 	re_send_email: 'Повторна відправка електронної пошти',
 	email_confirmation: 'Підтвердження електронної пошти',
 	add_image_url: 'Додайте URL вашого зображення',
+	like: 'Подобатися',
 }

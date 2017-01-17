@@ -21,6 +21,11 @@ export default {
     module: {
         loaders: [
             {test: /\.(jpe?g|png)/, loader: 'url-loader?limit=4096'},
+            {
+                test: /fonts.*\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9-]+)?$/,
+
+                loader: 'file-loader'
+            },
             {test: /\.json$/, loader: 'json'},
             {test: /\.js$|\.jsx$/, exclude: /node_modules/, loader: 'babel'},
             {test: /\.svg$/, loader: 'svg-inline-loader'},

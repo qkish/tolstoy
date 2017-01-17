@@ -165,7 +165,7 @@ class Voting extends React.Component {
         let payout = pending_payout + total_author_payout + total_curator_payout;
         if (payout < 0.0) payout = 0.0;
 
-        const up = <Icon name={votingUpActive ? 'empty' : 'chevron-up-circle'} />;
+        const up = <div className={votingUpActive ? 'Voting__upvote_ico' : 'Voting__upvote_ico'}>{translate('like')}</div>;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
 
         const payoutItems = [
@@ -188,7 +188,7 @@ class Voting extends React.Component {
                 {/* <FormattedAsset amount={payout} asset="$" /> */}
                 {/* TODO check FormattedAsset and it's possible replacememnt with LocalizedCurrency */}
                 <LocalizedCurrency amount={payout} />
-                <Icon name="dropdown-arrow" />
+               
             </span>
         </DropdownMenu>;
 
@@ -232,7 +232,8 @@ class Voting extends React.Component {
                           process.env.BROWSER
                           ? <span>
                               <span className={classUp}>
-                                  {votingUpActive ? up : <a href="#" onClick={voteUpClick} title={translate(myVote > 0 ? 'remove_vote' : 'upvote')}>{up}</a>}
+                                  {votingUpActive ? <a href="#">{up}</a>
+                                  : <a href="#" onClick={voteUpClick} title={translate(myVote > 0 ? 'remove_vote' : 'upvote')}>{up}</a>}
                                   {dropdown}
                               </span>
                               {payoutEl}

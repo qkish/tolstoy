@@ -1,5 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+
 const {oneOfType, string, object} = PropTypes
 
 class Userpic extends Component {
@@ -11,10 +14,26 @@ class Userpic extends Component {
 		height: 48
 	}
 
+ constructor(props) {
+        super(props);
+
+this.shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
+    }
+
+
 	render() {
+
+		
+		
 
 		const {props} = this
 		const {dispatch, account, ...rest} = props
+
+
+
+		//let accountobj = '';
+
+		//if (typeof account == 'string') accountobj = dispatch.global.getIn(['accounts', account]).toJS(); else accountobj = account;
 
 		let url
 
@@ -28,18 +47,32 @@ class Userpic extends Component {
 		}
 		// как это сделать средствами react?
 		return 	<div className="Userpic">
+					 {
+					 	process.env.BROWSER
+                          ?
 					<img
 						src={url || '/images/user.png'}
 						{...rest}
-					/>
+					/> 
+					: <LoadingIndicator type="circle" inline />
+				}
+
 				</div>;
 	}
 }
 
 export default connect(
 	(state, {account, ...restOfProps}) => {
+		
 		// you can pass either user object, or username string
-		if (typeof account == 'string') account = state.global.getIn(['accounts', account]).toJS()
+
+		if (typeof account == 'string') {
+			account = state.global.getIn(['accounts', account]);
+			if(account) account = account.toJS();
+
+
+		}
+
 		return { account, ...restOfProps }
 	}
 )(Userpic)

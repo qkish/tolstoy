@@ -209,20 +209,18 @@ class Header extends React.Component {
 
         return (
             <header className="Header noPrint">
-                <div className="Header__top header">
+                <div className="Header__top header container">
                     <div className="expanded row">
                         <div className="columns">
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
                                         {/* <Icon name={APP_ICON} size="2x" /> */}
-                                        <img style={{display: 'inline-block', width: '2rem', height: '2rem'}} src="/images/golos-NG.png" alt="Новогодний логотип Голоса" />
+                                        <img style={{display: 'inline-block', width: '126px', height: '20px'}} src="/images/syslogo.png" alt="Система" />
                                     </Link>
                                 </li>
 
-                                <li className="Header__top-steemit show-for-medium noPrint">
-                                    <Link to={logo_link}>{APP_NAME}<span className="beta">alpha</span></Link>
-                                </li>
+                               
 
                                 {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
                                 {topic_link && <li className="Header__top-topic">{topic_link}</li>}
@@ -237,14 +235,7 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </div>
-                <div className={'Header__sub-nav expanded show-for-medium row' + (this.state.subheader_hidden ? ' hidden' : '')}>
-                    <div className="columns">
-                        <HorizontalMenu items={sort_order_menu_horizontal} />
-                    </div>
-                    <div className="columns shrink">
-                        {sort_order_extra_menu}
-                    </div>
-                </div>
+                
             </header>
         );
     }

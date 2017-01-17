@@ -4,20 +4,24 @@
 }
 
 .App__content {
-    margin-top: 3.5rem;
+    margin-top: 10px;
     /* Small only */
     @media screen and (max-width: 39.9375em) {
-        margin-top: 1.5rem;
+        margin-top: 10px;
     }
     /* Medium only */
     @media screen and (min-width: 40em) and (max-width: 63.9375em) {
-        margin-top: 3.5rem;
+        margin-top: 10px;
     }
     /* Large and above */
     @media screen and (min-width: 64.063em) {
-        margin-top: 3.5rem;
+        margin-top: 10px;
     }
 
+}
+
+.container {
+  width: 915px;
 }
 
 #reformal_tab {

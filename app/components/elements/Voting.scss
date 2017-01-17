@@ -1,7 +1,10 @@
 .Voting {
   white-space: nowrap !important;
+  display: block;
   span {
     white-space: nowrap !important;
+    display: block;
+    float: left;
   }
 }
 
@@ -26,8 +29,50 @@
     margin-left: 0;
   }
   > a {
-    padding-right: 0.5rem;
+    padding-right: 5px;
+     display: block;
   }
+}
+
+.Voting__upvote_ico {
+  background: url(../../assets/icons/likeico.png) no-repeat;
+  background-size: 18px 110px;
+ 
+  height: 20px;
+  margin-top:3px;
+  padding-left: 25px;
+  color: #9da5ab;
+  font-size: 12px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.Voting__amount {
+  color: #9da5ab;
+  font-size: 12px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.Voting__button--upvoted .Voting__upvote_ico{
+background-position: 0 -60px;
+}
+
+.Voting__inner:hover .Voting__upvote_ico {
+  background-position: 0 -30px;
+  text-decoration: none;
+  color: #7f8991;
+}
+.Voting__inner:hover a, .Voting__inner:focus a, .Voting__inner:active a {
+  text-decoration: none;
+}
+.Voting__button a:hover, .Voting__button a:focus, .Voting__button a:active { 
+  text-decoration: none;
+}
+.Voting__inner:hover .Voting__button--upvoted .Voting__upvote_ico {
+   background-position: 0 -90px;
+   text-decoration: none;
+   color: #7f8991;
 }
 
 .Voting__button-up > a:hover, a.confirm_weight:hover {
@@ -41,7 +86,7 @@
 }
 
 .Voting__button-up.votingUp {
-  padding-right: 0.5rem;
+  padding-right: 5px;
   svg {
     border: 1px solid #4BA2F2;
     border-radius: 50%;
@@ -99,23 +144,28 @@
   width: auto;
 
   li > a {
-    padding: 0 0.5rem;
+    padding: 0 5px;
     line-height: 1.25;
   }
 
   li > span {
-    padding: 0 0.5rem;
+    padding: 0 5px;
     line-height: 1.25;
   }
 }
 
+.Voting .DropdownMenu {
+  display: block;
+  float: left;
+  margin-top:3px;
+}
 .DropdownMenu.Voting__voters_list ul {
   li > a {
     //font-weight: 200;
   }
 
   li > span {
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 5px;
     font-size: 82.5%;
     display: block;
     color: #666;
@@ -123,8 +173,8 @@
 }
 
 .Voting__inner {
-  border-right: 1px solid #cacaca;
-  padding-right: .5rem;
+
+  padding-right: 5px;
   margin-right: 1rem;
   position: relative;
   .cancel {

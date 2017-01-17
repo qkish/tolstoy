@@ -134,11 +134,12 @@ export default class LocalizedCurrency extends React.Component {
 									)
 			// if noSymbol is specified return only amount of digits
 			return 	noSymbol
-					? currencyAmount
-					: localCurrencySymbol + ' ' + currencyAmount
+					? currencyAmount : currencyAmount
+
+					//: localCurrencySymbol + ' ' + currencyAmount
 		}
 
-		return 	<span {...rest}>
+		return 	<span {...rest} className="Voting__amount">
 					{localizedCurrency(amount, {maximumFractionDigits: fractionDigits})}
 				</span>
 	}

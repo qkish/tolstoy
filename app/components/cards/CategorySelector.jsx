@@ -56,7 +56,7 @@ class CategorySelector extends React.Component {
 
         const impProps = {...this.props}
         const categoryInput =
-            <input type="text" {...cleanReduxInput(impProps)} ref="categoryRef" tabIndex={tabIndex} disabled={disabled} />
+            <input type="hidden" {...cleanReduxInput(impProps)} ref="categoryRef" tabIndex={tabIndex} disabled={disabled} value ="bmreport"/>
 
         const categorySelect = (
             <select {...cleanReduxInput(this.props)} onChange={this.categorySelectOnChange} ref="categoryRef" tabIndex={tabIndex} disabled={disabled}>

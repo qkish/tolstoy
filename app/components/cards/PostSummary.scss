@@ -3,24 +3,40 @@ ul.PostsList__summaries {
 }
 
 .PostSummary {
-  padding: 0 0 0.5rem;
-  margin: 0 0 1.25vw;
+  padding: 15px 20px 12px 20px;
+  margin: 0 0 15px;
   background-color: #fff;
   clear: left;
+  border: 1px solid #e1e3e4;
+  border-radius: 3px;
   @include clearfix;
+  width: 560px;
 }
 
 .PostSummary__image {
-  float: left;
-  width: 130px;
-  height: 4.5rem;
+  display: block;
+  overflow: hidden;
+  width: 518px;
+  max-height: 1000px;
   background-color: #EEE;
-  background-size: 100%;
+  background-size: cover;
   background-repeat: no-repeat;
-  background-position: 50% 20%;
-  border: 1px solid #EEE;
+
+  margin-top:15px;
+ 
+}
+.PostSummary__image img {
+  width: 518px;
 }
 
+.PostSummary__author_with_userpic {
+
+display: block;
+overflow: hidden;
+clear: both;
+margin-bottom: 15px;
+
+}
 .PostSummary__image-mobile {
   display: block;
   background: #F8F8F8;
@@ -38,8 +54,9 @@ ul.PostsList__summaries {
 
 .PostSummary.with-image .PostSummary__reblogged_by,
 .PostSummary.with-image .PostSummary__content {
-  margin-left: 8.25rem;
+  
 }
+
 
 .PostSummary__header {
   > h1 {
@@ -64,23 +81,30 @@ ul.PostsList__summaries {
 
 .PostSummary__body {
   width: auto;
-  padding: 0.3rem 0.1rem 0.15rem;
-  font-family: "Helvetica Neue", Helvetica, Verdana, Arial, sans-serif;
-  color: #666;
+  padding: 0;
+  font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  color: #1f1f1f;
   overflow: hidden;
-  line-height: 1.4;
-  white-space: nowrap;
+  line-height: 20px;
+ 
   text-overflow: ellipsis;
+  font-weight: 500;
 
-  a {
+  a, a:hover {
     color: inherit;
     display: inline;
+    text-decoration: none;
   }
+
 }
 
 .PostSummary__footer {
   color: $dark-gray;
   font-weight: 400;
+  margin: 0 -20px 0 -20px;
+  padding: 12px 20px 0 20px;
+  border-top: 1px solid #efeff0;
+  margin-top:20px;
   path {
     fill: $dark-gray;
   }
@@ -99,21 +123,29 @@ ul.PostsList__summaries {
 }
 
 .PostSummary__time_author_category {
-  color: $dark-gray;
+  color: #7d7d7d;
+   font-size: 12px;
+   display: block;
   a {
-    color: $dark-gray;
-    font-weight: bold;
-    @include hoverUnderline;
+    color: $black;
+    font-weight: 700;
+    font-size: 14px;
+ 
+   
   }
   padding-right: 1rem;
   margin-right: 1rem;
-  border-right: 1px solid #cacaca;
+
 
   .Reblog__button {
     margin-left: 1rem;
     padding-left: 1rem;
     border-left: 1px solid #cacaca;
   }
+}
+.PostSummary__niche {
+color: #7d7d7d;
+  margin: -3px 0 0 60px;
 }
 
 .PostSummary__time_author_category_small a {
@@ -132,6 +164,14 @@ ul.PostsList__summaries {
     font-weight: bold;
     @include hoverUnderline;
   }
+}
+.PostSummary__avatar_wrapper {
+width: 50px;
+  height: 50px;
+  float: left;
+  border-radius: 25px;
+  background: $bg-gray;
+  margin-right: 10px;
 }
 
 /* Small only */

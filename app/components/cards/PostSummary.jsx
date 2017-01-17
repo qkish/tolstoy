@@ -15,7 +15,7 @@ import TagList from 'app/components/elements/TagList';
 import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
-
+import Userpic from 'app/components/elements/Userpic';
 import Author from 'app/components/elements/Author';
 import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
@@ -24,6 +24,7 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     const author = <strong>{post.author}</strong>;
     return (
         <span className="vcard">
+
             <Tooltip t={new Date(post.created).toLocaleString()}>
                 <span className="TimeAgo"><TimeAgoWrapper date={post.created} /></span>
             </Tooltip>
@@ -31,7 +32,7 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
                 <span itemProp="author" itemScope itemType="http://schema.org/Person">
                     {links ? <Link to={post.author_link}>{author}</Link> :
                         <strong>{author}</strong>}&nbsp;
-                    <Reputation value={authorRepLog10} />
+                   
                 </span>
             </span>
             <span>{' ' + translate('in')}&nbsp;{links ? <TagList post={post} /> : <strong>{detransliterate(post.category)}</strong>}</span>
@@ -63,7 +64,7 @@ class PostSummary extends React.Component {
         netVoteSign: React.PropTypes.number,
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
-        onClick: React.PropTypes.func
+        onClick: React.PropTypes.func,
     };
 
     shouldComponentUpdate(props) {
@@ -95,6 +96,8 @@ class PostSummary extends React.Component {
         let comments_link;
         let is_comment = false;
 
+    
+
         if( content.get( 'parent_author') !== "" ) {
            title_text = "Re: " + content.get('root_title');
            title_link_url = content.get( 'url' );
@@ -113,11 +116,19 @@ class PostSummary extends React.Component {
         </h1>;
 
         // author and category
-        let author_category = <span className="vcard">
+        let author_category = <div className="vcard">
+
+             <div className="Author__avatar_wrapper">
+                          <Link to={'/@' + p.author}>
+                                <Userpic account={p.author} width="50" height="50" />
+                            </Link>
+                </div>            
+                         
+            <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
             <TimeAgoWrapper date={p.created} className="updated" />
-            {} {translate('by')} <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
-            {} {translate('in')} <TagList post={p} single />
-        </span>
+            <div className="PostSummary__niche">Ниша автора</div>
+            
+        </div>
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
            if (currentCategory !== '-' && currentCategory !== p.category && p.category.match(/nsfw/) ) {
@@ -128,12 +139,12 @@ class PostSummary extends React.Component {
         let thumb = null;
         if(pictures && p.image_link) {
           const prox = $STM_Config.img_proxy_prefix
-          const size = (thumbSize == 'mobile') ? '640x480' : '128x256'
+          const size = (thumbSize == 'mobile') ? '640x480' : '556x356'
           const url = (prox ? prox + size + '/' : '') + p.image_link
           if(thumbSize == 'mobile') {
             thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
           } else {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image" style={{backgroundImage: 'url(' + url + ')'}}></a>
+            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image"><img src={url} /></a>
           }
         }
         const commentClasses = []
@@ -141,6 +152,14 @@ class PostSummary extends React.Component {
 
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
+                <div className="PostSummary__author_with_userpic">
+                        <span className="PostSummary__time_author_category show-for-medium">
+                            {author_category}
+                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
+                        </span>
+                </div>
+
+
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
                     <div className="float-right"><Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} flag /></div>
                 </div>
@@ -151,21 +170,22 @@ class PostSummary extends React.Component {
                 <div className="PostSummary__time_author_category_small show-for-small-only">
                     <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAuthorCategory post={p} links={false} authorRepLog10={authorRepLog10} gray={gray} /></a>
                 </div>
-                {thumb}
+              
                 <div className="PostSummary__content">
                     <div className="PostSummary__header show-for-medium">
                         {content_title}
                     </div>
                     {content_body}
-                    <div className="PostSummary__footer">
-                        <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} showList={false} />
-                        <span className="PostSummary__time_author_category show-for-medium">
-                            {author_category}
-                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
-                        </span>
-                        <VotesAndComments post={post} commentsLink={comments_link} />
-                    </div>
+                    
                 </div>
+
+                  {thumb}
+                  
+                <div className="PostSummary__footer">
+                        <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} showList={false} />
+                        
+                </div>
+
             </article>
         )
     }
@@ -175,6 +195,7 @@ export default connect(
     (state, props) => {
         const {post} = props;
         const content = state.global.get('content').get(post);
+
         let pending_payout = 0;
         let total_payout = 0;
         if (content) {

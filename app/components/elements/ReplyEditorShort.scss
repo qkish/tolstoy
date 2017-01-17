@@ -9,27 +9,68 @@
   // height: 40vh;
 }
 
+
+.covered {
+  display: none;
+}
+
+
+
 .ReplyEditor .Markdown {
   border: 1px solid $light-gray;
   padding: 0 1rem;
 }
 
-.ReplyEditor__body {
+.ReplyEditorShort__body {
   margin-top: 1rem;
+  margin-bottom: 5px;
   border-radius: 4px;
   > div {
     border: none;
   }
   > textarea {
-      min-height: 35rem;
+    border: 1px solid #e1e3e4;
+    border-radius: 3px;
+    box-shadow: none;
+
+    resize: none;
+    color: #1f1f1f;
+    height: 50px;
+    font-size: 13px;
+    background-color: #fff;
+    background: url('../../assets/icons/write-ico.png') 15px 15px no-repeat #fff;
+    background-size: 17px 17px;
+    
+    padding: 13px 10px 10px 45px;
+    
+    ::-webkit-input-placeholder {color:#9f9f9f;}
+::-moz-placeholder          {color:#9f9f9f;}/* Firefox 19+ */
+:-moz-placeholder           {color:#9f9f9f;}/* Firefox 18- */
+:-ms-input-placeholder      {color:#9f9f9f;}
   }
+
+  > textarea.expanded-area {
+  resize: auto;
+  height: 100px;
+  background: #fff;
+  padding: 13px 10px 10px 15px;
+}
+ > textarea.collapsed-area {
+  resize: none;
+  height: 50px !important;
+  background: url('../../assets/icons/write-ico.png') 15px 15px no-repeat #fff;
+    background-size: 17px 17px;
+    
+    padding: 13px 10px 10px 45px;
 }
 
-.ReplyEditor__body.rte {
+}
+
+.ReplyEditorShort__body.rte {
   border: 1px solid $medium-gray;
 }
 
-.Comment__replies .ReplyEditor__body {
+.Comment__replies .ReplyEditorShort__body {
   margin-top: -1rem;
 }
 .medium-editor-element {
@@ -38,7 +79,6 @@
 .medium-editor-toolbar-actions button {
     margin-right: 0 !important;
 }
-
 // .medium-insert-images.medium-insert-images-grid.small-grid figure {
 //     width: 10%;
 // }

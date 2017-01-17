@@ -1,5 +1,5 @@
 .UserProfile {
-    margin-top: -1.5rem;
+
 }
 
 .UserProfile__top-nav {
@@ -55,19 +55,11 @@
 .UserProfile__banner {
     text-align: center;
     color: $white;
+    padding: 0 5px 0 5px;
     a {
         color: $white;
     }
-    > div.column {
-        background: #23579d; /* for older browsers */
-        background: linear-gradient(to bottom, #1a4072 0%, #23579d 100%);
-
-        height: 150px;
-    }
-    h2 {
-        padding-top: 20px;
-    }
-
+   
     .UserProfile__buttons {
         position: absolute;
         top: 15px;
@@ -97,6 +89,37 @@
             border-right: 1px solid grey;
         }
     }
+
+    .UserProfile__nameinfo {
+      width: 300px;
+      background: #fff;
+      border: 1px solid #e1e3e4;
+      border-radius: 3px;
+      padding: 24px 20px 20px 20px;
+      color: #0c0c0c;
+    }
+    .UserProfile__nameinfo h2 {
+      font-size: 21px;
+    }
+    .UserProfile__infoboxes {
+      
+      font-size: 12px;
+      line-height: 18px;
+      color: #9f9f9f;
+    
+    }
+}
+
+
+
+.UserProfile__cover {
+  width: 875px;
+  height: 198px;
+  background-position: top left;
+  background-repeat: repeat;
+  background-size: cover;
+  border-radius: 0 0 3px 3px;
+  margin: 0 5px 30px 5px;
 }
 
 .UserWallet__balance {

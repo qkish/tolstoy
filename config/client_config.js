@@ -32,7 +32,7 @@ export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
 export const DEFAULT_LANGUAGE = 'ru' // 'en' // used on application internationalization bootstrap
 export const DEFAULT_CURRENCY = 'RUB'
 export const ALLOWED_CURRENCIES = ['RUB', 'UAH', 'BYN', 'USD', 'EUR', 'CNY', 'GEL', 'KZT']
-export const FRACTION_DIGITS = 2 // default amount of decimal digits
+export const FRACTION_DIGITS = 0 // default amount of decimal digits
 export const FRACTION_DIGITS_MARKET = 3 // accurate amount of deciaml digits (example: used in market)
 
 // meta info

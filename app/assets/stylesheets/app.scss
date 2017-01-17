@@ -11,19 +11,33 @@
 @import "./notifications";
 @import "app/components/all";
 
+body {
+  font: 14px/20px 'museo_sans_cyrl', Arial, sans-serif;
+  color: $black;
+  font-weight: 500;
+}
+
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   body {
-    font-size: 86%;
+
   }
 }
 
 /* Medium only */
 @media screen and (min-width: 40em) and (max-width: 63.9375em) {
   body {
-    font-size: 92%;
+    font-size: 100%;
+
   }
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'museo_sans_cyrl', Arial, sans-serif;
+  color: $black;
+  font-weight: 700;
+}
+
 
 a, path, circle {
   transition: all .3s ease 0s;
@@ -94,6 +108,27 @@ label {
   }
 }
 
+.vframe-short {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  backface-visibility: hidden;
+  flex-flow: column nowrap;
+  align-items: stretch;
+  justify-content: flex-start;
+
+
+  > .vframe__section {
+    flex-shrink: 0;
+    flex-grow: 1;
+  }
+
+  > .vframe__section--shrink {
+    flex-shrink: 1;
+    flex-grow: 0;
+  }
+}
+
 .marginLeft1rem {
   margin-left: 1rem;
 }
@@ -101,7 +136,9 @@ label {
 .NotFound {
   width: 640px;
 }
-
+.row {
+  flex-flow: row nowrap;
+}
 
 .uppercase {text-transform: uppercase}
 

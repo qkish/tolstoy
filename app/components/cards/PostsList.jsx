@@ -228,7 +228,7 @@ class PostsList extends React.Component {
         }
         const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
             <PostSummary post={item} currentCategory={category} thumbSize={thumbSize}
-                ignore={ignore} netVoteSign={netVoteSign} authorRepLog10={authorRepLog10} onClick={this.onPostClick} />
+                ignore={ignore} netVoteSign={netVoteSign} onClick={this.onPostClick} />
         </li>)
         return (
             <div id="posts_list" className="PostsList">

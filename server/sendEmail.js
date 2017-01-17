@@ -3,8 +3,10 @@ import config from '../config';
 
 const sg = sendgrid(config.sendgrid.key);
 
+
 export default function sendEmail(template, to, params, from = null) {
     const tmpl_id = config.sendgrid.templates[template];
+
     if (!tmpl_id) throw new Error(`can't find template ${template}`);
 
     const request = sg.emptyRequest({

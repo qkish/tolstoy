@@ -21,6 +21,11 @@ import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import { translate } from 'app/Translator';
+import HorizontalMenu from 'app/components/elements/HorizontalMenu';
+import Avatar from 'app/components/elements/Avatar';
+import UserprofileNamfeInfo from 'app/components/elements/UserprofileNameInfo';
+
+import resolveRoute from 'app/ResolveRoute';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -279,49 +284,47 @@ export default class UserProfile extends React.Component {
             </div>
          </div>;
 
+
+ 
+
+
         return (
             <div className="UserProfile">
-
-                <div className="UserProfile__banner row expanded">
-
-                    <div className="column">
-                        <div style={{position: "relative"}}>
+            <div className="row">
+                <div className="UserProfile__cover col-sm-12 col-md-12" style={{backgroundImage: "url('http://img.ii4.ru/images/2017/01/15/799687_cover.jpg')"}}>
+                <Avatar account={account} />
+ <div style={{position: "relative"}}>
                             <div className="UserProfile__buttons">
                                 <Follow follower={username} following={accountname} what="blog" />
                             </div>
                         </div>
-                        <h2>{account.name} <Tooltip t={translate('this_is_users_reputations_score_it_is_based_on_history_of_votes', {name})}><span style={{fontSize: "80%"}}>({rep})</span></Tooltip></h2>
+                </div>
+            </div>
 
-                        <div>
-                            <div className="UserProfile__stats">
-                                {
-                                    // before react-intl is properly loaded in browser, translated strings can contain errors
-                                    process.env.BROWSER
-                                    ?   <span>
-                                            <span><Link to={`/@${accountname}/followers`}>{translate('follower_count', {followerCount: followerCount || 0})}</Link></span>
-                                            <span>{translate('post_count', {postCount: account.post_count || 0})}</span>
-                                            <span><Link to={`/@${accountname}/followed`}>{translate('followed_count', {followingCount: followingCount || 0})}</Link></span>
-                                        </span>
-                                    : <LoadingIndicator type="circle" inline />
-                                }
-                            </div>
-                        </div>
-                    </div>
+             <div className="row">
+
+                <div className="UserProfile__banner col-sm-4 col-md-4 expanded">
+
+                    <UserprofileNamfeInfo global={this.props.global} account={account} />
+
                 </div>
-                <div className="UserProfile__top-nav row expanded noPrint">
+                {/* <div className="UserProfile__top-nav row expanded noPrint">
                     {top_menu}
-                </div>
-                <div className="row">
+                </div> */}
+                {/* <div className="row">
                     <div className="column">
                         {printLink}
                     </div>
-                </div>
-                <div className="row">
+                </div>*/}
+                <div className="col-sm-8 col-md-8">
                     <div className="column">
                         {/*section_title && <h2 className="UserProfile__section-title">{section_title}</h2>*/}
+
+                       {/* <HorizontalMenu items={sort_order_menu_horizontal} /> */}
                         {tab_content}
                     </div>
                 </div>
+            </div>
             </div>
         );
     }

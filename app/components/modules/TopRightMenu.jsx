@@ -58,9 +58,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     {/* <li className={lcn + ' buttons'}>
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li> */}
-                    <li className={lcn}>
-                        <Link className="button success" to="/ico">Выплаты авторам</Link>
-                    </li>
+                    
                     <li className={lcn}>
                         <a href="#what-is-golos">Видео</a>
                     </li>
@@ -86,9 +84,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                             </a>
                         </li>}
                     </LinkWithDropdown>
-                    {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                        <span className="hamburger" />
-                    </a></li>}
+                   
                 </ul>
             );
             return      <ul className={mcn + mcl + ' landing'}>
@@ -114,9 +110,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 </a>
                             </li>
                             <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                                <span className="hamburger" />
-                            </a></li>}
+                            
                         </ul>
         }
 
@@ -126,14 +120,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 */
         return (
             <ul className={mcn}>
-                {/* <li className={lcn + ' buttons'}>
-                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li> */}
-                <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Выплаты авторам</Link>
-                </li>
+                
+                
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
-                {submit_story}
+              
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -143,13 +133,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 >
                     {!vertical && <li className={'Header__userpic '}>
                         <a href={account_link} title={username} onClick={e => e.preventDefault()}>
-                            <Userpic account={username} width="36" height="36" />
+                            <Userpic account={username} width="40" height="40" />
                         </a>
                     </li>}
                 </LinkWithDropdown>
-                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                    <span className="hamburger" />
-                </a></li>}
+                
             </ul>
         );
     }
@@ -159,9 +147,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                             {/* <li className={lcn + ' buttons'}>
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                             </li> */}
-                            <li className={lcn}>
-                                <Link className="button success" to="/ico">Выплаты авторам</Link>
-                            </li>
+                            
                             <li className={lcn}>
                                 <a href="#what-is-golos">Видео</a>
                             </li>
@@ -181,25 +167,17 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 </a>
                             </li>
                             <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                            {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                                <span className="hamburger" />
-                            </a></li>}
+                            
                         </ul>
         }
 
         return (
             <ul className={mcn + mcl}>
-                {/* <li className={lcn + ' buttons'}>
-                    <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
-                </li> */}
-                <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Выплаты авторам</Link>
-                </li>
+                
+                
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                    <span className="hamburger" />
-                </a></li>}
+                
             </ul>
         );
     }
@@ -209,9 +187,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     {/* <li className={lcn + ' buttons'}>
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li> */}
-                    <li className={lcn}>
-                        <Link className="button success" to="/ico">Выплаты авторам</Link>
-                    </li>
+                    
                     <li className={lcn}>
                         <a href="#what-is-golos">Видео</a>
                     </li>
@@ -230,9 +206,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                             <span>Вход</span>
                         </a>
                     </li>
-                    {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                        <span className="hamburger" />
-                    </a></li>}
+                    
                 </ul>
     }
     return (
@@ -240,16 +214,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 {/*<li className={lcn + ' buttons'}>
                      <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                 </li>*/}
-                <li className={lcn + ' buttons'}>
-                    <Link to="/ico" className="button success">Выплаты авторам</Link>
-                </li>
+                
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
                 <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
                 <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
-                {submit_story}
-                {toggleOffCanvasMenu && <li className="toggle-menu"><a href="#" onClick={toggleOffCanvasMenu}>
-                    <span className="hamburger" />
-                </a></li>}
+                
+                
             </ul>
         );
 }

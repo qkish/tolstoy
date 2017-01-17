@@ -66,6 +66,9 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
             {/* animate.css were added for landing page */}
             <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet" />
 
+            {/* Latest compiled and minified CSS */}
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css" />
+
             { assets.style.map((href, idx) =>
                 <link href={href} key={idx} rel="stylesheet" type="text/css" />) }
             <title>{page_title}</title>
