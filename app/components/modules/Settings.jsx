@@ -20,8 +20,8 @@ class Settings extends React.Component {
         userImage: this.props.userImage || '',
 
         // BM data
-        first_name: this.props.first_name || '',
-        last_name: this.props.last_name || '',
+        first_name: this.props.firstName || '',
+        last_name: this.props.lastName || '',
         age: this.props.age || '',
         city: this.props.city || '',
         occupation: this.props.occupation || '',
@@ -91,50 +91,7 @@ class Settings extends React.Component {
         })
     }
 
-    // -----------------------------
-    // User base info handlers
-
-    handleUserBaseInfoSubmit = event => {
-        event.preventDefault()
-        this.setState({loading: true})
-
-        const {account, updateAccount} = this.props
-        let {metaData} = this.props
-
-        if (!metaData) metaData = {}
-        if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
-        metaData.first_name = this.state.first_name;
-        metaData.last_name = this.state.last_name;
-        metaData.city = this.state.city;
-        metaData.age = this.state.age;
-        metaData.occupation = this.state.occupation;
-
-        metaData = JSON.stringify(metaData);
-
-        updateAccount({
-            json_metadata: metaData,
-            account: account.name,
-            memo_key: account.memo_key,
-            errorCallback: err => {
-                console.error('updateAccount() error!', err)
-                this.setState({
-                    loading: false,
-                    errorMessage: translate('server_returned_error')
-                })
-            },
-            successCallback: () => {
-                console.log('SUCCES')
-                // clear form ad show successMessage
-                this.setState({
-                    loading: false,
-                    errorMessage: '',
-                    successMessage: translate('saved') + '!',
-                })
-                // remove successMessage after a while
-                setTimeout(() => this.setState({successMessage: ''}), 2000)
-            }
-        })
-    }
+    
 
     handleUserFirstNameChange = event => {
         this.setState({first_name: event.target.value})
@@ -195,6 +152,51 @@ class Settings extends React.Component {
     }
 
 
+// -----------------------------
+    // User base info handlers
+
+    handleUserBaseInfoSubmit = event => {
+        event.preventDefault()
+        this.setState({loading: true})
+
+        const {account, updateAccount} = this.props
+        let {metaData} = this.props
+
+        if (!metaData) metaData = {}
+        if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
+        metaData.first_name = this.state.first_name;
+        metaData.last_name = this.state.last_name;
+        metaData.city = this.state.city;
+        metaData.age = this.state.age;
+        metaData.occupation = this.state.occupation;
+
+        metaData = JSON.stringify(metaData);
+
+        updateAccount({
+            json_metadata: metaData,
+            account: account.name,
+            memo_key: account.memo_key,
+            errorCallback: err => {
+                console.error('updateAccount() error!', err)
+                this.setState({
+                    loading: false,
+                    errorMessage: translate('server_returned_error')
+                })
+            },
+            successCallback: () => {
+                console.log('SUCCES')
+                // clear form ad show successMessage
+                this.setState({
+                    loading: false,
+                    errorMessage: '',
+                    successMessage: translate('saved') + '!',
+                })
+                // remove successMessage after a while
+                setTimeout(() => this.setState({successMessage: ''}), 2000)
+            }
+        })
+    }
+
     //HandleUsername
 
       handleUsernameChange = event => {
@@ -242,6 +244,7 @@ class Settings extends React.Component {
     render() {
         const {state, props} = this
         const {locale} = props.intl
+
 
         return <div className="Settings">
                     <div className="row">
