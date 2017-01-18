@@ -23,7 +23,7 @@ import VerticalMenu from 'app/components/elements/VerticalMenu';
 import { translate } from 'app/Translator';
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import Avatar from 'app/components/elements/Avatar';
-import UserprofileNamfeInfo from 'app/components/elements/UserprofileNameInfo';
+import UserprofileNameInfo from 'app/components/elements/UserprofileNameInfo';
 
 import resolveRoute from 'app/ResolveRoute';
 
@@ -305,7 +305,7 @@ export default class UserProfile extends React.Component {
 
                 <div className="UserProfile__banner col-sm-4 col-md-4 expanded">
 
-                    <UserprofileNamfeInfo global={this.props.global} account={account} />
+                    <UserprofileNameInfo global={this.props.global} account={account} />
 
                 </div>
                 {/* <div className="UserProfile__top-nav row expanded noPrint">

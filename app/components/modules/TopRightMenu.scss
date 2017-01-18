@@ -1,6 +1,40 @@
+.TopRightMenu__search-icon {
+    width: 55px;
+    height: 59px;
+    background: url(../../assets/icons/search.png) no-repeat;
+    background-position: center 22px;
+    background-size: 16px 56px;
+    padding: 0;
+    float: left;
+    border-left: 1px solid #f0f1f1;
+}
+
+.TopRightMenu__search-icon:hover {
+    background-position: center -18px;
+}
+
+.TopRightMenu_sila {
+     background: url(../../assets/icons/likeico.png) no-repeat;
+    background-position: 20px 22px;
+    background-size: 18px 181px;
+    height: 59px;
+    padding: 20px 20px 0 44px;
+    float: left;
+    border-left: 1px solid #f0f1f1;
+    font: 14px/20px 'museo_sans_cyrl', Arial, sans-serif;
+    color: #9da5ab;
+    text-decoration: none;
+}
+.TopRightMenu_sila:hover {
+        background-position: 20px -33px;
+}
+.TopRightMenu_sila-link, .TopRightMenu_sila-link:hover, .TopRightMenu_sila-link:focus, .TopRightMenu_sila-link:active {
+    text-decoration: none;
+}
+
 .sub-menu {
     li {
-        padding: .7rem 1rem;
+  
         a {
             padding: 0px;
         }
@@ -21,4 +55,8 @@ li.buttons {
 
 li {
     .button.alert, .button.success { padding: 2px 10px; }
+}
+
+.menu li a {
+    padding: 0;
 }

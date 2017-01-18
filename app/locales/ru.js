@@ -592,6 +592,30 @@ const ru = {
 	replies_by_user_name: 'Ответы {user_name}',
 	comments_by_user_name: 'Комментарии {user_name}',
 	like: 'Нравится',
+
+    // for Setting Component -> account metadata
+    user_base_info: 'Основная информация',
+    first_name: 'Имя',
+    last_name: 'Фамилия',
+    age: 'Возраст',
+    city: 'Город',
+    occupation: 'Ниша',
+    user_target_info: 'Бизнес цель',
+    target_plan: 'Цель',
+    target_date: 'Срок',
+    target_point_a: 'Точка А',
+    target_point_b: 'Точка Б',
+    user_contacts_info: 'Основная информация',
+    website: 'Сайт',
+    instagram: 'Instagram',
+    facebook: 'Facebook',
+    VK: 'VK',
+    user_photo_info: 'Фотография профиля',
+    user_more_info: 'Дополнительная информация',
+    looking_for: 'Могу',
+    i_can: 'Ищу',
+
+    system_settings: 'Настройки системы',
 }
 
 export { ru }

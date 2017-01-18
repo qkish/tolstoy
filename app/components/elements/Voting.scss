@@ -36,7 +36,7 @@
 
 .Voting__upvote_ico {
   background: url(../../assets/icons/likeico.png) no-repeat;
-  background-size: 18px 110px;
+  background-size: 18px 181px;
  
   height: 20px;
   margin-top:3px;
@@ -55,11 +55,11 @@
 }
 
 .Voting__button--upvoted .Voting__upvote_ico{
-background-position: 0 -60px;
+background-position: 0 -110px;
 }
 
 .Voting__inner:hover .Voting__upvote_ico {
-  background-position: 0 -30px;
+  background-position: 0 -55px;
   text-decoration: none;
   color: #7f8991;
 }
@@ -70,7 +70,7 @@ background-position: 0 -60px;
   text-decoration: none;
 }
 .Voting__inner:hover .Voting__button--upvoted .Voting__upvote_ico {
-   background-position: 0 -90px;
+   background-position: 0 -165px;
    text-decoration: none;
    color: #7f8991;
 }

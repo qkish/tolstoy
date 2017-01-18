@@ -33,11 +33,15 @@
   //.submit-story {
   //  margin-right: 1rem;
   //}
+
+  .container {
+    width: 875px;
+  }
 }
 
 .Header__top {
 
-  padding: 10px 0 0 0;
+  padding: 0 0 0 0;
 
   ul > li.Header__top-logo {
     padding: 10px 0 .35rem 0;
@@ -59,7 +63,6 @@
 
 .Header__userpic {
   position: relative;
-  top: -6px;
   img {
     width: 40px;
     height: 40px;
@@ -71,7 +74,11 @@
 }
 
 .menu > li.Header__userpic > a {
-  padding: 5px 0 0 0;
+  padding: 10px 0 0 13px;
+  height: 59px;
+  border-left: 1px solid #f0f1f1;
+  display: block;
+  float: left;
 }
 
 ul > li.Header__top-logo > a {

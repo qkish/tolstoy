@@ -177,26 +177,7 @@ class App extends React.Component {
         if (new_visitor && this.state.showBanner
                   && !/^\/ico$/.test(location.pathname) && !/^\/$/.test(location.pathname)  // LANDING
             ) {
-            welcome_screen = (
-                <div className="welcomeWrapper">
-                    <div className="welcomeBanner">
-                        <CloseButton onClick={() => this.setState({showBanner: false})} />
-                        <div className="text-center">
-                            <h2>{translate("welcome_to_the_blockchain")}</h2>
-                            <h4>{translate("your_voice_is_worth_something")}</h4>
-                            <br />
-                            <a className="button" href="/create_account" onClick={showSignUp}> <b>{translate("sign_up")}</b> </a>
-                            &nbsp; &nbsp; &nbsp;
-                            <a className="button hollow uppercase" href={LANDING_PAGE_URL} target="_blank"> <b>{translate("learn_more")}</b> </a>
-                            <br />
-                            <br />
-                            <div className="tag3">
-                                <b>{translate("get_INVEST_TOKEN_when_sign_up", {signupBonus: localizedCurrency(signup_bonus)})}</b>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
+            welcome_screen = null;
         }
 
         let header_bar = null

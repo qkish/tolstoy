@@ -10,6 +10,8 @@ import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdow
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { translate } from 'app/Translator';
+import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions';
+
 
 const defaultNavigate = (e) => {
     // do not navigate if middle mouse button is clicked
@@ -34,6 +36,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
+
+
+        
+
     function trackAnalytics(eventType) {
         console.log(eventType)
         analytics.track(eventType)
@@ -59,18 +65,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li> */}
                     
-                    <li className={lcn}>
-                        <a href="#what-is-golos">Видео</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#docs">Документация</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#faq">FAQ</a>
-                    </li>
-                    <li className={lcn}>
-                        <a href="#team">Команда</a>
-                    </li>
+                    
                     <LinkWithDropdown
                         closeOnClickOutside
                         dropdownPosition="bottom"
@@ -91,18 +86,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                             {/* <li className={lcn + ' buttons'}>
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                             </li> */}
-                            <li className={lcn}>
-                                <a href="#what-is-golos">Видео</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#docs">Документация</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#faq">FAQ</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#team">Команда</a>
-                            </li>
+                           
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="/login.html">
                                     <img src="images/user.png" width="36" height="36" />
@@ -120,9 +104,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 */
         return (
             <ul className={mcn}>
+                 <li className={lcn}><a href="#" className="TopRightMenu_sila-link"><div className="TopRightMenu_sila">233</div></a></li>
                 
-                
-                <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <Icon name="search" />}</a></li>
+                <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <div className="TopRightMenu__search-icon"></div>}</a></li>
               
                 <LinkWithDropdown
                     closeOnClickOutside
@@ -148,18 +132,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                             </li> */}
                             
-                            <li className={lcn}>
-                                <a href="#what-is-golos">Видео</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#docs">Документация</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#faq">FAQ</a>
-                            </li>
-                            <li className={lcn}>
-                                <a href="#team">Команда</a>
-                            </li>
+                           
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="/login.html">
                                     <img src="images/user.png" width="36" height="36" />
@@ -173,9 +146,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 
         return (
             <ul className={mcn + mcl}>
+               
                 
-                
-                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
+                {!vertical && <li><a href="/static/search.html" title="Поиск"><div className="TopRightMenu__search-icon"></div></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
                 
             </ul>
@@ -215,7 +188,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                      <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                 </li>*/}
                 
-                {!vertical && <li><a href="/static/search.html" title="Поиск"><Icon name="search" /></a></li>}
+                {!vertical && <li><a href="/static/search.html" title="Поиск"><div className="TopRightMenu__search-icon"></div></a></li>}
                 <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
                 <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
                 
@@ -235,6 +208,7 @@ TopRightMenu.propTypes = {
     vertical: React.PropTypes.bool,
     navigate: React.PropTypes.func,
     toggleOffCanvasMenu: React.PropTypes.func
+
 };
 
 export default connect(
@@ -248,6 +222,7 @@ export default connect(
             }
         }
         const username = state.user.getIn(['current', 'username']);
+        const current_user = state.user.get('current');
         const loggedIn = !!username;
         return {
             username,

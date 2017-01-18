@@ -216,7 +216,7 @@ class Header extends React.Component {
                                 <li className="Header__top-logo">
                                     <Link to={logo_link}>
                                         {/* <Icon name={APP_ICON} size="2x" /> */}
-                                        <img style={{display: 'inline-block', width: '126px', height: '20px'}} src="/images/syslogo.png" alt="Система" />
+                                        <img style={{display: 'inline-block', width: '41px', height: '36px'}} src="/images/bmproudlogo.png" alt="Система" />
                                     </Link>
                                 </li>
 
@@ -231,7 +231,7 @@ class Header extends React.Component {
                             </ul>
                         </div>
                         <div className="columns shrink">
-                            <TopRightMenu {...this.props} />
+                            <TopRightMenu {...this.props} global={this.props.global}/>
                         </div>
                     </div>
                 </div>
