@@ -308,7 +308,7 @@ function* handleRedditCallback() {
 function retrieveVkUserData(access_token, userId) {
     console.log('https://api.vk.com/method/account.getProfileInfo?v=5.53&user_ids='+userId)
     return new Promise((resolve, reject) => {
-       vk.query().get('https://api.vk.com/method/users.get?v=5.53&user_ids='+userId+'&fields=verified,sex,bdate,city,country,timezone,screen_name')
+       vk.query().get('https://api.vk.com/method/user.get?v=5.53&user_ids='+userId+'&fields=verified,sex,bdate,city,country,timezone,screen_name')
        .request((err, res) => {
                 if (err) {
                     reject(err);

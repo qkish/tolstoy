@@ -21,11 +21,18 @@ import Tooltip from 'app/components/elements/Tooltip';
 import { LinkWithDropdown } from 'react-foundation-components/lib/global/dropdown';
 import VerticalMenu from 'app/components/elements/VerticalMenu';
 import { translate } from 'app/Translator';
+import ReplyEditorShort from 'app/components/elements/ReplyEditorShort'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
-import Avatar from 'app/components/elements/Avatar';
-import UserprofileNameInfo from 'app/components/elements/UserprofileNameInfo';
-
 import resolveRoute from 'app/ResolveRoute';
+
+// BMChain components
+import ViewUserBase from 'app/components/elements/user/views/ViewUserBase';
+import ViewUserTarget from 'app/components/elements/user/views/ViewUserTarget';
+import ViewUserMore from 'app/components/elements/user/views/ViewUserMore';
+import Avatar from 'app/components/elements/Avatar';
+
+const formId = 'submitStory';
+const SubmitReplyEditor = ReplyEditorShort(formId);
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -100,7 +107,6 @@ export default class UserProfile extends React.Component {
         const rep = repLog10(account.reputation);
 
         const isMyAccount = username === account.name
-        const {name} = account
         let tab_content = null;
 
         const global_status = this.props.global.get('status');
@@ -133,16 +139,14 @@ export default class UserProfile extends React.Component {
             rewardsClass = "active";
             tab_content = <AuthorRewards global={this.props.global}
                           account={account}
-                          current_user={current_user}
-                          />
+                          current_user={current_user} />
         }
         else if( section === 'followers' ) {
             if (followers && followers.has('result')) {
                 tab_content = <UserList
                           title={translate('followers')}
                           account={account}
-                          users={followers}
-                          />
+                          users={followers} />
             }
         }
         else if( section === 'followed' ) {
@@ -150,8 +154,7 @@ export default class UserProfile extends React.Component {
                 tab_content = <UserList
                           title="Followed"
                           account={account}
-                          users={following}
-                          />
+                          users={following} />
             }
         }
         else if( section === 'settings' ) {
@@ -160,27 +163,40 @@ export default class UserProfile extends React.Component {
         else if( section === 'posts' && account.post_history ) {
            if( account.posts )
            {
-              tab_content = <PostsList
-                  emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
-                  posts={account.posts.map(p => `${account.name}/${p}`)}
-                  loading={fetching}
-                  category="posts"
-                  loadMore={null}
-                  showSpam />;
+              tab_content = <section>
+                  {isMyAccount ?
+                      <div className="SubmitPost" style={{marginLeft: "10px"}}>
+                          <SubmitReplyEditor
+                              type="submit_story" />
+                      </div>: null}
+                  <PostsList
+                      emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
+                      posts={account.posts.map(p => `${account.name}/${p}`)}
+                      loading={fetching}
+                      category="posts"
+                      loadMore={null}
+                      showSpam />
+              </section>;
            }
            else {
               tab_content = (<center><LoadingIndicator type="circle" /></center>);
            }
         } else if(!section || section === 'blog') {
             if (account.blog) {
-                tab_content = <PostsList
-                    emptyText={translate('user_hasnt_started_bloggin_yet', {name})}
-                    posts={account.blog}
-                    loading={fetching}
-                    category="blog"
-                    loadMore={this.loadMore}
-                    accountName={account.name}
-                    showSpam />;
+                tab_content = <section>
+                    {isMyAccount ?
+                        <div className="SubmitPost" style={{marginLeft: "10px"}}>
+                            <SubmitReplyEditor type="submit_story" />
+                        </div>: null}
+                    <PostsList
+                        emptyText={translate('user_hasnt_started_bloggin_yet', {name})}
+                        posts={account.blog}
+                        loading={fetching}
+                        category="blog"
+                        loadMore={this.loadMore}
+                        accountName={account.name}
+                        showSpam />
+                    </section>;
             } else {
                 tab_content = (<center><LoadingIndicator type="circle" /></center>);
             }
@@ -199,7 +215,8 @@ export default class UserProfile extends React.Component {
         //     }
         // }
         else if( (section === 'recent-replies') && account.recent_replies ) {
-              tab_content = <PostsList
+              tab_content =
+                  <PostsList
                   emptyText={translate('user_hasnt_had_any_replies_yet', {name}) + '.'}
                   posts={account.recent_replies}
                   loading={fetching}
@@ -215,20 +232,28 @@ export default class UserProfile extends React.Component {
         //    console.log( "no matches" );
         }
 
+        const jsonMetaData = JSON.parse(account.json_metadata)
+        const {firstName, lastName} = jsonMetaData
+
+        let name
+        if (firstName !== '' && lastName !== '')
+            name = firstName + ' ' + lastName
+        else name = account.name;
+
         let printLink = null;
         let section_title = account.name + ' / ' + section;
         if( section === 'blog' ) {
            section_title = translate('users_blog', {name});
         } else if( section === 'transfers' ) {
-           section_title = account.name + translate('users_wallet', {name});
+           section_title = fullName + translate('users_wallet', {name});
         } else if( section === 'curation-rewards' ) {
-          section_title = account.name + translate('users_curation_rewards', {name});
+          section_title = fullName + translate('users_curation_rewards', {name});
       } else if( section === 'author-rewards' ) {
-        section_title = account.name + translate('users_author_rewards', {name});
+        section_title = fullName + translate('users_author_rewards', {name});
         } else if( section === 'password' ) {
            section_title = ''
         } else if( section === 'permissions' ) {
-           section_title = account.name + translate('users_permissions', {name})
+           section_title = fullName + translate('users_permissions', {name})
            if(isMyAccount && wifShown) {
 
                printLink = <div><a className="float-right noPrint" onClick={onPrint}>
@@ -284,30 +309,32 @@ export default class UserProfile extends React.Component {
             </div>
          </div>;
 
-
- 
-
+        const background = jsonMetaData.background_image;
 
         return (
             <div className="UserProfile">
             <div className="row">
-                <div className="UserProfile__cover col-sm-12 col-md-12 col-xs-12" style={{backgroundImage: "url('http://img.ii4.ru/images/2017/01/15/799687_cover.jpg')"}}>
+                <div className="UserProfile__cover col-sm-12"
+                     style={{backgroundImage: "url('" + background + "')"}}>
                 <Avatar account={account} />
- <div style={{position: "relative"}}>
-                            <div className="UserProfile__buttons">
-                                <Follow follower={username} following={accountname} what="blog" />
-                            </div>
+                    <div style={{position: "relative"}}>
+                        <div className="UserProfile__buttons">
+                            <Follow follower={username} following={accountname} what="blog" />
                         </div>
+                    </div>
                 </div>
             </div>
 
              <div className="row">
 
-                <div className="UserProfile__banner col-sm-4 col-md-4 col-xs-12">
-
-                    <UserprofileNameInfo global={this.props.global} account={account} />
-
+                <div className="UserProfile__banner col-sm-4 col-xs-12">
+                    <ViewUserBase global={this.props.global} account={account} />
+                    <br/>
+                    <ViewUserTarget global={this.props.global} account={account} />
+                    <br />
+                    <ViewUserMore global={this.props.global} account={account} />
                 </div>
+
                 {/* <div className="UserProfile__top-nav row expanded noPrint">
                     {top_menu}
                 </div> */}
@@ -316,7 +343,7 @@ export default class UserProfile extends React.Component {
                         {printLink}
                     </div>
                 </div>*/}
-                <div className="UserProfile_tabcontent col-sm-8 col-md-8 col-xs-12">
+                <div className="UserProfile_tabcontent col-sm-8 col-xs-12">
                     <div>
                         {/*section_title && <h2 className="UserProfile__section-title">{section_title}</h2>*/}
 

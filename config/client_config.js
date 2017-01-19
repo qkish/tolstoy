@@ -28,7 +28,7 @@ export const VEST_TICKER = 'GESTS'
 export const DEBT_TICKER = 'GBG'
 export const DEBT_TOKEN_SHORT = 'GBG' // 'SD'
 
-// application settings
+// application users
 export const DEFAULT_LANGUAGE = 'ru' // 'en' // used on application internationalization bootstrap
 export const DEFAULT_CURRENCY = 'RUB'
 export const ALLOWED_CURRENCIES = ['RUB', 'UAH', 'BYN', 'USD', 'EUR', 'CNY', 'GEL', 'KZT']

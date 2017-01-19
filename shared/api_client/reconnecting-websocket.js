@@ -110,7 +110,7 @@
 
     function ReconnectingWebSocket(url, protocols, options) {
 
-        // Default settings
+        // Default users
         var settings = {
 
             /** Whether this instance should log debug messages. */
@@ -147,7 +147,7 @@
         ReconnectingWebSocket.CLOSED = WebSocket.CLOSED;
         if (!console.debug) console.debug = console.log;
 
-        // Overwrite and define settings with options if they exist.
+        // Overwrite and define users with options if they exist.
         for (var key in settings) {
             if (typeof options[key] !== 'undefined') {
                 this[key] = options[key];

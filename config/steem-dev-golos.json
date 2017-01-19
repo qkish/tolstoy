@@ -12,7 +12,7 @@
       "protocol": "http",
       "host": "localhost:3002"
     },
-   
+
     "facebook": {
       "key": "",
       "secret": "",
@@ -42,7 +42,7 @@
     "signing_key": "5J.....",
     "recovery_account": "cyberfounder"
   },
-  "ws_connection_client": "wss://ws.golos.io",
+  "ws_connection_client": "ws://95.85.35.245:8090"",
   "ws_connection_server": [
     "wss://ws.golos.io"
   ],

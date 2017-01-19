@@ -605,7 +605,7 @@ const ru = {
     target_date: 'Срок',
     target_point_a: 'Точка А',
     target_point_b: 'Точка Б',
-    user_contacts_info: 'Основная информация',
+    user_contacts_info: 'Контактная информация',
     website: 'Сайт',
     instagram: 'Instagram',
     facebook: 'Facebook',
@@ -616,6 +616,17 @@ const ru = {
     i_can: 'Ищу',
 
     system_settings: 'Настройки системы',
+    user_background_info: 'Фоновое изображение',
+    add_background_image_url: 'Добавить фоновое изображение',
+
+    // Setting tabs
+    base_tab: 'Основные',
+    more_tab: 'О себе',
+    target_tab: 'Цель',
+    contacts_tab: 'Контакты',
+    avatar_tab: 'Аватар',
+    background_tab: 'Фон',
+    system_tab: 'Дополнительно',
 }
 
 export { ru }

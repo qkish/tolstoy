@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
+import _urls from 'shared/clash/images/urls'
 
 const {oneOfType, string, object} = PropTypes
 
@@ -23,8 +24,8 @@ this.shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 
 	render() {
 
-		
-		
+
+
 
 		const {props} = this
 		const {dispatch, account, ...rest} = props
@@ -45,25 +46,17 @@ this.shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 			const size = props.width + 'x' + props.height
 			url = proxy + size + '/' + url;
 		}
-		// как это сделать средствами react?
 		return 	<div className="Userpic">
-					 {
-					 	process.env.BROWSER
-                          ?
-					<img
-						src={url || '/images/user.png'}
-						{...rest}
-					/> 
-					: <LoadingIndicator type="circle" inline />
-				}
-
+                    {process.env.BROWSER ?
+                        <img src={_urls.proxyImage(url || '')} {...rest} /> :
+                        <LoadingIndicator type="circle" inline />}
 				</div>;
 	}
 }
 
 export default connect(
 	(state, {account, ...restOfProps}) => {
-		
+
 		// you can pass either user object, or username string
 
 		if (typeof account == 'string') {

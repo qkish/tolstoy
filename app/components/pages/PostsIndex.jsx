@@ -244,9 +244,8 @@ class PostsIndex extends React.Component {
 
                 {formFront}
 
-<HorizontalMenu items={sort_order_menu_horizontal} />
+                    <HorizontalMenu items={sort_order_menu_horizontal} />
 
-                
                     <PostsList ref="list"
                         posts={posts ? posts.toArray() : []}
                         loading={fetching}

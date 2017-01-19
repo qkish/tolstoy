@@ -73,7 +73,7 @@ class ReplyEditor extends React.Component {
         submitting: React.PropTypes.bool.isRequired,
         invalid: React.PropTypes.bool.isRequired,
 
-       
+
 
 
 
@@ -86,7 +86,7 @@ class ReplyEditor extends React.Component {
         parent_permlink: '',
         type: 'submit_comment',
         metaLinkData: Map(),
-        
+
     }
 
     constructor() {
@@ -229,7 +229,7 @@ class ReplyEditor extends React.Component {
     onChange(rte_value) {
         this.setState({rte_value})
         console.log('2')
-        
+
 
         let html = rte_value.toString('html');
         if (html === '<p><br></p>') html = '';
@@ -296,16 +296,13 @@ class ReplyEditor extends React.Component {
     }
     handleOnBlur = event => {
         let bodynow = this.props.fields.body.value
-  
 
         if (bodynow == '') {
-        this.setState({btnVisible: 'covered'})
-        this.setState({textareaState: 'collapsed-area'})
+            this.setState({btnVisible: 'covered'})
+            this.setState({textareaState: 'collapsed-area'})
+        }
     }
 
-    
-}
-  
 
     render() {
         // NOTE title, category, and body are UI form fields ..
@@ -379,20 +376,20 @@ class ReplyEditor extends React.Component {
                         </div>
 
                         <div className={'ReplyEditorShort__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
-                         
+
                                 <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onFocus={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState} />
-                        
+
                         </div>
                         <div className={vframe_section_shrink_class}>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
                         </div>
 
-                       
+
                             {hasCategory && <span>
                                 <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
-                               
+
                             </span>}
-                      
+
                         <div className={vframe_section_shrink_class}>
                             {postError && <div className="error">{translateError(postError)}</div>}
                         </div>
@@ -402,15 +399,15 @@ class ReplyEditor extends React.Component {
                             &nbsp; {!loading && this.props.onCancel &&
                                 <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
                             }
-    
+
                             {isStory && !isEdit && <div className="float-right">
-                          
+
                                 <input type="hidden" onChange={this.toggleAllSteemPower} checked={allSteemPower} />
 
                                 <input type="hidden" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />
                             </div>}
                         </div>
-                        
+
                     </form>
                 </div>
             </div>
