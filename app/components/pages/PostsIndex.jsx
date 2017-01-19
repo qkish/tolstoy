@@ -36,7 +36,8 @@ class PostsIndex extends React.Component {
         status: PropTypes.object,
         routeParams: PropTypes.object,
         requestData: PropTypes.func,
-        loading: PropTypes.bool
+        loading: PropTypes.bool,
+        current_account_name: React.PropTypes.string
     };
 
     static defaultProps = {
@@ -80,6 +81,7 @@ class PostsIndex extends React.Component {
     render() {
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
         let topics_order = order;
+
 
         let posts = [];
         let emptyText = '';
@@ -226,17 +228,20 @@ class PostsIndex extends React.Component {
                 return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
             }); 
 
+
+         let formFront = '';
+         if (current_account_name) formFront = <div className="SubmitPost">
+               <SubmitReplyEditor type="submit_story" />
+            </div>;
+
         
-       
 
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
                 <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
 
-                <div className="SubmitPost">
-               <SubmitReplyEditor type="submit_story" />
-            </div>
+                {formFront}
 
 <HorizontalMenu items={sort_order_menu_horizontal} />
 
