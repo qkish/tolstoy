@@ -112,6 +112,12 @@ z-index: 101 !important
   display: none;
 }
 
+.button {
+  background: #196aff;
+  text-transform: none;
+  padding: 10px 20px;
+}
+
 
 /* live chat specific styles */
 @media #{$medium-only} {

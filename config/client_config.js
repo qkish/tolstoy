@@ -1,11 +1,11 @@
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
-export const APP_NAME = 'Голос' // 'Steemit'
+export const APP_NAME = 'БМ Платформа' // 'Steemit'
 // sometimes APP_NAME is written in non-latin characters, but they are needed for technical purposes
 // ie. "Голос" > "Golos"
-export const APP_NAME_LATIN = 'Golos' // 'Steemit'
-export const APP_NAME_UPPERCASE = 'Golos' // 'STEEMIT'
-export const APP_ICON = 'golos' // 'steem'
-export const APP_URL = 'golos.io' // 'steemit.com'
+export const APP_NAME_LATIN = 'BM Platform' // 'Steemit'
+export const APP_NAME_UPPERCASE = 'BM PLATFORM' // 'STEEMIT'
+export const APP_ICON = 'bmplatform' // 'steem'
+export const APP_URL = 'feed.molodost.bz' // 'steemit.com'
 export const LIQUID_TOKEN = 'Голос' // 'Steem'
 // sometimes it's impossible to use html tags to style coin name, hence usage of _UPPERCASE modifier
 export const LIQUID_TOKEN_UPPERCASE = 'ГОЛОС' // 'STEEM'
@@ -36,12 +36,12 @@ export const FRACTION_DIGITS = 0 // default amount of decimal digits
 export const FRACTION_DIGITS_MARKET = 3 // accurate amount of deciaml digits (example: used in market)
 
 // meta info
-export const TWITTER_HANDLE = '@goloschain'
+export const TWITTER_HANDLE = '@molodost_bz'
 export const SHARE_IMAGE = 'https://golos.io/images/golos-share.png'
 export const TWITTER_SHARE_IMAGE = 'https://golos.io/images/golos-twshare.png'
-export const SITE_DESCRIPTION = 'Голос - социальная сеть, построенная на публичном блокчейне. Вознаграждение пользователей осуществляется за счет дополнительной эмиссии токенов. При этом распределением токенов управляют текущие пользователи сети через голосование за лучший контент.'
+export const SITE_DESCRIPTION = 'Платформа БМ для достижения финансового результата в автоматическом режиме.'
 
 // various
-export const SUPPORT_EMAIL = 't@cyber.fund'
+export const SUPPORT_EMAIL = 'gqkish@gmail.com'
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
 export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september
