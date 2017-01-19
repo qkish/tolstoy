@@ -5,7 +5,7 @@ import Icon from 'app/components/elements/Icon.jsx';
 export default class VerticalMenu extends React.Component {
     static propTypes = {
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        title: React.PropTypes.string,
+        
         className: React.PropTypes.string,
         hideValue: React.PropTypes.oneOfType([
             React.PropTypes.string,
@@ -19,8 +19,8 @@ export default class VerticalMenu extends React.Component {
 
     render() {
         const {items, title, className, hideValue} = this.props;
-        return <ul className={'VerticalMenu menu vertical' + (className ? ' ' + className : '')}>
-            {title && <li className="title">{title}</li>}
+        return <ul className={'VerticalMenu vertical' + (className ? ' ' + className : '')}>
+          
             {items.map(i => {
                 if(i.value === hideValue) return null
                 return <li key={i.value} onClick={this.closeMenu}>

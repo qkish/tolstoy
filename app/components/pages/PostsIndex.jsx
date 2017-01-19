@@ -14,7 +14,8 @@ import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import resolveRoute from 'app/ResolveRoute';
 import { APP_NAME, APP_ICON } from 'config/client_config';
 import capitalizeFirstLetter from 'capitalize';
-import { detransliterate } from 'app/utils/ParsersAndFormatters'
+import { detransliterate } from 'app/utils/ParsersAndFormatters';
+import Products from 'app/components/elements/Products';
 
 
 function sortOrderToLink(so, topic, account) {
@@ -196,7 +197,7 @@ class PostsIndex extends React.Component {
         const sort_orders = [
         ['hot', translate('hot')],
             ['created', translate('new')],
-            
+          
             ['trending', translate('trending_24_hour')],
             // disabled until crowdsale starts
             // ['trending30', translate('trending_30_day')],
@@ -212,19 +213,21 @@ class PostsIndex extends React.Component {
         const sort_orders_horizontal = [
         ['hot', translate('hot')],
             ['created', translate('new')],
-            
+        
             ['trending', translate('trending')],
             // ['promoted', translate('promoted')],
             ['active', translate('active')]
         ];
-        if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]);
+        /* if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]); */
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
                 sort_order = route.params && route.params[0] !== 'home' ? route.params[0] : null;
                 let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
                 return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
-            });
+            }); 
 
+        
+       
 
 
         return (
@@ -234,7 +237,6 @@ class PostsIndex extends React.Component {
                 <div className="SubmitPost">
                <SubmitReplyEditor type="submit_story" />
             </div>
-
 
 <HorizontalMenu items={sort_order_menu_horizontal} />
 
@@ -250,8 +252,8 @@ class PostsIndex extends React.Component {
                         showSpam={showSpam} />
                 </div>
                 <div className="PostsIndex__topics col-md-4 shrink show-for-large">
-                    <Topics order={topics_order} current={category} compact={false} />
-                    <small><a onClick={this.onShowSpam}>{translate(showSpam ? 'show_less' : 'show_more')}</a>{' ' + translate('value_posts')}</small>
+                    <Products />
+                   
                 </div>
             </div>
         );
@@ -263,11 +265,15 @@ module.exports = {
     component: connect(
         (state) => {
             // console.log('state.global', state.global)
+            const current_user = state.user.get('current');
+            const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
+  
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
-                global: state.global
+                global: state.global,
+                current_account_name
             };
         },
         (dispatch) => {

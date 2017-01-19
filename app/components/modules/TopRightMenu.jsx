@@ -46,9 +46,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-            {link: feed_link, value: translate('feed')},
-            {link: account_link, value: translate('blog')},
-            {link: posts_link, value: translate('comments')},
+           
+            {link: account_link, value: translate('profile')},
+           
             {link: replies_link, value: translate('replies')},
             {link: wallet_link, value: translate('wallet')},
             {link: reset_password_link, value: translate('change_password')},
@@ -112,7 +112,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     closeOnClickOutside
                     dropdownPosition="bottom"
                     dropdownAlignment="right"
-                    dropdownContent={<VerticalMenu items={user_menu} title={username} />}
+                    dropdownContent={<VerticalMenu items={user_menu} />}
                     onClick={trackAnalytics.bind(this, 'user dropdown menu clicked')}
                 >
                     {!vertical && <li className={'Header__userpic '}>
@@ -189,8 +189,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 </li>*/}
                 
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><div className="TopRightMenu__search-icon"></div></a></li>}
-                <li className={lcn}><a href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
-                <li className={lcn}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
+                <li className={lcn + ' TopRightMenu__signupbtn'}><a className="TopRightMenu__signupbtn-link" href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
+                <li className={lcn + ' TopRightMenu__loginbtn'}><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
                 
                 
             </ul>

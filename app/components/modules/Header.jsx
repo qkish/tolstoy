@@ -222,15 +222,11 @@ class Header extends React.Component {
 
                                
 
-                                {(topic_link || user_name || page_name) && <li className="delim show-for-medium">|</li>}
-                                {topic_link && <li className="Header__top-topic">{topic_link}</li>}
-                                {user_name && <li><Link to={`/@${user_name}`}>{user_name}</Link></li>}
-                                {page_name && <li><span>{page_name}</span></li>}
-                                {(topic_link || user_name || page_name) && sort_order && <li className="delim show-for-small-only">|</li>}
-                                {selected_sort_order && <DropdownMenu className="Header__sort-order-menu show-for-small-only" items={sort_order_menu} selected={selected_sort_order[1]} el="li" />}
+                              
+                     
                             </ul>
                         </div>
-                        <div className="columns shrink">
+                        <div className="shrink">
                             <TopRightMenu {...this.props} global={this.props.global}/>
                         </div>
                     </div>

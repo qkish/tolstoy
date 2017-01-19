@@ -1,6 +1,9 @@
 .VerticalMenu {
 
   width: 200px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 
   .Icon {
     padding-left: 0.1rem;
@@ -12,13 +15,28 @@
     fill: $dark-gray;
   }
 
+  > li {
+    list-style: none;
+    display: block;
+  }
+
   > li > a {
     color: $black;
-    line-height: 1rem;
+
+    padding: 8px 15px;
+    display: block;
+    text-decoration: none;
   }
+
 
   > li > a:hover {
     background-color: #f0f0f0;
+    text-decoration: none;
+    
+  }
+
+  > li > a:focus {
+    text-decoration: none;
   }
 
   > li.title {
@@ -28,3 +46,13 @@
     border-bottom: 1px solid $medium-gray;
   }
 }
+
+
+.dropdown-pane {
+  background: #fff;
+  border: 1px solid #e1e3e4;
+  -webkit-box-shadow: 0px 6px 6px 0px rgba(42,51,69,0.16);
+-moz-box-shadow: 0px 6px 6px 0px rgba(42,51,69,0.16);
+box-shadow: 0px 6px 6px 0px rgba(42,51,69,0.16);
+  
+  }

@@ -50,7 +50,7 @@
     color: $medium-gray;
   }
   ul > li > a {
-    font-size: 1.1rem;
+   padding: 0;
   }
   ul > li > span {
     font-size: 1.1rem;
@@ -80,6 +80,7 @@
   display: block;
   float: left;
 }
+
 
 ul > li.Header__top-logo > a {
   padding: 0;
