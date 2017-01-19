@@ -1,0 +1,26 @@
+.Beta {
+	width: 300px;
+	height: 185px;
+	   padding: 15px 20px 10px 20px;
+	background: url('../../assets/images/betaannounce.jpg') left top no-repeat;
+	border-radius: 3px;
+	margin-bottom: 15px;
+	background-size: 300px 185px;
+	
+}
+
+.Beta__title {
+	color: #fff;
+		font: 18px/22px 'museo_sans_cyrl', Arial, sans-serif;
+	font-weight: 700;
+	margin-top: 72px;
+}
+
+.Beta__desc {
+			font: 12px/17px 'museo_sans_cyrl', Arial, sans-serif;
+	font-weight: 700;
+	color: #9f9f9f;
+	margin-top: 4px;
+	letter-spacing: -1px;
+	
+}

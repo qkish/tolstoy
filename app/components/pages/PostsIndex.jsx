@@ -16,6 +16,7 @@ import { APP_NAME, APP_ICON } from 'config/client_config';
 import capitalizeFirstLetter from 'capitalize';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import Products from 'app/components/elements/Products';
+import Beta from 'app/components/elements/Beta';
 
 
 function sortOrderToLink(so, topic, account) {
@@ -255,6 +256,8 @@ class PostsIndex extends React.Component {
                         showSpam={showSpam} />
                 </div>
                 <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
+                    
+                    <Beta />
                     <Products />
                    
                 </div>
