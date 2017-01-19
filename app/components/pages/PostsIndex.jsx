@@ -232,7 +232,7 @@ class PostsIndex extends React.Component {
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
-                <div className="PostsIndex__left col-md-8 small-collapse">
+                <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
 
                 <div className="SubmitPost">
                <SubmitReplyEditor type="submit_story" />
@@ -240,9 +240,7 @@ class PostsIndex extends React.Component {
 
 <HorizontalMenu items={sort_order_menu_horizontal} />
 
-                    <div className="PostsIndex__topics_compact show-for-small hide-for-large">
-                        <Topics order={topics_order} current={category} compact />
-                    </div>
+                
                     <PostsList ref="list"
                         posts={posts ? posts.toArray() : []}
                         loading={fetching}
@@ -251,7 +249,7 @@ class PostsIndex extends React.Component {
                         emptyText = {emptyText}
                         showSpam={showSpam} />
                 </div>
-                <div className="PostsIndex__topics col-md-4 shrink show-for-large">
+                <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
                     <Products />
                    
                 </div>

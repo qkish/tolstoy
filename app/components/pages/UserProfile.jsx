@@ -291,7 +291,7 @@ export default class UserProfile extends React.Component {
         return (
             <div className="UserProfile">
             <div className="row">
-                <div className="UserProfile__cover col-sm-12 col-md-12" style={{backgroundImage: "url('http://img.ii4.ru/images/2017/01/15/799687_cover.jpg')"}}>
+                <div className="UserProfile__cover col-sm-12 col-md-12 col-xs-12" style={{backgroundImage: "url('http://img.ii4.ru/images/2017/01/15/799687_cover.jpg')"}}>
                 <Avatar account={account} />
  <div style={{position: "relative"}}>
                             <div className="UserProfile__buttons">
@@ -303,7 +303,7 @@ export default class UserProfile extends React.Component {
 
              <div className="row">
 
-                <div className="UserProfile__banner col-sm-4 col-md-4 expanded">
+                <div className="UserProfile__banner col-sm-4 col-md-4 col-xs-12">
 
                     <UserprofileNameInfo global={this.props.global} account={account} />
 
@@ -316,8 +316,8 @@ export default class UserProfile extends React.Component {
                         {printLink}
                     </div>
                 </div>*/}
-                <div className="col-sm-8 col-md-8">
-                    <div className="column">
+                <div className="UserProfile_tabcontent col-sm-8 col-md-8 col-xs-12">
+                    <div>
                         {/*section_title && <h2 className="UserProfile__section-title">{section_title}</h2>*/}
 
                        {/* <HorizontalMenu items={sort_order_menu_horizontal} /> */}

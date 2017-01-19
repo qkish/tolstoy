@@ -153,7 +153,7 @@ class PostSummary extends React.Component {
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
                 <div className="PostSummary__author_with_userpic">
-                        <span className="PostSummary__time_author_category show-for-medium">
+                        <span className="PostSummary__time_author_category">
                             {author_category}
                             {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                         </span>

@@ -125,3 +125,12 @@ z-index: 101 !important
     right: 0;
   }
 }
+
+@media #{$small-only} {
+
+  .container {
+    width: 100%;
+  }
+  
+}
+
