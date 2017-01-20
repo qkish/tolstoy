@@ -171,7 +171,7 @@ export default class UserProfile extends React.Component {
                               type="submit_story" />
                       </div>: null}
                   <PostsList
-                      emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
+                      emptyText={translate('user_hasnt_made_any_posts_yet', {fullname})}
                       posts={account.posts.map(p => `${account.name}/${p}`)}
                       loading={fetching}
                       category="posts"
