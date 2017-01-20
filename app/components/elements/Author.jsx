@@ -14,7 +14,7 @@ import { translate } from 'app/Translator';
 const {string, bool, number} = React.PropTypes
 
 class Author extends React.Component {
-    
+
 
 
 
@@ -39,38 +39,14 @@ class Author extends React.Component {
         const {author, follow, mute, authorRepLog10} = this.props // html
         const {username} = this.props // redux
 
-        const author_link = <span className="Author">
-    
-        <span itemProp="author" itemScope itemType="http://schema.org/Person" className="Author__name">
-            <Link to={'/@' + author}><strong>{author}</strong></Link>
-        </span>
-         </span>
-
-        if(!username)
-            return author_link
-
-
         return (
-
-           
-
             <span className="Author">
-
-            
-
-                       
-                
-                   
-                        <span itemProp="author" itemScope itemType="http://schema.org/Person" className="Author__name">
-                            <Link to={'/@' + author}>{author}</Link>
-                        </span>
-                        
-                   
-                
-               
+                <span itemProp="author" itemScope itemType="http://schema.org/Person" className="Author__name">
+                    <Link to={'/@' + author}>{author}</Link>
+                </span>
             </span>
         )
-               
+
     }
 }
 

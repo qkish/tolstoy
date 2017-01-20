@@ -32,7 +32,7 @@ function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
                 <span itemProp="author" itemScope itemType="http://schema.org/Person">
                     {links ? <Link to={post.author_link}>{author}</Link> :
                         <strong>{author}</strong>}&nbsp;
-                   
+
                 </span>
             </span>
             <span>{' ' + translate('in')}&nbsp;{links ? <TagList post={post} /> : <strong>{detransliterate(post.category)}</strong>}</span>
@@ -96,7 +96,7 @@ class PostSummary extends React.Component {
         let comments_link;
         let is_comment = false;
 
-    
+
 
         if( content.get( 'parent_author') !== "" ) {
            title_text = "Re: " + content.get('root_title');
@@ -122,12 +122,12 @@ class PostSummary extends React.Component {
                           <Link to={'/@' + p.author}>
                                 <Userpic account={p.author} width="50" height="50" />
                             </Link>
-                </div>            
-                         
+                </div>
+
             <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
             <TimeAgoWrapper date={p.created} className="updated" />
             <div className="PostSummary__niche">Ниша автора</div>
-            
+
         </div>
 
         if( !(currentCategory && currentCategory.match( /nsfw/ )) ) {
@@ -151,14 +151,14 @@ class PostSummary extends React.Component {
         if(gray || ignore) commentClasses.push('downvoted') // rephide
 
         return (
-            <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')} itemScope itemType ="http://schema.org/blogPost">
+            <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')}
+                     itemScope itemType ="http://schema.org/blogPost">
                 <div className="PostSummary__author_with_userpic">
-                        <span className="PostSummary__time_author_category">
-                            {author_category}
-                            {!archived && <Reblog author={p.author} permlink={p.permlink} />}
-                        </span>
+                    <span className="PostSummary__time_author_category">
+                        {author_category}
+                        {!archived && <Reblog author={p.author} permlink={p.permlink} />}
+                    </span>
                 </div>
-
 
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
                     <div className="float-right"><Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} flag /></div>
@@ -170,22 +170,17 @@ class PostSummary extends React.Component {
                 <div className="PostSummary__time_author_category_small show-for-small-only">
                     <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}><TimeAuthorCategory post={p} links={false} authorRepLog10={authorRepLog10} gray={gray} /></a>
                 </div>
-              
+
                 <div className="PostSummary__content">
                     <div className="PostSummary__header show-for-medium">
                         {content_title}
                     </div>
                     {content_body}
-                    
                 </div>
-
-                  {thumb}
-                  
+                {thumb}
                 <div className="PostSummary__footer">
-                        <Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} showList={false} />
-                        
+                    <Voting pending_payout={pending_payout} total_payout={total_payout} cashout_time={cashout_time} post={post} showList={false} />
                 </div>
-
             </article>
         )
     }

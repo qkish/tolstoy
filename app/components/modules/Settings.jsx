@@ -434,30 +434,32 @@ class Settings extends React.Component {
             </div>;
         }
 
-        return <div className="PostSummary Settings">
+        let tabIsActive = id => { return id === currentTab }
+
+        return <div className="PostSummary Settings" style={{marginLeft: "10px"}}>
 
             <h3>{translate('settings')}</h3>
 
                 <ul className="nav nav-pills">
-                    <li role="presentation">
+                    <li role="presentation" className={currentTab == 'base' ? 'active' : ''}>
                         <a id="base" onClick={this.tabsSelectHandle}>{translate('base_tab')}</a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" className={currentTab == 'more' ? 'active' : ''}>
                         <a id="more" onClick={this.tabsSelectHandle}>{translate('more_tab')}</a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" className={currentTab == 'target' ? 'active' : ''}>
                         <a id="target" onClick={this.tabsSelectHandle}>{translate('target_tab')}</a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" className={currentTab == 'contacts' ? 'active' : ''}>
                         <a id="contacts" onClick={this.tabsSelectHandle}>{translate('contacts_tab')}</a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" className={currentTab == 'avatar' ? 'active' : ''}>
                         <a id="avatar" onClick={this.tabsSelectHandle}>{translate('avatar_tab')}</a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" className={currentTab == 'background' ? 'active' : ''}>
                         <a id="background" onClick={this.tabsSelectHandle}>{translate('background_tab')}</a>
                     </li>
-                    <li role="presentation">
+                    <li role="presentation" className={currentTab == 'system' ? 'active' : ''}>
                         <a id="system" onClick={this.tabsSelectHandle}>{translate('system_tab')}</a>
                     </li>
                 </ul>

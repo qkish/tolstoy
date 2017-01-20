@@ -25,10 +25,11 @@ import ReplyEditorShort from 'app/components/elements/ReplyEditorShort'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import resolveRoute from 'app/ResolveRoute';
 
-// BMChain components
-import ViewUserBase from 'app/components/elements/user/views/ViewUserBase';
-import ViewUserTarget from 'app/components/elements/user/views/ViewUserTarget';
-import ViewUserMore from 'app/components/elements/user/views/ViewUserMore';
+// BMChain components/modules
+import ViewUserBase from 'app/components/modules/user/views/ViewUserBase';
+import ViewUserTarget from 'app/components/modules/user/views/ViewUserTarget';
+import ViewUserMore from 'app/components/modules/user/views/ViewUserMore';
+// elements
 import Avatar from 'app/components/elements/Avatar';
 
 const formId = 'submitStory';

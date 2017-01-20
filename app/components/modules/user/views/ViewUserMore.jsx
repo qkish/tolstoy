@@ -1,0 +1,52 @@
+import React, {Component, PropsTypes} from 'react';
+import { translate } from 'app/Translator';
+
+// -------------------------
+// Компонент отображает
+// дополнительную информацию
+// о пользователе
+
+class ViewUserMore extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {currentTab: 'looking'};
+    }
+
+    setCurrentTab = event =>  {
+        const id = event.target.id;
+        if (id !== this.state.currentTab) {
+            this.setState({currentTab : id});
+            console.log('change more/tab to ' + id + "\n" + this.state);
+        }
+    }
+
+    render() {
+        let account = this.props.account;
+        let globalProps = this.props.global.getIn(['props']).toJS();
+        let metaData = JSON.parse(account.json_metadata);
+        let {looking_for, i_can} = metaData;
+
+        let currentTab = this.state.currentTab;
+        let currentTabContent;
+
+        if (currentTab == 'looking') currentTabContent = <div className="UserProfile__infoboxes">{looking_for}</div>;
+        if (currentTab == 'can') currentTabContent = <div className="UserProfile__infoboxes">{i_can}</div>;
+
+        return <div className="UserProfile__blockinfo">
+            <h6>
+                <span id="looking" onClick={this.setCurrentTab}>
+                    {currentTab == 'looking' ? <strong>{translate('looking_for')}</strong> : translate('looking_for')}
+                </span>
+                {' / '}
+                <span id="can" onClick={this.setCurrentTab}>
+                    {currentTab == 'can' ? <strong>{translate('i_can')}</strong> : translate('i_can')}
+                </span>
+            </h6>
+            {currentTabContent}
+        </div>
+    }
+
+}
+
+export default ViewUserMore;
