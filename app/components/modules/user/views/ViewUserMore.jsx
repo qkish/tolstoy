@@ -17,7 +17,7 @@ class ViewUserMore extends Component {
         const id = event.target.id;
         if (id !== this.state.currentTab) {
             this.setState({currentTab : id});
-            console.log('change more/tab to ' + id + "\n" + this.state);
+            console.log('change more/tab to ' + id);
         }
     }
 
@@ -34,15 +34,15 @@ class ViewUserMore extends Component {
         if (currentTab == 'can') currentTabContent = <div className="UserProfile__infoboxes">{i_can}</div>;
 
         return <div className="UserProfile__blockinfo">
-            <h6>
-                <span id="looking" onClick={this.setCurrentTab}>
-                    {currentTab == 'looking' ? <strong>{translate('looking_for')}</strong> : translate('looking_for')}
-                </span>
-                {' / '}
-                <span id="can" onClick={this.setCurrentTab}>
-                    {currentTab == 'can' ? <strong>{translate('i_can')}</strong> : translate('i_can')}
-                </span>
-            </h6>
+            <span id="looking" onClick={this.setCurrentTab}>
+                {currentTab == 'looking' ?
+                    <strong>{translate('looking_for')}</strong> : translate('looking_for')}
+            </span>
+            {' / '}
+            <span id="can" onClick={this.setCurrentTab}>
+                {currentTab == 'can' ?
+                    <strong>{translate('i_can')}</strong> : translate('i_can')}
+            </span>
             {currentTabContent}
         </div>
     }
