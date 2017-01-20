@@ -203,37 +203,37 @@ class Settings extends React.Component {
         // Base fileds tab
         if (currentTab == 'base') {
             currentFieldsBlock =
-                <div className="Settings__FieldsTabs__tab col-xs-12">
+                <div className="Settings__FieldsTabs__tab">
                     <form onSubmit={this.handleUserFieldsSubmit}>
 
-                    <h5>{translate('user_base_info')}</h5>
+                  
 
                     <label>
-                        {translate('first_name')}
-                        <input type="text" onChange={this.handleUserFirstNameChange} value={state.first_name}/>
+                        <span>{translate('first_name')}</span>
+                        <input type="text" onChange={this.handleUserFirstNameChange} value={state.first_name} placeholder={translate('first_name')} />
                     </label>
                     <label>
-                        {translate('last_name')}
-                        <input type="text" onChange={this.handleUserLastNameChange} value={state.last_name}/>
+                        <span>{translate('last_name')}</span>
+                        <input type="text" onChange={this.handleUserLastNameChange} value={state.last_name} placeholder={translate('last_name')} />
                     </label>
                     <label>
-                        {translate('city')}
-                        <input type="text" onChange={this.handleUserCityChange} value={state.city}/>
+                        <span>{translate('city')}</span>
+                        <input type="text" onChange={this.handleUserCityChange} value={state.city} placeholder={translate('city')} />
                     </label>
                     <label>
-                        {translate('age')}
-                        <input type="text" onChange={this.handleUserAgeChange} value={state.age}/>
+                        <span>{translate('age')}</span>
+                        <input type="text" onChange={this.handleUserAgeChange} value={state.age} placeholder={translate('age')}/>
                     </label>
                     <label>
-                        {translate('occupation')}
-                        <textarea onChange={this.handleUserOccupationChange} value={state.occupation}></textarea>
+                        <span>{translate('occupation')}</span>
+                        <textarea onChange={this.handleUserOccupationChange} value={state.occupation} placeholder={translate('occupation')}></textarea>
                     </label>
 
                     {state.errorMessage ?
                         <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
                             <div className="alert alert-success">{state.successMessage}</div> : null}
 
-                    <p className="text-center" style={{marginTop: 16.8}}>
+                    <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                         <input type="submit" className="button" value={translate('save')} />
                     </p>
                 </form>
@@ -244,29 +244,28 @@ class Settings extends React.Component {
         // More fields tab
         if (currentTab == 'more') {
             currentFieldsBlock =
-                <div className="Settings__FieldsTabs__tab col-xs-12">
+                <div className="Settings__FieldsTabs__tab">
                 {/* Choose user more info */}
                 <form onSubmit={this.handleUserFieldsSubmit}>
 
-                    <h5>{translate('user_more_info')}</h5>
 
                     {/* Looking For */}
                     <label>
-                        {translate('looking_for')}
-                        <textarea onChange={this.handleLookingForChange} value={state.looking_for}></textarea>
+                        <span>{translate('looking_for')}</span>
+                        <textarea onChange={this.handleLookingForChange} value={state.looking_for} placeholder={translate('looking_for')}></textarea>
                     </label>
 
                     {/* I Can */}
                     <label>
-                        {translate('i_can')}
-                        <textarea onChange={this.handleICanChange} value={state.i_can}></textarea>
+                        <span>{translate('i_can')}</span>
+                        <textarea onChange={this.handleICanChange} value={state.i_can} placeholder={translate('i_can')}></textarea>
                     </label>
 
                     {state.errorMessage ?
                         <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
                             <div className="alert alert-success">{state.successMessage}</div> : null}
 
-                    <p className="text-center" style={{marginTop: 16.8}}>
+                    <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                         <input type="submit" className="button" value={translate('save')} />
                     </p>
                 </form>
@@ -278,33 +277,29 @@ class Settings extends React.Component {
         // Target fields tab
         if (currentTab == 'target') {
             currentFieldsBlock =
-                <div className="Settings__FieldsTabs__tab col-xs-12">
+                <div className="Settings__FieldsTabs__tab">
                     <form onSubmit={this.handleUserFieldsSubmit}>
 
-                        <h5>{translate('user_target_info')}</h5>
+                    
 
                         <label>
-                            {translate('target_plan')}
-                            <textarea onChange={this.handleTargetPlanChange} value={state.target_plan}></textarea>
+                            <span>{translate('target_date')}</span>
+                            <input type="text" onChange={this.handleTargetDateChange} value={state.target_date} placeholder={translate('target_date')} />
                         </label>
                         <label>
-                            {translate('target_date')}
-                            <input type="text" onChange={this.handleTargetDateChange} value={state.target_date}/>
+                            <span>{translate('target_point_a')}</span>
+                            <input type="text" onChange={this.handleTargetPointAChange} value={state.target_point_a} placeholder={translate('target_point_a')} />
                         </label>
                         <label>
-                            {translate('target_point_a')}
-                            <input type="text" onChange={this.handleTargetPointAChange} value={state.target_point_a}/>
-                        </label>
-                        <label>
-                            {translate('target_point_b')}
-                            <input type="text" onChange={this.handleTargetPointBChange} value={state.target_point_b}/>
+                            <span>{translate('target_point_b')}</span>
+                            <input type="text" onChange={this.handleTargetPointBChange} value={state.target_point_b} placeholder={translate('target_point_b')} />
                         </label>
 
                         {state.errorMessage ?
                             <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
                                 <div className="alert alert-success">{state.successMessage}</div> : null}
 
-                        <p className="text-center" style={{marginTop: 16.8}}>
+                        <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                             <input type="submit" className="button" value={translate('save')} />
                         </p>
                     </form>
@@ -315,33 +310,33 @@ class Settings extends React.Component {
         // Contacts fields tab
         if (currentTab == 'contacts') {
             currentFieldsBlock =
-                <div className="Settings__FieldsTabs__tab col-xs-12">
+                <div className="Settings__FieldsTabs__tab">
                     <form onSubmit={this.handleUserFieldsSubmit}>
 
-                        <h5>{translate('user_contacts_info')}</h5>
+                     
 
                         <label>
-                            {translate('website')}
-                            <input type="text" onChange={this.handleWebsiteChange} defaultValue={state.website}/>
+                            <span>{translate('website')}</span>
+                            <input type="text" onChange={this.handleWebsiteChange} defaultValue={state.website} placeholder={translate('website')} />
                         </label>
                         <label>
-                            {translate('instagram')}
-                            <input type="text" onChange={this.handleInstagramChange} defaultValue={state.instagram}/>
+                            <span>{translate('instagram')}</span>
+                            <input type="text" onChange={this.handleInstagramChange} defaultValue={state.instagram} placeholder={translate('instagram')} />
                         </label>
                         <label>
-                            {translate('facebook')}
-                            <input type="text" onChange={this.handleFacebookChange} defaultValue={state.facebook}/>
+                            <span>{translate('facebook')}</span>
+                            <input type="text" onChange={this.handleFacebookChange} defaultValue={state.facebook} placeholder={translate('facebook')} />
                         </label>
                         <label>
-                            {translate('VK')}
-                            <input type="text" onChange={this.handleVKChange} defaultValue={state.vk}/>
+                            <span>{translate('VK')}</span>
+                            <input type="text" onChange={this.handleVKChange} defaultValue={state.vk} placeholder={translate('VK')} />
                         </label>
 
                         {state.errorMessage ?
                             <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
                                 <div className="alert alert-success">{state.successMessage}</div> : null}
 
-                        <p className="text-center" style={{marginTop: 16.8}}>
+                        <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                             <input type="submit" className="button" value={translate('save')} />
                         </p>
                     </form>
@@ -352,22 +347,24 @@ class Settings extends React.Component {
         // Avatar fields tab
         if (currentTab == 'avatar') {
             currentFieldsBlock =
-                <div className="Settings__FieldsTabs__tab col-xs-12">
+                <div className="Settings__FieldsTabs__tab">
                 {state.userImage ? <img src={_urls.proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} /> : null}
 
                 <form onSubmit={this.handleUserFieldsSubmit}>
 
-                    <h5>{translate('user_photo_info')}</h5>
+                    
 
-                    <label>{translate('add_image_url')}
-                        <input type="url" onChange={this.handleUserImageChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} />
+                    <label>
+
+                    <span>{translate('add_image_url')}</span>
+                        <input type="url" onChange={this.handleUserImageChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} placeholder={translate('add_image_url')} />
                     </label>
 
                     {state.errorMessage ?
                         <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
                             <div className="alert alert-success">{state.successMessage}</div> : null}
 
-                    <p className="text-center" style={{marginTop: 16.8}}>
+                    <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                         <input type="submit" className="button" value={translate('save_avatar')} />
                     </p>
                 </form>
@@ -378,23 +375,24 @@ class Settings extends React.Component {
         // Background fields tab
         if (currentTab == 'background') {
             currentFieldsBlock =
-                <div className="Settings__FieldsTabs__tab col-xs-12">
+                <div className="Settings__FieldsTabs__tab">
 
                     {state.background_image ? <img src={_urls.proxyImage(state.background_image)} alt={translate('user_avatar') + ' ' + props.account.name} /> : null}
 
                     <form onSubmit={this.handleUserFieldsSubmit}>
 
-                        <h5>{translate('user_background_info')}</h5>
+        
 
-                        <label>{translate('add_background_image_url')}
-                            <input type="url" onChange={this.handleBackgroundImageChange} value={state.background_image} disabled={!props.isOwnAccount || state.loading} />
+                        <label>
+                        <span>{translate('add_background_image_url')}</span>
+                            <input type="url" onChange={this.handleBackgroundImageChange} value={state.background_image} disabled={!props.isOwnAccount || state.loading} placeholder={translate('add_background_image_url')} />
                         </label>
 
                         {state.errorMessage ?
                             <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
                                 <div className="alert alert-success">{state.successMessage}</div> : null}
 
-                        <p className="text-center" style={{marginTop: 16.8}}>
+                        <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                             <input type="submit" className="button" value={translate('save_avatar')} />
                         </p>
                     </form>
@@ -405,16 +403,16 @@ class Settings extends React.Component {
         // System fields tab
         if (currentTab == 'system') {
             currentFieldsBlock =
-                <div className="Settings__FieldsTabs__tab col-xs-12">
+                <div className="Settings__FieldsTabs__tab">
 
-                    <h5>{translate('system_settings')}</h5>
+               
 
                     {state.errorMessage ?
                         <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
                             <div className="alert alert-success">{state.successMessage}</div> : null}
 
                     <label>
-                        {translate('choose_language')}
+                        <span>{translate('choose_language')}</span>
                         <select defaultValue={locale}
                                 onChange={this.handleLanguageChange}>
                             <option value="ru">русский</option>
@@ -424,7 +422,7 @@ class Settings extends React.Component {
                    </label>
 
                    <label>
-                       {translate('choose_currency')}
+                      <span> {translate('choose_currency')}</span>
                        <select defaultValue={store.get('currency')}
                                onChange={this.handleCurrencyChange}>
                        {ALLOWED_CURRENCIES.map(i =>
@@ -436,22 +434,23 @@ class Settings extends React.Component {
 
         let tabIsActive = id => { return id === currentTab }
 
-        return <div className="PostSummary Settings" style={{marginLeft: "10px"}}>
+        return <div className="Settings" style={{marginLeft: "10px"}}>
 
-            <h3>{translate('settings')}</h3>
+      
 
-                <ul className="nav nav-pills">
+                <ul className="menu Settings__tabs">
                     <li role="presentation" className={currentTab == 'base' ? 'active' : ''}>
                         <a id="base" onClick={this.tabsSelectHandle}>{translate('base_tab')}</a>
                     </li>
-                    <li role="presentation" className={currentTab == 'more' ? 'active' : ''}>
-                        <a id="more" onClick={this.tabsSelectHandle}>{translate('more_tab')}</a>
-                    </li>
+                    
                     <li role="presentation" className={currentTab == 'target' ? 'active' : ''}>
                         <a id="target" onClick={this.tabsSelectHandle}>{translate('target_tab')}</a>
                     </li>
                     <li role="presentation" className={currentTab == 'contacts' ? 'active' : ''}>
                         <a id="contacts" onClick={this.tabsSelectHandle}>{translate('contacts_tab')}</a>
+                    </li>
+                    <li role="presentation" className={currentTab == 'more' ? 'active' : ''}>
+                        <a id="more" onClick={this.tabsSelectHandle}>{translate('more_tab')}</a>
                     </li>
                     <li role="presentation" className={currentTab == 'avatar' ? 'active' : ''}>
                         <a id="avatar" onClick={this.tabsSelectHandle}>{translate('avatar_tab')}</a>
@@ -463,7 +462,7 @@ class Settings extends React.Component {
                         <a id="system" onClick={this.tabsSelectHandle}>{translate('system_tab')}</a>
                     </li>
                 </ul>
-            <div className="Settings__FieldsTabs row">{currentFieldsBlock}</div>
+            <div className="Settings__FieldsTabs">{currentFieldsBlock}</div>
         </div>
     }
 }

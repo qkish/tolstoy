@@ -1,6 +1,137 @@
+.Settings {
+	  padding: 0;
+  margin: 0 0 15px;
+  background-color: #fff;
+  clear: left;
+  border: 1px solid #e1e3e4;
+  border-radius: 3px;
+  @include clearfix;
+  width: 560px;
+}
+
+
 .Settings__FieldsTabs {
-    padding: 2rem;
+  
+}
+
+.Settings__submit-wrap {
+	margin-left: 20px;
+	
 }
 .Settings__FieldsTabs__tab {
+width: 100%;
 
+ > form > label {
+ 	 border-bottom: 1px solid #eeeeee;
+ 	 margin-top:10px;
+ }
+
+ > form > label > span {
+ 	font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+ 	color: #b5b5b5;
+ 	font-size: 12px;
+ 	font-weight: 500;
+ 	text-transform: none;
+ 	margin: 0 0 0 20px;
+
+ }
+
+ > form > label > input[type=text] {
+ 	border: 0 none;
+ 	padding: 0 10px 10px 20px;
+ 	box-shadow: none;
+ }
+ > form > label > input[type=url] {
+ 	border: 0 none;
+ 	padding: 0 10px 10px 20px;
+ 	box-shadow: none;
+ }
+  > form > label > textarea {
+ 	border: 0 none;
+ 	padding: 0 10px 10px 20px;
+ 	box-shadow: none;
+ }
+
+
+
+
+> label {
+ 	 border-bottom: 1px solid #eeeeee;
+ 	 margin-top:10px;
+ }
+
+ > label > span {
+ 	font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+ 	color: #b5b5b5;
+ 	font-size: 12px;
+ 	font-weight: 500;
+ 	text-transform: none;
+ 	margin: 0 0 0 20px;
+
+ }
+
+  > label > select {
+ 	border: 0 none;
+ 	padding: 0 10px 10px 20px;
+ 	box-shadow: none;
+ 	
+ }
+}
+
+
+
+.Settings__tabs {
+  background: $white;
+  padding: 0 0 0 10px;
+  border-bottom: 1px solid #e1e3e4;
+
+  border-radius: 3px 3px 0 0;
+  height: 50px;
+  
+
+  .active > a {
+    background: none;
+    color: $black;
+    font-weight: 600;
+  }
+  li > a:hover {
+    color: $black;
+  }
+  > li:first-child > a {
+    padding-left: 0;
+  }
+  > li:last-child > a {
+    padding-right: 0;
+  }
+
+}
+
+
+.Settings__tabs li {
+  margin-bottom: -1px;
+  height: 50px;
+}
+.Settings__tabs li a {
+  padding: 14px 0 0 0;
+  margin: 0 10px 0 10px;
+    color: #2b2b2b;
+  font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  text-decoration: none;
+    height: 50px;
+
+    border-bottom: 2px solid transparent;
+}
+.Settings__tabs li a:focus {
+  text-decoration: none;
+}
+.Settings__tabs li.active a  {
+  border-bottom: 2px solid map-get($foundation-palette, 'primary');
+  color: map-get($foundation-palette, 'primary');
+
+
+}
+.Settings__tabs li a:hover {
+    text-decoration: none;
+    color: map-get($foundation-palette, 'primary');
 }

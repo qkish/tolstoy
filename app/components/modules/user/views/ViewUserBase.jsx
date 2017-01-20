@@ -17,9 +17,30 @@ class ViewUserBase extends Component {
 
     isFullName(meta) {
         let {first_name, last_name} = meta;
-        if (first_name !== '' && last_name !== '') { return true }
+        
+        if (first_name || last_name) { return true }
         else { return false }
     }
+    
+    AgeCalc(age) {
+    var txt;
+    let count = age % 100;
+    if (count >= 5 && count <= 20) {
+        txt = 'лет';
+    } else {
+        count = count % 10;
+        if (count == 1) {
+            txt = 'год';
+        } else if (count >= 2 && count <= 4) {
+            txt = 'года';
+        } else {
+            txt = 'лет';
+        }
+    }
+    return txt;
+    }
+
+
 
     render() {
         let account = this.props.account;
@@ -32,14 +53,15 @@ class ViewUserBase extends Component {
         let vestingSteemFn = vestingSteem(account, globalProps);
         let vestingSteemVal = vestingSteemFn.toFixed(0);
 
-        let yearsCorrect
+        let yearsCorrect;
+        yearsCorrect = this.AgeCalc(age);
 
         return <div className="UserProfile__nameinfo">
 
                 <h2>{this.isFullName(metaData) ? first_name + ' ' + last_name : account.name}</h2>
 
             <div className="UserProfile__infoboxes">{age + ' ' + yearsCorrect + ', ' + city}</div>
-            <div className="UserProfile__infoboxes">{occupation}</div>
+            <div className="UserProfile__infoboxes">{occupation ? occupation : ''}</div>
             <div className="UserProfile__infoboxes ">Голосов: {vestingSteemVal}</div>
 
             <div className="UserProfile__infoboxes">Сайт: {website}</div>

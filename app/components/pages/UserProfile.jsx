@@ -236,10 +236,10 @@ export default class UserProfile extends React.Component {
         const jsonMetaData = JSON.parse(account.json_metadata)
         const {firstName, lastName} = jsonMetaData
 
-        let name
+        let fullName
         if (firstName !== '' && lastName !== '')
-            name = firstName + ' ' + lastName
-        else name = account.name;
+            fullName = firstName + ' ' + lastName
+        else fullName = account.name;
 
         let printLink = null;
         let section_title = account.name + ' / ' + section;
