@@ -171,7 +171,7 @@ export default class UserProfile extends React.Component {
                               type="submit_story" />
                       </div>: null}
                   <PostsList
-                      emptyText={translate('user_hasnt_made_any_posts_yet', {fullname})}
+                      emptyText={translate('user_hasnt_made_any_posts_yet', {fullName})}
                       posts={account.posts.map(p => `${account.name}/${p}`)}
                       loading={fetching}
                       category="posts"
@@ -190,7 +190,7 @@ export default class UserProfile extends React.Component {
                             <SubmitReplyEditor type="submit_story" />
                         </div>: null}
                     <PostsList
-                        emptyText={translate('user_hasnt_started_bloggin_yet', {name})}
+                        emptyText={translate('user_hasnt_started_bloggin_yet', {fullName})}
                         posts={account.blog}
                         loading={fetching}
                         category="blog"
@@ -218,7 +218,7 @@ export default class UserProfile extends React.Component {
         else if( (section === 'recent-replies') && account.recent_replies ) {
               tab_content =
                   <PostsList
-                  emptyText={translate('user_hasnt_had_any_replies_yet', {name}) + '.'}
+                  emptyText={translate('user_hasnt_had_any_replies_yet', {fullName}) + '.'}
                   posts={account.recent_replies}
                   loading={fetching}
                   category="recent-replies"
@@ -244,17 +244,17 @@ export default class UserProfile extends React.Component {
         let printLink = null;
         let section_title = account.name + ' / ' + section;
         if( section === 'blog' ) {
-           section_title = translate('users_blog', {name});
+           section_title = translate('users_blog', {fullName});
         } else if( section === 'transfers' ) {
-           section_title = fullName + translate('users_wallet', {name});
+           section_title = fullName + translate('users_wallet', {fullName});
         } else if( section === 'curation-rewards' ) {
-          section_title = fullName + translate('users_curation_rewards', {name});
+          section_title = fullName + translate('users_curation_rewards', {fullName});
       } else if( section === 'author-rewards' ) {
-        section_title = fullName + translate('users_author_rewards', {name});
+        section_title = fullName + translate('users_author_rewards', {fullName});
         } else if( section === 'password' ) {
            section_title = ''
         } else if( section === 'permissions' ) {
-           section_title = fullName + translate('users_permissions', {name})
+           section_title = fullName + translate('users_permissions', {fullName})
            if(isMyAccount && wifShown) {
 
                printLink = <div><a className="float-right noPrint" onClick={onPrint}>
@@ -263,9 +263,9 @@ export default class UserProfile extends React.Component {
 
            }
         } else if( section === 'posts' ) {
-           section_title = translate('users_posts', {name});
+           section_title = translate('users_posts', {fullName});
         } else if( section === 'recent-replies' ) {
-           section_title = translate('recent_replies_to_users_posts', {name});
+           section_title = translate('recent_replies_to_users_posts', {fullName});
         }
 
         const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}
