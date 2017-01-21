@@ -13,6 +13,7 @@ module.exports = function (sequelize, DataTypes) {
         active_key: {type: DataTypes.STRING, unique: true},
         posting_key: {type: DataTypes.STRING, unique: true},
         memo_key: {type: DataTypes.STRING, unique: true},
+        private_key: {type: DataTypes.STRING, unique: true},
         referrer: DataTypes.STRING,
         refcode: DataTypes.STRING,
         remote_ip: DataTypes.STRING,
