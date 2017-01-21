@@ -10,7 +10,7 @@ export function validate_account_name(value) {
     if (length < 3) {
         return suffix + 'be longer.';
     }
-    if (length > 16) {
+    if (length > 50) {
         return suffix + 'be shorter.';
     }
     if (/\./.test(value)) {
@@ -22,7 +22,7 @@ export function validate_account_name(value) {
         if (!/^[a-z]/.test(label)) {
             return suffix + 'start with a letter.';
         }
-        if (!/^[a-z0-9-]*$/.test(label)) {
+        if (!/^[@_a-z0-9-]*$/.test(label)) {
             return suffix + 'have only letters, digits, or dashes.';
         }
         if (/--/.test(label)) {

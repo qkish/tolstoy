@@ -8,7 +8,7 @@ import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient';
+import {serverApiRecordEvent, serverApiGetAccountPrivateKey} from 'app/utils/ServerApiClient';
 import {loadFollows} from 'app/redux/FollowSaga'
 import { translate } from 'app/Translator';
 
@@ -118,10 +118,16 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
 
     const account = yield call(getAccount, username)
-    if (!account) {
-        yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
-        return
-    }
+    // if (!account) {
+    //     yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
+    //     return
+    // }
+
+    const { access_token } = yield call(getBMAccessToken, username, password)
+    // console.log(access_token)
+
+    const { private_key } = yield call(serverApiGetAccountPrivateKey, username)
+    password = private_key
 
     let private_keys
     try {
@@ -328,3 +334,19 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 //     const [account] = yield call(Apis.db_api, 'get_accounts', [current.get('username')])
 //     yield put(g.actions.receiveAccount({ account }))
 // }
+
+function getBMAccessToken (username, password) {
+    return fetch('http://test2.api.molodost.bz/oauth/token/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            client_id: 'renat.biktagirov',
+            client_secret: '6NbQvMElYMcBbOVWie7a1Bs4rfVt9FpNY4V4Fl6EEGt4xTEUa1K0ugMohlemqFQ5',
+            grant_type: 'client_credentials',
+            username,
+            password
+        })
+    }).then(res => res.json())
+}
