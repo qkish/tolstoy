@@ -54,7 +54,7 @@ export default function useGeneralApi(app) {
         const {csrf, username} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
         const account = yield models.Account.findOne(
-            attributes: ['private_key'];
+            attributes: ['private_key'],
             where: {
                 name: username
             }
