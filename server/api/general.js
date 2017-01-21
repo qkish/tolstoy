@@ -53,12 +53,12 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const {csrf, username} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        const account = yield models.Account.findOne(
+        const account = yield models.Account.findOne({
             attributes: ['private_key'],
             where: {
                 name: username
             }
-        );
+        });
         const pk = account.private_key;
         console.log('-- /get_account_private_key', this.session.uui, pk);
         recordWebEvent(this, 'api/get_account_private_key', username);
