@@ -108,6 +108,9 @@ export default class UserProfile extends React.Component {
         const rep = repLog10(account.reputation);
 
         const isMyAccount = username === account.name
+        const name = account
+
+
         let tab_content = null;
 
         const global_status = this.props.global.get('status');
@@ -171,7 +174,7 @@ export default class UserProfile extends React.Component {
                               type="submit_story" />
                       </div>: null}
                   <PostsList
-                      emptyText={translate('user_hasnt_made_any_posts_yet', {fullName})}
+                      emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
                       posts={account.posts.map(p => `${account.name}/${p}`)}
                       loading={fetching}
                       category="posts"
@@ -190,7 +193,7 @@ export default class UserProfile extends React.Component {
                             <SubmitReplyEditor type="submit_story" />
                         </div>: null}
                     <PostsList
-                        emptyText={translate('user_hasnt_started_bloggin_yet', {fullName})}
+                        emptyText={translate('user_hasnt_started_bloggin_yet', {name})}
                         posts={account.blog}
                         loading={fetching}
                         category="blog"
@@ -218,7 +221,7 @@ export default class UserProfile extends React.Component {
         else if( (section === 'recent-replies') && account.recent_replies ) {
               tab_content =
                   <PostsList
-                  emptyText={translate('user_hasnt_had_any_replies_yet', {fullName}) + '.'}
+                  emptyText={translate('user_hasnt_had_any_replies_yet', {name}) + '.'}
                   posts={account.recent_replies}
                   loading={fetching}
                   category="recent-replies"
@@ -237,24 +240,24 @@ export default class UserProfile extends React.Component {
         const {firstName, lastName} = jsonMetaData
 
         let fullName
-        if (firstName !== '' && lastName !== '')
+        if (firstName || lastName )
             fullName = firstName + ' ' + lastName
-        else fullName = account.name;
+        else fullName = name;
 
         let printLink = null;
         let section_title = account.name + ' / ' + section;
         if( section === 'blog' ) {
-           section_title = translate('users_blog', {fullName});
+           section_title = translate('users_blog', {name});
         } else if( section === 'transfers' ) {
-           section_title = fullName + translate('users_wallet', {fullName});
+           section_title = fullName + translate('users_wallet', {name});
         } else if( section === 'curation-rewards' ) {
-          section_title = fullName + translate('users_curation_rewards', {fullName});
+          section_title = fullName + translate('users_curation_rewards', {name});
       } else if( section === 'author-rewards' ) {
-        section_title = fullName + translate('users_author_rewards', {fullName});
+        section_title = fullName + translate('users_author_rewards', {name});
         } else if( section === 'password' ) {
            section_title = ''
         } else if( section === 'permissions' ) {
-           section_title = fullName + translate('users_permissions', {fullName})
+           section_title = fullName + translate('users_permissions', {name})
            if(isMyAccount && wifShown) {
 
                printLink = <div><a className="float-right noPrint" onClick={onPrint}>
@@ -263,9 +266,9 @@ export default class UserProfile extends React.Component {
 
            }
         } else if( section === 'posts' ) {
-           section_title = translate('users_posts', {fullName});
+           section_title = fullName + translate('users_posts', {name});
         } else if( section === 'recent-replies' ) {
-           section_title = translate('recent_replies_to_users_posts', {fullName});
+           section_title = translate('recent_replies_to_users_posts', {name});
         }
 
         const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}

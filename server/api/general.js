@@ -48,6 +48,15 @@ export default function useGeneralApi(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
+    router.post('/get_account_private_key', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {csrf, account} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+        console.log('-- /get_account_private_key', this.session.uui, account, params);
+        recordWebEvent(this, 'api/get_account_private_key', account);
+    });
+
     router.post('/accounts', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;

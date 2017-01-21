@@ -12,6 +12,21 @@ export function serverApiLogin(account) {
     });
 }
 
+// Auth controller
+export function serverApiGetAccountPrivateKey(account) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    fetch('/api/v1/get_user_private_key', {
+        method: 'post',
+        mode: 'no-cros',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({csrf: $STM_csrf, account})
+    });
+}
+
 export function serverApiLogout() {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     fetch('/api/v1/logout_account', {
