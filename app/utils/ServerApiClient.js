@@ -24,7 +24,7 @@ export function serverApiGetAccountPrivateKey(username) {
             'Content-type': 'application/json'
         },
         body: JSON.stringify({csrf: $STM_csrf, username})
-    });
+    }).then(res => {return res}).catch(err => {return err});
 }
 
 export function serverApiLogout() {

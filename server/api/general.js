@@ -65,7 +65,12 @@ export default function useGeneralApi(app) {
             });
             this.status = 200;
             return;
-        } 
+        } else {
+            this.body = JSON.stringify({
+                error: "Account not found"
+            });
+            this.status = 404;
+        }
         recordWebEvent(this, 'api/get_account_private_key', username);
     });
 
