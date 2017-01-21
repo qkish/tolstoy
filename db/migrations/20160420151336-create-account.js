@@ -31,9 +31,6 @@ module.exports = {
             memo_key: {
                 type: Sequelize.STRING
             },
-            private_key: {
-                type: Sequelize.STRING
-            },
             referrer: {
                 type: Sequelize.STRING
             },
@@ -60,7 +57,6 @@ module.exports = {
             queryInterface.addIndex('accounts', ['active_key']);
             queryInterface.addIndex('accounts', ['posting_key']);
             queryInterface.addIndex('accounts', ['memo_key']);
-            queryInterface.addIndex('accounts', ['private_key']);
         });
     },
     down: function (queryInterface, Sequelize) {
