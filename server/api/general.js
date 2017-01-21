@@ -59,8 +59,13 @@ export default function useGeneralApi(app) {
                 name: username
             }
         });
-        const pk = account.private_key;
-        console.log('-- /get_account_private_key', this.session.uui, pk);
+        if (account) {
+            this.body = JSON.stringify({
+                private_key: account.private_key
+            });
+            this.status = 200;
+            return;
+        } 
         recordWebEvent(this, 'api/get_account_private_key', username);
     });
 
