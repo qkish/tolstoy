@@ -51,10 +51,17 @@ export default function useGeneralApi(app) {
     router.post('/get_account_private_key', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const {csrf, account} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        const {csrf, username} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
-        console.log('-- /get_account_private_key', this.session.uui, account, params);
-        recordWebEvent(this, 'api/get_account_private_key', account);
+        const account = yield models.Account.findOne(
+            attributes: ['private_key'];
+            where: {
+                name: username
+            }
+        );
+        const pk = account.private_key;
+        console.log('-- /get_account_private_key', this.session.uui, pk);
+        recordWebEvent(this, 'api/get_account_private_key', username);
     });
 
     router.post('/accounts', koaBody, function*() {

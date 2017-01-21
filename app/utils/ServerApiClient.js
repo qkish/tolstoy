@@ -13,9 +13,9 @@ export function serverApiLogin(account) {
 }
 
 // Auth controller
-export function serverApiGetAccountPrivateKey(account) {
+export function serverApiGetAccountPrivateKey(username) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    fetch('/api/v1/get_user_private_key', {
+    fetch('/api/v1/get_account_private_key', {
         method: 'post',
         mode: 'no-cros',
         credentials: 'same-origin',
@@ -23,7 +23,7 @@ export function serverApiGetAccountPrivateKey(account) {
             Accept: 'application/json',
             'Content-type': 'application/json'
         },
-        body: JSON.stringify({csrf: $STM_csrf, account})
+        body: JSON.stringify({csrf: $STM_csrf, username})
     });
 }
 
