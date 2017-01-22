@@ -194,7 +194,10 @@ class Settings extends React.Component {
         const {locale} = props.intl
         const {currentTab} = state
 
-        let currentFieldsBlock
+        let currentFieldsBlock;
+        const errorView =  state.errorMessage ?
+            <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
+                <div className="alert alert-success">{state.successMessage}</div> : null;
 
         // ------------------------
         // Tabs -> routes and jsx
@@ -206,7 +209,7 @@ class Settings extends React.Component {
                 <div className="Settings__FieldsTabs__tab">
                     <form onSubmit={this.handleUserFieldsSubmit}>
 
-                  
+                        {errorView}
 
                     <label>
                         <span>{translate('first_name')}</span>
@@ -229,10 +232,6 @@ class Settings extends React.Component {
                         <textarea onChange={this.handleUserOccupationChange} value={state.occupation} placeholder={translate('occupation')}></textarea>
                     </label>
 
-                    {state.errorMessage ?
-                        <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
-                            <div className="alert alert-success">{state.successMessage}</div> : null}
-
                     <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                         <input type="submit" className="button" value={translate('save')} />
                     </p>
@@ -248,6 +247,7 @@ class Settings extends React.Component {
                 {/* Choose user more info */}
                 <form onSubmit={this.handleUserFieldsSubmit}>
 
+                    {errorView}
 
                     {/* Looking For */}
                     <label>
@@ -260,10 +260,6 @@ class Settings extends React.Component {
                         <span>{translate('i_can')}</span>
                         <textarea onChange={this.handleICanChange} value={state.i_can} placeholder={translate('i_can')}></textarea>
                     </label>
-
-                    {state.errorMessage ?
-                        <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
-                            <div className="alert alert-success">{state.successMessage}</div> : null}
 
                     <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                         <input type="submit" className="button" value={translate('save')} />
@@ -280,7 +276,7 @@ class Settings extends React.Component {
                 <div className="Settings__FieldsTabs__tab">
                     <form onSubmit={this.handleUserFieldsSubmit}>
 
-                    
+                        {errorView}
 
                         <label>
                             <span>{translate('target_date')}</span>
@@ -294,10 +290,6 @@ class Settings extends React.Component {
                             <span>{translate('target_point_b')}</span>
                             <input type="text" onChange={this.handleTargetPointBChange} value={state.target_point_b} placeholder={translate('target_point_b')} />
                         </label>
-
-                        {state.errorMessage ?
-                            <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
-                                <div className="alert alert-success">{state.successMessage}</div> : null}
 
                         <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                             <input type="submit" className="button" value={translate('save')} />
@@ -313,7 +305,7 @@ class Settings extends React.Component {
                 <div className="Settings__FieldsTabs__tab">
                     <form onSubmit={this.handleUserFieldsSubmit}>
 
-                     
+                        {errorView}
 
                         <label>
                             <span>{translate('website')}</span>
@@ -332,10 +324,6 @@ class Settings extends React.Component {
                             <input type="text" onChange={this.handleVKChange} value={state.vk} placeholder={translate('VK')} />
                         </label>
 
-                        {state.errorMessage ?
-                            <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
-                                <div className="alert alert-success">{state.successMessage}</div> : null}
-
                         <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                             <input type="submit" className="button" value={translate('save')} />
                         </p>
@@ -348,27 +336,22 @@ class Settings extends React.Component {
         if (currentTab == 'avatar') {
             currentFieldsBlock =
                 <div className="Settings__FieldsTabs__tab">
-                {state.userImage ? <img src={_urls.proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} /> : null}
 
-                <form onSubmit={this.handleUserFieldsSubmit}>
+                    {errorView}
 
-                    
+                    {state.userImage ? <img src={_urls.proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} /> : null}
 
-                    <label>
+                    <form onSubmit={this.handleUserFieldsSubmit}>
+                        <label>
+                            <span>{translate('add_image_url')}</span>
+                            <input type="url" onChange={this.handleUserImageChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} placeholder={translate('add_image_url')} />
+                        </label>
 
-                    <span>{translate('add_image_url')}</span>
-                        <input type="url" onChange={this.handleUserImageChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} placeholder={translate('add_image_url')} />
-                    </label>
-
-                    {state.errorMessage ?
-                        <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
-                            <div className="alert alert-success">{state.successMessage}</div> : null}
-
-                    <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
-                        <input type="submit" className="button" value={translate('save_avatar')} />
-                    </p>
-                </form>
-            </div>;
+                        <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
+                            <input type="submit" className="button" value={translate('save_avatar')} />
+                        </p>
+                    </form>
+                </div>;
         }
 
         // _____________________
@@ -377,20 +360,16 @@ class Settings extends React.Component {
             currentFieldsBlock =
                 <div className="Settings__FieldsTabs__tab">
 
+                    {errorView}
+
                     {state.background_image ? <img src={_urls.proxyImage(state.background_image)} alt={translate('user_avatar') + ' ' + props.account.name} /> : null}
 
                     <form onSubmit={this.handleUserFieldsSubmit}>
-
-        
 
                         <label>
                         <span>{translate('add_background_image_url')}</span>
                             <input type="url" onChange={this.handleBackgroundImageChange} value={state.background_image} disabled={!props.isOwnAccount || state.loading} placeholder={translate('add_background_image_url')} />
                         </label>
-
-                        {state.errorMessage ?
-                            <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
-                                <div className="alert alert-success">{state.successMessage}</div> : null}
 
                         <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                             <input type="submit" className="button" value={translate('save_avatar')} />
@@ -405,11 +384,7 @@ class Settings extends React.Component {
             currentFieldsBlock =
                 <div className="Settings__FieldsTabs__tab">
 
-               
-
-                    {state.errorMessage ?
-                        <div className="alert alert-danger">{state.errorMessage}</div> : state.successMessage ?
-                            <div className="alert alert-success">{state.successMessage}</div> : null}
+                    {errorView}
 
                     <label>
                         <span>{translate('choose_language')}</span>
@@ -436,13 +411,13 @@ class Settings extends React.Component {
 
         return <div className="Settings" style={{marginLeft: "10px"}}>
 
-      
+
 
                 <ul className="menu Settings__tabs">
                     <li role="presentation" className={currentTab == 'base' ? 'active' : ''}>
                         <a id="base" onClick={this.tabsSelectHandle}>{translate('base_tab')}</a>
                     </li>
-                    
+
                     <li role="presentation" className={currentTab == 'target' ? 'active' : ''}>
                         <a id="target" onClick={this.tabsSelectHandle}>{translate('target_tab')}</a>
                     </li>

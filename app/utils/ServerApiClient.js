@@ -29,9 +29,9 @@ export function getBMAccessToken (username, password) {
 }
 
 // Auth controller
-export function serverApiGetAccountPrivateKey(username) {
+export function serverApiGetAccountPrivateKey(username /* , password */) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    return fetch('/api/v1/get_account_private_key', {
+    fetch('/api/v1/get_account_private_key', {
         method: 'post',
         mode: 'no-cros',
         credentials: 'same-origin',
@@ -40,7 +40,7 @@ export function serverApiGetAccountPrivateKey(username) {
             'Content-type': 'application/json'
         },
         body: JSON.stringify({csrf: $STM_csrf, username})
-    }).then(res => res.json()).catch(err => {return err});
+    }).then(res => res.json());
 }
 
 export function serverApiLogout() {
