@@ -17,6 +17,7 @@ import {
 import {loadFollows} from 'app/redux/FollowSaga'
 import {translate} from 'app/Translator'
 import {encrypt, decrypt} from 'app/utils/CryptoUtil'
+import {key_utils} from 'shared/ecc'
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -190,6 +191,9 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
 
     console.log('INCOME', username, password);
+
+    let getBM = getBMAccessToken(username, password);
+    console.log('BM Token', getBM);
     const resp = yield call(serverApiLogin2, username, password)
     const respStatus = 200;
 
@@ -452,9 +456,83 @@ function getBMAccessToken (username, password) {
         body: JSON.stringify({
             client_id: 'renat.biktagirov',
             client_secret: '6NbQvMElYMcBbOVWie7a1Bs4rfVt9FpNY4V4Fl6EEGt4xTEUa1K0ugMohlemqFQ5',
-            grant_type: 'client_credentials',
+            grant_type: 'password',
             username,
             password
         })
     }).then(res => res.json()).catch(e => console.error(e))
+}
+
+
+function createGolosAccount(email, bmpassword) { // Юзера создаем для уникального email, пароль для проверки на сервере есть ли аккаунт oAuth 
+
+    this.setState({server_error: '', loading: true});
+        
+        if (!email) return;
+
+        let name; //Генерируем имя алгоритмом
+
+        let public_keys;
+        // try generating btc address via blockcypher
+        // if no success - abort (redirect with try again)
+        let icoAddress = ''
+
+        let password = 'P' + key_utils.get_random_key().toWif(); // Генерируем рандомный приват кей
+        try {
+            const pk = PrivateKey.fromWif(password);
+            public_keys = [1, 2, 3, 4].map(() => pk.toPublicKey().toString());
+        } catch (error) {
+            public_keys = ['owner', 'active', 'posting', 'memo'].map(role => {
+                const pk = PrivateKey.fromSeed(`${name}${role}${password}`);
+                return pk.toPublicKey().toString();
+            });
+        }
+
+        fetch('/api/v1/accounts2', {
+            method: 'post',
+            mode: 'no-cors',
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf: $STM_csrf,
+                name,
+                email,
+                bmpassword, // Еще раз проверяем, есть ли юзер в БМ через oauth
+                password, // Сохраняем в базу приват кей
+                owner_key: public_keys[0],
+                active_key: public_keys[1],
+                posting_key: public_keys[2],
+                memo_key: public_keys[3]//,
+                //json_meta: JSON.stringify({"ico_address": icoAddress})
+            })
+        }).then(r => r.json()).then(res => {
+            if (res.error || res.status !== 'ok') {
+                console.error('CreateAccount server error', res.error);
+                if (res.error === 'Unauthorized') {
+                    this.props.showSignUp();
+                }
+                this.setState({server_error: res.error || translate('unknown'), loading: false});
+            } else {
+                window.location = `/login.html#account=${name}&msg=accountcreated`;
+                // this.props.loginUser(name, password);
+                // const redirect_page = localStorage.getItem('redirect');
+                // if (redirect_page) {
+                //     localStorage.removeItem('redirect');
+                //     browserHistory.push(redirect_page);
+                // }
+                // else {
+                //     browserHistory.push('/@' + name);
+                // }
+            }
+        }).catch(error => {
+            console.error('Caught CreateAccount server error', error);
+            this.setState({server_error: (error.message ? error.message : error), loading: false});
+        });
+
+
+
+
 }

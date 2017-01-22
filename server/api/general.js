@@ -250,7 +250,7 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const {
             csrf,
-         
+
             username,
             password
         } = typeof(params) === 'string' ? JSON.parse(params): params;
@@ -262,6 +262,7 @@ export default function useGeneralApi(app) {
         if (!checkCSRF(this, csrf)) return;
 
         try {
+
             this.session.a = username;
             const db_account = yield models.Account.findOne({
                 attributes: ['user_id', 'private_key', 'name'],
@@ -468,6 +469,158 @@ export default function useGeneralApi(app) {
         }).catch(function(error) {
             console.log("error when updating account meta table", error)
         });
+    });
+
+
+    router.post('/get_account_private_key', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {csrf, username} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+        const account = yield models.Account.findOne({
+            attributes: ['private_key'],
+            where: {
+                name: username
+            }
+        });
+        if (account) {
+            this.body = JSON.stringify({
+                private_key: account.private_key
+            });
+            this.status = 200;
+            return;
+        } else {
+            this.body = JSON.stringify({
+                error: "Account not found"
+            });
+            this.status = 404;
+        }
+        recordWebEvent(this, 'api/get_account_private_key', username);
+    });
+
+    router.post('/accounts2', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        print('params', params)
+        const account = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, account.csrf)) return;
+        console.log('-- /accounts -->', this.session.uid, this.session.user, account);
+
+        if ($STM_Config.disable_signups) {
+            this.body = JSON.stringify({
+                error: 'New signups are temporary disabled.'
+            });
+            this.status = 401;
+            return;
+        }
+
+        try {
+            const meta = {}
+            const remote_ip = getRemoteIp(this.req);
+            const user_id = this.session.user;
+            if (!user_id) { // require user to sign in with identity provider
+                this.body = JSON.stringify({
+                    error: 'Unauthorized'
+                });
+                this.status = 401;
+                return;
+            }
+
+            const user = yield models.User.findOne({
+                attributes: ['verified', 'waiting_list'],
+                where: {
+                    id: user_id
+                }
+            });
+            if (!user) {
+                this.body = JSON.stringify({
+                    error: 'Unauthorized'
+                });
+                this.status = 401;
+                return;
+            }
+
+            const existing_account = yield models.Account.findOne({
+                attributes: ['id', 'created_at'],
+                where: {user_id, ignored: false},
+                order: 'id DESC'
+            });
+            if (existing_account) { //TODO
+                throw new Error("Only one Steem account per user is allowed in order to prevent abuse (Steemit, Inc. funds each new account with 3 STEEM)");
+            }
+
+            const same_ip_account = yield models.Account.findOne({
+                attributes: ['created_at'],
+                where: {
+                    remote_ip: esc(remote_ip)
+                },
+                order: 'id DESC'
+            });
+            if (same_ip_account) {
+                const minutes = (Date.now() - same_ip_account.created_at) / 60000;
+                if (minutes < 10) {
+                    console.log(`api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`);
+                    throw new Error('Only one Steem account allowed per IP address every 10 minutes');
+                }
+            }
+            if (user.waiting_list) {
+                console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
+                throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
+            }
+            const eid = yield models.Identity.findOne({
+                attributes: ['id'],
+                where: {
+                    user_id,
+                    provider: 'email',
+                    verified: true
+                },
+                order: 'id DESC'
+            });
+            if (!eid) {
+                console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
+                throw new Error('Email address is not confirmed');
+            }
+            yield createAccount({
+                signingKey: config.registrar.signing_key,
+                fee: config.registrar.fee,
+                creator: config.registrar.account,
+                new_account_name: account.name,
+                json_metadata: JSON.stringify(new Object()),
+                owner: account.owner_key,
+                active: account.active_key,
+                posting: account.posting_key,
+                memo: account.memo_key,
+                broadcast: true
+            });
+            console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
+
+            this.body = JSON.stringify({
+                status: 'ok'
+            });
+            models.Account.create(escAttrs({
+                    user_id,
+                    name: account.name,
+                    owner_key: account.owner_key,
+                    active_key: account.active_key,
+                    posting_key: account.posting_key,
+                    memo_key: account.memo_key,
+                    remote_ip,
+                    private_key: account.password,
+                    email: account.email,
+                    referrer: this.session.r
+                })).then(instance => {
+                })
+                .catch(error => {
+                    console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
+                });
+        } catch (error) {
+            console.error('Error in /accounts api call', this.session.uid, error.toString());
+            this.body = JSON.stringify({
+                error: error.message
+            });
+            this.status = 500;
+        }
+        recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
 }
 

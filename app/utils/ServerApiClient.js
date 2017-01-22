@@ -38,7 +38,7 @@ export function getBMAccessToken (username, password) {
         body: JSON.stringify({
             client_id: 'renat.biktagirov',
             client_secret: '6NbQvMElYMcBbOVWie7a1Bs4rfVt9FpNY4V4Fl6EEGt4xTEUa1K0ugMohlemqFQ5',
-            grant_type: 'client_credentials',
+            grant_type: 'password',
             username,
             password
         })
