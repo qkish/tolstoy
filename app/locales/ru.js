@@ -614,6 +614,7 @@ const ru = {
     user_more_info: 'Дополнительная информация',
     looking_for: 'Могу',
     i_can: 'Ищу',
+		phone: 'Телефон',
 
     system_settings: 'Настройки системы',
     user_background_info: 'Фоновое изображение',
