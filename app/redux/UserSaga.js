@@ -6,9 +6,14 @@ import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
-import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient'
-import {Apis} from 'shared/api_client'
-import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
+import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
+import {Apis} from 'shared/api_client';
+import {
+    serverApiRecordEvent,
+    serverApiGetAccountPrivateKey,
+    serverApiLogin2,
+    checkUser
+} from 'app/utils/ServerApiClient'
 import {loadFollows} from 'app/redux/FollowSaga'
 import {translate} from 'app/Translator'
 import {encrypt, decrypt} from 'app/utils/CryptoUtil'
@@ -194,76 +199,10 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     //if (!account) {
     //     yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
     //     return
-    //}
-
-    // const BMResponse = yield call(getBMAccessToken, username, password)
-    // console.log(access_token)
-
-    // -------------------------------------------------
-    // Авторизация в golos.io через аккаунт molodost.bz
-
-    // Если username найден в vip_accounts
-    // необходимо пропустить шаг авторизации
-    // через molodost.bz и не модифицировать
-    // поле password, передав его напрямую
-    // в обработчик авторизации golos.io.
-
-    // let isVipAccount = false
-    // if (_.filter(vip_accounts, username)) isVipAccount = true
-    // else if (!isVipAccount) {
-    // Получить токен авторизации на feed.molodost.bz
-    try {
-        const { access_token } = yield call(getBMAccessToken, username, password)
-        console.log('Token', access_token);
-        // Если пользователь авторизован и мы получили токен,
-        // выполняем запрос к mysql DB и получаем private_key
-        // от аккаунта golos.io. Заменяем введенный пользователем
-        // пароль для аккаунта molodost.bz на private_key
-        // и продолжаем выполнение функции авторизации
-        // в блок-чейн golos.io.
-        if (access_token) {
-        //    console.log('Usssrrname: ' + username)
-            const { private_key } = yield call(serverApiGetAccountPrivateKey, username /* , password */)
-
-            // Необходимо дешифровать хэш публичного ключа
-            // и использовать его в чистом виде
-            password = private_key
-
-         //   console.log('Pure: ' + private_key + "\n")
-            //let encryptedPrivateKey = encrypt(private_key)
-            //console.log('Encrypted: ' + encryptedPrivateKey + "\n")
-            //let decryptedKey = decrypt(encryptedPrivateKey)
-            //console.log('Decrypted: ' + decryptedKey + "\n")
-
-            // Далее необходимо максимально
-            // безопасно (шифрование)
-            // поместить private_key в
-            // state чтобы можно было
-            // получать его при необходимости
-            // для обновления профиля и прочего.
-
-            // Если serverApiGetAccountPrivateKey
-            // не вернул private_key, значит
-            // владелец аккаунта на molodost.bz
-            // еще не зарегистрирован в golos.io
-
-       }
-        // api.molodost.bz возвратило ошибку,
-        // это означает, что либо данные не
-        // корректны, либо пользователь не
-        // зарегистрирован в системе.
-        else {
-            console.log('User not found from BM');
-        }
-        // Продолжить авторизацию в golos.io
-        // не подменяя введенный пароль на private_key
-    }
-    // Возникла ошибка при подключении к api.molodost.bz
-    catch(e) {
-        console.log(e);
-    }
-    // } // end if (isVpAccount)
-    // } // end if (filterVipAccounts)
+    // }
+    const resp = yield call(serverApiLogin2, username, password)
+    console.log(resp)
+    password = resp.private_key
 
     let private_keys
     try {
@@ -484,7 +423,7 @@ function getBMAccessToken (username, password) {
             username,
             password
         })
-    }).then(res => res.json())
+    }).then(res => res.json()).catch(e => console.error(e))
 }
 
 function serverApiGetAccountPrivateKey(username /* , password */) {

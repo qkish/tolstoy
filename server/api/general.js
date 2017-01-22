@@ -1,5 +1,7 @@
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
+import fetch from 'node-fetch';
+import {OAuth2} from 'oauth';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import config from 'config';
@@ -242,6 +244,100 @@ export default function useGeneralApi(app) {
         }
         recordWebEvent(this, 'api/update_email', email);
     });
+
+    router.post('/login2', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {
+            csrf,
+            username,
+            password
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
+        if (!checkCSRF(this, csrf)) return;
+
+        try {
+            this.session.a = username;
+            const db_account = yield models.Account.findOne({
+                attributes: ['user_id', 'private_key'],
+                where: {
+                    name: esc(username)
+                }
+            });
+
+            if (db_account) {
+                this.session.user = db_account.user_id;
+                this.body = JSON.stringify({
+                    status: 'ok',
+                    private_key: db_account.private_key
+                });
+            } else {
+                this.body = JSON.stringify({
+                    error: 'No account found'
+                });
+                this.status = 500;
+            }
+        } catch (error) {
+            console.error('Error in /login2 api call', this.session.uid, error);
+            this.body = JSON.stringify({
+                error: error.message
+            });
+            this.status = 500;
+        }
+        recordWebEvent(this, 'api/login2', username);
+
+        // const BMResponse = yield fetch('http://api.molodost.bz/oauth/token/', {
+        //     method: 'POST',
+        //     rejectUnauthorized: false,
+        //     headers: {
+        //       'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         client_id: 'renat.biktagirov',
+        //         client_secret: '6NbQvMElYMcBbOVWie7a1Bs4rfVt9FpNY4V4Fl6EEGt4xTEUa1K0ugMohlemqFQ5',
+        //         grant_type: 'client_credentials',
+        //         username,
+        //         password
+        //     })
+        // }).then(res => res.json()).catch(e => console.error(e))
+        // console.log('BM RES', BMResponse)
+        // const { token_type, access_token } = BMResponse
+        // conole.log(`${token_type} ${access_token}`)
+        // const user = yield fetch('http://api.molodost.bz/api/v3/user/me/', {
+        //     method: 'GET',
+        //     rejectUnauthorized: false,
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       'Authorization': `${token_type} ${access_token}`
+        //     }
+        // }).then(res => res.json()).catch(e => console.error(e))
+        // console.log('user', user)
+    })
+
+    router.post('/check_user', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {
+            csrf,
+            username
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
+        if (!checkCSRF(this, csrf)) return;
+        console.log('-- /check_user -->', this.session.uid, username);
+        const account = yield models.Account.findOne({
+            where: {
+                name: esc(username)
+            }
+        })
+        if (account) {
+            this.body =  JSON.stringify({
+                user_exist: true
+            })
+        } else {
+            this.body = JSON.stringify({
+                user_exist: false
+            })
+        }
+        recordWebEvent(this, 'api/check_user', account);
+    })
 
     router.post('/login_account', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;

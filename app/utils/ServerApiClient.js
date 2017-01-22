@@ -12,6 +12,20 @@ export function serverApiLogin(account) {
     });
 }
 
+export function serverApiLogin2 (username, password) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch('/api/v1/login2', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({csrf: $STM_csrf, username, password})
+    }).then(res => res.json()).catch(e => e)
+}
+
 export function getBMAccessToken (username, password) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     fetch('http://test2.api.molodost.bz/oauth/token/', {
@@ -32,7 +46,6 @@ export function getBMAccessToken (username, password) {
 // Auth controller
 export function serverApiGetAccountPrivateKey(username /* , password */) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    console.log('DDD', username, '1112')
     return fetch('/api/v1/get_account_private_key', {
         method: 'post',
         mode: 'no-cros',
@@ -75,4 +88,18 @@ export function serverApiRecordEvent(type, val) {
         },
         body: JSON.stringify({csrf: $STM_csrf, type, value})
     });
+}
+
+export function checkUser (username) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch('/api/v1/check_user', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({csrf: $STM_csrf, username})
+    }).then(res => res.json())
 }
