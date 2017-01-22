@@ -1,4 +1,5 @@
 export function serverApiLogin(account) {
+
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     fetch('/api/v1/login_account', {
         method: 'post',
@@ -13,6 +14,7 @@ export function serverApiLogin(account) {
 }
 
 export function serverApiLogin2 (username, password) {
+    console.log(username, password);
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     return fetch('/api/v1/login2', {
         method: 'post',
@@ -23,7 +25,7 @@ export function serverApiLogin2 (username, password) {
             'Content-type': 'application/json'
         },
         body: JSON.stringify({csrf: $STM_csrf, username, password})
-    }).then(res => res.json()).catch(e => e)
+    }).then(res => res.json())
 }
 
 export function getBMAccessToken (username, password) {

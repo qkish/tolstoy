@@ -131,16 +131,6 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
     });
 } */
 
-function* baseLogin(action) {
-    yield call(usernamePasswordLogin2, action)
-    const current = yield select(state => state.user.get('current'))
-    if(current) {
-        const username = current.get('username')
-        yield fork(loadFollows, "get_following", username, 'blog')
-        yield fork(loadFollows, "get_following", username, 'ignore')
-    }
-}
-
 function* usernamePasswordLogin(action) {
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
     // Проверка наличия пользователя по email
@@ -162,14 +152,18 @@ const clean = (value) => value == null || value === '' || /null|undefined/.test(
 function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         operationType /*high security*/, afterLoginRedirectToAccount
 }}) {
+
+
     // login, using saved password
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey
     if (!username && !password) {
         const data = localStorage.getItem('autopost2')
         if (data) { // auto-login with a low security key (like a posting key)
+            console.log('Before: ', username, password)
             autopost = true; // must use simi-colon
             // The 'password' in this case must be the posting private wif .. See setItme('autopost')
             [username, password, memoWif, login_owner_pubkey] = new Buffer(data, 'hex').toString().split('\t');
+            console.log('After: ', username, password)
             memoWif = clean(memoWif);
             login_owner_pubkey = clean(login_owner_pubkey);
         }
@@ -195,14 +189,53 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
 
-    const account = yield call(getAccount, username)
-    //if (!account) {
-    //     yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
-    //     return
-    // }
+    console.log('INCOME', username, password);
     const resp = yield call(serverApiLogin2, username, password)
-    console.log(resp)
-    password = resp.private_key
+    const respStatus = 200;
+
+  // Если пользователь найден в молодости и данные валидны,
+    // тогда заменить имя и пароль на данные дя входа в golos.io
+    if (respStatus === 200) {
+        if (resp.name) username = resp.name // resp.name
+        password = resp.private_key // resp.private_key
+        console.log('RESP 200', username, password)
+    } 
+    // Сервер вернул ошибку
+    // необходимо определить -
+    // ошибка в БМ авторизации,
+    // или пользователь не найден в БД
+    else {
+        const {error} = resp
+
+        // Ошибка авторизации на molodost
+        if (error == 'bmAccountNotFound') {
+            return;
+        } 
+        // Пользователь найден на
+        // molodost.bz, но не имеет
+        // аккаунта в golos.io
+        else {
+            // Создать аккаунт на golos.io
+            const golosLogin = 'test'
+            // createGolosAccount()
+            // Получить сгоенерированные 
+            // логин и приватный ключ
+            // и продолжить авторизацию в golos.io
+        }
+    } 
+
+
+
+console.log('UNAME', username, ': RESP.NAME', resp.name)
+
+    //console.log(resp)
+    //password = resp.private_key
+
+        const account = yield call(getAccount, username)
+          //  if (!account) {
+         //       yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
+        //        return
+       //     }
 
     let private_keys
     try {
@@ -302,7 +335,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if (!autopost && saveLogin)
         yield put(user.actions.saveLogin());
 
-    serverApiLogin(username);
+    //serverApiLogin(username);
     if (afterLoginRedirectToAccount) browserHistory.push('/@' + username);
 }
 
@@ -424,17 +457,4 @@ function getBMAccessToken (username, password) {
             password
         })
     }).then(res => res.json()).catch(e => console.error(e))
-}
-
-function serverApiGetAccountPrivateKey(username /* , password */) {
-    return fetch('/api/v1/get_account_private_key', {
-        method: 'post',
-        mode: 'no-cros',
-        credentials: 'same-origin',
-        headers: {
-            Accept: 'application/json',
-            'Content-type': 'application/json'
-        },
-        body: JSON.stringify({csrf: $STM_csrf, username})
-    }).then(res => res.json()).catch(e => console.error(e));
 }

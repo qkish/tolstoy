@@ -1,7 +1,6 @@
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
 import fetch from 'node-fetch';
-import {OAuth2} from 'oauth';
 import models from 'db/models';
 import findUser from 'db/utils/find_user';
 import config from 'config';
@@ -13,6 +12,7 @@ import {getLogger} from '../../app/utils/Logger'
 import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
+
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
 
@@ -250,25 +250,34 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const {
             csrf,
+         
             username,
             password
         } = typeof(params) === 'string' ? JSON.parse(params): params;
+
+
+
+        console.log('SERV', username, password);
+
         if (!checkCSRF(this, csrf)) return;
 
         try {
             this.session.a = username;
             const db_account = yield models.Account.findOne({
-                attributes: ['user_id', 'private_key'],
+                attributes: ['user_id', 'private_key', 'name'],
                 where: {
-                    name: esc(username)
+                    email: esc(username)
                 }
             });
 
             if (db_account) {
                 this.session.user = db_account.user_id;
+                console.log('SERVKEY', db_account.name, db_account.private_key)
                 this.body = JSON.stringify({
                     status: 'ok',
+                    name: db_account.name,
                     private_key: db_account.private_key
+
                 });
             } else {
                 this.body = JSON.stringify({
