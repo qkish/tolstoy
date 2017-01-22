@@ -200,7 +200,7 @@ class PostsIndex extends React.Component {
         const sort_orders = [
         ['hot', translate('hot')],
             ['created', translate('new')],
-          
+
             ['trending', translate('trending_24_hour')],
             // disabled until crowdsale starts
             // ['trending30', translate('trending_30_day')],
@@ -216,7 +216,7 @@ class PostsIndex extends React.Component {
         const sort_orders_horizontal = [
         ['hot', translate('hot')],
             ['created', translate('new')],
-        
+
             ['trending', translate('trending')],
             // ['promoted', translate('promoted')],
             ['active', translate('active')]
@@ -227,15 +227,16 @@ class PostsIndex extends React.Component {
                 let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
                 return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
-            }); 
+            });
+
+        // Скрыть форму добавления поста
+        // для неавторизованных пользователей
+        let formFront = '';
+        if (current_account_name) formFront = <div className="SubmitPost">
+            <SubmitReplyEditor type="submit_story" />
+        </div>;
 
 
-         let formFront = '';
-         if (current_account_name) formFront = <div className="SubmitPost">
-               <SubmitReplyEditor type="submit_story" />
-            </div>;
-
-        
 
 
         return (
@@ -255,10 +256,10 @@ class PostsIndex extends React.Component {
                         showSpam={showSpam} />
                 </div>
                 <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
-                    
+
                     <Beta />
                     <Products />
-                   
+
                 </div>
             </div>
         );
@@ -272,7 +273,7 @@ module.exports = {
             // console.log('state.global', state.global)
             const current_user = state.user.get('current');
             const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
-  
+
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
