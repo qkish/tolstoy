@@ -29,6 +29,8 @@ class Settings extends React.Component {
         target_date: this.props.targetDate || '',
         target_point_a: this.props.targetPointA || '',
         target_point_b: this.props.targetPointB || '',
+        email: this.props.email || '',
+        phone: this.props.phone || '',
         website: this.props.website || '',
         instagram: this.props.instagram || '',
         facebook: this.props.facebook || '',
@@ -65,6 +67,13 @@ class Settings extends React.Component {
     handleUserOccupationChange = event => {
         this.setState({occupation: event.target.value})
     }
+    handleUserEmailChange = event => {
+        this.setState({email: event.target.value})
+    }
+    handleUserPhoneChange = event => {
+        this.setState({phone: event.target.value})
+    }
+
 
     // -----------------------------
     // User target info fields handlers
@@ -133,6 +142,8 @@ class Settings extends React.Component {
         metaData.city = this.state.city;
         metaData.age = this.state.age;
         metaData.occupation = this.state.occupation;
+        metaData.email = this.state.email;
+        metaData.phone = this.state.phone;
 
         // Target
         metaData.target_plan = this.state.target_plan;
@@ -230,6 +241,15 @@ class Settings extends React.Component {
                     <label>
                         <span>{translate('occupation')}</span>
                         <textarea onChange={this.handleUserOccupationChange} value={state.occupation} placeholder={translate('occupation')}></textarea>
+                    </label>
+
+                    <label>
+                        <span>{translate('email')}</span>
+                        <textarea onChange={this.handleUserEmailChange} value={state.email} placeholder={translate('email')}></textarea>
+                    </label>
+                    <label>
+                        <span>{translate('phone')}</span>
+                        <textarea onChange={this.handleUserPhoneChange} value={state.phone} placeholder={translate('phone')}></textarea>
                     </label>
 
                     <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
@@ -461,6 +481,8 @@ export default connect(
         const age = metaData ? metaData.age : ''
         const city = metaData ? metaData.city : ''
         const occupation = metaData ? metaData.occupation : '' // направление деятельности
+        const email = metaData ? metaData.email : ''
+        const phone = metaData ? metaData.phone : ''
 
         // Target
         const targetPlan = metaData ? metaData.target_plan : ''
@@ -494,6 +516,8 @@ export default connect(
             age,
             city,
             occupation,
+            email,
+            phone,
             targetPlan,
             targetDate,
             targetPointA,
