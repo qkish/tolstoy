@@ -207,9 +207,6 @@ class LoginForm extends Component {
                     <button type="submit" disabled={submitting || disabled} className="button">
                         {submitLabel}
                     </button>
-                    {this.props.onCancel && <button type="button float-right" disabled={submitting} className="button hollow" onClick={onCancel}>
-                        {translate("cancel")}
-                    </button>}
                 </div>
             </form>
         )
@@ -279,6 +276,7 @@ export default connect(
         dispatchSubmit: (data, loginBroadcastOperation, afterLoginRedirectToAccount) => {
             const {password, saveLogin} = data
             const username = data.username.trim().toLowerCase()
+
             if (loginBroadcastOperation) {
                 const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
                 dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))

@@ -27,6 +27,7 @@ export function serverApiLogin2 (username, password) {
 }
 
 export function getBMAccessToken (username, password) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     fetch('http://test2.api.molodost.bz/oauth/token/', {
         method: 'POST',
         headers: {
