@@ -123,7 +123,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     //     return
     // }
 
-    const { access_token } = yield call(getBMAccessToken, username, password)
+
+    const BMResponse = yield call(getBMAccessToken, username, password)
     // console.log(access_token)
 
     const { private_key } = yield call(serverApiGetAccountPrivateKey, username)
@@ -336,7 +337,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 // }
 
 function getBMAccessToken (username, password) {
-    return fetch('http://test2.api.molodost.bz/oauth/token/', {
+    fetch('http://test2.api.molodost.bz/oauth/token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -317,19 +317,19 @@ class Settings extends React.Component {
 
                         <label>
                             <span>{translate('website')}</span>
-                            <input type="text" onChange={this.handleWebsiteChange} defaultValue={state.website} placeholder={translate('website')} />
+                            <input type="text" onChange={this.handleWebsiteChange} value={state.website} placeholder={translate('website')} />
                         </label>
                         <label>
                             <span>{translate('instagram')}</span>
-                            <input type="text" onChange={this.handleInstagramChange} defaultValue={state.instagram} placeholder={translate('instagram')} />
+                            <input type="text" onChange={this.handleInstagramChange} value={state.instagram} placeholder={translate('instagram')} />
                         </label>
                         <label>
                             <span>{translate('facebook')}</span>
-                            <input type="text" onChange={this.handleFacebookChange} defaultValue={state.facebook} placeholder={translate('facebook')} />
+                            <input type="text" onChange={this.handleFacebookChange} value={state.facebook} placeholder={translate('facebook')} />
                         </label>
                         <label>
                             <span>{translate('VK')}</span>
-                            <input type="text" onChange={this.handleVKChange} defaultValue={state.vk} placeholder={translate('VK')} />
+                            <input type="text" onChange={this.handleVKChange} value={state.vk} placeholder={translate('VK')} />
                         </label>
 
                         {state.errorMessage ?

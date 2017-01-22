@@ -1,0 +1,77 @@
+.ViewUserBase__instagram {
+
+	background: url('../../assets/icons/social.png') no-repeat;
+	width: 30px;
+	height: 25px;
+	background-size: 135px 65px;
+	background-position: 2px 2px;
+	display: block;
+	-webkit-transition: none;
+	transition: none;
+	
+}
+.ViewUserBase__instagram:hover {
+	background-position: 2px -43px;
+}
+
+.ViewUserBase__facebook {
+
+		background: url('../../assets/icons/social.png') no-repeat;
+	width: 30px;
+	height: 25px;
+	background-size: 135px 65px;
+	background-position: -55px 2px;
+	display: block;
+	-webkit-transition: none;
+	transition: none;
+}
+.ViewUserBase__facebook:hover {
+	background-position: -55px -43px;
+}
+
+.ViewUserBase__vk {
+
+			background: url('../../assets/icons/social.png') no-repeat;
+	width: 30px;
+	height: 25px;
+	background-size: 135px 65px;
+	background-position: -112px 2px;
+	display: block;
+	-webkit-transition: none;
+	transition: none;
+	
+}
+.ViewUserBase__vk:hover {
+	background-position: -112px -43px;
+}
+
+.ViewUserBase__website {
+	width: 60px;
+	height: 20px;
+	border-radius: 3px;
+	background-color: #dadde0;
+	float: left;
+	font-size:11px;
+	margin-left: 5px;
+	 font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 2px;
+
+} 
+.ViewUserBase__website:hover, .ViewUserBase__website:focus {
+	text-decoration: none;
+	background-color: #c5c8cb;
+}
+
+.ViewUserBase_link {
+	display: inline-block;
+	height: 25px;
+	
+}
+
+.ViewUserBase_linksblock {
+	text-align: center; 
+	margin-top: 15px;
+}

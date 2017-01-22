@@ -8,16 +8,20 @@ function getRemoteIp(req) {
     return ip_match ? ip_match[1] : esc(remote_address);
 }
 
+var ip_conn_count = 1;
 var ip_last_hit = new Map();
 function rateLimitReq(ctx, req) {
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    const now = Date.now()
+    const now = Date.now();
 
     // purge hits older than minutes_max
     ip_last_hit.forEach((v, k) => {
+     
         const seconds = (now - v) / 1000;
-        if (seconds > 1) {
-            ip_last_hit.delete(ip)
+        
+        if (seconds > 1 || ip_conn_count >= 3) {
+            ip_last_hit.delete(ip);
+            ip_conn_count = 0;
         }
     })
 
@@ -34,6 +38,7 @@ function rateLimitReq(ctx, req) {
 
     // record api hit
     ip_last_hit.set(ip, now);
+    ip_conn_count++;
     return result;
 }
 

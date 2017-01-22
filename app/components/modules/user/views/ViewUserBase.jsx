@@ -41,6 +41,51 @@ class ViewUserBase extends Component {
     }
 
 
+    InstaCorrect(text) {
+
+     var pattern = /^((http|https|ftp):\/\/instagram.com\/)/;
+
+        if(!pattern.test(text)) {
+        text = "http://instagram.com/" + text;
+         }
+        return text;
+
+    }
+    FbCorrect(text) {
+
+     var pattern = /^((http|https|ftp):\/\/facebook.com\/)/;
+
+        if(!pattern.test(text)) {
+        text = "http://facebook.com/" + text;
+         }
+        return text;
+
+    }
+
+    VkCorrect(text) {
+
+     var pattern = /^((http|https|ftp):\/\/(vk.com|vkontakte.ru)\/)/;
+
+        if(!pattern.test(text)) {
+        text = "http://vk.com/" + text;
+         }
+        return text;
+
+    }
+     LinkCorrect(text) {
+
+     var pattern = /^((http|https|ftp):\/\/)/;
+
+        if(!pattern.test(text)) {
+        text = "http://" + text;
+         }
+        return text;
+
+    }
+
+
+
+
 
     render() {
         let account = this.props.account;
@@ -56,6 +101,39 @@ class ViewUserBase extends Component {
         let yearsCorrect;
         yearsCorrect = this.AgeCalc(age);
 
+
+
+
+        let instagramLink;
+        let facebookLink;
+        let vkLink;
+        let websiteLink;
+
+       
+        
+   
+        
+
+
+        if (instagram != '') {
+             instagram = this.InstaCorrect(instagram);
+            instagramLink = <div className="ViewUserBase_link"><a className="ViewUserBase__instagram" href={instagram} target='_blank'></a></div>;
+        }
+        if (facebook != '') {
+            facebook = this.FbCorrect(facebook);
+            facebookLink = <div className="ViewUserBase_link"><a className="ViewUserBase__facebook" href={facebook}  target='_blank'></a></div>;
+        }
+        if (vk) {
+            vk = this.VkCorrect(vk);
+            vkLink = <div className="ViewUserBase_link"><a className="ViewUserBase__vk" href={vk}  target='_blank'></a></div>;
+        }
+        if (website) {
+            website = this.LinkCorrect(website);
+            websiteLink = <div className="ViewUserBase_link"><a className="ViewUserBase__website" href={website}  target='_blank'>Сайт</a> </div>;
+        }
+
+
+
         return <div className="UserProfile__nameinfo">
 
                 <h2>{this.isFullName(metaData) ? first_name + ' ' + last_name : account.name}</h2>
@@ -64,10 +142,18 @@ class ViewUserBase extends Component {
             <div className="UserProfile__infoboxes">{occupation ? occupation : ''}</div>
             <div className="UserProfile__infoboxes ">Голосов: {vestingSteemVal}</div>
 
-            <div className="UserProfile__infoboxes">Сайт: {website}</div>
-            <div className="UserProfile__infoboxes">Instargram: {instagram}</div>
-            <div className="UserProfile__infoboxes">Facebook: {facebook}</div>
-            <div className="UserProfile__infoboxes">VK: {vk}</div>
+            <div className="ViewUserBase_linksblock">
+
+            {instagramLink}
+            {facebookLink}
+            {vkLink}
+            {websiteLink}
+                
+                
+                
+
+            </div>
+
         </div>
     }
 
