@@ -204,7 +204,7 @@ class CreateAccount extends React.Component {
         }
 
         const existingUserAccount = offchainUser.get('account');
-        if (existingUserAccount) {
+        if (existingUserAccount && false) {
             return <div className="row">
                 <div className="column">
                     <div className="callout alert">
@@ -222,8 +222,8 @@ class CreateAccount extends React.Component {
             </div>;
         }
 
-        return (
-            <div className="CreateAccount row">
+        
+        const GolosRegForm = <div className="CreateAccount row">
                 <div className="column large-7 small-10">
                     <h2>{translate('sign_up')}</h2>
                     <div className="CreateAccount__rules">
@@ -255,8 +255,9 @@ class CreateAccount extends React.Component {
                         <input disabled={submit_btn_disabled} type="submit" className={submit_btn_class + ' uppercase'} value={translate('sign_up')} />
                     </form>
                 </div>
-            </div>
-        );
+            </div>;
+
+            return (<SignUp />);
     }
 }
 

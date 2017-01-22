@@ -19,7 +19,7 @@ function rateLimitReq(ctx, req) {
      
         const seconds = (now - v) / 1000;
         
-        if (seconds > 1 || ip_conn_count >= 3) {
+        if (seconds > 1 || ip_conn_count <= 3) {
             ip_last_hit.delete(ip);
             ip_conn_count = 0;
         }

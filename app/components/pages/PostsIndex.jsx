@@ -98,8 +98,6 @@ class PostsIndex extends React.Component {
             posts = this.getPosts(order, category);
         }
 
-
-
         const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;
         const fetching = (status && status.fetching) || this.props.loading;
         const {showSpam} = this.state
@@ -243,7 +241,7 @@ class PostsIndex extends React.Component {
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
                 <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
 
-                {formFront}
+                    {formFront}
 
                     <HorizontalMenu items={sort_order_menu_horizontal} />
 

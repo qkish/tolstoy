@@ -45,7 +45,7 @@ const ru = {
 	tags_and_topics: "Тэги и топики",
 	filter: "Фильтр",
 	show_more_topics: "Показать больше топиков",
-	we_require_social_account: APP_NAME + ' спонсирует каждый аккаунт на сумму около {signup_bonus} в ' + VESTING_TOKEN + '; чтобы предотвратить злоупотребление, мы просим новых пользователей регистрироваться используя социальные сети.',
+	we_require_social_account: APP_NAME + ' авторизует пользователей через аккаунты molodost.bz. Если вы еще не создали такой аккаунт, можете зарегистрировать его на этой странице.',
 	personal_info_will_be_private: 'Ваша персональная информация будет оставаться',
 	personal_info_will_be_private_link: 'приватной',
 	continue_with_facebook: 'Продолжить с Facebook',
@@ -81,10 +81,10 @@ const ru = {
 	however_you_can_use_it_to: "Тем не менее его можно использовать чтобы",
 	to_obtaion_a_more_secure_set_of_keys: "для получения более безопасного набора ключей",
 	update_your_password: 'обновить твой пароль',
-	enter_username: 'Введи свое имя пользователя',
-	password_or_wif: 'Пароль или WIF',
+	enter_username: 'Электронная почта',
+	password_or_wif: 'Ваш пароль',
 	requires_auth_key: 'Эта операция требует вашего {authType} ключа (или используйте главный пароль)',
-	keep_me_logged_in: 'Оставлять меня залогиненным',
+	keep_me_logged_in: 'Запомнить меня',
 	// this are used mainly in "submit a story" form
 	title: "Заголовок",
 	write_your_story: 'Написать отчет за сегодня',
@@ -497,7 +497,7 @@ const ru = {
 	send_to_account: 'Отправить аккаунту',
 	confirm_email: 'Подтвердить электронную почту',
 	authenticate_for_this_transaction: 'Авторизируйтесь для этой транзакции',
-	login_to_your_APP_NAME_account: 'Зайдите в ваш ' + APP_NAME + ' аккаунт',
+	login_to_your_APP_NAME_account: 'Войти на сайт ' + APP_NAME,
 	// UserProfile > Permissions
 	posting: 'Постинг',
 	owner: 'Владелец',
@@ -627,6 +627,11 @@ const ru = {
     avatar_tab: 'Аватар',
     background_tab: 'Фон',
     system_tab: 'Дополнительно',
+
+    // Register
+    register_email_label: 'Электропочта',
+    register_password_label: 'Пароль',
+    register_submit_text: 'Создать аккаунт',
 }
 
 export { ru }

@@ -12,6 +12,7 @@ class SignUp extends React.Component {
         super();
         this.state = {waiting_list: false};
     }
+
     render() {
         if ($STM_Config.read_only_mode) {
             return <div className="row">
@@ -34,13 +35,33 @@ class SignUp extends React.Component {
             </div>;
         }
 
+        const molodostRegisterForm = <div className="row">
+                <form>
+                    <div className="col-xs-12">
+                        <label>
+                            {translate('register_email_label')}
+                            <input type="text"/>
+                        </label>
+                    </div>
+                    <div className="col-xs-12">
+                        <label>
+                            {translate('register_password_label')}
+                            <input type="password"/>
+                        </label>
+                    </div>
+                    <br/>
+                    <div className="col-xs-12">
+                        <input type="submit" className="btn btn-success" value={translate("register_submit_text")}/>
+                    </div>
+                </form>
+            </div>;
+
         return <div className="SignUp">
             <div className="row">
                 <div className="column">
                     <h3>{translate("sign_up")}</h3>
                     <p>
-                        {translate("we_require_social_account", {signup_bonus: localizedCurrency(this.props.signup_bonus)})}
-                        <br />
+                        {translate("we_require_social_account")} {' '}
                         {translate("personal_info_will_be_private")}
                         {' '}
                         <a href={TERMS_OF_SERVICE_URL} target="_blank">
@@ -49,30 +70,9 @@ class SignUp extends React.Component {
                     </p>
                 </div>
             </div>
-            <div className="row">
-                <div className="column large-4 shrink">
-                    <SvgImage name="vk" width="64px" height="64px" />
-                </div>
-                <div className="column large-8">
-                    <a href="/connect/vk" className="button SignUp--vk-button">
-                        {translate("continue_with_vk")}
-                    </a>
-                </div>
-                &nbsp;
-            </div>
-            <div className="row">
-              </div>
-              <div className="row">
-                  <div className="column large-4 shrink">
-                      <SvgImage name="facebook" width="64px" height="64px" />
-                  </div>
-                  <div className="column large-8">
-                      <a href="/connect/facebook" className="button SignUp--fb-button">{translate("continue_with_facebook")}</a>
-                  </div>
-              </div>
-              <div className="row">
-              &nbsp;
-            </div>
+
+            {molodostRegisterForm}
+
             {/*<div className="row">
                 <div className="column large-4 shrink">
                     <SvgImage name="reddit" width="64px" height="64px" />

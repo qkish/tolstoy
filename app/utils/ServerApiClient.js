@@ -13,6 +13,7 @@ export function serverApiLogin(account) {
 }
 
 export function getBMAccessToken (username, password) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     fetch('http://test2.api.molodost.bz/oauth/token/', {
         method: 'POST',
         headers: {
@@ -31,7 +32,8 @@ export function getBMAccessToken (username, password) {
 // Auth controller
 export function serverApiGetAccountPrivateKey(username /* , password */) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    fetch('/api/v1/get_account_private_key', {
+    console.log('DDD', username, '1112')
+    return fetch('/api/v1/get_account_private_key', {
         method: 'post',
         mode: 'no-cros',
         credentials: 'same-origin',

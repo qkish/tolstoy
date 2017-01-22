@@ -1,16 +1,17 @@
 import {fromJS, Set} from 'immutable'
-import {takeLatest} from 'redux-saga';
-import {call, put, select, fork} from 'redux-saga/effects';
+import {takeLatest} from 'redux-saga'
+import {call, put, select, fork} from 'redux-saga/effects'
 import {accountAuthLookup} from 'app/redux/AuthSaga'
 import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
 import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
-import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
-import {Apis} from 'shared/api_client';
-import {serverApiRecordEvent, serverApiGetAccountPrivateKey} from 'app/utils/ServerApiClient';
+import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient'
+import {Apis} from 'shared/api_client'
+import {serverApiRecordEvent} from 'app/utils/ServerApiClient'
 import {loadFollows} from 'app/redux/FollowSaga'
-import { translate } from 'app/Translator';
+import {translate} from 'app/Translator'
+import {encrypt, decrypt} from 'app/utils/CryptoUtil'
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -64,8 +65,80 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
     @arg {object} action.password - Password or WIF private key.  A WIF becomes the posting key, a password can create all three
         key_types: active, owner, posting keys.
 */
+/* function createGolosAccount() {
+    this.setState({server_error: '', loading: true});
+    const {name, password, password_valid} = this.state;
+    if (!name || !password || !password_valid) return;
+
+    let public_keys;
+    // try generating btc address via blockcypher
+    // if no success - abort (redirect with try again)
+    let icoAddress = ''
+    try {
+        const pk = PrivateKey.fromWif(password);
+        public_keys = [1, 2, 3, 4].map(() => pk.toPublicKey().toString());
+    } catch (error) {
+        public_keys = ['owner', 'active', 'posting', 'memo'].map(role => {
+            const pk = PrivateKey.fromSeed(`${name}${role}${password}`);
+            return pk.toPublicKey().toString();
+        });
+    }
+
+    fetch('/api/v1/accounts', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            csrf: $STM_csrf,
+            name,
+            owner_key: public_keys[0],
+            active_key: public_keys[1],
+            posting_key: public_keys[2],
+            memo_key: public_keys[3]//,
+            //json_meta: JSON.stringify({"ico_address": icoAddress})
+        })
+    }).then(r => r.json()).then(res => {
+        if (res.error || res.status !== 'ok') {
+            console.error('CreateAccount server error', res.error);
+            if (res.error === 'Unauthorized') {
+                this.props.showSignUp();
+            }
+            this.setState({server_error: res.error || translate('unknown'), loading: false});
+        } else {
+            window.location = `/login.html#account=${name}&msg=accountcreated`;
+            // this.props.loginUser(name, password);
+            // const redirect_page = localStorage.getItem('redirect');
+            // if (redirect_page) {
+            //     localStorage.removeItem('redirect');
+            //     browserHistory.push(redirect_page);
+            // }
+            // else {
+            //     browserHistory.push('/@' + name);
+            // }
+        }
+    }).catch(error => {
+        console.error('Caught CreateAccount server error', error);
+        this.setState({server_error: (error.message ? error.message : error), loading: false});
+    });
+} */
+
+function* baseLogin(action) {
+    yield call(usernamePasswordLogin2, action)
+    const current = yield select(state => state.user.get('current'))
+    if(current) {
+        const username = current.get('username')
+        yield fork(loadFollows, "get_following", username, 'blog')
+        yield fork(loadFollows, "get_following", username, 'ignore')
+    }
+}
+
 function* usernamePasswordLogin(action) {
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
+    // Проверка наличия пользователя по email
     yield call(usernamePasswordLogin2, action)
     const current = yield select(state => state.user.get('current'))
     if(current) {
@@ -118,17 +191,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
 
     const account = yield call(getAccount, username)
-    // if (!account) {
+    //if (!account) {
     //     yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
     //     return
-    // }
+    //}
 
-
-
-    const BMResponse = yield call(getBMAccessToken, username, password)
+    // const BMResponse = yield call(getBMAccessToken, username, password)
     // console.log(access_token)
-
-
 
     // -------------------------------------------------
     // Авторизация в golos.io через аккаунт molodost.bz
@@ -145,7 +214,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     // Получить токен авторизации на feed.molodost.bz
     try {
         const { access_token } = yield call(getBMAccessToken, username, password)
-
+        console.log('Token', access_token);
         // Если пользователь авторизован и мы получили токен,
         // выполняем запрос к mysql DB и получаем private_key
         // от аккаунта golos.io. Заменяем введенный пользователем
@@ -153,8 +222,18 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // и продолжаем выполнение функции авторизации
         // в блок-чейн golos.io.
         if (access_token) {
+        //    console.log('Usssrrname: ' + username)
             const { private_key } = yield call(serverApiGetAccountPrivateKey, username /* , password */)
+
+            // Необходимо дешифровать хэш публичного ключа
+            // и использовать его в чистом виде
             password = private_key
+
+         //   console.log('Pure: ' + private_key + "\n")
+            //let encryptedPrivateKey = encrypt(private_key)
+            //console.log('Encrypted: ' + encryptedPrivateKey + "\n")
+            //let decryptedKey = decrypt(encryptedPrivateKey)
+            //console.log('Decrypted: ' + decryptedKey + "\n")
 
             // Далее необходимо максимально
             // безопасно (шифрование)
@@ -168,7 +247,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             // владелец аккаунта на molodost.bz
             // еще не зарегистрирован в golos.io
 
-        }
+       }
         // api.molodost.bz возвратило ошибку,
         // это означает, что либо данные не
         // корректны, либо пользователь не
@@ -393,7 +472,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 // }
 
 function getBMAccessToken (username, password) {
-    fetch('http://test2.api.molodost.bz/oauth/token/', {
+    return fetch('http://test2.api.molodost.bz/oauth/token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -406,4 +485,17 @@ function getBMAccessToken (username, password) {
             password
         })
     }).then(res => res.json())
+}
+
+function serverApiGetAccountPrivateKey(username /* , password */) {
+    return fetch('/api/v1/get_account_private_key', {
+        method: 'post',
+        mode: 'no-cros',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({csrf: $STM_csrf, username})
+    }).then(res => res.json()).catch(e => console.error(e));
 }
