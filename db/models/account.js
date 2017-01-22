@@ -9,6 +9,7 @@ module.exports = function (sequelize, DataTypes) {
             field: 'user_id'
         },
         name: {type: DataTypes.STRING, unique: true},
+        email: {type: DataTypes.STRING, unique: true},
         owner_key: {type: DataTypes.STRING, unique: true},
         active_key: {type: DataTypes.STRING, unique: true},
         posting_key: {type: DataTypes.STRING, unique: true},
