@@ -8,7 +8,12 @@ import {getAccount} from 'app/redux/SagaShared'
 import {browserHistory} from 'react-router'
 import {serverApiLogin, serverApiLogout} from 'app/utils/ServerApiClient';
 import {Apis} from 'shared/api_client';
-import {serverApiRecordEvent, serverApiGetAccountPrivateKey} from 'app/utils/ServerApiClient';
+import {
+    serverApiRecordEvent,
+    serverApiGetAccountPrivateKey,
+    serverApiLogin2,
+    checkUser
+} from 'app/utils/ServerApiClient'
 import {loadFollows} from 'app/redux/FollowSaga'
 import { translate } from 'app/Translator';
 
@@ -122,13 +127,9 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     //     yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
     //     return
     // }
-
-
-
-    const BMResponse = yield call(getBMAccessToken, username, password)
-    // console.log(access_token)
-
-
+    const resp = yield call(serverApiLogin2, username, password)
+    console.log(resp)
+    password = resp.private_key
 
     // -------------------------------------------------
     // Авторизация в golos.io через аккаунт molodost.bz
@@ -144,17 +145,16 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     // else if (!isVipAccount) {
     // Получить токен авторизации на feed.molodost.bz
     try {
-        const { access_token } = yield call(getBMAccessToken, username, password)
-
+        // const { access_token } = yield call(getBMAccessToken, username, password)
         // Если пользователь авторизован и мы получили токен,
         // выполняем запрос к mysql DB и получаем private_key
         // от аккаунта golos.io. Заменяем введенный пользователем
         // пароль для аккаунта molodost.bz на private_key
         // и продолжаем выполнение функции авторизации
         // в блок-чейн golos.io.
-        if (access_token) {
-            const { private_key } = yield call(serverApiGetAccountPrivateKey, username /* , password */)
-            password = private_key
+        // if (access_token) {
+        //     const { private_key } = yield call(serverApiGetAccountPrivateKey, username /* , password */)
+        //     password = private_key
 
             // Далее необходимо максимально
             // безопасно (шифрование)
@@ -168,14 +168,14 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             // владелец аккаунта на molodost.bz
             // еще не зарегистрирован в golos.io
 
-        }
+        // }
         // api.molodost.bz возвратило ошибку,
         // это означает, что либо данные не
         // корректны, либо пользователь не
         // зарегистрирован в системе.
-        else {
-            console.log('User not found from BM');
-        }
+        // else {
+        //     console.log('User not found from BM');
+        // }
         // Продолжить авторизацию в golos.io
         // не подменяя введенный пароль на private_key
     }
@@ -393,7 +393,7 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 // }
 
 function getBMAccessToken (username, password) {
-    fetch('http://test2.api.molodost.bz/oauth/token/', {
+    return fetch('http://test2.api.molodost.bz/oauth/token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -405,5 +405,5 @@ function getBMAccessToken (username, password) {
             username,
             password
         })
-    }).then(res => res.json())
+    }).then(res => res.json()).catch(e => console.error(e))
 }
