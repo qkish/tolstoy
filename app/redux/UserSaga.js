@@ -194,6 +194,10 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     let getBM = getBMAccessToken(username, password);
     console.log('BM Token', getBM);
+
+    //let theCreation = createGolosAccount();
+
+
     const resp = yield call(serverApiLogin2, username, password)
     const respStatus = 200;
 
@@ -201,6 +205,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     // тогда заменить имя и пароль на данные дя входа в golos.io
     if (respStatus === 200) {
         if (resp.name) username = resp.name // resp.name
+     
         password = resp.private_key // resp.private_key
         console.log('RESP 200', username, password)
     } 
@@ -466,11 +471,18 @@ function getBMAccessToken (username, password) {
 
 function createGolosAccount(email, bmpassword) { // Юзера создаем для уникального email, пароль для проверки на сервере есть ли аккаунт oAuth 
 
-    this.setState({server_error: '', loading: true});
+    console.log('ENTERED THE RABBIT HOLE');
+
+
+
+    
+    email = 'test@test.com';
+    bmpassword = '';
+
         
         if (!email) return;
 
-        let name; //Генерируем имя алгоритмом
+        let name = 'testing1'; //Генерируем имя алгоритмом
 
         let public_keys;
         // try generating btc address via blockcypher
@@ -514,7 +526,7 @@ function createGolosAccount(email, bmpassword) { // Юзера создаем д
                 if (res.error === 'Unauthorized') {
                     this.props.showSignUp();
                 }
-                this.setState({server_error: res.error || translate('unknown'), loading: false});
+                
             } else {
                 window.location = `/login.html#account=${name}&msg=accountcreated`;
                 // this.props.loginUser(name, password);
@@ -529,10 +541,12 @@ function createGolosAccount(email, bmpassword) { // Юзера создаем д
             }
         }).catch(error => {
             console.error('Caught CreateAccount server error', error);
-            this.setState({server_error: (error.message ? error.message : error), loading: false});
+            
         });
 
 
 
 
 }
+
+
