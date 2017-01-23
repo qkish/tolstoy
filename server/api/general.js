@@ -250,12 +250,9 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         const {
             csrf,
-
             username,
             password
         } = typeof(params) === 'string' ? JSON.parse(params): params;
-
-
 
         console.log('SERV', username, password);
 
@@ -263,28 +260,44 @@ export default function useGeneralApi(app) {
 
         try {
 
-            this.session.a = username;
-            const db_account = yield models.Account.findOne({
-                attributes: ['user_id', 'private_key', 'name'],
-                where: {
-                    email: esc(username)
-                }
-            });
+            // Первый этап
+            // Проверить есть ли пользователь на БМ
+            const userExistBM = yield getBMAccessToken(username, password);
 
-            if (db_account) {
-                this.session.user = db_account.user_id;
-                console.log('SERVKEY', db_account.name, db_account.private_key)
-                this.body = JSON.stringify({
-                    status: 'ok',
-                    name: db_account.name,
-                    private_key: db_account.private_key
+            console.log('BM check: ' + userExistBM.access_token);
 
+            // If user account have in DB
+            if (userExistBM.access_token) {
+                // Проверить есть ли пользователь в нашей БД
+                 const db_account = yield models.Account.findOne({
+                    attributes: ['user_id', 'private_key', 'name'],
+                    where: {
+                        email: esc(username)
+                    }
                 });
+
+                // If user accoun have in DB
+                if (db_account) {
+                    this.session.a = username;
+                    this.session.user = db_account.user_id;
+                    console.log('SERVKEY', db_account.name, db_account.private_key)
+                    this.body = JSON.stringify({
+                        status: 'ok',
+                        name: db_account.name,
+                        private_key: db_account.private_key
+                    });
+                } else {
+                    this.body = JSON.stringify({
+                        error_status: 'db-user-not-found',
+                        error: 'No account found from MYSQL'
+                    });
+                    this.status = 500;
+                }
             } else {
                 this.body = JSON.stringify({
-                    error: 'No account found'
+                    error_status: 'bm-user-not-found',
+                    error: 'No account found from BM'
                 });
-                this.status = 500;
             }
         } catch (error) {
             console.error('Error in /login2 api call', this.session.uid, error);
@@ -294,33 +307,6 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
         recordWebEvent(this, 'api/login2', username);
-
-        // const BMResponse = yield fetch('http://api.molodost.bz/oauth/token/', {
-        //     method: 'POST',
-        //     rejectUnauthorized: false,
-        //     headers: {
-        //       'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         client_id: 'renat.biktagirov',
-        //         client_secret: '6NbQvMElYMcBbOVWie7a1Bs4rfVt9FpNY4V4Fl6EEGt4xTEUa1K0ugMohlemqFQ5',
-        //         grant_type: 'client_credentials',
-        //         username,
-        //         password
-        //     })
-        // }).then(res => res.json()).catch(e => console.error(e))
-        // console.log('BM RES', BMResponse)
-        // const { token_type, access_token } = BMResponse
-        // conole.log(`${token_type} ${access_token}`)
-        // const user = yield fetch('http://api.molodost.bz/api/v3/user/me/', {
-        //     method: 'GET',
-        //     rejectUnauthorized: false,
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       'Authorization': `${token_type} ${access_token}`
-        //     }
-        // }).then(res => res.json()).catch(e => console.error(e))
-        // console.log('user', user)
     })
 
     router.post('/check_user', koaBody, function* () {
@@ -390,6 +376,7 @@ export default function useGeneralApi(app) {
         console.log('-- /logout_account -->', this.session.uid);
         try {
             this.session.a = null;
+            this.session.name = null;
             this.body = JSON.stringify({
                 status: 'ok'
             });
@@ -500,6 +487,11 @@ export default function useGeneralApi(app) {
 
     router.post('/accounts2', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
+
+        var crypto = require("crypto");
+        var newname = 'bm' + crypto.randomBytes(5).toString('hex'); // Генерируем имя
+
+
         const params = this.request.body;
         print('params', params)
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
@@ -556,13 +548,13 @@ export default function useGeneralApi(app) {
                 },
                 order: 'id DESC'
             });
-            if (same_ip_account) {
+            /* if (same_ip_account) {
                 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
                 if (minutes < 10) {
                     console.log(`api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`);
                     throw new Error('Only one Steem account allowed per IP address every 10 minutes');
                 }
-            }
+            } */
             if (user.waiting_list) {
                 console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
                 throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
@@ -580,6 +572,8 @@ export default function useGeneralApi(app) {
                 console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
                 throw new Error('Email address is not confirmed');
             }
+
+
             yield createAccount({
                 signingKey: config.registrar.signing_key,
                 fee: config.registrar.fee,
@@ -622,6 +616,34 @@ export default function useGeneralApi(app) {
         }
         recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
     });
+}
+
+
+function* getBMAccessToken (username, password) {
+    return fetch('http://api.molodost.bz/oauth/token/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            client_id: 'renat.biktagirov',
+            client_secret: '6NbQvMElYMcBbOVWie7a1Bs4rfVt9FpNY4V4Fl6EEGt4xTEUa1K0ugMohlemqFQ5',
+            grant_type: 'password',
+            username: username,
+            password: password
+            
+        })
+    }).then(res => res.json())
+}
+
+function* getBMUserMeta (acces_token) {
+    return fetch('http://api.molodost.bz/api/v3/user/me/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + acces_token
+        }
+    }).then(res => res.json()).catch(e => console.log(e))
 }
 
 /**

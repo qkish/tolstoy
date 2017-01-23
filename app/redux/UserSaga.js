@@ -192,59 +192,81 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     console.log('INCOME', username, password);
 
-    let getBM = getBMAccessToken(username, password);
-    console.log('BM Token', getBM);
+    // 1) Check local storage
+    const userExistInLocalStorage = yield select(state => state.offchain.get('account'));
+    if (!userExistInLocalStorage) {
 
-    //let theCreation = createGolosAccount();
+        // Send to server auth request
+        const resp = yield call(serverApiLogin2, username, password);
 
+         //let testBM = yield getBMAccessToken(username, password);
+         //console.log(testBM);
 
-    const resp = yield call(serverApiLogin2, username, password)
-    const respStatus = 200;
+         //let bmUserMeta = yield getBMUserMeta(testBM.access_token);
+         //console.log(bmUserMeta);
 
-  // Если пользователь найден в молодости и данные валидны,
-    // тогда заменить имя и пароль на данные дя входа в golos.io
-    if (respStatus === 200) {
-        if (resp.name) username = resp.name // resp.name
-     
-        password = resp.private_key // resp.private_key
-        console.log('RESP 200', username, password)
-    } 
-    // Сервер вернул ошибку
-    // необходимо определить -
-    // ошибка в БМ авторизации,
-    // или пользователь не найден в БД
-    else {
-        const {error} = resp
+          // const resp = yield call(serverApiLogin2, username, password)
+        //const respStatus = 200;
 
-        // Ошибка авторизации на molodost
-        if (error == 'bmAccountNotFound') {
-            return;
+        // Если пользователь найден в молодости и данные валидны,
+        // тогда заменить имя и пароль на данные дя входа в golos.io
+        if (resp.name && resp.private_key) {
+            username = resp.name // resp.name
+            password = resp.private_key // resp.private_key
         } 
-        // Пользователь найден на
-        // molodost.bz, но не имеет
-        // аккаунта в golos.io
+        // Сервер вернул ошибку
+        // необходимо определить -
+        // ошибка в БМ авторизации,
+        // или пользователь не найден в БД
         else {
-            // Создать аккаунт на golos.io
-            const golosLogin = 'test'
-            // createGolosAccount()
-            // Получить сгоенерированные 
-            // логин и приватный ключ
-            // и продолжить авторизацию в golos.io
-        }
-    } 
 
+            // Ошибка авторизации на molodost
+            if (resp.error_status === 'bm-user-not-found') {
+                console.log('Error: User account for found from BM api');
+                return;
+            } 
+            // Пользователь найден на
+            // molodost.bz, но не имеет
+            // аккаунта в golos.io
+            else {
 
+                if (resp.error_status === 'db-user-not-found') {
+                    // Получить сгоенерированные 
+                    // логин и приватный ключ
+                    // и продолжить авторизацию в golos.io
+                    // Создать аккаунт на golos.io
+                    let newname, account;
+                    while (true) {
+                        newname = 'bm' + generateGolosLogin(12); //Генерируем имя алгоритмом на сервере
+                        account = yield call(getAccount, newname);
+                        if(!account) break;
+                    }
 
-console.log('UNAME', username, ': RESP.NAME', resp.name)
+                    console.log('PRE CREATE', newname)
+                    const createResp = createGolosAccount(username, password, newname);
+                    console.log('AFTER CREATE: ', createResp);
+
+                    if (createResp.golosName && createResp.golosPassword) {
+                        username = createResp.golosName;
+                        password = createResp.golosPassword;
+                    } 
+                } else {
+                    return;
+                }
+            }
+
+        } 
+        //console.log('UNAME', username, ': RESP.NAME', resp.name)
+    }
 
     //console.log(resp)
     //password = resp.private_key
 
-        const account = yield call(getAccount, username)
-          //  if (!account) {
-         //       yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
-        //        return
-       //     }
+    const account = yield call(getAccount, username)
+    //if (!account) {
+    //    yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
+    //    return
+    //}
 
     let private_keys
     try {
@@ -452,8 +474,8 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 //     yield put(g.actions.receiveAccount({ account }))
 // }
 
-function getBMAccessToken (username, password) {
-    return fetch('http://test2.api.molodost.bz/oauth/token/', {
+function* getBMAccessToken (username, password) {
+    return fetch('http://api.molodost.bz/oauth/token/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -462,45 +484,62 @@ function getBMAccessToken (username, password) {
             client_id: 'renat.biktagirov',
             client_secret: '6NbQvMElYMcBbOVWie7a1Bs4rfVt9FpNY4V4Fl6EEGt4xTEUa1K0ugMohlemqFQ5',
             grant_type: 'password',
-            username,
-            password
+            username: username,
+            password: password
+            
         })
-    }).then(res => res.json()).catch(e => console.error(e))
+    }).then(res => res.json())
+}
+
+function* getBMUserMeta (acces_token) {
+    return fetch('http://api.molodost.bz/api/v3/user/me/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + acces_token
+        }
+    }).then(res => res.json()).catch(e => console.log(e))
 }
 
 
-function createGolosAccount(email, bmpassword) { // Юзера создаем для уникального email, пароль для проверки на сервере есть ли аккаунт oAuth 
+function dec2hex (dec) {
+  return ('0' + dec.toString(16)).substr(-2)
+}
+
+// generateId :: Integer -> String
+function generateGolosLogin (len) {
+  var arr = new Uint8Array((len || 40) / 2)
+  window.crypto.getRandomValues(arr)
+  return Array.from(arr).map(dec2hex).join('')
+}
+
+
+function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера создаем для уникального email, пароль для проверки на сервере есть ли аккаунт oAuth 
 
     console.log('ENTERED THE RABBIT HOLE');
 
+    let email = emailpassed;
+    let bmpassword = bmpasswordpassed;
 
+    if (!email) return;
 
-    
-    email = 'test@test.com';
-    bmpassword = '';
+    let public_keys;
+    // try generating btc address via blockcypher
+    // if no success - abort (redirect with try again)
+    let icoAddress = ''
+    let successReg = false;
 
-        
-        if (!email) return;
+    let password = 'P' + key_utils.get_random_key().toWif(); // Генерируем рандомный приват кей
+    try {
+        const pk = PrivateKey.fromWif(password);
+        public_keys = [1, 2, 3, 4].map(() => pk.toPublicKey().toString());
+    } catch (error) {
+        public_keys = ['owner', 'active', 'posting', 'memo'].map(role => {
+        const pk = PrivateKey.fromSeed(`${name}${role}${password}`);
+        return pk.toPublicKey().toString();
+    });}
 
-        let name = 'testing1'; //Генерируем имя алгоритмом
-
-        let public_keys;
-        // try generating btc address via blockcypher
-        // if no success - abort (redirect with try again)
-        let icoAddress = ''
-
-        let password = 'P' + key_utils.get_random_key().toWif(); // Генерируем рандомный приват кей
-        try {
-            const pk = PrivateKey.fromWif(password);
-            public_keys = [1, 2, 3, 4].map(() => pk.toPublicKey().toString());
-        } catch (error) {
-            public_keys = ['owner', 'active', 'posting', 'memo'].map(role => {
-                const pk = PrivateKey.fromSeed(`${name}${role}${password}`);
-                return pk.toPublicKey().toString();
-            });
-        }
-
-        fetch('/api/v1/accounts2', {
+    fetch('/api/v1/accounts2', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
@@ -520,16 +559,19 @@ function createGolosAccount(email, bmpassword) { // Юзера создаем д
                 memo_key: public_keys[3]//,
                 //json_meta: JSON.stringify({"ico_address": icoAddress})
             })
-        }).then(r => r.json()).then(res => {
-            if (res.error || res.status !== 'ok') {
-                console.error('CreateAccount server error', res.error);
-                if (res.error === 'Unauthorized') {
-                    this.props.showSignUp();
-                }
+    }).then(r => r.json()).then(res => {
+        if (res.error || res.status !== 'ok') {
+            console.error('CreateAccount server error', res.error);
+            if (res.error === 'Unauthorized') {
+                this.props.showSignUp();
+            }     
+        } else {
                 
-            } else {
-                window.location = `/login.html#account=${name}&msg=accountcreated`;
-                // this.props.loginUser(name, password);
+                let loginpair = {
+                                golosName: name || '', 
+                                golosPassword: password || '' 
+                            };
+                return loginpair;
                 // const redirect_page = localStorage.getItem('redirect');
                 // if (redirect_page) {
                 //     localStorage.removeItem('redirect');
@@ -543,10 +585,6 @@ function createGolosAccount(email, bmpassword) { // Юзера создаем д
             console.error('Caught CreateAccount server error', error);
             
         });
-
-
-
-
 }
 
 

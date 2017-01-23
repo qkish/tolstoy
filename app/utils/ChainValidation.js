@@ -7,10 +7,10 @@ export function validate_account_name(value) {
         return suffix + 'not be empty.';
     }
     length = value.length;
-    if (length < 3) {
+    if (length < 1) {
         return suffix + 'be longer.';
     }
-    if (length > 50) {
+    if (length > 90) {
         return suffix + 'be shorter.';
     }
     if (/\./.test(value)) {
@@ -31,7 +31,7 @@ export function validate_account_name(value) {
         if (!/[a-z0-9]$/.test(label)) {
             return suffix + 'end with a letter or digit.';
         }
-        if (!(label.length >= 3)) {
+        if (!(label.length >= 1)) {
             return suffix + 'be longer';
         }
     }
