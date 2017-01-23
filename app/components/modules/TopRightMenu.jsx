@@ -189,7 +189,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 </li>*/}
                 
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><div className="TopRightMenu__search-icon"></div></a></li>}
-                <li className='TopRightMenu__signupbtn'><a className="TopRightMenu__signupbtn-link" href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
+               {/* <li className='TopRightMenu__signupbtn'><a className="TopRightMenu__signupbtn-link" href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li> */}
                 <li className='TopRightMenu__loginbtn'><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
                 
                 
