@@ -35,7 +35,22 @@ class SignUp extends React.Component {
             </div>;
         }
 
-        const molodostRegisterForm = <div className="row">
+        return <div className="SignUp">
+            <div className="row">
+                <div className="column">
+                    <h3>{translate("sign_up")}</h3>
+                    <p>
+                        {translate("we_require_social_account")} {' '}
+                        {translate("personal_info_will_be_private")}
+                        {' '}
+                        <a href={TERMS_OF_SERVICE_URL} target="_blank">
+                            {translate("personal_info_will_be_private_link")}
+                        </a>.
+                    </p>
+                </div>
+            </div>
+
+            <div className="row">
                 <form>
                     <div className="col-xs-12">
                         <label>
@@ -54,24 +69,7 @@ class SignUp extends React.Component {
                         <input type="submit" className="btn btn-success" value={translate("register_submit_text")}/>
                     </div>
                 </form>
-            </div>;
-
-        return <div className="SignUp">
-            <div className="row">
-                <div className="column">
-                    <h3>{translate("sign_up")}</h3>
-                    <p>
-                        {translate("we_require_social_account")} {' '}
-                        {translate("personal_info_will_be_private")}
-                        {' '}
-                        <a href={TERMS_OF_SERVICE_URL} target="_blank">
-                            {translate("personal_info_will_be_private_link")}
-                        </a>.
-                    </p>
-                </div>
             </div>
-
-            {molodostRegisterForm}
 
             {/*<div className="row">
                 <div className="column large-4 shrink">

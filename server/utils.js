@@ -16,9 +16,9 @@ function rateLimitReq(ctx, req) {
 
     // purge hits older than minutes_max
     ip_last_hit.forEach((v, k) => {
-     
+
         const seconds = (now - v) / 1000;
-        
+
         if (seconds > 1 || ip_conn_count <= 3) {
             ip_last_hit.delete(ip);
             ip_conn_count = 0;
@@ -55,9 +55,31 @@ function checkCSRF(ctx, csrf) {
     return true;
 }
 
+// Crypto utils
+import crypto from 'crypto'
+import config from 'config'
+
+const algorithm = 'aes-256-ctr'
+
+export function encryptPrivateKey(string){
+  let cipher = crypto.createCipher(algorithm, SECRET_KEY)
+  let crypted = cipher.update(string, 'utf8', 'hex')
+  crypted += cipher.final('hex');
+  return crypted;
+}
+
+export function decryptPrivateKey(string){
+  let decipher = crypto.createDecipher(algorithm, SECRET_KEY)
+  let dec = decipher.update(string, 'hex', 'utf8')
+  dec += decipher.final('utf8');
+  return dec;
+}
+
 module.exports = {
     emailRegex,
     getRemoteIp,
     rateLimitReq,
-    checkCSRF
+    checkCSRF,
+    encryptPrivateKey,
+    decryptPrivateKey
 };

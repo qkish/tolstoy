@@ -491,7 +491,6 @@ export default function useGeneralApi(app) {
         var crypto = require("crypto");
         var newname = 'bm' + crypto.randomBytes(5).toString('hex'); // Генерируем имя
 
-
         const params = this.request.body;
         print('params', params)
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
@@ -631,7 +630,7 @@ function* getBMAccessToken (username, password) {
             grant_type: 'password',
             username: username,
             password: password
-            
+
         })
     }).then(res => res.json())
 }
