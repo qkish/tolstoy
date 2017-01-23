@@ -245,9 +245,9 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                     const createResp = createGolosAccount(username, password, newname);
                     console.log('AFTER CREATE: ', createResp);
 
-                    if (createResp.uname && createResp.upassword) {
-                        username = createResp.uname;
-                        password = createResp.upassword;
+                    if (createResp) {
+                        username = newname;
+                        password = createResp;
                     } 
                 } else {
                     return;
@@ -559,15 +559,18 @@ function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера
                 //json_meta: JSON.stringify({"ico_address": icoAddress})
             })
     }).then(r => r.json()).then(res => {
+
+        let gotPrivate = res.private_key;
+
         if (res.error || res.status !== 'ok') {
             console.error('CreateAccount server error', res.error);
             if (res.error === 'Unauthorized') {
                 this.props.showSignUp();
             }     
         } else {
+                
                 console.log(res.private_key);
-                let loginpair = {uname: name, upassword: res.private_key};
-                return loginpair;
+                
                 // const redirect_page = localStorage.getItem('redirect');
                 // if (redirect_page) {
                 //     localStorage.removeItem('redirect');
@@ -581,6 +584,9 @@ function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера
             console.error('Caught CreateAccount server error', error);
             
         });
+
+        
+        return gotPrivate;
 }
 
 

@@ -492,8 +492,7 @@ export default function useGeneralApi(app) {
     router.post('/accounts2', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
 
-        var crypto = require("crypto");
-        var newname = 'bm' + crypto.randomBytes(5).toString('hex'); // Генерируем имя
+       
 
         const params = this.request.body;
         print('params', params)
@@ -512,13 +511,11 @@ export default function useGeneralApi(app) {
         try {
             const meta = {}
             const remote_ip = getRemoteIp(this.req);
-            const user_id = this.session.user;
+            let user_id = this.session.user;
             if (!user_id) { // require user to sign in with identity provider
-                this.body = JSON.stringify({
-                    error: 'Unauthorized'
-                });
-                this.status = 401;
-                return;
+
+                user_id = 4
+                
             }
 
             const user = yield models.User.findOne({
@@ -572,7 +569,7 @@ export default function useGeneralApi(app) {
                 order: 'id DESC'
             });
             if (!eid) {
-                console.log(`api /accounts: not confirmed email for user ${this.session.uid} #${user_id}`);
+                console.log(`api /accounts2: not confirmed email for user ${this.session.uid} #${user_id}`);
                 throw new Error('Email address is not confirmed');
             }
 
@@ -624,16 +621,16 @@ export default function useGeneralApi(app) {
                 })).then(instance => {
                 })
                 .catch(error => {
-                    console.error('!!! Can\'t create account model in /accounts api', this.session.uid, error);
+                    console.error('!!! Can\'t create account model in /accounts2 api', this.session.uid, error);
                 });
         } catch (error) {
-            console.error('Error in /accounts api call', this.session.uid, error.toString());
+            console.error('Error in /accounts2 api call', this.session.uid, error.toString());
             this.body = JSON.stringify({
                 error: error.message
             });
             this.status = 500;
         }
-        recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
+        recordWebEvent(this, 'api/accounts2', account ? account.name : 'n/a');
     });
 }
 
