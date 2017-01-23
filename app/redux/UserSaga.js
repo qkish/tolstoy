@@ -16,7 +16,6 @@ import {
 } from 'app/utils/ServerApiClient'
 import {loadFollows} from 'app/redux/FollowSaga'
 import {translate} from 'app/Translator'
-import {encrypt, decrypt} from 'app/utils/CryptoUtil'
 import {key_utils} from 'shared/ecc'
 
 export const userWatches = [
@@ -566,8 +565,8 @@ function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера
                 this.props.showSignUp();
             }     
         } else {
-                
-                let loginpair = {uname: name, upassword: password};
+                console.log(res.private_key);
+                let loginpair = {uname: name, upassword: res.private_key};
                 return loginpair;
                 // const redirect_page = localStorage.getItem('redirect');
                 // if (redirect_page) {

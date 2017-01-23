@@ -61,15 +61,16 @@ import config from 'config'
 
 const algorithm = 'aes-256-ctr'
 
-export function encryptPrivateKey(string){
-  let cipher = crypto.createCipher(algorithm, SECRET_KEY)
+
+export function encryptPrivateKey(string) {
+  let cipher = crypto.createCipher(algorithm, config.secret_key)
   let crypted = cipher.update(string, 'utf8', 'hex')
   crypted += cipher.final('hex');
   return crypted;
 }
 
 export function decryptPrivateKey(string){
-  let decipher = crypto.createDecipher(algorithm, SECRET_KEY)
+  let decipher = crypto.createDecipher(algorithm, config.secret_key)
   let dec = decipher.update(string, 'hex', 'utf8')
   dec += decipher.final('utf8');
   return dec;

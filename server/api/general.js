@@ -6,12 +6,13 @@ import findUser from 'db/utils/find_user';
 import config from 'config';
 import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
-import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF} from 'server/utils';
+import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF, encryptPrivateKey, decryptPrivateKey} from 'server/utils';
 import coBody from 'co-body';
 import {getLogger} from '../../app/utils/Logger'
 import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
+
 
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
@@ -278,13 +279,16 @@ export default function useGeneralApi(app) {
 
                 // If user accoun have in DB
                 if (db_account) {
+
+                    let DectryptedKey = decryptPrivateKey(db_account.private_key);
+                    console.log('DECRYPTED: ', DectryptedKey)
                     this.session.a = username;
                     this.session.user = db_account.user_id;
                     console.log('SERVKEY', db_account.name, db_account.private_key)
                     this.body = JSON.stringify({
                         status: 'ok',
                         name: db_account.name,
-                        private_key: db_account.private_key
+                        private_key: DectryptedKey
                     });
                 } else {
                     this.body = JSON.stringify({
@@ -572,7 +576,6 @@ export default function useGeneralApi(app) {
                 throw new Error('Email address is not confirmed');
             }
 
-
             yield createAccount({
                 signingKey: config.registrar.signing_key,
                 fee: config.registrar.fee,
@@ -587,8 +590,11 @@ export default function useGeneralApi(app) {
             });
             console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
 
+            const encryptedPassword = encryptPrivateKey(account.password);
+
             this.body = JSON.stringify({
-                status: 'ok'
+                status: 'ok',
+                private_key: encryptedPassword
             });
             models.Account.create(escAttrs({
                     user_id,
@@ -598,7 +604,7 @@ export default function useGeneralApi(app) {
                     posting_key: account.posting_key,
                     memo_key: account.memo_key,
                     remote_ip,
-                    private_key: account.password,
+                    private_key: encryptedPassword,
                     email: account.email,
                     referrer: this.session.r
                 })).then(instance => {
