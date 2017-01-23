@@ -260,7 +260,7 @@ export default function useGeneralApi(app) {
         if (!checkCSRF(this, csrf)) return;
 
         try {
-
+            this.session.a = username;
             // Первый этап
             // Проверить есть ли пользователь на БМ
             const userExistBM = yield getBMAccessToken(username, password);
@@ -282,7 +282,7 @@ export default function useGeneralApi(app) {
 
                     let DectryptedKey = decryptPrivateKey(db_account.private_key);
                     console.log('DECRYPTED: ', DectryptedKey)
-                    this.session.a = username;
+                    
                     this.session.user = db_account.user_id;
                     console.log('SERVKEY', db_account.name, db_account.private_key)
                     this.body = JSON.stringify({
@@ -605,9 +605,10 @@ export default function useGeneralApi(app) {
 
             this.body = JSON.stringify({
                 status: 'ok',
+                account: account,
                 private_key: encryptedPassword
             });
-            models.Account.create(escAttrs({
+            yield models.Account.create(escAttrs({
                     user_id,
                     name: account.name,
                     owner_key: account.owner_key,
@@ -631,6 +632,9 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
         recordWebEvent(this, 'api/accounts2', account ? account.name : 'n/a');
+
+        console.log('SERVER RETURNED ACCOUNT: ', account);
+       return account;
     });
 }
 

@@ -242,12 +242,12 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                     }
 
                     console.log('PRE CREATE', newname)
-                    const createResp = createGolosAccount(username, password, newname);
-                    console.log('AFTER CREATE: ', createResp);
+                    const createResp = yield createGolosAccount(username, password, newname);
+                    console.log('AFTER CREATE: ', createResp.account);
 
                     if (createResp) {
                         username = newname;
-                        password = createResp;
+                        password = createResp.account.password;
                     } 
                 } else {
                     return;
@@ -262,8 +262,9 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     //password = resp.private_key
 
     const account = yield call(getAccount, username)
+
     //if (!account) {
-    //    yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
+    //   yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
     //    return
     //}
 
@@ -513,7 +514,7 @@ function generateGolosLogin (len) {
 }
 
 
-function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера создаем для уникального email, пароль для проверки на сервере есть ли аккаунт oAuth 
+function* createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера создаем для уникального email, пароль для проверки на сервере есть ли аккаунт oAuth 
 
     console.log('ENTERED THE RABBIT HOLE');
 
@@ -538,7 +539,7 @@ function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера
         return pk.toPublicKey().toString();
     });}
 
-    fetch('/api/v1/accounts2', {
+   return fetch('/api/v1/accounts2', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
@@ -560,7 +561,7 @@ function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера
             })
     }).then(r => r.json()).then(res => {
 
-        let gotPrivate = res.private_key;
+        console.log('CLIENT RECIEVED ACCOUNT: ', res);
 
         if (res.error || res.status !== 'ok') {
             console.error('CreateAccount server error', res.error);
@@ -568,8 +569,9 @@ function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера
                 this.props.showSignUp();
             }     
         } else {
+            return res;
                 
-                console.log(res.private_key);
+                console.log(res.password);
                 
                 // const redirect_page = localStorage.getItem('redirect');
                 // if (redirect_page) {
@@ -586,7 +588,7 @@ function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера
         });
 
         
-        return gotPrivate;
+        return res;
 }
 
 
