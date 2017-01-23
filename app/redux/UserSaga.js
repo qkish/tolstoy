@@ -16,7 +16,6 @@ import {
 } from 'app/utils/ServerApiClient'
 import {loadFollows} from 'app/redux/FollowSaga'
 import {translate} from 'app/Translator'
-import {encrypt, decrypt} from 'app/utils/CryptoUtil'
 import {key_utils} from 'shared/ecc'
 
 export const userWatches = [
@@ -213,7 +212,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         if (resp.name && resp.private_key) {
             username = resp.name // resp.name
             password = resp.private_key // resp.private_key
-        } 
+        }
         // Сервер вернул ошибку
         // необходимо определить -
         // ошибка в БМ авторизации,
@@ -224,14 +223,14 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             if (resp.error_status === 'bm-user-not-found') {
                 console.log('Error: User account for found from BM api');
                 return;
-            } 
+            }
             // Пользователь найден на
             // molodost.bz, но не имеет
             // аккаунта в golos.io
             else {
 
                 if (resp.error_status === 'db-user-not-found') {
-                    // Получить сгоенерированные 
+                    // Получить сгоенерированные
                     // логин и приватный ключ
                     // и продолжить авторизацию в golos.io
                     // Создать аккаунт на golos.io
@@ -249,13 +248,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                     if (createResp.golosName && createResp.golosPassword) {
                         username = createResp.golosName;
                         password = createResp.golosPassword;
-                    } 
+                    }
                 } else {
                     return;
                 }
             }
 
-        } 
+        }
         //console.log('UNAME', username, ': RESP.NAME', resp.name)
     }
 
@@ -486,7 +485,7 @@ function* getBMAccessToken (username, password) {
             grant_type: 'password',
             username: username,
             password: password
-            
+
         })
     }).then(res => res.json())
 }
@@ -514,7 +513,7 @@ function generateGolosLogin (len) {
 }
 
 
-function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера создаем для уникального email, пароль для проверки на сервере есть ли аккаунт oAuth 
+function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера создаем для уникального email, пароль для проверки на сервере есть ли аккаунт oAuth
 
     console.log('ENTERED THE RABBIT HOLE');
 
@@ -564,12 +563,12 @@ function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера
             console.error('CreateAccount server error', res.error);
             if (res.error === 'Unauthorized') {
                 this.props.showSignUp();
-            }     
+            }
         } else {
-                
+
                 let loginpair = {
-                                golosName: name || '', 
-                                golosPassword: password || '' 
+                                golosName: name || '',
+                                golosPassword: password || ''
                             };
                 return loginpair;
                 // const redirect_page = localStorage.getItem('redirect');
@@ -583,8 +582,6 @@ function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера
             }
         }).catch(error => {
             console.error('Caught CreateAccount server error', error);
-            
+
         });
 }
-
-
