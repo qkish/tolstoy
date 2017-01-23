@@ -576,12 +576,26 @@ export default function useGeneralApi(app) {
                 throw new Error('Email address is not confirmed');
             }
 
+            const getBMtoken = yield getBMAccessToken(account.email, account.bmpassword);
+            const getBMmeta = yield getBMUserMeta(getBMtoken.access_token);
+            const accountMetaData = {
+                first_name: getBMmeta.firstName,
+                last_name: getBMmeta.lastName,
+                age: getBMmeta.birthDate,
+                facebook: getBMmeta.fbId,
+                vk: getBMmeta.vkId,
+                website: getBMmeta.siteLink,
+                user_image: 'http://static.molodost.bz/thumb/160_160_2/img/avatars/' + getBMmeta.avatar,
+                email: getBMmeta.email,
+                phone: getBMmeta.phone
+            }
+            console.log('MetaData:', accountMetaData)
             yield createAccount({
                 signingKey: config.registrar.signing_key,
                 fee: config.registrar.fee,
                 creator: config.registrar.account,
                 new_account_name: account.name,
-                json_metadata: JSON.stringify(new Object()),
+                json_metadata: JSON.stringify(accountMetaData),
                 owner: account.owner_key,
                 active: account.active_key,
                 posting: account.posting_key,
