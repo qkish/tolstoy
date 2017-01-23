@@ -246,9 +246,9 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                     const createResp = createGolosAccount(username, password, newname);
                     console.log('AFTER CREATE: ', createResp);
 
-                    if (createResp.golosName && createResp.golosPassword) {
-                        username = createResp.golosName;
-                        password = createResp.golosPassword;
+                    if (createResp.uname && createResp.upassword) {
+                        username = createResp.uname;
+                        password = createResp.upassword;
                     } 
                 } else {
                     return;
@@ -567,10 +567,7 @@ function createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера
             }     
         } else {
                 
-                let loginpair = {
-                                golosName: name || '', 
-                                golosPassword: password || '' 
-                            };
+                let loginpair = {uname: name, upassword: password};
                 return loginpair;
                 // const redirect_page = localStorage.getItem('redirect');
                 // if (redirect_page) {
