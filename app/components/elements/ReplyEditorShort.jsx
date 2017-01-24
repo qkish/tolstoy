@@ -438,12 +438,12 @@ export default formId => reduxForm(
         const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
-            title: isStory && (
-                !values.title || values.title.trim() === '' ? translate('required') :
-                values.title.length > 255 ? translate('shorten_title') :
-                null
-            ),
-            category: hasCategory && validateCategory(values.category, !isEdit),
+           // title: isStory && (
+           //     !values.title || values.title.trim() === '' ? translate('required') :
+           //     values.title.length > 255 ? translate('shorten_title') :
+           //     null
+           // ),
+           // category: hasCategory,
             body: !values.body ? translate('required') :
                   values.body.length > maxKb * 1024 ? translate('exceeds_maximum_length', { maxKb }) : null,
         })
