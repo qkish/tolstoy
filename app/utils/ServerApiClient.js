@@ -14,7 +14,7 @@ export function serverApiLogin(account) {
 }
 
 export function serverApiLogin2 (username, password) {
-    console.log(username, password);
+    console.log('SERVER LOGIN2 CALL', username, password);
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     return fetch('/api/v1/login2', {
         method: 'post',

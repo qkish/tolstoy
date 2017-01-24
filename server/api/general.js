@@ -247,7 +247,7 @@ export default function useGeneralApi(app) {
     });
 
     router.post('/login2', koaBody, function* () {
-        if (rateLimitReq(this, this.req)) return;
+      //  if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const {
             csrf,
@@ -260,7 +260,7 @@ export default function useGeneralApi(app) {
         if (!checkCSRF(this, csrf)) return;
 
         try {
-            this.session.a = username;
+            
             // Первый этап
             // Проверить есть ли пользователь на БМ
             const userExistBM = yield getBMAccessToken(username, password);
@@ -282,7 +282,7 @@ export default function useGeneralApi(app) {
 
                     let DectryptedKey = decryptPrivateKey(db_account.private_key);
                     console.log('DECRYPTED: ', DectryptedKey)
-                    
+                    this.session.a = username;
                     this.session.user = db_account.user_id;
                     console.log('SERVKEY', db_account.name, db_account.private_key)
                     this.body = JSON.stringify({
@@ -290,6 +290,8 @@ export default function useGeneralApi(app) {
                         name: db_account.name,
                         private_key: DectryptedKey
                     });
+
+                    console.log('Server response after login: ', this.body)
                 } else {
                     this.body = JSON.stringify({
                         error_status: 'db-user-not-found',
@@ -381,6 +383,7 @@ export default function useGeneralApi(app) {
         try {
             this.session.a = null;
             this.session.name = null;
+            this.session.uid = Math.random().toString(36).slice(2);;
             this.body = JSON.stringify({
                 status: 'ok'
             });
@@ -511,43 +514,7 @@ export default function useGeneralApi(app) {
         try {
             const meta = {}
             const remote_ip = getRemoteIp(this.req);
-            let user_id = this.session.user;
-            if (!user_id) { // require user to sign in with identity provider
-
-                user_id = 4
-                
-            }
-
-            const user = yield models.User.findOne({
-                attributes: ['verified', 'waiting_list'],
-                where: {
-                    id: user_id
-                }
-            });
-            if (!user) {
-                this.body = JSON.stringify({
-                    error: 'Unauthorized'
-                });
-                this.status = 401;
-                return;
-            }
-
-            const existing_account = yield models.Account.findOne({
-                attributes: ['id', 'created_at'],
-                where: {user_id, ignored: false},
-                order: 'id DESC'
-            });
-            if (existing_account) { //TODO
-                throw new Error("Only one Steem account per user is allowed in order to prevent abuse (Steemit, Inc. funds each new account with 3 STEEM)");
-            }
-
-            const same_ip_account = yield models.Account.findOne({
-                attributes: ['created_at'],
-                where: {
-                    remote_ip: esc(remote_ip)
-                },
-                order: 'id DESC'
-            });
+            
             /* if (same_ip_account) {
                 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
                 if (minutes < 10) {
@@ -555,23 +522,7 @@ export default function useGeneralApi(app) {
                     throw new Error('Only one Steem account allowed per IP address every 10 minutes');
                 }
             } */
-            if (user.waiting_list) {
-                console.log(`api /accounts: waiting_list user ${this.session.uid} #${user_id}`);
-                throw new Error('You are on the waiting list. We will get back to you at the earliest possible opportunity.');
-            }
-            const eid = yield models.Identity.findOne({
-                attributes: ['id'],
-                where: {
-                    user_id,
-                    provider: 'email',
-                    verified: true
-                },
-                order: 'id DESC'
-            });
-            if (!eid) {
-                console.log(`api /accounts2: not confirmed email for user ${this.session.uid} #${user_id}`);
-                throw new Error('Email address is not confirmed');
-            }
+           
 
             const getBMtoken = yield getBMAccessToken(account.email, account.bmpassword);
             const getBMmeta = yield getBMUserMeta(getBMtoken.access_token);
@@ -582,10 +533,58 @@ export default function useGeneralApi(app) {
                 facebook: getBMmeta.fbId,
                 vk: getBMmeta.vkId,
                 website: getBMmeta.siteLink,
-                user_image: 'http://static.molodost.bz/thumb/160_160_2/img/avatars/' + getBMmeta.avatar,
+                user_image: getBMmeta.avatar ? 'http://static.molodost.bz/thumb/160_160_2/img/avatars/' + getBMmeta.avatar : '',
                 email: getBMmeta.email,
                 phone: getBMmeta.phone
             }
+
+
+            const attrs = {
+            uid: this.session.uid ? this.session.uid : account.name,
+            name: account.name,
+            email: account.email,
+            first_name: getBMmeta.firstName ? getBMmeta.firstName : 'Без',
+            last_name: getBMmeta.lastName ? getBMmeta.lastName : 'имени',
+            birthday: getBMmeta.age ? getBMmeta.age: null,
+            gender: null,
+            picture_small: getBMmeta.avatar ? 'http://static.molodost.bz/thumb/160_160_2/img/avatars/' + getBMmeta.avatar : '',
+            location_id: null,
+            location_name: null,
+            locale: null,
+            timezone: null,
+            remote_ip: getRemoteIp(this.request.req),
+            verified: true,
+            waiting_list: false,
+            facebook_id: getBMmeta.fbId ? getBMmeta.fbId : ''
+        };
+
+            const i_attrs = {
+            provider: 'bm',
+            uid: account.name,
+            name: account.name,
+            email: account.email,
+            verified: true,
+            provider_user_id: null
+        };
+
+            let user;
+            let identity;
+            user = yield models.User.create(attrs);
+            
+            i_attrs.user_id = user.id;
+
+
+
+            console.log('-- BM created user -->', user.id);
+
+            identity = yield models.Identity.create(i_attrs);
+            console.log('-- BM created identity -->', this.session.uid, identity.id);
+
+            
+
+            this.session.user = user.id;
+
+
             console.log('MetaData:', accountMetaData)
             yield createAccount({
                 signingKey: config.registrar.signing_key,
@@ -609,7 +608,7 @@ export default function useGeneralApi(app) {
                 private_key: encryptedPassword
             });
             yield models.Account.create(escAttrs({
-                    user_id,
+                    user_id: user.id,
                     name: account.name,
                     owner_key: account.owner_key,
                     active_key: account.active_key,

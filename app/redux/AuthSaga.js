@@ -20,7 +20,8 @@ function* watchForAuth() {
 export function* accountAuthLookup({payload: {account, private_keys, login_owner_pubkey}}) {
     account = fromJS(account)
     private_keys = fromJS(private_keys)
-    // console.log('accountAuthLookup', account.name)
+    console.log('accountAuthLookup', account);
+    
     const stateUser = yield select(state => state.user)
     let keys
     if (private_keys)
