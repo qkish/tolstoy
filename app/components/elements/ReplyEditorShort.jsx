@@ -86,6 +86,9 @@ class ReplyEditor extends React.Component {
         parent_permlink: '',
         type: 'submit_comment',
         metaLinkData: Map(),
+        title: translate('post'),
+        category: 'bm-open',
+        
 
     }
 
@@ -146,6 +149,8 @@ class ReplyEditor extends React.Component {
                     if(title) title.onChange(editorData.title)
                     if (editorData.body) {
                         body.onChange(editorData.body)
+
+
                         // const html = getHtml(editorData.body)
                         // console.log('createValueFromString mnt1', html);
                         // this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
@@ -183,7 +188,7 @@ class ReplyEditor extends React.Component {
     componentDidMount() {
         // focus
         setTimeout(() => {
-            if (this.props.isStory) this.refs.titleRef.focus()
+            if (this.props.isStory) {this.refs.titleRef.focus(); }
             else if (this.refs.postRef) this.refs.postRef.focus()
             else if (this.refs.rte) this.refs.rte._focus()
         }, 300)
@@ -236,6 +241,7 @@ class ReplyEditor extends React.Component {
         else if (html.indexOf('<html>') !== 0) html = `<html>\n${html}\n</html>`;
         const body = this.props.fields.body
         body.onChange(html);
+
 
     }
 
@@ -311,6 +317,10 @@ class ReplyEditor extends React.Component {
             category: this.props.category,
             body: this.props.body,
         }
+
+    
+
+
         const {onCancel, autoVoteOnChange} = this
         const {title, category, body, autoVote} = this.props.fields
         const {
@@ -358,6 +368,13 @@ class ReplyEditor extends React.Component {
         let isTextareaEmptyVal = this.state.isTextareaEmpty;
 
 
+       // this.props.title.value = translate('post') + ' ' + username;
+        //this.props.category.value = 'bm-open';
+        
+
+        //this.props.title.value = translate('post') + ' ' + username;
+        //this.props.category.value = 'bm-open';
+
 
         return (
             <div className="ReplyEditor row">
@@ -371,7 +388,7 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="hidden" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder={translate('title')} autoComplete="off" ref="titleRef" tabIndex={1} value={translate('post') + ' ' + username} />
+                                <input type="hidden" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder={translate('title')} autoComplete="off" ref="titleRef" tabIndex={1}  />
                             </span>}
                         </div>
 
@@ -432,18 +449,22 @@ export default formId => reduxForm(
         )
         const hasCategory = isStory // /submit_story/.test(type)
 
+       
+
         if (isStory) fields.push('title')
         if (hasCategory) fields.push('category')
 
         const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
-           // title: isStory && (
-           //     !values.title || values.title.trim() === '' ? translate('required') :
-           //     values.title.length > 255 ? translate('shorten_title') :
-           //     null
-           // ),
-           // category: hasCategory,
+           title: null,
+           //isStory && (
+           //!values.title || values.title.trim() === '' ? translate('required') :
+           //values.title.length > 255 ? translate('shorten_title') :
+           //null
+           //),
+           category: null,
+           //hasCategory,
             body: !values.body ? translate('required') :
                   values.body.length > maxKb * 1024 ? translate('exceeds_maximum_length', { maxKb }) : null,
         })
