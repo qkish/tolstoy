@@ -43,9 +43,9 @@ const sagaMiddleware = createSagaMiddleware(
 let middleware;
 
 if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
-    middleware = compose(
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+    middleware = composeEnhancers(
         applyMiddleware(sagaMiddleware)
-        // DevTools.instrument()
     );
 } else {
     middleware = applyMiddleware(sagaMiddleware);
