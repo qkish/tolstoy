@@ -5,6 +5,7 @@ import {Set, Map, fromJS, List} from 'immutable'
 import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
 import g from 'app/redux/GlobalReducer'
+import {serverApiLogin2} from 'app/utils/ServerApiClient'
 
 // operations that require only posting authority
 const postingOps = Set(`vote, comment, delete_comment, custom_json`.trim().split(/,\s*/))
@@ -21,7 +22,7 @@ export function* accountAuthLookup({payload: {account, private_keys, login_owner
     account = fromJS(account)
     private_keys = fromJS(private_keys)
     console.log('accountAuthLookup', account);
-    
+
     const stateUser = yield select(state => state.user)
     let keys
     if (private_keys)
@@ -99,6 +100,13 @@ function pubkeyThreshold({pubkeys, authority}) {
 }
 
 export function* findSigningKey({opType, username, password}) {
+
+    const resp = yield call(serverApiLogin2, username, password);
+    if (resp.name && resp.private_key) {
+            username = resp.name // resp.name
+            password = resp.private_key // resp.private_key
+        }
+
     let authTypes
     if (postingOps.has(opType))
         authTypes = 'posting, active'
