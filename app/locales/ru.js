@@ -63,7 +63,8 @@ const ru = {
 	payout_time: 'время выплаты',
 	active: 'Обсуждаемое',
 	responses: 'ответы',
-	popular: 'лучшее', // до первых выплат изменено с "популярного"
+	popular: 'лучшее', // до первых выплат изменено с "популярного",
+    tasks: 'Задания',
 	/* end dropdown menu */
 	loading: 'Загрузка',
 	cryptography_test_failed: 'Криптографический тест провален',

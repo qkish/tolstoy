@@ -4,6 +4,9 @@ export default function resolveRoute(path)
     if (path === '/') {
         return {page: 'PostsIndex', params: ['trending']};
     }
+    if (path === '/tasks') {
+        return {page: 'PostsIndex', params: ['tasks']};
+    }
     if (path === '/about.html') {
         return {page: 'About'};
     }

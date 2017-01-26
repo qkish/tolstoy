@@ -62,6 +62,7 @@ const en = 	{
 	active: 'active',
 	responses: 'responses',
 	popular: 'popular',
+	tasks: 'tasks',
 	/* end dropdown menu */
 	loading: 'Loading',
 	cryptography_test_failed: 'Cryptography test failed',

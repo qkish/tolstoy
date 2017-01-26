@@ -23,6 +23,7 @@ function sortOrderToLink(so, topic, account) {
     // to prevent probmes check if topic is not the same as account name
     if ('@' + account == topic) topic = ''
     if (so === 'home') return '/@' + account + '/feed';
+    if (so === 'tasks') return '/tasks'
     if (topic) return `/${so}/${topic}`;
     return `/${so}`;
 }
@@ -98,6 +99,10 @@ class PostsIndex extends React.Component {
             posts = this.getPosts(order, category);
         }
 
+        if (this.props.routeParams.order === 'tasks') {
+            posts = this.getPosts('created', 'bm-tasks')
+        }
+
         const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;
         const fetching = (status && status.fetching) || this.props.loading;
         const {showSpam} = this.state
@@ -135,8 +140,9 @@ class PostsIndex extends React.Component {
                 } else {
                     if (route.params[0] === "created") {
                         page_title = translate('new_posts');
-                    }
-                    else {
+                    } else if (route.params[0] === 'tasks') {
+                        page_title = translate('tasks')
+                    } else {
                         page_title = translate('sort_order_posts', {sort_order});
                     }
                 }
@@ -217,7 +223,8 @@ class PostsIndex extends React.Component {
 
             ['trending', translate('trending')],
             // ['promoted', translate('promoted')],
-            ['active', translate('active')]
+            ['active', translate('active')],
+            ['tasks', translate('tasks')]
         ];
         /* if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]); */
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
