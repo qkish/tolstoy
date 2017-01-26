@@ -99,10 +99,6 @@ class PostsIndex extends React.Component {
             posts = this.getPosts(order, category);
         }
 
-        if (this.props.routeParams.order === 'tasks') {
-            posts = this.getPosts('created', 'bm-tasks')
-        }
-
         const status = this.props.status ? this.props.status.getIn([category || '', order]) : null;
         const fetching = (status && status.fetching) || this.props.loading;
         const {showSpam} = this.state
