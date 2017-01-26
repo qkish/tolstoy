@@ -220,7 +220,7 @@ class PostsIndex extends React.Component {
             ['trending', translate('trending')],
             // ['promoted', translate('promoted')],
             ['active', translate('active')],
-            ['tasks', translate('tasks')]
+            // ['tasks', translate('tasks')]
         ];
         /* if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]); */
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
