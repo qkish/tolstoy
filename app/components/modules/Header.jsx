@@ -164,7 +164,7 @@ class Header extends React.Component {
 
         if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — ' + APP_NAME;
 
-        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order : '/hot';
+        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order + '/bm-open' : '/hot/bm-open';
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'hot'}/${topic_original_link}`}>{detransliterate(topic)}</Link> : null;
 
         const sort_orders = [
@@ -220,10 +220,10 @@ class Header extends React.Component {
                                     </Link>
                                 </li>
 
-                               
 
-                              
-                     
+
+
+
                             </ul>
                         </div>
                         <div className="shrink">
@@ -231,7 +231,7 @@ class Header extends React.Component {
                         </div>
                     </div>
                 </div>
-                
+
             </header>
         );
     }
