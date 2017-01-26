@@ -88,7 +88,7 @@ class ReplyEditor extends React.Component {
         metaLinkData: Map(),
         title: translate('post'),
         category: 'bm-open',
-        
+
 
     }
 
@@ -318,7 +318,7 @@ class ReplyEditor extends React.Component {
             body: this.props.body,
         }
 
-    
+
 
 
         const {onCancel, autoVoteOnChange} = this
@@ -326,13 +326,14 @@ class ReplyEditor extends React.Component {
         const {
             reply, username, hasCategory, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
-            state, successCallback, handleSubmit, submitting, invalid, //lastComment,
+            state, successCallback, handleSubmit, submitting, invalid, resetForm //lastComment,
         } = this.props
         const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
         const {onTitleChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
             this.setState({ loading: false })
+            resetForm()
             if (successCallback) successCallback(args)
         }
         const isEdit = type === 'edit'
@@ -370,7 +371,7 @@ class ReplyEditor extends React.Component {
 
        // this.props.title.value = translate('post') + ' ' + username;
         //this.props.category.value = 'bm-open';
-        
+
 
         //this.props.title.value = translate('post') + ' ' + username;
         //this.props.category.value = 'bm-open';
@@ -449,7 +450,7 @@ export default formId => reduxForm(
         )
         const hasCategory = isStory // /submit_story/.test(type)
 
-       
+
 
         if (isStory) fields.push('title')
         if (hasCategory) fields.push('category')
