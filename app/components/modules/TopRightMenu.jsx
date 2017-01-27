@@ -22,7 +22,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location, gprops, account}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -37,8 +37,11 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
 
+    let vesting_steem
+    if (account) {
+        vesting_steem = vestingSteem(account.toJS(), gprops).toFixed(2)
+    }
 
-        
 
     function trackAnalytics(eventType) {
         console.log(eventType)
@@ -46,9 +49,9 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     }
     if (loggedIn) { // change back to if(username) after bug fix:  Clicking on Login does not cause drop-down to close #TEMP!
         const user_menu = [
-           
+
             {link: account_link, value: translate('profile')},
-           
+
             {link: replies_link, value: translate('replies')},
             {link: wallet_link, value: translate('wallet')},
             {link: reset_password_link, value: translate('change_password')},
@@ -64,8 +67,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     {/* <li className={lcn + ' buttons'}>
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li> */}
-                    
-                    
+
+
                     <LinkWithDropdown
                         closeOnClickOutside
                         dropdownPosition="bottom"
@@ -79,14 +82,14 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                             </a>
                         </li>}
                     </LinkWithDropdown>
-                   
+
                 </ul>
             );
             return      <ul className={mcn + mcl + ' landing'}>
                             {/* <li className={lcn + ' buttons'}>
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                             </li> */}
-                           
+
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="/login.html">
                                     <img src="images/user.png" width="36" height="36" />
@@ -94,7 +97,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 </a>
                             </li>
                             <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                            
+
                         </ul>
         }
 
@@ -104,10 +107,10 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 */
         return (
             <ul className={mcn}>
-                 <li className={lcn}><a href="#" className="TopRightMenu_sila-link"><div className="TopRightMenu_sila">233</div></a></li>
-                
+                 <li className={lcn}><a href="#" className="TopRightMenu_sila-link"><div className="TopRightMenu_sila">{vesting_steem}</div></a></li>
+
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <div className="TopRightMenu__search-icon"></div>}</a></li>
-              
+
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -121,7 +124,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         </a>
                     </li>}
                 </LinkWithDropdown>
-                
+
             </ul>
         );
     }
@@ -131,8 +134,8 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                             {/* <li className={lcn + ' buttons'}>
                                 <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                             </li> */}
-                            
-                           
+
+
                             <li className={lcn + ' image-wrapper'}>
                                 <a href="/login.html">
                                     <img src="images/user.png" width="36" height="36" />
@@ -140,17 +143,17 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                                 </a>
                             </li>
                             <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                            
+
                         </ul>
         }
 
         return (
             <ul className={mcn + mcl}>
-               
-                
+
+
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><div className="TopRightMenu__search-icon"></div></a></li>}
                 <li className={lcn}><LoadingIndicator type="circle" inline /></li>
-                
+
             </ul>
         );
     }
@@ -160,7 +163,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                     {/* <li className={lcn + ' buttons'}>
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li> */}
-                    
+
                     <li className={lcn}>
                         <a href="#what-is-golos">Видео</a>
                     </li>
@@ -179,7 +182,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                             <span>Вход</span>
                         </a>
                     </li>
-                    
+
                 </ul>
     }
     return (
@@ -187,12 +190,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 {/*<li className={lcn + ' buttons'}>
                      <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                 </li>*/}
-                
+
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><div className="TopRightMenu__search-icon"></div></a></li>}
                {/* <li className='TopRightMenu__signupbtn'><a className="TopRightMenu__signupbtn-link" href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li> */}
                 <li className='TopRightMenu__loginbtn'><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
-                
-                
+
+
             </ul>
         );
 }
@@ -224,11 +227,15 @@ export default connect(
         const username = state.user.getIn(['current', 'username']);
         const current_user = state.user.get('current');
         const loggedIn = !!username;
+        const gprops = state.global.getIn(['props']).toJS();
+        const account = state.global.getIn(['accounts', username]);
         return {
             username,
             userpic: null, // state.offchain.getIn(['user', 'picture']),
             loggedIn,
-            probablyLoggedIn: false
+            probablyLoggedIn: false,
+            gprops,
+            account
         }
     },
     dispatch => ({
