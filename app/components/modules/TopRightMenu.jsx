@@ -107,7 +107,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 */
         return (
             <ul className={mcn}>
-                 <li className={lcn}><a href="#" className="TopRightMenu_sila-link"><div className="TopRightMenu_sila">{vesting_steem}</div></a></li>
+                 <li className={lcn}><a href="#" className="TopRightMenu_sila-link"><div className="TopRightMenu_sila">{vesting_steem && Math.round(vesting_steem)}</div></a></li>
 
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <div className="TopRightMenu__search-icon"></div>}</a></li>
 
