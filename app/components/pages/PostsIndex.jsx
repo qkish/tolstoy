@@ -234,7 +234,7 @@ class PostsIndex extends React.Component {
         // для неавторизованных пользователей
         let formFront = '';
         if (current_account_name) formFront = <div className="SubmitPost">
-            <SubmitReplyEditor type="submit_story" />
+            <SubmitReplyEditor successCallback={() => { window.location.reload() }} type="submit_story" />
         </div>;
 
 
