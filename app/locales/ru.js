@@ -88,6 +88,7 @@ const ru = {
 	keep_me_logged_in: 'Запомнить меня',
 	// this are used mainly in "submit a story" form
 	title: "Заголовок",
+	reporttitle: "Заголовок отчета",
 	write_your_story: 'Написать отчет за сегодня',
 	editor: 'Редактор',
 	reply: 'Ответить',

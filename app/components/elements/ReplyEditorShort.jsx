@@ -86,7 +86,6 @@ class ReplyEditor extends React.Component {
         parent_permlink: '',
         type: 'submit_comment',
         metaLinkData: Map(),
-        title: translate('post'),
         category: 'bm-open',
 
 
@@ -297,18 +296,35 @@ class ReplyEditor extends React.Component {
     }
 
     handleOnFocus = event => {
+        this.refs.postRef.focus()
         this.setState({btnVisible: 'uncovered'})
         this.setState({textareaState: 'expanded-area'})
     }
     handleOnBlur = event => {
         let bodynow = this.props.fields.body.value
+        let titlenow = this.props.fields.title.value
 
-        if (bodynow == '') {
+        if (bodynow == '' && titlenow == '') {
             this.setState({btnVisible: 'covered'})
             this.setState({textareaState: 'collapsed-area'})
         }
     }
 
+    handleOnTitleFocus = event => {
+        this.refs.titleRef.focus()
+        this.setState({btnVisible: 'uncovered'})
+        this.setState({textareaState: 'expanded-area'})
+    }
+
+    handleOnTitleBlur = event => {
+        let bodynow = this.props.fields.body.value
+        let titlenow = this.props.fields.title.value
+
+        if (bodynow == '' && titlenow == '') {
+            this.setState({btnVisible: 'covered'})
+            this.setState({textareaState: 'collapsed-area'})
+        }
+    }
 
     render() {
         // NOTE title, category, and body are UI form fields ..
@@ -368,19 +384,23 @@ class ReplyEditor extends React.Component {
         let areaState = this.state.textareaState;
         let isTextareaEmptyVal = this.state.isTextareaEmpty;
 
+        let titleVisible
 
-       // this.props.title.value = translate('post') + ' ' + username;
-        //this.props.category.value = 'bm-open';
+        if (areaState == 'expanded-area') {
+            titleVisible = true
+        } else {
+            titleVisible = false
+        }
 
 
-        //this.props.title.value = translate('post') + ' ' + username;
-        //this.props.category.value = 'bm-open';
+       
 
 
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
                     <form className={vframe_class}
+
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
                             reply({ ...data, ...replyParams, loadingCallback })
@@ -389,13 +409,13 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="hidden" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder={translate('title')} autoComplete="off" ref="titleRef" tabIndex={1}  />
+                                <input type="text" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder={translate('reporttitle')} autoComplete="off" ref="titleRef" tabIndex={1} onMouseDown={this.handleOnTitleFocus} onBlur={this.handleOnTitleBlur} className={titleVisible ? 'ReplyEditorShort__titleVisible' : 'ReplyEditorShort__titleInvisible'} />
                             </span>}
                         </div>
 
                         <div className={'ReplyEditorShort__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
 
-                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onFocus={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState} />
+                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onMouseDown={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState} />
 
                         </div>
                         <div className={vframe_section_shrink_class}>
@@ -458,12 +478,11 @@ export default formId => reduxForm(
         const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
-           title: null,
-           //isStory && (
-           //!values.title || values.title.trim() === '' ? translate('required') :
-           //values.title.length > 255 ? translate('shorten_title') :
-           //null
-           //),
+           title: isStory && (
+           !values.title || values.title.trim() === '' ? translate('required') :
+           values.title.length > 255 ? translate('shorten_title') :
+           null
+           ),
            category: null,
            //hasCategory,
             body: !values.body ? translate('required') :

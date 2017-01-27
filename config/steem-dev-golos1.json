@@ -35,8 +35,8 @@
   "helmet": {},
   "registrar": {
     "account": "qkish",
-    "signing_key": "5JRZkwjNad3Ln7vqT3ZyzEdiG3ZS8fz38WwzAYp8jd1tzJtoa52",
-    "fee": "5.000 GOLOS"
+    "signing_key": "P5KhTNqmdxKocLhwia4VfgPD4P7ZvkUGTaiSPEuJjYUfxJzakVXm",
+    "fee": "1.000 GOLOS"
   },
   "requestAccountRecovery": {
     "signing_key": "5J.....",
@@ -63,5 +63,5 @@
   "disable_signups": false,
   "read_only_mode": false,
   "uploadImage": "https://...",
-    "secret_key": "mZO6lInYf4yYFY4nRX7apUZgvAG96B1U0CTJ7WbZv1I"
+  "secret_key": "mZO6lInYf4yYFY4nRX7apUZgvAG96B1U0CTJ7WbZv1I"
 }

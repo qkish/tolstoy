@@ -86,6 +86,7 @@ const en = 	{
 	keep_me_logged_in: 'Keep me logged in',
 	// this are used mainly in "submit a story" form
 	title: "Title",
+	reporttitle: "Report title",
 	write_your_story: 'Write your story',
 	editor: 'Editor',
 	reply: 'Reply',
