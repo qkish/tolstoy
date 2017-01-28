@@ -133,7 +133,7 @@ class PostSummary extends React.Component {
             money = money.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
          } 
 
-        let moneyCurrency = store.get('currency') || DEFAULT_CURRENCY
+        let moneyCurrency = store.get('fetchedCurrency') || DEFAULT_CURRENCY
      
         let moneyToday = <div className="PostSummary__summToday">Заработано сегодня: {money} {moneyCurrency}</div>
 

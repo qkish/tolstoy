@@ -8,6 +8,7 @@ export default class Avatar extends Component {
   constructor(props) {
         super(props);
         this.state = {};
+        console.log(props);
       
     }
 
@@ -20,12 +21,10 @@ export default class Avatar extends Component {
 
 		let url
 
-		if (this.props.account) {
+		if (this.props) {
 
 		 let account = this.props.account;
 		 
-
-		 console.log('account in Avatar: ', account)
 
 		// try to extract image url from users metaData
 		try { url = JSON.parse(account.json_metadata).user_image }
