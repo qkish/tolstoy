@@ -21,7 +21,7 @@ export default class Avatar extends Component {
 
 		let url
 
-		if (this.props) {
+		
 
 		 let account = this.props.account;
 		 
@@ -35,7 +35,7 @@ export default class Avatar extends Component {
 			url = proxy + size + '/' + url;
 		}
 
-	}
+	
 
 		let finalurl = '';
 		if (url) finalurl = url; else finalurl = '/images/user.png';
