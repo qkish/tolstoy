@@ -125,6 +125,16 @@ export default class UserProfile extends React.Component {
         // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
 
         let rewardsClass = "";
+
+         const jsonMetaData = JSON.parse(account.json_metadata)
+        const {firstName, lastName} = jsonMetaData
+
+        let fullName
+        if (firstName || lastName )
+            fullName = firstName + ' ' + lastName
+        else fullName = name;
+
+
         if( section === 'transfers' ) {
             tab_content = <UserWallet global={this.props.global}
                           account={account}
@@ -174,7 +184,7 @@ export default class UserProfile extends React.Component {
                               type="submit_story" />
                       </div>: null}
                   <PostsList
-                      emptyText={translate('user_hasnt_made_any_posts_yet', {name})}
+                      emptyText={translate('user_hasnt_made_any_posts_yet', {fullName})}
                       posts={account.posts.map(p => `${account.name}/${p}`)}
                       loading={fetching}
                       category="posts"
@@ -193,7 +203,7 @@ export default class UserProfile extends React.Component {
                             <SubmitReplyEditor type="submit_story" />
                         </div>: null}
                     <PostsList
-                        emptyText={translate('user_hasnt_started_bloggin_yet', {name})}
+                        emptyText={translate('user_hasnt_started_bloggin_yet', {fullName})}
                         posts={account.blog}
                         loading={fetching}
                         category="blog"
@@ -221,7 +231,7 @@ export default class UserProfile extends React.Component {
         else if( (section === 'recent-replies') && account.recent_replies ) {
               tab_content =
                   <PostsList
-                  emptyText={translate('user_hasnt_had_any_replies_yet', {name}) + '.'}
+                  emptyText={translate('user_hasnt_had_any_replies_yet', {fullName}) + '.'}
                   posts={account.recent_replies}
                   loading={fetching}
                   category="recent-replies"
@@ -236,13 +246,7 @@ export default class UserProfile extends React.Component {
         //    console.log( "no matches" );
         }
 
-        const jsonMetaData = JSON.parse(account.json_metadata)
-        const {firstName, lastName} = jsonMetaData
-
-        let fullName
-        if (firstName || lastName )
-            fullName = firstName + ' ' + lastName
-        else fullName = name;
+       
 
         let printLink = null;
         let section_title = account.name + ' / ' + section;

@@ -221,6 +221,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
             // Ошибка авторизации на molodost
             if (resp.error_status === 'bm-user-not-found') {
+                yield put(user.actions.loginError({ error: translate('incorrect_password') }))
                 console.log('Error: User account for found from BM api');
                 return;
             } 
@@ -236,7 +237,12 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                     // Создать аккаунт на golos.io
                     let newname, account;
                     while (true) {
-                        newname = 'bm' + generateGolosLogin(12); //Генерируем имя алгоритмом на сервере
+                        newname = 'bm-' + username.split('@')[0];
+                        //Генерируем имя алгоритмом на сервере
+                        account = yield call(getAccount, newname);
+                        if(!account) break;
+                        
+                        newname = 'bm-'+ username.split('@')[0] + generateGolosLogin(2); 
                         account = yield call(getAccount, newname);
                         if(!account) break;
                     }
