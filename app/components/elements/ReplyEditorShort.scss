@@ -151,3 +151,41 @@ input[type="number"] {
 .RichTextEditor__root___33zoV button {
   margin-right: 0 !important;
 }
+
+
+@media screen and (max-width: 39.9375em) {
+
+.ReplyEditorShort__body  {
+
+  > textarea {
+  font-size:16px;
+  }
+  > input {
+     font-size:16px;
+  }
+}
+
+  .ReplyEditorShort__moneyVisible, .ReplyEditorShort__moneyVisible:focus {
+      font-size:16px;
+}
+
+
+.ReplyEditorShort__moneyInvisible {
+  font-size:16px;
+
+}
+
+.ReplyEditorShort__titleVisible, .ReplyEditorShort__titleVisible:focus   {
+font-size: 16px;
+}
+
+.ReplyEditorShort__titleInvisible  {
+font-size: 16px;
+}
+
+
+
+}
+
+
+
