@@ -14,7 +14,25 @@
   display: none;
 }
 
+.ReplyEditorShort__titleVisible, .ReplyEditorShort__titleVisible:focus  {
+  display: block;
+  border: 1px solid #e1e3e4;
+    border-radius: 3px;
+    box-shadow: none;
 
+    resize: none;
+    color: #1f1f1f;
+    height: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    background-color: #fff;
+    padding: 10px 10px 10px 15px;
+    margin-bottom: 10px !important;
+}
+
+.ReplyEditorShort__titleInvisible {
+  display: none;
+}
 
 .ReplyEditor .Markdown {
   border: 1px solid $light-gray;
@@ -51,7 +69,7 @@
 
   > textarea.expanded-area {
   resize: auto;
-  height: 100px;
+  height: 150px;
   background: #fff;
   padding: 13px 10px 10px 15px;
 }

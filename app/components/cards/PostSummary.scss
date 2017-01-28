@@ -60,14 +60,21 @@ margin-bottom: 15px;
 
 .PostSummary__header {
   > h1 {
-    font: 600 100% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
-    margin: 0;
+    font-family:"museo_sans_cyrl", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin: 0 0 5px 0;
     overflow: hidden;
+    
     > a {
       color: #333;
     }
     > a:visited {
       color: #777;
+    }
+
+    >a:hover {
+      text-decoration: none;
     }
   }
 }
