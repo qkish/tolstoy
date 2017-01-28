@@ -18,10 +18,14 @@ export default class Avatar extends Component {
 
 	render() {
 
+		let url
+
+		if (this.props.account) {
+
 		 let account = this.props.account;
-		 let url
+		 
 
-
+		 console.log('account in Avatar: ', account)
 
 		// try to extract image url from users metaData
 		try { url = JSON.parse(account.json_metadata).user_image }
@@ -31,6 +35,8 @@ export default class Avatar extends Component {
 			const size = props.width + 'x' + props.height
 			url = proxy + size + '/' + url;
 		}
+
+	}
 
 		let finalurl = '';
 		if (url) finalurl = url; else finalurl = '/images/user.png';

@@ -19,6 +19,8 @@ import Userpic from 'app/components/elements/Userpic';
 import Author from 'app/components/elements/Author';
 import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
+import store from 'store';
+import { FRACTION_DIGITS, DEFAULT_CURRENCY } from 'config/client_config';
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     const author = <strong>{post.author}</strong>;
@@ -65,6 +67,7 @@ class PostSummary extends React.Component {
         currentCategory: React.PropTypes.string,
         thumbSize: React.PropTypes.string,
         onClick: React.PropTypes.func,
+        jsonMetadata: React.PropTypes.object,
     };
 
     shouldComponentUpdate(props) {
@@ -75,7 +78,7 @@ class PostSummary extends React.Component {
 
     render() {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
-        const {post, content, pending_payout, total_payout, cashout_time} = this.props;
+        const {post, content, pending_payout, total_payout, cashout_time, jsonMetadata} = this.props;
         if (!content) return null;
 
         const archived = content.get('mode') === 'archived'
@@ -88,6 +91,9 @@ class PostSummary extends React.Component {
 
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
+
+      
+
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
             desc = desc.replace(p.image_link, '')
@@ -95,6 +101,10 @@ class PostSummary extends React.Component {
         let title_text = p.title;
         let comments_link;
         let is_comment = false;
+
+       
+ 
+      
 
 
 
@@ -114,6 +124,18 @@ class PostSummary extends React.Component {
         let content_title = <h1 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{title_text}</a>
         </h1>;
+
+         let money = '0';
+
+        if (p.json_metadata.daySumm)  { 
+            money = p.json_metadata.daySumm;
+            money = String(money);
+            money = money.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
+         } 
+
+        let moneyCurrency = store.get('currency') || DEFAULT_CURRENCY
+     
+        let moneyToday = <div className="PostSummary__summToday">Заработано сегодня: {money} {moneyCurrency}</div>
 
         // author and category
         let author_category = <div className="vcard">
@@ -172,10 +194,14 @@ class PostSummary extends React.Component {
                 <div className="PostSummary__content">
                  
                     {content_body}
+                   
+
+
                 </div>
                 {thumb}
                 <div className="PostSummary__footer">
                     <Voting pending_payout={pending_payout} total_payout={total_payout} cashout_time={cashout_time} post={post} showList={false} />
+                    {moneyToday}
                 </div>
             </article>
         )

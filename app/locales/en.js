@@ -576,7 +576,8 @@ const en = 	{
   author_rewards_by_user_name: 'Author rewards by {user_name}',
   replies_by_user_name: 'Replies by {user_name}',
   comments_by_user_name: 'Comments by {user_name}',
-  like: 'Like',
+  like: 'Coins',
+  money_for_day: 'Income today',
 
 }
 

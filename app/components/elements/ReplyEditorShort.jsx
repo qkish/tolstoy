@@ -54,6 +54,7 @@ class ReplyEditor extends React.Component {
         category: React.PropTypes.string, // initial value
         title: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
+        money: React.PropTypes.string,
 
         //redux connect
         reply: React.PropTypes.func.isRequired,
@@ -65,6 +66,7 @@ class ReplyEditor extends React.Component {
         hasCategory: React.PropTypes.bool.isRequired,
         isStory: React.PropTypes.bool.isRequired,
         username: React.PropTypes.string,
+        
 
         // redux-form
         fields: React.PropTypes.object.isRequired,
@@ -87,6 +89,8 @@ class ReplyEditor extends React.Component {
         type: 'submit_comment',
         metaLinkData: Map(),
         category: 'bm-open',
+        
+
 
 
     }
@@ -105,6 +109,17 @@ class ReplyEditor extends React.Component {
             const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
             this.setState({ titleWarn: hasMarkdown ? translate('markdown_not_supported') : ''})
             this.props.fields.title.onChange(e)
+        }
+
+        this.onMoneyChange = e => {
+
+           const value = e.target.value
+            // TODO block links in title (the do not make good permlinks)
+            const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
+            this.setState({ titleWarn: hasMarkdown ? translate('markdown_not_supported') : ''})
+            this.props.fields.money.onChange(e)
+
+
         }
         this.onCancel = e => {
             if(e) e.preventDefault()
@@ -143,9 +158,10 @@ class ReplyEditor extends React.Component {
             if(editorData) {
                 editorData = JSON.parse(editorData)
                 if(editorData.formId === formId) {
-                    const {fields: {category, title, body}} = this.props
+                    const {fields: {category, title, body, money}} = this.props
                     if(category) category.onChange(editorData.category)
                     if(title) title.onChange(editorData.title)
+                    if(money) money.onChange(editorData.money)
                     if (editorData.body) {
                         body.onChange(editorData.body)
 
@@ -188,7 +204,8 @@ class ReplyEditor extends React.Component {
         // focus
         setTimeout(() => {
             if (this.props.isStory) {this.refs.titleRef.focus(); }
-            else if (this.refs.postRef) this.refs.postRef.focus()
+            else if (this.refs.postRef) this.refs.postRef.focus();
+            else if (this.refs.moneyRef) this.refs.moneyRef.focus();
             else if (this.refs.rte) this.refs.rte._focus()
         }, 300)
     }
@@ -204,13 +221,15 @@ class ReplyEditor extends React.Component {
             const np = nextProps.fields
             if(tp.body.value !== np.body.value ||
                 (np.category && tp.category.value !== np.category.value) ||
-                (np.title && tp.title.value !== np.title.value)
-            ) { // also prevents saving after parent deletes this information
-                const {fields: {category, title, body}, formId} = nextProps
+                (np.title && tp.title.value !== np.title.value) || 
+                (np.money && tp.money.value) !== np.money.value)
+             { // also prevents saving after parent deletes this information
+                const {fields: {category, title, body, money}, formId} = nextProps
                 const data = {formId}
                 data.title = title ? title.value : undefined
                 data.category = category ? category.value : undefined
                 data.body = body.value
+                data.money = money ? money.value : '0'
                 clearTimeout(saveEditorTimeout)
                 saveEditorTimeout = setTimeout(() => {
                     // console.log('save formId', formId)
@@ -232,7 +251,6 @@ class ReplyEditor extends React.Component {
     }
     onChange(rte_value) {
         this.setState({rte_value})
-        console.log('2')
 
 
         let html = rte_value.toString('html');
@@ -303,8 +321,9 @@ class ReplyEditor extends React.Component {
     handleOnBlur = event => {
         let bodynow = this.props.fields.body.value
         let titlenow = this.props.fields.title.value
+        let moneynow = this.props.fields.money.value
 
-        if (bodynow == '' && titlenow == '') {
+        if (bodynow == '' && titlenow == '' && !moneynow) {
             this.setState({btnVisible: 'covered'})
             this.setState({textareaState: 'collapsed-area'})
         }
@@ -319,12 +338,34 @@ class ReplyEditor extends React.Component {
     handleOnTitleBlur = event => {
         let bodynow = this.props.fields.body.value
         let titlenow = this.props.fields.title.value
+        let moneynow = this.props.fields.money.value
 
-        if (bodynow == '' && titlenow == '') {
+        if (bodynow == '' && titlenow == '' && !moneynow) {
             this.setState({btnVisible: 'covered'})
             this.setState({textareaState: 'collapsed-area'})
         }
     }
+
+    handleOnMoneyFocus = event => {
+        this.refs.moneyRef.focus()
+        this.setState({btnVisible: 'uncovered'})
+        this.setState({textareaState: 'expanded-area'})
+    }
+
+    handleOnMoneyBlur = event => {
+        let bodynow = this.props.fields.body.value
+        let titlenow = this.props.fields.title.value
+        let moneynow = this.props.fields.money.value
+
+        if (bodynow == '' && titlenow == '' && !moneynow) {
+            this.setState({btnVisible: 'covered'})
+            this.setState({textareaState: 'collapsed-area'})
+        }
+
+    }
+
+
+
 
     render() {
         // NOTE title, category, and body are UI form fields ..
@@ -332,20 +373,21 @@ class ReplyEditor extends React.Component {
             title: this.props.title,
             category: this.props.category,
             body: this.props.body,
+            money: this.props.money
         }
 
 
 
 
         const {onCancel, autoVoteOnChange} = this
-        const {title, category, body, autoVote} = this.props.fields
+        const {title, category, body, money, autoVote} = this.props.fields
         const {
             reply, username, hasCategory, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
             state, successCallback, handleSubmit, submitting, invalid, resetForm //lastComment,
         } = this.props
         const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
-        const {onTitleChange} = this
+        const {onTitleChange, onMoneyChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
             this.setState({ loading: false })
@@ -392,8 +434,7 @@ class ReplyEditor extends React.Component {
             titleVisible = false
         }
 
-
-       
+      
 
 
         return (
@@ -416,8 +457,9 @@ class ReplyEditor extends React.Component {
                         <div className={'ReplyEditorShort__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
 
                                 <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onMouseDown={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState} />
-
-                        </div>
+                     </div>
+                      <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_day')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className={titleVisible ? 'ReplyEditorShort__moneyVisible' : 'ReplyEditorShort__moneyInvisible'} />
+                       
                         <div className={vframe_section_shrink_class}>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
                         </div>
@@ -464,7 +506,7 @@ export default formId => reduxForm(
         // const current = state.user.get('current')||Map()
         const username = state.user.getIn(['current', 'username'])
         const fields = ['body', 'autoVote']
-        const {type, parent_author, jsonMetadata} = ownProps
+        let {type, parent_author, jsonMetadata} = ownProps
         const isStory =   /submit_story/.test(type) || (
             /edit/.test(type) && parent_author === ''
         )
@@ -473,7 +515,9 @@ export default formId => reduxForm(
 
 
         if (isStory) fields.push('title')
+        if (isStory) fields.push('money')
         if (hasCategory) fields.push('category')
+
 
         const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
@@ -484,11 +528,13 @@ export default formId => reduxForm(
            null
            ),
            category: null,
+           money: null,
            //hasCategory,
             body: !values.body ? translate('required') :
                   values.body.length > maxKb * 1024 ? translate('exceeds_maximum_length', { maxKb }) : null,
         })
-        let {category, title, body} = ownProps
+        let {category, title, body, money} = ownProps
+
 
         if (/submit_/.test(type)) title = body = ''
 
@@ -503,12 +549,12 @@ export default formId => reduxForm(
         const ret = {
             ...ownProps,
             fields, validate, isStory, hasCategory, username,
-            initialValues: {title, body, category}, state,
+            initialValues: {title, body, category, money}, state,
             // lastComment: current.get('lastComment'),
             formId,
             metaLinkData,
         }
-        // console.log('ret', ret)
+  
         return ret
     },
 
@@ -524,13 +570,15 @@ export default formId => reduxForm(
         setMetaData: (id, jsonMetadata) => {
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        reply: ({category, title, body, author, permlink, parent_author, parent_permlink,
+        reply: ({category, title, body, money, author, permlink, parent_author, parent_permlink,
             type, originalPost, autoVote = false, allSteemPower = false,
             state, jsonMetadata, /*metaLinkData,*/
             successCallback, errorCallback, loadingCallback
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
+
+           
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
@@ -547,11 +595,15 @@ export default formId => reduxForm(
             if (category) {console.log(category);}else{console.log(author);}
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
+
+          
+           
+            
             const linkProps =
                 /^submit_/.test(type) ? { // submit new
                     parent_author: author,
                     parent_permlink: permlink,
-                    author: username,
+                    author: username
                     // permlink,  assigned in TransactionSaga
                 } :
                 // edit existing
@@ -588,6 +640,13 @@ export default formId => reduxForm(
             if(rtags.usertags.size) meta.users = rtags.usertags; else delete meta.users
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
+            
+            if(money) meta.daySumm = money; else delete meta.daySumm
+
+
+
+
+
 
             // const cp = prop => { if(metaLinkData.has(prop)) json_metadata.steem[prop] = metaLinkData.get(prop) }
             // cp('link')
@@ -614,6 +673,8 @@ export default formId => reduxForm(
                     percent_steem_dollars: 0, // 10000 === 100%
                 }
             }
+
+            console.log('SUMBIT ', meta);
             const operation = {
                 ...linkProps,
                 category: rootCategory, title, body,

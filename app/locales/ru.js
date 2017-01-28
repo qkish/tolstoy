@@ -593,7 +593,9 @@ const ru = {
 	author_rewards_by_user_name: 'Авторские награды {user_name}',
 	replies_by_user_name: 'Ответы {user_name}',
 	comments_by_user_name: 'Комментарии {user_name}',
-	like: 'Нравится',
+	like: 'Монет',
+
+
 
     // for Setting Component -> account metadata
     user_base_info: 'Основная информация',
@@ -635,6 +637,9 @@ const ru = {
     register_email_label: 'Электропочта',
     register_password_label: 'Пароль',
     register_submit_text: 'Создать аккаунт',
+
+
+    money_for_day: 'Заработано за день',
 }
 
 export { ru }
