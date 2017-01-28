@@ -115,7 +115,7 @@ export default class LocalizedCurrency extends React.Component {
 		const {amount, intl: {formatNumber}, noSymbol, fractionDigits, ...rest} = this.props
 		let {localCurrencySymbol} = this.state
 
-		this.checkIfCurrencyChanged()
+		// this.checkIfCurrencyChanged()
 
 		/**
 		 * localyze currency

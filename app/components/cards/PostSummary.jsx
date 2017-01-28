@@ -19,7 +19,7 @@ import Userpic from 'app/components/elements/Userpic';
 import Author from 'app/components/elements/Author';
 import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
-
+import store from 'store';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY } from 'config/client_config';
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
@@ -133,9 +133,7 @@ class PostSummary extends React.Component {
             money = money.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
          } 
 
-        //let moneyCurrency = store.get('fetchedCurrency') || DEFAULT_CURRENCY
-
-        let moneyCurrency = DEFAULT_CURRENCY
+        let moneyCurrency = store.get('fetchedCurrency') || DEFAULT_CURRENCY
      
         let moneyToday = <div className="PostSummary__summToday">Заработано сегодня: {money} {moneyCurrency}</div>
 
