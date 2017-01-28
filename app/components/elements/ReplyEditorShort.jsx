@@ -451,15 +451,15 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text"  {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder={translate('reporttitle')} autoComplete="off" ref="titleRef" tabIndex={1} onMouseDown={this.handleOnTitleFocus} onBlur={this.handleOnTitleBlur} className={titleVisible ? 'ReplyEditorShort__titleVisible' : 'ReplyEditorShort__titleInvisible'} />
+                                <input type="text"  {...cleanReduxInput(title)} onChange={onTitleChange} onTouchStart={onTitleChange} disabled={loading} placeholder={translate('reporttitle')} autoComplete="off" ref="titleRef" tabIndex={1} onMouseDown={this.handleOnTitleFocus} onBlur={this.handleOnTitleBlur} className={titleVisible ? 'ReplyEditorShort__titleVisible' : 'ReplyEditorShort__titleInvisible'} />
                             </span>}
                         </div>
 
                         <div className={'ReplyEditorShort__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
 
-                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onMouseDown={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState} />
+                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onMouseDown={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState} onTouchStart={this.handleOnFocus} />
                      </div>
-                      <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_day')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className={titleVisible ? 'ReplyEditorShort__moneyVisible' : 'ReplyEditorShort__moneyInvisible'}  />
+                      <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_day')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className={titleVisible ? 'ReplyEditorShort__moneyVisible' : 'ReplyEditorShort__moneyInvisible'} onTouchStart={this.handleOnMoneyFocus} />
                        
                         <div className={vframe_section_shrink_class}>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>

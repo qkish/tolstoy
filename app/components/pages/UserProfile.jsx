@@ -333,9 +333,9 @@ export default class UserProfile extends React.Component {
 
                 <div className="UserProfile__banner col-sm-4 col-xs-12">
                     <ViewUserBase global={this.props.global} account={account} />
-                    <br/>
+                   
                     <ViewUserTarget global={this.props.global} account={account} />
-                    <br />
+                  
                     <ViewUserMore global={this.props.global} account={account} />
                 </div>
 

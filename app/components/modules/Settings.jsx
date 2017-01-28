@@ -245,11 +245,11 @@ class Settings extends React.Component {
 
                     <label>
                         <span>{translate('email')}</span>
-                        <textarea onChange={this.handleUserEmailChange} value={state.email} placeholder={translate('email')}></textarea>
+                        <input type="text" onChange={this.handleUserEmailChange} value={state.email} placeholder={translate('email')} />
                     </label>
                     <label>
                         <span>{translate('phone')}</span>
-                        <textarea onChange={this.handleUserPhoneChange} value={state.phone} placeholder={translate('phone')}></textarea>
+                        <input type="text" onChange={this.handleUserPhoneChange} value={state.phone} placeholder={translate('phone')} />
                     </label>
 
                     <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
