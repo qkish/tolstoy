@@ -193,7 +193,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     // 1) Check local storage
     const userExistInLocalStorage = yield select(state => state.offchain.get('account'));
-    if (!userExistInLocalStorage) {
+    if (!userExistInLocalStorage && !localStorage.autopost2) {
 
         // Send to server auth request
         const resp = yield call(serverApiLogin2, username, password);
@@ -267,6 +267,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     //console.log(resp)
     //password = resp.private_key
+
 
     const account = yield call(getAccount, username)
 

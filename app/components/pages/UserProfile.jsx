@@ -320,7 +320,7 @@ export default class UserProfile extends React.Component {
         const background = jsonMetaData.background_image;
         let backgroundUrl 
         if (background) backgroundUrl = {backgroundImage: "url('" + background + "')"};
-        
+
 
         return (
             <div className="UserProfile">
@@ -328,7 +328,7 @@ export default class UserProfile extends React.Component {
                 <div className="UserProfile__cover col-sm-12"
                      style={backgroundUrl}>
                 <Avatar account={account} />
-                    <div style={{position: "relative"}}>
+                    <div className="UserProfile__buttons-block">
                         <div className="UserProfile__buttons">
                             <Follow follower={username} following={accountname} what="blog" />
                         </div>

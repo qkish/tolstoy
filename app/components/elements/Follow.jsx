@@ -60,8 +60,8 @@ export default class Follow extends React.Component {
             console.log('Unknown follow type:', what)
             return <span></span>
         }
-        const cnActive = 'button' + (fat ? '' : ' slim')
-        const cnInactive = cnActive + ' hollow secondary'
+        const cnActive = 'button'
+        const cnInactive = cnActive + '  secondary'
         return <span>
             {showFollow && !existingFollows.has(what) && <label className={cnInactive} onClick={this.follow}>{translate('follow')}</label>}
             {showFollow && existingFollows.has(what) && <label className={cnInactive} onClick={this.unfollow}>{translate('unfollow')}</label>}
