@@ -125,15 +125,9 @@ export default class UserProfile extends React.Component {
         // const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(2));
 
         let rewardsClass = "";
-
-         const jsonMetaData = JSON.parse(account.json_metadata)
-        const {firstName, lastName} = jsonMetaData
-
-        let fullName
-        if (firstName || lastName)
-            fullName = firstName + ' ' + lastName
-        else fullName = account.name;
-
+        const jsonMetaData = JSON.parse(account.json_metadata)
+        const {first_name, last_name} = jsonMetaData
+        const fullName = first_name || last_name ? `${first_name} ${last_name}` : account.name
 
         if( section === 'transfers' ) {
             tab_content = <UserWallet global={this.props.global}
@@ -197,6 +191,7 @@ export default class UserProfile extends React.Component {
            }
         } else if(!section || section === 'blog') {
             if (account.blog) {
+                console.log('FULL NAME', fullName)
                 tab_content = <section>
                     {isMyAccount ?
                         <div className="SubmitPost" style={{marginLeft: "10px"}}>
@@ -246,7 +241,7 @@ export default class UserProfile extends React.Component {
         //    console.log( "no matches" );
         }
 
-       
+
 
         let printLink = null;
         let section_title = account.name + ' / ' + section;
@@ -318,7 +313,7 @@ export default class UserProfile extends React.Component {
          </div>;
 
         const background = jsonMetaData.background_image;
-        let backgroundUrl 
+        let backgroundUrl
         if (background) backgroundUrl = {backgroundImage: "url('" + background + "')"};
 
 
@@ -340,9 +335,9 @@ export default class UserProfile extends React.Component {
 
                 <div className="UserProfile__banner col-sm-4 col-xs-12">
                     <ViewUserBase global={this.props.global} account={account} />
-                   
+
                     <ViewUserTarget global={this.props.global} account={account} />
-                  
+
                     <ViewUserMore global={this.props.global} account={account} />
                 </div>
 
