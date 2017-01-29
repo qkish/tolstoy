@@ -183,15 +183,15 @@ class Voting extends React.Component {
             payoutItems.push({value: ' - ' + translate('authors') + ': ' + localizedCurrency(formatDecimal(total_author_payout).join(''))});
             payoutItems.push({value: ' - ' + translate('curators') + ': ' + localizedCurrency(formatDecimal(total_curator_payout).join(''))});
         }
-       // const payoutEl = <DropdownMenu el="div" items={payoutItems} onClick={this.trackAnalytics.bind(this, 'rewards dropdown clicked')}>
-        //    <span>
-         //       {/* <FormattedAsset amount={payout} asset="$" /> */}
-          //      {/* TODO check FormattedAsset and it's possible replacememnt with LocalizedCurrency */}
-           //     <LocalizedCurrency amount={payout} />
+       //const payoutEl = <DropdownMenu el="div" items={payoutItems} onClick={this.trackAnalytics.bind(this, 'rewards dropdown clicked')}>
+         //   <span>
+             //  {/* <FormattedAsset amount={payout} asset="$" /> */}
+             //  {/* TODO check FormattedAsset and it's possible replacememnt with LocalizedCurrency */}
+          //   <LocalizedCurrency amount={payout} />
                
-           // </span>
-        // </DropdownMenu>;
-        const payoutEl = ''
+          //</span>
+        //</DropdownMenu>;
+        const payoutEl = <LocalizedCurrency amount={payout} />
 
         const avotes = active_votes.toJS();
         avotes.sort((a, b) => Math.abs(parseInt(a.rshares)) > Math.abs(parseInt(b.rshares)) ? -1 : 1)
