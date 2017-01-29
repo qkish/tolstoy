@@ -78,7 +78,7 @@ class PostSummary extends React.Component {
 
     render() {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
-        const {post, content, pending_payout, total_payout, cashout_time, jsonMetadata} = this.props;
+        const {post, content, pending_payout, total_payout, cashout_time, jsonMetadata, accounts} = this.props;
         if (!content) return null;
 
         const archived = content.get('mode') === 'archived'
@@ -91,8 +91,7 @@ class PostSummary extends React.Component {
 
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
-
-      
+        const occupation = JSON.parse(accounts.get(p.author).get('json_metadata')).occupation
 
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
@@ -101,12 +100,6 @@ class PostSummary extends React.Component {
         let title_text = p.title;
         let comments_link;
         let is_comment = false;
-
-       
- 
-      
-
-
 
         if( content.get( 'parent_author') !== "" ) {
            title_text = "Re: " + content.get('root_title');
@@ -127,14 +120,14 @@ class PostSummary extends React.Component {
 
          let money = '0';
 
-        if (p.json_metadata.daySumm)  { 
+        if (p.json_metadata.daySumm)  {
             money = p.json_metadata.daySumm;
             money = String(money);
             money = money.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
-         } 
+         }
 
         let moneyCurrency = store.get('fetchedCurrency') || DEFAULT_CURRENCY
-     
+
         let moneyToday = <div className="PostSummary__summToday">{translate('earned_in_post')} {money} {moneyCurrency}</div>
 
         // author and category
@@ -148,7 +141,7 @@ class PostSummary extends React.Component {
 
             <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
             <TimeAgoWrapper date={p.created} className="updated" />
-            <div className="PostSummary__niche">Ниша автора</div>
+            <div className="PostSummary__niche">{occupation || ''}</div>
 
         </div>
 
@@ -189,12 +182,12 @@ class PostSummary extends React.Component {
                  <div className="PostSummary__header">
                         {content_title}
                     </div>
-               
+
 
                 <div className="PostSummary__content">
-                 
+
                     {content_body}
-                   
+
 
 
                 </div>
@@ -212,6 +205,7 @@ export default connect(
     (state, props) => {
         const {post} = props;
         const content = state.global.get('content').get(post);
+        const accounts = state.global.get('accounts');
 
         let pending_payout = 0;
         let total_payout = 0;
@@ -219,7 +213,7 @@ export default connect(
             pending_payout = content.get('pending_payout_value');
             total_payout = content.get('total_payout_value');
         }
-        return {post, content, pending_payout, total_payout};
+        return {post, content, pending_payout, total_payout, accounts};
     },
 
     (dispatch) => ({
