@@ -91,7 +91,16 @@ class PostSummary extends React.Component {
 
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
-        const occupation = JSON.parse(accounts.get(p.author).get('json_metadata')).occupation
+        let occupation = ''
+        if (accounts) {
+            if (accounts.get(p.author)) {
+                if (accounts.get(p.author).get('json_metadata')) {
+                    occupation = JSON.parse(accounts.get(p.author).get('json_metadata')).occupation
+                }
+            }
+        }
+        // console.log('author', accounts && accounts.get(p.author) && accounts.get(p.author).get('json_metadata'))
+        // let occupation = accounts ? JSON.parse(accounts.get(p.author).get('json_metadata')).occupation : ''
 
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
