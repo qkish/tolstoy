@@ -12,6 +12,7 @@ import Reblog from 'app/components/elements/Reblog';
 import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
+import ReplyEditorShort from 'app/components/elements/ReplyEditorShort';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
@@ -22,6 +23,8 @@ import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import { translate } from 'app/Translator';
 import { APP_NAME, APP_NAME_LATIN, APP_URL } from 'config/client_config';
+
+const SubmitStory = ReplyEditorShort('submitStoryAsTaskResolve')
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
@@ -289,6 +292,7 @@ class PostFull extends React.Component {
                 <div className="row">
                      <div className="column small-12">
                         {showReply && renderedEditor}
+                        {content.category === 'bm-tasks' ? <SubmitStory type="submit_story" /> : ''}
                     </div>
                 </div>
             </article>
