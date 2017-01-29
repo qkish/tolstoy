@@ -219,6 +219,9 @@ class Header extends React.Component {
                                         <img style={{display: 'inline-block', width: '41px', height: '36px'}} src="/images/bmproudlogo.png" alt="Система" />
                                     </Link>
                                 </li>
+                                <li>
+                                    <Link to='/created/bm-tasks'>Задания</Link>
+                                </li>
 
 
 
