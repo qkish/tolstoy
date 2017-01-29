@@ -17,11 +17,11 @@ class ViewUserBase extends Component {
 
     isFullName(meta) {
         let {first_name, last_name} = meta;
-        
+
         if (first_name || last_name) { return true }
         else { return false }
     }
-    
+
     AgeCalc(age) {
     var txt;
     let count = age % 100;
@@ -109,10 +109,10 @@ class ViewUserBase extends Component {
         let vkLink;
         let websiteLink;
 
-       
-        
-   
-        
+
+
+
+
 
 
         if (instagram != '') {
@@ -132,13 +132,19 @@ class ViewUserBase extends Component {
             websiteLink = <div className="ViewUserBase_link"><a className="ViewUserBase__website" href={website}  target='_blank'>Сайт</a> </div>;
         }
 
-
+        let ageWithCity = '';
+        if (age) {
+          ageWithCity += `${age} ${yearsCorrect}`
+        }
+        if (city) {
+          ageWithCity += `, ${city}`
+        }
 
         return <div className="UserProfile__nameinfo">
 
                 <h2>{this.isFullName(metaData) ? first_name + ' ' + last_name : account.name}</h2>
 
-            <div className="UserProfile__infoboxes">{age + ' ' + yearsCorrect + ', ' + city}</div>
+            <div className="UserProfile__infoboxes">{ageWithCity}</div>
             <div className="UserProfile__infoboxes">{occupation ? occupation : ''}</div>
             <div className="UserProfile__infoboxes ">Голосов: {vestingSteemVal}</div>
 
@@ -148,9 +154,9 @@ class ViewUserBase extends Component {
             {facebookLink}
             {vkLink}
             {websiteLink}
-                
-                
-                
+
+
+
 
             </div>
 
