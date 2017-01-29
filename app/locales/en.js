@@ -583,6 +583,9 @@ const en = 	{
     enter_password: 'Enter your password:',
     earned_in_post: 'For today:',
 
+    till: 'Till',
+    leverage: 'Leverage',
+
 }
 
 export { en }

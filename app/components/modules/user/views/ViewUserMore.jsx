@@ -30,16 +30,16 @@ class ViewUserMore extends Component {
         let currentTab = this.state.currentTab;
         let currentTabContent;
 
-        if (currentTab == 'looking') currentTabContent = <div className="UserProfile__infoboxes">{looking_for}</div>;
-        if (currentTab == 'can') currentTabContent = <div className="UserProfile__infoboxes">{i_can}</div>;
+        if (currentTab == 'looking') currentTabContent = <div className="UserProfile__moreinfo">{looking_for}</div>;
+        if (currentTab == 'can') currentTabContent = <div className="UserProfile__moreinfo">{i_can}</div>;
 
         return <div className="UserProfile__blockinfo">
-            <span id="looking" onClick={this.setCurrentTab}>
+            <span id="looking" onClick={this.setCurrentTab} className="UserProfile__subtitle">
                 {currentTab == 'looking' ?
                     <strong>{translate('looking_for')}</strong> : translate('looking_for')}
             </span>
-            {' / '}
-            <span id="can" onClick={this.setCurrentTab}>
+           
+            <span id="can" onClick={this.setCurrentTab} className="UserProfile__subtitle">
                 {currentTab == 'can' ?
                     <strong>{translate('i_can')}</strong> : translate('i_can')}
             </span>

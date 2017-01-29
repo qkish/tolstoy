@@ -20,21 +20,37 @@ class ViewUserTarget extends Component {
         let metaData = JSON.parse(account.json_metadata);
         let {target_plan, target_date, target_point_a, target_point_b} = metaData;
 
-        return <div className="UserProfile__blockinfo">
+        let targetPlanDiv = ''
+        let targetDateDiv = ''
+
+        target_point_a = String(target_point_a);
+        target_point_a = target_point_a.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
+
+        target_point_b = String(target_point_b);
+        target_point_b = target_point_b.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
+
+        if (target_plan) targetPlanDiv = <div className="UserProfile__infoboxes">{translate('leverage')}: {target_plan}</div>
+        if (target_date) targetDateDiv = <div className="UserProfile__infoboxes">{translate('till')} {target_date}</div>
+
+        return <div className="UserProfile__blockinfo UserProfile__goalblock">
 
             <h6>{translate('target_plan')}</h6>
+            
 
-            <div className="UserProfile__infoboxes"><strong>{target_date}</strong></div>
-            <div className="UserProfile__infoboxes">{target_plan}</div>
-            <hr/>
-            <div className="row">
-                <div className="col-xs-6" style={{borderRight: "1px solid #ccc"}}>
-                    <div className="UserProfile__infoboxes">{translate('target_point_a')}</div>
-                    <p className="lead"><strong>{target_point_a}</strong></p>
+            {targetDateDiv}
+            {targetPlanDiv}
+            
+          
+            <div className="UserProfile_progress"></div>
+           
+            <div className="UserProfile_points row">
+                <div className="col-xs-6 UserProfile_rightCol">
+                    <div className="UserProfile__point">{translate('target_point_a')}</div>
+                    <div className="UserProfile__money">{target_point_a}</div>
                 </div>
                 <div className="col-xs-6">
-                    <div className="UserProfile__infoboxes">{translate('target_point_b')}</div>
-                    <p className="lead"><strong>{target_point_b}</strong></p>
+                    <div className="UserProfile__point">{translate('target_point_b')}</div>
+                    <div className="UserProfile__money">{target_point_b}</div>
                 </div>
             </div>
         </div>

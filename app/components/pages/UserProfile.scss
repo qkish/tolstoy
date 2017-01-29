@@ -95,10 +95,21 @@
         background: #fff;
         border: 1px solid #e1e3e4;
         border-radius: 3px;
-        padding: 24px 20px 20px 20px;
+        padding: 16px 16px 16px 16px;
         color: #0c0c0c;
         text-align: left;
          margin-bottom: 15px;
+         
+
+         > h6 {
+           font-size: 10px;
+           text-transform: uppercase;
+           letter-spacing: 2px;
+           color: #0c0c0c;
+           font-weight: 700;
+           margin-bottom: 5px;
+           
+         }
     }
     .UserProfile__nameinfo {
       width: 300px;
@@ -120,6 +131,81 @@
      
 
     }
+
+    .UserProfile__point {
+      font-size: 10px;
+           text-transform: uppercase;
+           letter-spacing: 2px;
+           color: #bbbbbb;
+           font-weight: 700;
+           margin-top: 10px;
+           
+    }
+
+    .UserProfile_progress {
+    
+      height:3px;
+      background: #f2f2f2;
+      -webkit-box-shadow: inset 0px 1px 0px 0px rgba(0,0,0,0.14);
+-moz-box-shadow: inset 0px 1px 0px 0px rgba(0,0,0,0.14);
+box-shadow: inset 0px 1px 0px 0px rgba(0,0,0,0.14);
+      
+      margin: 15px -16px 0 -16px;
+      
+
+
+    }
+
+    .UserProfile__money {
+      font-size: 14px;
+      color: #181818;
+      font-weight: 700;
+      
+    }
+
+    .UserProfile_rightCol {
+      border-right: 1px solid #e1e3e4;
+      padding-bottom: 15px;
+    }
+
+    .UserProfile__goalblock {
+      padding-bottom: 0;
+    }
+
+    .UserProfile__subtitle strong {
+
+        font-size: 10px;
+           text-transform: uppercase;
+           letter-spacing: 2px;
+           color: #3f3f3f;
+           font-weight: 700;
+           margin-top: 10px;
+      
+    }
+
+    .UserProfile__subtitle {
+       font-size: 10px;
+           text-transform: uppercase;
+           letter-spacing: 2px;
+           color: #9f9f9f;
+           font-weight: 700;
+           margin-top: 10px;
+           margin-right: 22px;
+           cursor: pointer;
+
+    }
+
+    .UserProfile__moreinfo {
+      font-size: 13px;
+         
+          
+           color: #131313;
+           font-weight: 500;
+           margin-top: 10px;
+          
+    }
+
+
 }
 
 
@@ -133,6 +219,8 @@
   background-size: cover;
   border-radius: 0 0 3px 3px;
   margin: 0 5px 30px 5px;
+  background-image: url('../../assets/images/defaultcover.jpg');
+
 }
 
 .UserWallet__balance {
@@ -145,12 +233,23 @@
 
     .UserProfile__banner {
       padding: 0;
-      margin-bottom: 15px;
+      
         > div.column {
             height: 110px;
         }
     }
 
+     .UserProfile__goalblock {
+      margin-bottom: 15px;
+     }
+
+    .UserProfile__banner .UserProfile__nameinfo {
+      width: 100%;
+    }
+
+    .UserProfile__banner .UserProfile__blockinfo {
+      width: 100%;
+    } 
     .UserProfile .PostsList{
  margin-left: 0;
 }

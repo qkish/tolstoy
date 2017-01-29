@@ -302,6 +302,10 @@ class Settings extends React.Component {
                             <span>{translate('target_date')}</span>
                             <input type="text" onChange={this.handleTargetDateChange} value={state.target_date} placeholder={translate('target_date')} />
                         </label>
+                         <label>
+                            <span>{translate('leverage')}</span>
+                            <input type="text" onChange={this.handleTargetPlanChange} value={state.target_plan} placeholder={translate('leverage')} />
+                        </label>
                         <label>
                             <span>{translate('target_point_a')}</span>
                             <input type="text" onChange={this.handleTargetPointAChange} value={state.target_point_a} placeholder={translate('target_point_a')} />

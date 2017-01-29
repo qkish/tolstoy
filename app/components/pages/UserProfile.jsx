@@ -319,7 +319,8 @@ export default class UserProfile extends React.Component {
 
         const background = jsonMetaData.background_image;
         let backgroundUrl 
-        if (background) backgroundUrl = {backgroundImage: "url('" + background + "')"}
+        if (background) backgroundUrl = {backgroundImage: "url('" + background + "')"};
+        
 
         return (
             <div className="UserProfile">

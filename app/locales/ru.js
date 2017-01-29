@@ -645,7 +645,10 @@ const ru = {
     enter_email: 'Введите ваш E-mail:',
     enter_password: 'Введите ваш пароль:',
 
-    earned_in_post: 'За сегодня:',
+    earned_in_post: 'Факт дня:',
+    till: 'До',
+    leverage: 'Цена слова',
+
 }
 
 export { ru }
