@@ -581,6 +581,7 @@ const en = 	{
 
    enter_email: 'Enter your E-mail:',
     enter_password: 'Enter your password:',
+    earned_in_post: 'For today:',
 
 }
 

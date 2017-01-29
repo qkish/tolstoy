@@ -639,11 +639,13 @@ const ru = {
     register_submit_text: 'Создать аккаунт',
 
 
-    money_for_day: 'Заработано за день',
+    money_for_day: 'Заработано за день, руб',
 
 
     enter_email: 'Введите ваш E-mail:',
     enter_password: 'Введите ваш пароль:',
+
+    earned_in_post: 'За сегодня:',
 }
 
 export { ru }

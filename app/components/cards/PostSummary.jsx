@@ -135,7 +135,7 @@ class PostSummary extends React.Component {
 
         let moneyCurrency = store.get('fetchedCurrency') || DEFAULT_CURRENCY
      
-        let moneyToday = <div className="PostSummary__summToday">Заработано сегодня: {money} {moneyCurrency}</div>
+        let moneyToday = <div className="PostSummary__summToday">{translate('earned_in_post')} {money} {moneyCurrency}</div>
 
         // author and category
         let author_category = <div className="vcard">
