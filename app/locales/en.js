@@ -586,6 +586,10 @@ const en = 	{
     till: 'Till',
     leverage: 'Leverage',
 
+    undefined: 'Unset',
+
+
+
 }
 
 export { en }

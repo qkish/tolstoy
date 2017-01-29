@@ -23,11 +23,16 @@ class ViewUserTarget extends Component {
         let targetPlanDiv = ''
         let targetDateDiv = ''
 
+
+        if (target_point_a) {
         target_point_a = String(target_point_a);
         target_point_a = target_point_a.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
+        } else target_point_a=translate('undefined');
 
+        if (target_point_b) {
         target_point_b = String(target_point_b);
         target_point_b = target_point_b.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
+    } else target_point_b=translate('undefined');
 
         if (target_plan) targetPlanDiv = <div className="UserProfile__infoboxes">{translate('leverage')}: {target_plan}</div>
         if (target_date) targetDateDiv = <div className="UserProfile__infoboxes">{translate('till')} {target_date}</div>

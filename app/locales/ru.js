@@ -649,6 +649,8 @@ const ru = {
     till: 'До',
     leverage: 'Цена слова',
 
+    undefined: 'Не задана',
+
 }
 
 export { ru }
