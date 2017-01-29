@@ -99,8 +99,6 @@ class PostSummary extends React.Component {
                 }
             }
         }
-        // console.log('author', accounts && accounts.get(p.author) && accounts.get(p.author).get('json_metadata'))
-        // let occupation = accounts ? JSON.parse(accounts.get(p.author).get('json_metadata')).occupation : ''
 
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
