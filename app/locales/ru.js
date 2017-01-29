@@ -90,6 +90,7 @@ const ru = {
 	title: "Заголовок",
 	reporttitle: "Заголовок отчета",
 	write_your_story: 'Написать отчет за сегодня',
+    reply_to_task: 'Ответить на задание',
 	editor: 'Редактор',
 	reply: 'Ответить',
 	edit: 'Редактировать',

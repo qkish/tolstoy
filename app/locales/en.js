@@ -88,6 +88,7 @@ const en = 	{
 	title: "Title",
 	reporttitle: "Report title",
 	write_your_story: 'Write your story',
+    reply_to_task: 'Reply to task',
 	editor: 'Editor',
 	reply: 'Reply',
 	edit: 'Edit',

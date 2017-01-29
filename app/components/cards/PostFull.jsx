@@ -12,7 +12,7 @@ import Reblog from 'app/components/elements/Reblog';
 import Tooltip from 'app/components/elements/Tooltip';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer';
 import ReplyEditor from 'app/components/elements/ReplyEditor';
-import ReplyEditorShort from 'app/components/elements/ReplyEditorShort';
+import ReplyTaskEditor from 'app/components/elements/ReplyTaskEditor';
 import {immutableAccessor} from 'app/utils/Accessors';
 import extractContent from 'app/utils/ExtractContent';
 import FoundationDropdownMenu from 'app/components/elements/FoundationDropdownMenu';
@@ -24,7 +24,7 @@ import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import { translate } from 'app/Translator';
 import { APP_NAME, APP_NAME_LATIN, APP_URL } from 'config/client_config';
 
-const SubmitStory = ReplyEditorShort('submitStoryAsTaskResolve')
+const SubmitStory = ReplyTaskEditor('replyTask')
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
     return (
