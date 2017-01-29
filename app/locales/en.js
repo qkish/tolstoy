@@ -271,10 +271,10 @@ const en = 	{
 	change_password: 'Change Password',
 	// UserProfile
 	unknown_account: 'Unknown Account',
-	user_hasnt_made_any_posts_yet: "Looks like {name} hasn't made any posts yet!",
-	user_hasnt_started_bloggin_yet: "Looks like {name} hasn't started blogging yet!",
-	user_hasnt_followed_anything_yet: "Looks like {name} hasn't followed anything yet!",
-	user_hasnt_had_any_replies_yet: "{name} hasn't had any replies yet",
+	user_hasnt_made_any_posts_yet: "Looks like {fullName} hasn't made any posts yet!",
+	user_hasnt_started_bloggin_yet: "Looks like {fullName} hasn't started blogging yet!",
+	user_hasnt_followed_anything_yet: "Looks like {fullName} hasn't followed anything yet!",
+	user_hasnt_had_any_replies_yet: "{fullName} hasn't had any replies yet",
 	users_blog: "{name}'s blog",
 	users_posts: "{name}'s posts",
 	users_wallet: "{name}'s wallet",
@@ -488,7 +488,7 @@ const en = 	{
 	send_to_account: "Send to account",
 	confirm_email: 'Confirm Email',
 	authenticate_for_this_transaction: 'Authenticate for this transaction',
-	login_to_your_APP_NAME_account: 'Login to your ' + APP_NAME + ' Account',
+	login_to_your_APP_NAME_account: 'Login to your BM account',
 	// UserProfile > Permissions
 	posting: 'Posting',
 	owner: 'Owner',
@@ -578,6 +578,9 @@ const en = 	{
   comments_by_user_name: 'Comments by {user_name}',
   like: 'Coins',
   money_for_day: 'Income today',
+
+   enter_email: 'Enter your E-mail:',
+    enter_password: 'Enter your password:',
 
 }
 

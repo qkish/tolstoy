@@ -274,10 +274,10 @@ const ru = {
 	change_password: 'Сменить пароль',
 	// UserProfile
 	unknown_account: 'Неизвестный аккаунт',
-	user_hasnt_made_any_posts_yet: "Похоже что {name} еще не написал(а) постов!",
-	user_hasnt_started_bloggin_yet: "Похоже что {name} еще не завёл(а) блог!",
-	user_hasnt_followed_anything_yet: "Похоже что {name} еще никого ни на кого не подписан(а)!",
-	user_hasnt_had_any_replies_yet: "{name} еще не получил(а) ответов",
+	user_hasnt_made_any_posts_yet: "Похоже что {fullName} еще не написал(а) постов!",
+	user_hasnt_started_bloggin_yet: "Похоже что {fullName} еще не завёл(а) блог!",
+	user_hasnt_followed_anything_yet: "Похоже что {fullName} еще никого ни на кого не подписан(а)!",
+	user_hasnt_had_any_replies_yet: "{fullName} еще не получил(а) ответов",
 	users_blog: "блог {name}",
 	users_posts: "посты {name}",
 	users_wallet: "кошелек {name}",
@@ -499,7 +499,7 @@ const ru = {
 	send_to_account: 'Отправить аккаунту',
 	confirm_email: 'Подтвердить электронную почту',
 	authenticate_for_this_transaction: 'Авторизируйтесь для этой транзакции',
-	login_to_your_APP_NAME_account: 'Войти на сайт ' + APP_NAME,
+	login_to_your_APP_NAME_account: 'Вход с аккаунтом БМ',
 	// UserProfile > Permissions
 	posting: 'Постинг',
 	owner: 'Владелец',
@@ -640,6 +640,10 @@ const ru = {
 
 
     money_for_day: 'Заработано за день',
+
+
+    enter_email: 'Введите ваш E-mail:',
+    enter_password: 'Введите ваш пароль:',
 }
 
 export { ru }

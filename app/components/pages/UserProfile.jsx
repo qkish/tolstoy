@@ -130,9 +130,9 @@ export default class UserProfile extends React.Component {
         const {firstName, lastName} = jsonMetaData
 
         let fullName
-        if (firstName || lastName )
+        if (firstName || lastName)
             fullName = firstName + ' ' + lastName
-        else fullName = name;
+        else fullName = account.name;
 
 
         if( section === 'transfers' ) {
@@ -318,12 +318,14 @@ export default class UserProfile extends React.Component {
          </div>;
 
         const background = jsonMetaData.background_image;
+        let backgroundUrl 
+        if (background) backgroundUrl = {backgroundImage: "url('" + background + "')"}
 
         return (
             <div className="UserProfile">
             <div className="row">
                 <div className="UserProfile__cover col-sm-12"
-                     style={{backgroundImage: "url('" + background + "')"}}>
+                     style={backgroundUrl}>
                 <Avatar account={account} />
                     <div style={{position: "relative"}}>
                         <div className="UserProfile__buttons">

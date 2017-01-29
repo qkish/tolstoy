@@ -182,14 +182,16 @@ class LoginForm extends Component {
                 onChange={this.props.clearError}
                 method="post"
             >
-                <div>
-                    <input type="text" required placeholder={translate('enter_username')} ref="username"
+                <div className="LoginForm__login">
+                <label className="LoginForm__label">{translate('enter_email')}</label>
+                    <input type="text" className="LoginForm__login-input" required placeholder={translate('enter_username')} ref="username"
                         {...username.props} onChange={usernameOnChange} autoComplete="on" disabled={submitting} />
-                    <div className="error">{username.touched && username.blur && translateError(username.error)}&nbsp;</div>
+                    <div className="error LoginForm__hide-error">{username.touched && username.blur && translateError(username.error)}&nbsp;</div>
                 </div>
 
                 <div>
-                    <input type="password" required ref="pw" placeholder={translate('password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
+                 <label className="LoginForm__label">{translate('enter_password')}</label>
+                    <input type="password" className="LoginForm__password-input" required ref="pw" placeholder={translate('password_or_wif')} {...password.props} autoComplete="on" disabled={submitting} />
                     <div className="error">{translateError(error)}&nbsp;</div>
                 </div>
                 {loginBroadcastOperation && <div>
@@ -197,12 +199,12 @@ class LoginForm extends Component {
                         {translate("requires_auth_key", { authType })}.
                     </div>
                 </div>}
-                {!loginBroadcastOperation && <div>
+                {!loginBroadcastOperation && <div className="LoginForm__keepme">
                     <label htmlFor="saveLogin">
                         {translate("keep_me_logged_in") + ' '}
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
-                <br />
+              
                 <div>
                     <button type="submit" disabled={submitting || disabled} className="button">
                         {submitLabel}
@@ -215,7 +217,7 @@ class LoginForm extends Component {
            <div className="LoginForm">
                {message}
                <h3>{title}</h3>
-               <br />
+              
                {form}
            </div>
        )

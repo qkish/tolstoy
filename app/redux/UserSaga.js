@@ -247,15 +247,16 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                         if(!account) break;
                     }
 
-                    console.log('PRE CREATE', newname)
+                   
                     const createResp = yield createGolosAccount(username, password, newname);
-                    console.log('AFTER CREATE: ', createResp.account);
+                   
 
                     if (createResp) {
                         username = newname;
                         password = createResp.account.password;
                     } 
                 } else {
+                    yield put(user.actions.loginError({ error: translate('error') }))
                     return;
                 }
             }

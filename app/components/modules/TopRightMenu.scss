@@ -71,7 +71,7 @@ li {
 .TopRightMenu__signupbtn > a:focus, .TopRightMenu__loginbtn > a:focus {
   text-decoration: none;
 }
-.TopRightMenu__signupbtn > a {
+.TopRightMenu__signupbtn > a, .TopRightMenu__loginbtn > a {
     border-left: 1px solid #f0f1f1;
 }
 
