@@ -48,7 +48,7 @@ this.shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic')
 		}
 		return 	<div className="Userpic">
                     {process.env.BROWSER ?
-                        <img src={_urls.proxyImage(url || '')} {...rest} /> :
+                        url ? <img src={_urls.proxyImage(url || '')} {...rest} /> : <div className="Userpic__defaultAva"></div> :
                         <LoadingIndicator type="circle" inline />}
 				</div>;
 	}

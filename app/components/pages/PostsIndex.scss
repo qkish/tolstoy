@@ -43,12 +43,13 @@ margin: 18px 0 0 -15px;
   height: 50px;
   overflow: hidden;
     width: 560px;
+    margin-bottom: -1px;
 
 
 }
 .PostsIndex__left .HorizontalMenu li {
-  margin-bottom: -1px;
-  height: 50px;
+  margin-bottom: 0;
+  height: 49px;
 
 }
 .PostsIndex__left .HorizontalMenu li a {
@@ -58,7 +59,7 @@ margin: 18px 0 0 -15px;
   font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
   font-weight: 700;
   text-decoration: none;
-    height: 50px;
+    height: 49px;
 
     border-bottom: 2px solid transparent;
 }
