@@ -191,7 +191,6 @@ export default class UserProfile extends React.Component {
            }
         } else if(!section || section === 'blog') {
             if (account.blog) {
-                console.log('FULL NAME', fullName)
                 tab_content = <section>
                     {isMyAccount ?
                         <div className="SubmitPost" style={{marginLeft: "10px"}}>
