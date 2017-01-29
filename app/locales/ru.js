@@ -84,7 +84,7 @@ const ru = {
 	update_your_password: 'обновить твой пароль',
 	enter_username: 'Электронная почта',
 	password_or_wif: 'Ваш пароль',
-	requires_auth_key: 'Эта операция требует вашего {authType} ключа (или используйте главный пароль)',
+	requires_auth_key: 'Эта операция требует дополнительного введения пароля для безопасности',
 	keep_me_logged_in: 'Запомнить меня',
 	// this are used mainly in "submit a story" form
 	title: "Заголовок",

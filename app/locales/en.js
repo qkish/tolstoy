@@ -82,7 +82,7 @@ const en = 	{
 	update_your_password: 'update your password',
 	enter_username: 'Enter your username',
 	password_or_wif: 'Password or WIF',
-	requires_auth_key: 'This operation requires your {authType} key (or use your master password)',
+	requires_auth_key: 'This operation requires your password for security reasons',
 	keep_me_logged_in: 'Keep me logged in',
 	// this are used mainly in "submit a story" form
 	title: "Title",
