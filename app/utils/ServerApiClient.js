@@ -147,3 +147,25 @@ export function updateMoneyTotal (username, value) {
         body: JSON.stringify({csrf: $STM_csrf, username, value})
     }).then(res => res.json())
 }
+
+export function updateMoney (payload) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch('/api/v1/user/update_money', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            csrf: $STM_csrf,
+            payload
+        })
+    }).then(res => res.json());
+}
+
+export function getUsers () {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch('/api/v1/users').then(res => res.json());
+}

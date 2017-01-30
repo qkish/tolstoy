@@ -130,7 +130,7 @@ class PostsIndex extends React.Component {
 
                     if (route.params[1] === "bm-open") bmOpen = 'active_tab';
                     if (route.params[1] === "bm-tasks") bmTasks = 'active_tab';
-                  
+
 
                     topic = detransliterate(route.params[1]);
                     topic_original_link = (route.params[1])
@@ -242,7 +242,7 @@ class PostsIndex extends React.Component {
         // для неавторизованных пользователей
         let formFront = '';
         if (current_account_name && !bmTasks) formFront = <div className="SubmitPost">
-            <SubmitReplyEditor successCallback={() => { window.location.reload() }} type="submit_story" />
+            <SubmitReplyEditor successCallback={() => {  }} type="submit_story" />
         </div>;
 
 

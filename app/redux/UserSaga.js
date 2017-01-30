@@ -15,7 +15,8 @@ import {
     checkUser,
     updateVestingTotal,
     updateMonets,
-    updateMoneyTotal
+    updateMoneyTotal,
+    updateMoney
 } from 'app/utils/ServerApiClient'
 import {loadFollows} from 'app/redux/FollowSaga'
 import {translate} from 'app/Translator'
@@ -29,6 +30,7 @@ export const userWatches = [
     updateVestinWatch,
     updateMonetsWatch,
     updateMoneyWatch,
+    updateMoney2Watch,
     // getCurrentAccountWatch,
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
@@ -71,6 +73,12 @@ function* updateMoneyWatch() {
     yield* takeLatest('user/UPDATE_MONEY_TOTAL', function* ({payload}) {
         console.log('-- saga update money total', payload)
         yield call(updateMoneyTotal, payload.username, payload.value)
+    })
+}
+
+function* updateMoney2Watch() {
+    yield* takeLatest('user/UPDATE_MONEY', function* ({payload}) {
+        yield call(updateMoney, payload)
     })
 }
 

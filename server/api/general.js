@@ -12,7 +12,7 @@ import {getLogger} from '../../app/utils/Logger'
 import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
-
+import isBefore from 'date-fns/is_before';
 
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
@@ -689,6 +689,92 @@ export default function useGeneralApi(app) {
             user: updated
         });
     });
+
+    router.post('/user/update_money', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {csrf, payload} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        const weights = {
+            post: 1,
+            comment: 1,
+            task: 2
+        }
+
+        let weight
+        if (payload.type === 'submit_story') {
+            weight = weights['post']
+        }
+        if (payload.type === 'submit_comment') {
+            weight = weights['comment']
+        }
+        if (payload.type === 'reply_to_task') {
+            weight = weights['task']
+        }
+
+        const user = yield models.User.findOne({
+            where: {
+                name: payload.username
+            }
+        })
+
+        const last_transaction = user.last_total_transaction
+        const was_yesterday = isBefore(last_transaction, new Date())
+
+        console.log('was yesterday', was_yesterday)
+
+        if (!last_transaction || isBefore(last_transaction, new Date())) {
+            if (payload.type === 'submit_story') {
+                yield user.update({
+                    posts_monets: 1
+                })
+            }
+            if (payload.type === 'submit_comment') {
+                yield user.update({
+                    comments_monets: 1
+                })
+            }
+            if (payload.type === 'reply_to_task') {
+                yield user.update({
+                    tasks_monets: 1
+                })
+            }
+            yield user.update({
+                last_total_transaction: new Date()
+            })
+        }
+
+        console.log('last transaction', last_transaction)
+        // const updated = yield models.User.update({
+        //     money_total: value
+        // }, {
+        //     where: {
+        //         name: username
+        //     }
+        // });
+        this.body = JSON.stringify({
+            'receive payload': payload
+        });
+    });
+
+    router.get('/users', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return;
+        const osipov = yield models.User.findAll({
+            where: {
+                polk: 1
+            }
+        })
+        const dashkiev = yield models.User.findAll({
+            where: {
+                polk: 2
+            }
+        })
+        this.body = JSON.stringify({
+            osipov,
+            dashkiev
+        })
+    })
 }
 
 
