@@ -27,13 +27,14 @@ import { APP_NAME, APP_NAME_LATIN, APP_URL } from 'config/client_config';
 const SubmitStory = ReplyTaskEditor('replyTask')
 
 function TimeAuthorCategory({content, authorRepLog10, showTags}) {
+
     return (
         <span className="PostFull__time_author_category vcard">
             <Tooltip t={new Date(content.created).toLocaleString()}>
                 <Icon name="clock" className="space-right" />
                 <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
             </Tooltip>
-            <span> {translate('by')} <Author author={content.author} authorRepLog10={authorRepLog10} /></span>
+            <span> {translate('by')} <Author account={content.author} /></span>
             {showTags && <span> {translate('in')}&nbsp;<TagList post={content} /></span>}
         </span>
      );

@@ -58,7 +58,7 @@ export default createModule({
                         break
                     case 'comment':
                         if (/You may only post once per minute/.test(errorStr)) {
-                            errorKey = 'You may only post once per minute.'
+                            errorKey = 'Разрешен только один пост в минуту.'
                         } else if (errorStr === 'Testing, fake error')
                             errorKey = 'Testing, fake error'
                         break;

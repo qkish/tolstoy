@@ -91,7 +91,7 @@ class ReplyTaskEditor extends React.Component {
         parent_permlink: '',
         type: 'submit_story',
         metaLinkData: Map(),
-        category: 'bm-open ',
+        category: 'bm-open',
         
         
     }
@@ -369,7 +369,7 @@ class ReplyTaskEditor extends React.Component {
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
-            title: this.props.title,
+            title: 'Ответ на задание: ' + this.props.taskTitle, //this.props.title,
             category: this.props.category,
             body: this.props.body,
             money: this.props.money,
@@ -436,7 +436,7 @@ class ReplyTaskEditor extends React.Component {
 
         let currentTask = this.props.taskId;
 
-
+        let newTitle = "Ответ на задание: " + this.props.taskTitle;
 
 
 
@@ -454,7 +454,7 @@ class ReplyTaskEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text"  {...cleanReduxInput(title)} onChange={onTitleChange} onTouchStart={this.handleOnTitleFocus} disabled={loading} placeholder={translate('reporttitle')} autoComplete="off" ref="titleRef" tabIndex={1} onMouseDown={this.handleOnTitleFocus} onBlur={this.handleOnTitleBlur} className={titleVisible ? 'ReplyEditorShort__titleVisible' : 'ReplyEditorShort__titleInvisible'} />
+                                <input type="hidden"  {...cleanReduxInput(title)} onChange={onTitleChange} onTouchStart={this.handleOnTitleFocus} disabled={loading} placeholder={translate('reporttitle')} autoComplete="off" ref="titleRef" tabIndex={1} onMouseDown={this.handleOnTitleFocus} onBlur={this.handleOnTitleBlur} className={titleVisible ? 'ReplyEditorShort__titleVisible' : 'ReplyEditorShort__titleInvisible'} value={newTitle} />
                             </span>}
                         </div>
 
@@ -526,11 +526,8 @@ export default formId => reduxForm(
         const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
-           title: isStory && (
-           !values.title || values.title.trim() === '' ? translate('required') :
-           values.title.length > 255 ? translate('shorten_title') :
-           null
-           ),
+           title: null,
+        
            category: null,
            money: null,
            //hasCategory,
@@ -592,12 +589,16 @@ export default formId => reduxForm(
             
            // category = originalPost.newcategory;
             
-            console.log('CAT NOW: ', category)
+           
 
            // title = originalPost.newtitle;
-            category = Set([detransliterate(originalPost.category), originalPost.tag1]).join(' ')
+            let taskTag = originalPost.tag1;
 
-            console.log('CAT LATer: ', category)
+            title = originalPost.title;
+
+
+
+           
 
             if (category) {
                 category = category.split(' ')
@@ -645,8 +646,15 @@ export default formId => reduxForm(
                 return
             }
 
-            let allCategories = Set([...formCategories.toJS(), ...rtags.hashtags])
+            let taskTagSet = Set([taskTag]);
+
+            let allCategories = Set([...formCategories.toJS(), ...taskTagSet.toJS(), ...rtags.hashtags])
             if(rootTag) allCategories = allCategories.add(rootTag)
+
+            
+           
+
+
 
             // merge
             const meta = /edit/.test(type) ? jsonMetadata : {}
@@ -656,6 +664,9 @@ export default formId => reduxForm(
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
 
             if(money) meta.daySumm = money; else delete meta.daySumm
+
+
+            
 
 
 

@@ -47,6 +47,8 @@ class Author extends Component {
 
         let username = account;
 
+      
+
         // get account from state if proper user object was not provided
         if (typeof account != 'object') {
             this.getAccount()
