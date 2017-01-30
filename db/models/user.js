@@ -19,7 +19,8 @@ module.exports = function (sequelize, DataTypes) {
         bot: DataTypes.BOOLEAN,
         vesting_total: DataTypes.INTEGER,
         monets: DataTypes.INTEGER,
-        money_total: DataTypes.INTEGER
+        money_total: DataTypes.INTEGER,
+        polk: DataTypes.INTEGER
     }, {
         tableName: 'users',
         createdAt   : 'created_at',
