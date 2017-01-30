@@ -105,7 +105,7 @@ class Header extends React.Component {
 
                     if (route.params[1] === "bm-open") bmOpen = 'active_tab';
                     if (route.params[1] === "bm-tasks") bmTasks = 'active_tab';
-                  
+
                     // Overwrite default created for more human readable title
                     if (route.params[0] === "created") {
                         page_title = translate('new_topic_posts', {topic});
@@ -234,6 +234,9 @@ class Header extends React.Component {
                                 </li>
                                 <li className={'Header__toplinks ' + bmTasks}>
                                     <Link to='/created/bm-tasks'>Задания</Link>
+                                </li>
+                                <li className='Header__toplinks'>
+                                    <Link to='/top'>Рейтинг</Link>
                                 </li>
 
 
