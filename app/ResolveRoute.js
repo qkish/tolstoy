@@ -56,6 +56,9 @@ export default function resolveRoute(path)
     if (path === '/submit.html') {
         return {page: 'SubmitPost'};
     }
+    if (path === '/top') {
+        return {page: 'Top'};
+    }
     let match = path.match(/^\/(@[\w\.\d-]+)\/feed\/?$/);
     if (match) {
         return {page: 'PostsIndex', params: ['home', match[1]]};
