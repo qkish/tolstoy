@@ -279,7 +279,7 @@ class PostFull extends React.Component {
                                 </Link>
                             </span>
                             <span className="PostFull__reply">
-                                {!$STM_Config.read_only_mode && <a onClick={onShowReply}>{translate('reply')}</a>}
+                                {!$STM_Config.read_only_mode && (content.category !== 'bm-tasks') && <a onClick={onShowReply}>{translate('reply')}</a>}
                                 {showEditOption && !showEdit && <span>
                                     &nbsp;&nbsp;
                                     <a onClick={onShowEdit}>{translate('edit')}</a>
