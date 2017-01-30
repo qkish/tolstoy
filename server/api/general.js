@@ -260,7 +260,7 @@ export default function useGeneralApi(app) {
         if (!checkCSRF(this, csrf)) return;
 
         try {
-            
+
             // Первый этап
             // Проверить есть ли пользователь на БМ
             const userExistBM = yield getBMAccessToken(username, password);
@@ -495,7 +495,7 @@ export default function useGeneralApi(app) {
     router.post('/accounts2', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
 
-       
+
 
         const params = this.request.body;
         print('params', params)
@@ -514,7 +514,7 @@ export default function useGeneralApi(app) {
         try {
             const meta = {}
             const remote_ip = getRemoteIp(this.req);
-            
+
             /* if (same_ip_account) {
                 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
                 if (minutes < 10) {
@@ -522,7 +522,7 @@ export default function useGeneralApi(app) {
                     throw new Error('Only one Steem account allowed per IP address every 10 minutes');
                 }
             } */
-           
+
 
             const getBMtoken = yield getBMAccessToken(account.email, account.bmpassword);
             const getBMmeta = yield getBMUserMeta(getBMtoken.access_token);
@@ -570,7 +570,7 @@ export default function useGeneralApi(app) {
             let user;
             let identity;
             user = yield models.User.create(attrs);
-            
+
             i_attrs.user_id = user.id;
 
 
@@ -580,7 +580,7 @@ export default function useGeneralApi(app) {
             identity = yield models.Identity.create(i_attrs);
             console.log('-- BM created identity -->', this.session.uid, identity.id);
 
-            
+
 
             this.session.user = user.id;
 
@@ -634,6 +634,60 @@ export default function useGeneralApi(app) {
 
         console.log('SERVER RETURNED ACCOUNT: ', account);
        return account;
+    });
+
+    router.post('/user/update_vesting_total', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {csrf, username, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        const updated = yield models.User.update({
+            vesting_total: value
+        }, {
+            where: {
+                name: username
+            }
+        });
+        this.body = JSON.stringify({
+            user: updated
+        });
+    });
+
+    router.post('/user/update_monets', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {csrf, username, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        const updated = yield models.User.update({
+            monets: value
+        }, {
+            where: {
+                name: username
+            }
+        });
+        this.body = JSON.stringify({
+            user: updated
+        });
+    });
+
+    router.post('/user/update_money_total', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {csrf, username, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        const updated = yield models.User.update({
+            money_total: value
+        }, {
+            where: {
+                name: username
+            }
+        });
+        this.body = JSON.stringify({
+            user: updated
+        });
     });
 }
 
