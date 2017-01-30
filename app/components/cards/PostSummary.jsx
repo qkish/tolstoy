@@ -17,6 +17,7 @@ import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
 import Userpic from 'app/components/elements/Userpic';
 import Author from 'app/components/elements/Author';
+import UserNiche from 'app/components/elements/UserNiche';
 import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import store from 'store';
@@ -91,14 +92,7 @@ class PostSummary extends React.Component {
 
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
-        let occupation = ''
-        if (accounts) {
-            if (accounts.get(p.author)) {
-                if (accounts.get(p.author).get('json_metadata')) {
-                    occupation = JSON.parse(accounts.get(p.author).get('json_metadata')).occupation
-                }
-            }
-        }
+        
 
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
@@ -146,9 +140,9 @@ class PostSummary extends React.Component {
                             </Link>
                 </div>
 
-            <Author author={p.author} authorRepLog10={authorRepLog10} follow={false} mute={false} />
+            <Author account={p.author}/>
             <TimeAgoWrapper date={p.created} className="updated" />
-            <div className="PostSummary__niche">{occupation || ''}</div>
+            <div className="PostSummary__niche"><UserNiche account={p.author} /></div>
 
         </div>
 

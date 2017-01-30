@@ -2,7 +2,7 @@ import React from 'react';
 import {reduxForm} from 'redux-form'
 import transaction from 'app/redux/Transaction';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
-import CategorySelector from 'app/components/cards/CategorySelector'
+import CategorySelectorTask from 'app/components/cards/CategorySelectorTask'
 import {validateCategory} from 'app/components/cards/CategorySelector'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
@@ -72,6 +72,8 @@ class ReplyEditor extends React.Component {
         resetForm: React.PropTypes.func.isRequired,
         submitting: React.PropTypes.bool.isRequired,
         invalid: React.PropTypes.bool.isRequired,
+
+        
     }
 
     static defaultProps = {
@@ -360,7 +362,7 @@ class ReplyEditor extends React.Component {
 
                         <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
                             {hasCategory && <span>
-                                <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
+                                <CategorySelectorTask {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
                                 <div className="error">{category.touched && category.error && category.error}&nbsp;</div>
                             </span>}
                         </div>
@@ -375,12 +377,10 @@ class ReplyEditor extends React.Component {
                             }
                             {!loading && !this.props.onCancel && <button className="button hollow no-border uppercase" tabIndex={5} disabled={submitting} onClick={onCancel}>{translate("clear")}</button>}
                             {isStory && !isEdit && <div className="float-right">
-                                <small onClick={this.toggleAllSteemPower} title={translate('leave_this_unchecked_to_receive_half_your_reward')}>{translate('pay_me_100_in_INVEST_TOKEN')}</small>
+                                <small onClick={this.toggleAllSteemPower} title={translate('leave_this_unchecked_to_receive_half_your_reward')}>{translate('pay_me_100_in_VESTING_TOKEN')}</small>
                                 &nbsp;&nbsp;
                                 <input type="checkbox" onChange={this.toggleAllSteemPower} checked={allSteemPower} />
-
                                 <br />
-
                                 <small onClick={autoVoteOnChange}>{translate("upvote_post")}</small>
                                 &nbsp;&nbsp;
                                 <input type="checkbox" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />

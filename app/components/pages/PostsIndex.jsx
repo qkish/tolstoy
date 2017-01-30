@@ -115,6 +115,9 @@ class PostsIndex extends React.Component {
         let user_name = null;
         let page_name = null;
 
+        let bmOpen = '';
+        let bmTasks = '';
+
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0] ? translate(route.params[0]) : '';
             if (sort_order === 'home') {
@@ -124,6 +127,11 @@ class PostsIndex extends React.Component {
                     home_account = true;
             } else {
                 if (route.params.length > 1) {
+
+                    if (route.params[1] === "bm-open") bmOpen = 'active_tab';
+                    if (route.params[1] === "bm-tasks") bmTasks = 'active_tab';
+                  
+
                     topic = detransliterate(route.params[1]);
                     topic_original_link = (route.params[1])
                     // Overwrite default created for more human readable title
@@ -233,10 +241,9 @@ class PostsIndex extends React.Component {
         // Скрыть форму добавления поста
         // для неавторизованных пользователей
         let formFront = '';
-        if (current_account_name) formFront = <div className="SubmitPost">
+        if (current_account_name && !bmTasks) formFront = <div className="SubmitPost">
             <SubmitReplyEditor successCallback={() => { window.location.reload() }} type="submit_story" />
         </div>;
-
 
 
 
@@ -246,7 +253,7 @@ class PostsIndex extends React.Component {
 
                     {formFront}
 
-                    <HorizontalMenu items={sort_order_menu_horizontal} />
+                    {!bmTasks && <HorizontalMenu items={sort_order_menu_horizontal} />}
 
                     <PostsList ref="list"
                         posts={posts ? posts.toArray() : []}

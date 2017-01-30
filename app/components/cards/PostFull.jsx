@@ -245,6 +245,8 @@ class PostFull extends React.Component {
         const firstPayout = post_content.get('mode') === "first_payout"
         const rootComment = post_content.get('depth') == 0
 
+
+
         return (
             <article className="PostFull hentry" itemScope itemType ="http://schema.org/blogPost">
                 <div className="float-right"><Voting post={post} flag /></div>
@@ -292,7 +294,7 @@ class PostFull extends React.Component {
                 <div className="row">
                      <div className="column small-12">
                         {showReply && renderedEditor}
-                        {content.category === 'bm-tasks' ? <SubmitStory type="submit_story" /> : ''}
+                        {content.category === 'bm-tasks' ? <SubmitStory type="submit_story" taskId={p.json_metadata.tags[1]} taskTitle={p.title} /> : ''}
                     </div>
                 </div>
             </article>

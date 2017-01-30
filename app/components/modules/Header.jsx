@@ -88,6 +88,9 @@ class Header extends React.Component {
         let user_name = null;
         let page_name = null;
 
+        let bmOpen = '';
+        let bmTasks = '';
+
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0] ? translate(route.params[0]) : '';
             if (sort_order === 'home') {
@@ -99,9 +102,14 @@ class Header extends React.Component {
                 if (route.params.length > 1) {
                     topic = detransliterate(route.params[1]);
                     topic_original_link = (route.params[1])
+
+                    if (route.params[1] === "bm-open") bmOpen = 'active_tab';
+                    if (route.params[1] === "bm-tasks") bmTasks = 'active_tab';
+                  
                     // Overwrite default created for more human readable title
                     if (route.params[0] === "created") {
                         page_title = translate('new_topic_posts', {topic});
+
                     }
                     else {
                         page_title = translate('sort_order_topic_posts', {sort_order, topic});
@@ -207,6 +215,8 @@ class Header extends React.Component {
             // sort_order_extra_menu = <HorizontalMenu items={items} />
         }
 
+
+
         return (
             <header className="Header noPrint">
                 <div className="Header__top header container">
@@ -219,7 +229,10 @@ class Header extends React.Component {
                                         <img style={{display: 'inline-block', width: '41px', height: '36px'}} src="/images/bmproudlogo.png" alt="Система" />
                                     </Link>
                                 </li>
-                                <li>
+                                <li className={'Header__toplinks ' + bmOpen}>
+                                    <Link to='/hot/bm-open'>Отчеты</Link>
+                                </li>
+                                <li className={'Header__toplinks ' + bmTasks}>
                                     <Link to='/created/bm-tasks'>Задания</Link>
                                 </li>
 

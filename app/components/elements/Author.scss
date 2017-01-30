@@ -14,3 +14,11 @@
 .Author__name {
 	margin-right: 10px;
 }
+
+.Author__name a {
+	text-decoration: none;
+}
+
+.Author__name a:hover, .Author__name a:focus {
+	text-decoration: none;
+}

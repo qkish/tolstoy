@@ -15,6 +15,7 @@
   .menu {
     background-color: $white;
     padding-left: 0;
+    height: 59px;
     .hamburger {
       @include hamburger();
       position: relative;
@@ -44,13 +45,13 @@
   padding: 0 0 0 0;
 
   ul > li.Header__top-logo {
-    padding: 10px 0 .35rem 0;
+    padding: 5px 15px .35rem 0;
   }
   ul > li.delim {
     color: $medium-gray;
   }
   ul > li > a {
-   padding: 0;
+padding: 0
   }
   ul > li > span {
     font-size: 1.1rem;
@@ -60,6 +61,36 @@
     text-transform: lowercase;
   }
 }
+
+.Header__toplinks {
+  height: 59px;
+  vertical-align: middle;
+   margin-left: 20px;
+   margin-bottom: -1px;
+   
+}
+.Header__toplinks a {
+
+  color: #0c0c0c;
+ height: 59px;
+vertical-align: middle;
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ padding-top: 17px !important;
+
+  font-family:"museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700; 
+  text-decoration: none;
+ 
+  }
+.Header__toplinks a:hover, .Header__toplinks a:focus {
+  text-decoration: none;
+}
+  .active_tab {
+    color: #196aff;
+    border-bottom: 2px solid #196aff;
+  }
 
 .Header__userpic {
   position: relative;

@@ -2,7 +2,7 @@ import React from 'react';
 import {reduxForm} from 'redux-form'
 import transaction from 'app/redux/Transaction';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
-import CategorySelector from 'app/components/cards/CategorySelector'
+import CategorySelectorResponse from 'app/components/cards/CategorySelectorResponse'
 import {validateCategory} from 'app/components/cards/CategorySelector'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
@@ -75,6 +75,9 @@ class ReplyTaskEditor extends React.Component {
         submitting: React.PropTypes.bool.isRequired,
         invalid: React.PropTypes.bool.isRequired,
 
+        taskId: React.PropTypes.string,
+        taskTitle: React.PropTypes.string,
+
 
 
 
@@ -88,7 +91,9 @@ class ReplyTaskEditor extends React.Component {
         parent_permlink: '',
         type: 'submit_story',
         metaLinkData: Map(),
-        category: 'bm-open',
+        category: 'bm-open ',
+        
+        
     }
 
     constructor() {
@@ -367,7 +372,10 @@ class ReplyTaskEditor extends React.Component {
             title: this.props.title,
             category: this.props.category,
             body: this.props.body,
-            money: this.props.money
+            money: this.props.money,
+            tag1: this.props.taskId,
+          
+           
         }
 
         const {onCancel, autoVoteOnChange} = this
@@ -426,6 +434,11 @@ class ReplyTaskEditor extends React.Component {
         }
 
 
+        let currentTask = this.props.taskId;
+
+
+
+
 
 
         return (
@@ -449,7 +462,7 @@ class ReplyTaskEditor extends React.Component {
 
                                 <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'reply_to_task' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onMouseDown={this.handleOnFocus} onTouchStart={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState}  />
                      </div>
-                      <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_day')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onTouchStart={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className={titleVisible ? 'ReplyEditorShort__moneyVisible' : 'ReplyEditorShort__moneyInvisible'} />
+                      <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_task')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onTouchStart={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className={titleVisible ? 'ReplyEditorShort__moneyVisible' : 'ReplyEditorShort__moneyInvisible'} />
 
                         <div className={vframe_section_shrink_class}>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
@@ -457,7 +470,7 @@ class ReplyTaskEditor extends React.Component {
 
 
                             {hasCategory && <span>
-                                <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
+                                <CategorySelectorResponse {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
 
                             </span>}
 
@@ -569,13 +582,23 @@ export default formId => reduxForm(
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
 
-
+            
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
             // when transletirate it
             // This is needed to be able to detransletirate it back to russian in future (to show russian categories to user)
             // (all of this is needed because blockchain does not allow russian symbols in category)
+            
+           // category = originalPost.newcategory;
+            
+            console.log('CAT NOW: ', category)
+
+           // title = originalPost.newtitle;
+            category = Set([detransliterate(originalPost.category), originalPost.tag1]).join(' ')
+
+            console.log('CAT LATer: ', category)
+
             if (category) {
                 category = category.split(' ')
                                     .map(item => /^[а-яё]/.test(item) ? 'ru--' + detransliterate(item, true) : item)

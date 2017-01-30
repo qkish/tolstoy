@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 
 const {oneOfType, string, object} = PropTypes
 
-class Author extends Component {
+class UserNiche extends Component {
     // you can pass either user object, or username string
 
     state = {
@@ -21,7 +21,7 @@ class Author extends Component {
         height: 48
     }
 
-    shouldComponentUpdate = shouldComponentUpdate(this, 'Author')
+    shouldComponentUpdate = shouldComponentUpdate(this, 'UserNiche')
 
     getAccount = () => {
         const {account} = this.props
@@ -45,7 +45,7 @@ class Author extends Component {
         let {dispatch, ...rest} = props
         const account = state.account || props.account
 
-        let username = account;
+        
 
         // get account from state if proper user object was not provided
         if (typeof account != 'object') {
@@ -55,23 +55,19 @@ class Author extends Component {
                     </div>;
         }
 
-        let fullName =''
+        let userOccupation ='Не указана ниша'
 
         // try to extract image url from users metaData
         try { let parseRes = JSON.parse(account.json_metadata)
-            if (parseRes.first_name) fullName =  parseRes.first_name || username.name
-            if (parseRes.last_name) fullName = fullName + ' ' + parseRes.last_name
+            if (parseRes.occupation) userOccupation =  parseRes.occupation || 'Не указана ниша'
+          
         }
         catch (e) {
             // console.warn(e)
-            fullName = username.name
+            userOccupation = 'Не указана ниша'
         }
       
-        return  <span className="Author">
-                <span itemProp="author" itemScope itemType="http://schema.org/Person" className="Author__name">
-                    <Link to={'/@' + username.name}>{fullName}</Link>
-                </span>
-            </span>;
+        return  <div>{userOccupation}</div>
     }
 }
 
@@ -86,4 +82,4 @@ export default connect(
 
         return { account, ...restOfProps }
     }
-)(Author)
+)(UserNiche)

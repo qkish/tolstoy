@@ -641,6 +641,7 @@ const ru = {
 
 
     money_for_day: 'Заработано за день, руб',
+    money_for_task: 'Задание принесло денег, руб',
 
 
     enter_email: 'Введите ваш E-mail:',
@@ -651,6 +652,7 @@ const ru = {
     leverage: 'Цена слова',
 
     undefined: 'Не задана',
+    pay_me_100_in_VESTING_TOKEN: 'Pay 100 vesting',
 
 }
 

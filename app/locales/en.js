@@ -579,6 +579,7 @@ const en = 	{
   comments_by_user_name: 'Comments by {user_name}',
   like: 'Coins',
   money_for_day: 'Income today',
+  money_for_task: 'Income for task',
 
    enter_email: 'Enter your E-mail:',
     enter_password: 'Enter your password:',
