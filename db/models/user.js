@@ -20,7 +20,8 @@ module.exports = function (sequelize, DataTypes) {
         vesting_total: DataTypes.INTEGER,
         monets: DataTypes.INTEGER,
         money_total: DataTypes.INTEGER,
-        polk: DataTypes.INTEGER
+        polk: DataTypes.INTEGER,
+        last_total_transaction: DataTypes.DATE
     }, {
         tableName: 'users',
         createdAt   : 'created_at',
