@@ -21,7 +21,8 @@ module.exports = function (sequelize, DataTypes) {
         monets: DataTypes.INTEGER,
         money_total: DataTypes.INTEGER,
         polk: DataTypes.INTEGER,
-        last_total_transaction: DataTypes.DATE
+        last_total_transaction: DataTypes.DATE,
+        total: DataTypes.INTEGER
     }, {
         tableName: 'users',
         createdAt   : 'created_at',
