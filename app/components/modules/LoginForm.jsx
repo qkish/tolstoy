@@ -11,6 +11,7 @@ import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
 import reactForm from 'app/utils/ReactForm'
 import { translate } from 'app/Translator';
 import { translateError } from 'app/utils/ParsersAndFormatters';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
 class LoginForm extends Component {
 
@@ -33,7 +34,7 @@ class LoginForm extends Component {
             cryptographyFailure = true
         }
         this.state = {cryptographyFailure, hiding: '',
-            preoloader: 'PreloaderShown'}
+            preloader: 'PreloaderNotShown'}
         this.usernameOnChange = e => {
             const value = e.target.value.toLowerCase()
             this.state.username.props.onChange(value)
@@ -85,8 +86,8 @@ class LoginForm extends Component {
       
 
     
-            this.setState({hiding: 'SignUp_btnCovered'})
-            this.setState({preloader: ''})
+            this.setState({hiding: 'SignUp_btnCovered', preloader: 'preloaderShown'})
+           
         
     }
 
@@ -226,7 +227,9 @@ class LoginForm extends Component {
                         {submitLabel}
                     </button>
                 </div>
-                <div className={this.state.preoloader}> </div>
+                <div className={this.state.preloader}> 
+                <LoadingIndicator type="circle" inline />
+                </div>
             </form>
         )
 

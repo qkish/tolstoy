@@ -266,9 +266,7 @@ class Header extends React.Component {
                                 <li className={'Header__toplinks ' + bmTasks}>
                                     <Link to='/bitva'>Рейтинги</Link>
                                 </li>
-                                <li className='Header__toplinks'>
-                                    <Link to='/top'>Рейтинг</Link>
-                                </li>
+                              
 
 
 
