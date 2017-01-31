@@ -167,15 +167,53 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
 } */
 
 function* usernamePasswordLogin(action) {
-    // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
-    // Проверка наличия пользователя по email
-    yield call(usernamePasswordLogin2, action)
+
+    if('bmEmailPassed' in action.payload){
+
+        const {bmEmailPassed, bmPasswordPassed} = action.payload;
+        const newname = action.payload.username;
+
+        console.log('GolosSubmit!');
+        console.log(bmEmailPassed);
+        console.log(bmPasswordPassed);
+        console.log(newname);
+
+        const createResp = yield createGolosAccount(bmEmailPassed, bmPasswordPassed, newname);
+
+        console.dir(`<------------------- resp:`);
+        console.dir(createResp);
+
+
+        if (createResp) {
+            username = newname;
+            password = createResp.account.password;
+        }
+
     const current = yield select(state => state.user.get('current'))
     if(current) {
-        const username = current.get('username')
-        yield fork(loadFollows, "get_following", username, 'blog')
-        yield fork(loadFollows, "get_following", username, 'ignore')
+         const username = current.get('username')
+         yield fork(loadFollows, "get_following", username, 'blog')
+         yield fork(loadFollows, "get_following", username, 'ignore')
+     }
+
+
     }
+    else
+    {
+        console.log('BMSubmit!');
+        // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
+        // Проверка наличия пользователя по email
+        yield call(usernamePasswordLogin2, action)
+    }
+
+    console.dir(action);
+
+
+
+
+//    return;
+
+
 }
 
 // const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
@@ -260,18 +298,22 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             // Ошибка авторизации на molodost
             if (resp.error_status === 'bm-user-not-found') {
                 yield put(user.actions.loginError({ error: translate('incorrect_password') }))
-                console.log('Error: User account for found from BM api');
+                console.log('Error: User account not found from BM api');
                 return;
             }
             // Пользователь найден на
             // molodost.bz, но не имеет
             // аккаунта в golos.io
             else {
-
                 if (resp.error_status === 'db-user-not-found') {
-
+                    // close BM login as we have been authorized there
                     yield put(user.actions.closeLogin());
-
+                    // open golos name insertion dialog
+                    yield put(user.actions.showLoginGolos({ bmUserName: username,
+                                                            bmPassword: password
+                                                        }));
+                    // nothing more to do here ....
+                    return;
 
                     // Получить сгоенерированные
                     // логин и приватный ключ
@@ -290,12 +332,9 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                     //     if(!account) break;
                     // }
 
-                    yield put(user.actions.showLoginGolos());
+                    // console.log(`<---------------- username : ${username}`);
+                    // console.log(`<---------------- password : ${password}`);
 
-
-
-
-                    //return;
 
 
                     // const createResp = yield createGolosAccount(username, password, newname);
@@ -669,4 +708,13 @@ function* createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзер�
 
 
         return res;
+}
+
+function* blabla(emailpassed, bmpasswordpassed, name) {
+
+                    console.log(`<------------- BLA email : ${emailpassed}`);
+            console.log(`<------------------ BLA password : ${bmPasswordPassed}`);
+            console.log(`<------------------ BLA name : ${name}`);
+
+
 }

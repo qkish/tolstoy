@@ -40,12 +40,35 @@ export default createModule({
             reducer: (state, {payload}) => {
                 // https://github.com/mboperator/redux-modules/issues/11
                 if (typeof payload === 'function') payload = undefined
-                let operation, loginDefault
+                let operation, loginDefault, bmUserName, bmPassword
                 if(payload) {
-                    operation = fromJS(payload.operation)
-                    loginDefault = fromJS(payload.loginDefault)
+
+                    // console.log(`<------------------ payload`);
+                    // console.dir(payload);                    
+
+                    operation       = fromJS(payload.operation)
+                    loginDefault    = fromJS(payload.loginDefault)
+
+                    // obtain BM User name and password for further golos
+                    // account creation on qkish/tolstoy server logic
+
+                    bmUserName      = fromJS(payload.bmUserName)
+                    bmPassword      = fromJS(payload.bmPassword)
+
+                    // console.log(`<------------------ bmUserName : ${bmUserName}`);
+                    // console.log(`<------------------ bmPassword : ${bmPassword}`);
+
+
+
                 }
-                return state.merge({show_login_golos_modal: true, loginBroadcastOperation: operation, loginDefault})
+                return state.merge({show_login_golos_modal: true, 
+                                    loginBroadcastOperation: operation, 
+                                    loginDefault,
+                                    
+                                    emailpassed: bmUserName,
+                                    bmpasswordpassed: bmPassword
+
+                                })
             }
         },
         { action: 'HIDE_LOGIN_GOLOS', reducer: state =>

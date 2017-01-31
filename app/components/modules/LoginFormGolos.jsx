@@ -69,13 +69,15 @@ class LoginForm extends Component {
         reactForm({
             name: 'login',
             instance: this,
-            fields: ['username', 'password', 'saveLogin:bool'],
+            fields: ['username', 
+                        //'password', 
+                        'saveLogin:bool'],
             initialValues: props.initialValues,
             validation: values => ({
                 username: ! values.username ? translate('required') : validate_account_name(values.username.split('/')[0]),
-                password: ! values.password ? translate('required') :
-                    PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
-                    null,
+                // password: ! values.password ? translate('required') :
+                //     PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
+                //     null,
             })
         })
     }
@@ -141,7 +143,7 @@ class LoginForm extends Component {
         const submitLabel = translate(loginBroadcastOperation ? 'sign' : 'button_create_golos_account');
         const golosLink     = <span><a href="https://golos.io" target="_blank">Голос.</a> </span>
 
-        let error = password.touched && password.error ? password.error : this.props.login_error
+        let error = null;//password.touched && password.error ? password.error : this.props.login_error
         if (error === 'owner_login_blocked') {
             error = <span>
                         {translate("password_is_bound_to_account", {
@@ -176,10 +178,34 @@ class LoginForm extends Component {
                 </div>;
             }
         }
+
+        // obtain BM credentials
+
+
+        const {bmEmailPassed,bmPasswordPassed} = this.props;
+        // console.log(`<------------------ FORM PROPS`);
+        // console.dir(this.props);    
+
+
+
+        // console.log(`<------------------ FORM bmEmailPassed : ${bmEmailPassed}`);
+        // console.log(`<------------------ FORM bmPasswordPassed : ${bmPasswordPassed}`);
+
+        // console.log(`<------------------ this.props :`);
+        // console.dir(this.props);
+
+
+
+
+
         const form = (
             <form onSubmit={handleSubmit(data => {
                 // bind redux-form to react-redux
-                return dispatchSubmit(data, loginBroadcastOperation, afterLoginRedirectToAccount)
+                return dispatchSubmit(data, 
+                                      loginBroadcastOperation, 
+                                      afterLoginRedirectToAccount,
+                                      bmEmailPassed,
+                                      bmPasswordPassed)
             })}
                 onChange={this.props.clearError}
                 method="post"
@@ -212,6 +238,10 @@ class LoginForm extends Component {
                     <button type="submit" disabled={submitting || disabled} className="button">
                         {submitLabel}
                     </button>
+
+                    {console.log(`<-------------- disabled  : ${disabled}`)}
+                    {console.log(`<-------------- submitting  : ${submitting}`)}
+
                 </div>
             </form>
         )
@@ -250,6 +280,16 @@ export default connect(
         const currentUser = state.user.get('current')
         const loginBroadcastOperation = state.user.get('loginBroadcastOperation')
 
+        const bmEmailPassed     = state.user.get('emailpassed');
+        const bmPasswordPassed  = state.user.get('bmpasswordpassed');
+
+
+        //console.log(`<------------------ FROM CONNECT bmUserName : ${bmEmailPassed}`);
+        //console.log(`<------------------ FROM CONNECT bmPassword : ${bmPasswordPassed}`);
+
+
+
+
         const initialValues = {
             saveLogin: saveLoginDefault,
         }
@@ -272,25 +312,38 @@ export default connect(
             initialValues,
             initialUsername,
             msg,
-            offchain_user: state.offchain.get('user')
-        }
+            offchain_user: state.offchain.get('user'),
+            bmEmailPassed,
+            bmPasswordPassed
+
+        } 
     },
 
     // mapDispatchToProps
     dispatch => ({
-        dispatchSubmit: (data, loginBroadcastOperation, afterLoginRedirectToAccount) => {
+        dispatchSubmit: (data, loginBroadcastOperation, afterLoginRedirectToAccount, bmEmailPassed, bmPasswordPassed) => {
             const {password, saveLogin} = data
-            const username = data.username.trim().toLowerCase()
+            const username      = data.username.trim().toLowerCase()
+            // const emailpassed   = data.emailpassed;
+            // const bmpasswordpassed  = data.bmpasswordpassed;
 
-            if (loginBroadcastOperation) {
-                const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
-                dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
-                // Avoid saveLogin, this could be a user-provided content page and the login might be an active key.  Security will reject that...
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: false, afterLoginRedirectToAccount, operationType: type}))
-                dispatch(user.actions.closeLogin())
-            } else {
-                dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin, afterLoginRedirectToAccount}))
-            }
+            console.log(`<------------- DISPATCH password : ${password}`);
+            console.log(`<------------------ DISPATCH bmUserName : ${bmEmailPassed}`);
+            console.log(`<------------------ DISPATCH bmPassword : ${bmPasswordPassed}`);
+            console.log(`<------------- DISPATCH username : ${username}`);
+            // console.log(`<------------- saveLogin : ${saveLogin}`);
+
+  //          dispatch(user.actions.blabla(bmEmailPassed, bmPasswordPassed, username));
+
+            // if (loginBroadcastOperation) {
+            //     const {type, operation, successCallback, errorCallback} = loginBroadcastOperation.toJS()
+            //     dispatch(transaction.actions.broadcastOperation({type, operation, username, password, successCallback, errorCallback}))
+            //     // Avoid saveLogin, this could be a user-provided content page and the login might be an active key.  Security will reject that...
+            //     dispatch(user.actions.usernamePasswordLogin({username, password, saveLogin: false, afterLoginRedirectToAccount, operationType: type}))
+            //     dispatch(user.actions.closeLogin())
+            // } else {
+                 dispatch(user.actions.usernamePasswordLogin({bmEmailPassed, bmPasswordPassed, username}))
+            // }
         },
         clearError: () => { if (hasError) dispatch(user.actions.loginError({error: null})) },
         qrReader: (dataCallback) => {
