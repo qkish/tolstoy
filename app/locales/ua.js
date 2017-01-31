@@ -38,6 +38,7 @@ export const ua = {
 	submit_email_to_get_on_waiting_list: 'Додайте адресу вашої електронної пошти, щоб потрапити в список очікування',
 	login: 'Увійти',
 	logout: 'Вийти',
+	button_create_golos_account: 'Создать',
 	show_less_low_value_posts: "Показати менше повідомлень низької вартості",
 	show_more_low_value_posts: "Показати більше повідомлень низької вартості",
 	select_topic: 'Вибрати топік',
@@ -81,6 +82,9 @@ export const ua = {
 	to_obtaion_a_more_secure_set_of_keys: "для отримання більш безпечного набору ключів",
 	update_your_password: 'оновити свій пароль',
 	enter_username: 'Введіть своє ім\'я користувача',
+	enter_username_golos: 'Желаемое имя',
+	golos_about: 'Эта IT-платформа основана на социальной технологии будущего. Для её полноценного использования, Вам понадобится создать аккаунт в сети Голос.',
+
 	password_or_wif: 'Пароль чи WIF',
 	requires_auth_key: 'Ця операція вимагає ваш {authType} ключ (або використайте головний пароль)',
 	keep_me_logged_in: 'Залишати мене авторизованим',
@@ -497,6 +501,8 @@ export const ua = {
 	confirm_email: 'Підтвердити електронну пошту',
 	authenticate_for_this_transaction: 'Авторизуйтесь для цієї транзакції',
 	login_to_your_APP_NAME_account: 'Зайдіть в ваш ' + APP_NAME + ' акаунт',
+	create_your_GOLOS_account_name: 'Создайте свой Голос аккаунт ...',
+
 	// UserProfile > Permissions
 	posting: 'Постинг',
 	owner: 'Власник',

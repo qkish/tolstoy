@@ -37,6 +37,7 @@ const en = 	{
 	submit_email_to_get_on_waiting_list: 'Submit your email to get on the waiting list',
 	login: 'Login',
 	logout: 'Logout',
+	button_create_golos_account: 'Create',
 	show_less_low_value_posts: "Show less low value posts",
 	show_more_low_value_posts: "Show more low value posts",
 	select_topic: 'Select Topic',
@@ -81,6 +82,9 @@ const en = 	{
 	to_obtaion_a_more_secure_set_of_keys: "to obtain a more secure set of keys",
 	update_your_password: 'update your password',
 	enter_username: 'Enter your username',
+	enter_username_golos: 'Desired name',
+	golos_about: 'Эта IT-платформа основана на социальной технологии будущего. Для её полноценного использования, Вам понадобится создать аккаунт в сети Голос.',
+
 	password_or_wif: 'Password or WIF',
 	requires_auth_key: 'This operation requires your password for security reasons',
 	keep_me_logged_in: 'Keep me logged in',
@@ -490,6 +494,7 @@ const en = 	{
 	confirm_email: 'Confirm Email',
 	authenticate_for_this_transaction: 'Authenticate for this transaction',
 	login_to_your_APP_NAME_account: 'Login to your BM account',
+	create_your_GOLOS_account_name: 'Create your GOLOS account',
 	// UserProfile > Permissions
 	posting: 'Posting',
 	owner: 'Owner',

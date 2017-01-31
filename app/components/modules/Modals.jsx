@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import LoginForm from 'app/components/modules/LoginForm';
+import LoginFormGolos from 'app/components/modules/LoginFormGolos';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
 import SignUp from 'app/components/modules/SignUp';
@@ -17,11 +18,13 @@ import {OrderedSet} from 'immutable';
 class Modals extends React.Component {
     static propTypes = {
         show_login_modal: React.PropTypes.bool,
+        show_login_golos_modal: React.PropTypes.bool,
         show_confirm_modal: React.PropTypes.bool,
         show_transfer_modal: React.PropTypes.bool,
         show_signup_modal: React.PropTypes.bool,
         show_promote_post_modal: React.PropTypes.bool,
         hideLogin: React.PropTypes.func.isRequired,
+        hideLoginGolos: React.PropTypes.func.isRequired,
         hideConfirm: React.PropTypes.func.isRequired,
         hideSignUp: React.PropTypes.func.isRequired,
         hideTransfer: React.PropTypes.func.isRequired,
@@ -37,8 +40,8 @@ class Modals extends React.Component {
 
     render() {
         const {
-            show_login_modal, show_confirm_modal, show_transfer_modal, show_signup_modal,
-            hideLogin, hideTransfer, hideConfirm, hideSignUp,
+            show_login_modal, show_login_golos_modal, show_confirm_modal, show_transfer_modal, show_signup_modal,
+            hideLogin, hideLoginGolos, hideTransfer, hideConfirm, hideSignUp,
             notifications, removeNotification, hidePromotePost, show_promote_post_modal
         } = this.props;
 
@@ -52,6 +55,10 @@ class Modals extends React.Component {
                 {show_login_modal && <Reveal onHide={hideLogin} show={show_login_modal}>
                     <CloseButton onClick={hideLogin} />
                     <LoginForm onCancel={hideLogin} />
+                </Reveal>}
+                {show_login_golos_modal && <Reveal onHide={hideLoginGolos} show={show_login_golos_modal}>
+                    <CloseButton onClick={hideLoginGolos} />
+                    <LoginFormGolos onCancel={hideLoginGolos} />
                 </Reveal>}
                 {show_confirm_modal && <Reveal onHide={hideConfirm} show={show_confirm_modal}>
                     <CloseButton onClick={hideConfirm} />
@@ -78,12 +85,13 @@ class Modals extends React.Component {
 export default connect(
     state => {
         return {
-            show_login_modal: state.user.get('show_login_modal'),
-            show_confirm_modal: state.transaction.get('show_confirm_modal'),
-            show_transfer_modal: state.user.get('show_transfer_modal'),
-            show_promote_post_modal: state.user.get('show_promote_post_modal'),
-            show_signup_modal: state.user.get('show_signup_modal'),
-            notifications: state.app.get('notifications')
+            show_login_modal        : state.user.get('show_login_modal'),
+            show_login_golos_modal  : state.user.get('show_login_golos_modal'),
+            show_confirm_modal      : state.transaction.get('show_confirm_modal'),
+            show_transfer_modal     : state.user.get('show_transfer_modal'),
+            show_promote_post_modal : state.user.get('show_promote_post_modal'),
+            show_signup_modal       : state.user.get('show_signup_modal'),
+            notifications           : state.app.get('notifications')
         }
     },
     dispatch => ({
@@ -91,6 +99,11 @@ export default connect(
             if (e) e.preventDefault();
             dispatch(user.actions.hideLogin())
         },
+        hideLoginGolos: e => {
+            if (e) e.preventDefault();
+            dispatch(user.actions.hideLoginGolos())
+        },
+
         hideConfirm: e => {
             if (e) e.preventDefault();
             dispatch(tr.actions.hideConfirm())

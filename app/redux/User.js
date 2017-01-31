@@ -31,6 +31,22 @@ export default createModule({
         },
         { action: 'HIDE_LOGIN', reducer: state =>
             state.merge({show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined}) },
+        {
+            action: 'SHOW_LOGIN_GOLOS',
+            reducer: (state, {payload}) => {
+                // https://github.com/mboperator/redux-modules/issues/11
+                if (typeof payload === 'function') payload = undefined
+                let operation, loginDefault
+                if(payload) {
+                    operation = fromJS(payload.operation)
+                    loginDefault = fromJS(payload.loginDefault)
+                }
+                return state.merge({show_login_golos_modal: true, loginBroadcastOperation: operation, loginDefault})
+            }
+        },
+        { action: 'HIDE_LOGIN_GOLOS', reducer: state =>
+            state.merge({show_login_golos_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined}) },
+        
         { action: 'SAVE_LOGIN_CONFIRM', reducer: (state, {payload}) => state.set('saveLoginConfirm', payload) },
         { action: 'SAVE_LOGIN', reducer: (state) => state }, // Use only for low security keys (like posting only keys)
         { action: 'REMOVE_HIGH_SECURITY_KEYS', reducer: (state) => {

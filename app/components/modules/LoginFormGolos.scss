@@ -1,0 +1,98 @@
+.LoginForm {
+  padding: 18px 20px 20px 20px;
+  label {
+    text-transform: none;
+  }
+  form {
+    max-width: 400px;
+  }
+
+  h3 {
+  	font-size: 24px;
+  }
+
+  button {
+  	margin: 0;
+  	width: 100%;
+  }
+}
+.LoginForm__keepme {
+	display: none;
+}
+.LoginForm__hide-error {
+	display: none;
+	margin: 0;
+}
+
+.reveal {
+	width: 400px;
+	border-radius: 3px;
+	border: 0 none;
+}
+.close-button {
+	right: 10px;
+	top: 10px;
+}
+
+
+.LoginForm__login {
+	margin-top: 15px;
+	margin-bottom: 15px;
+	
+}
+.LoginForm__login-input, .LoginForm__password-input, .LoginForm__login-input:focus, .LoginForm__password-input:focus {
+	
+	border-radius: 3px;
+	font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 40px;
+    border-radius: 3px;
+    width: 100%;
+    height: 40px;
+    color: #232323;
+    display: block;
+    box-sizing: border-box;
+    padding: 0 10px 0 10px;
+    margin: 0 0 5px 0;
+    border: 1px solid #dbe0e3;
+    background: #f8f9fc;
+    box-shadow: none;
+}
+
+.LoginForm__label {
+	
+
+    font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 12px;
+    line-height: 16px;
+    display: block;
+    color: #b3b3b5;
+    margin: 0 0 6px 0;
+    
+    }
+
+    @media screen and (max-width: 39.9375em) {
+
+    	.LoginForm {
+    		
+    		 h3 {
+  	font-size: 20px;
+  }
+    	}
+
+.reveal {
+	width: 100%;
+	border-radius: 0;
+}
+
+.close-button {
+	
+	right: 20px;
+	top: 20px;
+}
+
+    }

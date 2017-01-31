@@ -39,6 +39,7 @@ const ru = {
 	submit_email_to_get_on_waiting_list: 'Добавьте ваш адрес электронной почты, чтобы попасть в список ожидания',
 	login: 'Войти',
 	logout: 'Выйти',
+	button_create_golos_account: 'Создать',
 	show_less_low_value_posts: "Показать меньше сообщений низкой стоимости",
 	show_more_low_value_posts: "Показать больше сообщений низкой стоимости",
 	select_topic: 'Выбрать топик',
@@ -83,6 +84,8 @@ const ru = {
 	to_obtaion_a_more_secure_set_of_keys: "для получения более безопасного набора ключей",
 	update_your_password: 'обновить твой пароль',
 	enter_username: 'Электронная почта',
+	enter_username_golos: 'Желаемое имя',
+	golos_about: 'Эта IT-платформа основана на социальной технологии будущего. Для её полноценного использования Вам понадобится создать аккаунт в сети ',
 	password_or_wif: 'Ваш пароль',
 	requires_auth_key: 'Эта операция требует дополнительного введения пароля для безопасности',
 	keep_me_logged_in: 'Запомнить меня',
@@ -501,6 +504,8 @@ const ru = {
 	confirm_email: 'Подтвердить электронную почту',
 	authenticate_for_this_transaction: 'Авторизируйтесь для этой транзакции',
 	login_to_your_APP_NAME_account: 'Вход с аккаунтом БМ',
+	create_your_GOLOS_account_name: 'Создайте свой Голос аккаунт ...',
+
 	// UserProfile > Permissions
 	posting: 'Постинг',
 	owner: 'Владелец',

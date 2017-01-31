@@ -231,11 +231,16 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             else {
 
                 if (resp.error_status === 'db-user-not-found') {
+
+                    yield put(user.actions.closeLogin());
+
+
                     // Получить сгоенерированные
                     // логин и приватный ключ
                     // и продолжить авторизацию в golos.io
                     // Создать аккаунт на golos.io
                     let newname, account;
+
                     while (true) {
                         newname = 'bm-' + username.split('@')[0].replace('_', '');
                         //Генерируем имя алгоритмом на сервере
@@ -247,15 +252,24 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                         if(!account) break;
                     }
 
+                    yield put(user.actions.showLoginGolos());
 
-                    const createResp = yield createGolosAccount(username, password, newname);
+                    return;
 
 
-                    if (createResp) {
-                        username = newname;
-                        password = createResp.account.password;
-                    }
-                } else {
+                    // const createResp = yield createGolosAccount(username, password, newname);
+
+                    // console.dir(`<------------------- resp:`);
+                    // console.dir(createResp);
+
+
+                    // if (createResp) {
+                    //     username = newname;
+                    //     password = createResp.account.password;
+                    // }
+
+                } 
+                else {
                     yield put(user.actions.loginError({ error: translate('error') }))
                     return;
                 }
@@ -526,8 +540,8 @@ function* createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзер�
 
     console.log('ENTERED THE RABBIT HOLE');
 
-    let email = emailpassed;
-    let bmpassword = bmpasswordpassed;
+    let email       = emailpassed;
+    let bmpassword  = bmpasswordpassed;
 
     if (!email) return;
 
@@ -546,6 +560,22 @@ function* createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзер�
         const pk = PrivateKey.fromSeed(`${name}${role}${password}`);
         return pk.toPublicKey().toString();
     });}
+
+
+        console.log(`<-----------------------------`);
+
+        console.log(`name: ${name}`);
+        console.log(`email: ${email}`);
+        console.log(`bmpassword: ${bmpassword}`);
+        console.log(`password: ${password}`);
+        console.log(`public_keys[0] : ${public_keys[0]}`);
+        console.log(`public_keys[1] : ${public_keys[1]}`);
+        console.log(`public_keys[2] : ${public_keys[2]}`);
+        console.log(`public_keys[3] : ${public_keys[3]}`);
+
+        console.log(`<-----------------------------`);
+
+
 
    return fetch('/api/v1/accounts2', {
             method: 'post',
@@ -567,7 +597,8 @@ function* createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзер�
                 memo_key: public_keys[3]//,
                 //json_meta: JSON.stringify({"ico_address": icoAddress})
             })
-    }).then(r => r.json()).then(res => {
+    }).then(r => r.json())
+      .then(res => {
 
         console.log('CLIENT RECIEVED ACCOUNT: ', res);
 
