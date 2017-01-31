@@ -13,9 +13,6 @@ import {
     serverApiGetAccountPrivateKey,
     serverApiLogin2,
     checkUser,
-    updateVestingTotal,
-    updateMonets,
-    updateMoneyTotal,
     updateMoney
 } from 'app/utils/ServerApiClient'
 import {loadFollows} from 'app/redux/FollowSaga'
@@ -27,10 +24,7 @@ export const userWatches = [
     loginWatch,
     saveLoginWatch,
     logoutWatch,
-    updateVestinWatch,
-    updateMonetsWatch,
     updateMoneyWatch,
-    updateMoney2Watch,
     // getCurrentAccountWatch,
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
@@ -55,28 +49,7 @@ function* loginErrorWatch() {
     yield* takeLatest('user/LOGIN_ERROR', loginError);
 }
 
-function* updateVestinWatch() {
-    yield* takeLatest('user/UPDATE_VESTING_TOTAL', function* ({ payload }) {
-        console.log('-- saga update vesting total', payload)
-        yield call(updateVestingTotal, payload.username, payload.value)
-    })
-}
-
-function* updateMonetsWatch() {
-    yield* takeLatest('user/UPDATE_MONETS', function* ({payload}) {
-        console.log('-- saga update monets', payload)
-        yield call(updateMonets, payload.username, payload.value)
-    })
-}
-
 function* updateMoneyWatch() {
-    yield* takeLatest('user/UPDATE_MONEY_TOTAL', function* ({payload}) {
-        console.log('-- saga update money total', payload)
-        yield call(updateMoneyTotal, payload.username, payload.value)
-    })
-}
-
-function* updateMoney2Watch() {
     yield* takeLatest('user/UPDATE_MONEY', function* ({payload}) {
         yield call(updateMoney, payload)
     })

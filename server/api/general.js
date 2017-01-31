@@ -636,60 +636,6 @@ export default function useGeneralApi(app) {
        return account;
     });
 
-    router.post('/user/update_vesting_total', koaBody, function*() {
-        if (rateLimitReq(this, this.req)) return;
-        const params = this.request.body;
-        const {csrf, username, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, csrf)) return;
-
-        const updated = yield models.User.update({
-            vesting_total: value
-        }, {
-            where: {
-                name: username
-            }
-        });
-        this.body = JSON.stringify({
-            user: updated
-        });
-    });
-
-    router.post('/user/update_monets', koaBody, function*() {
-        if (rateLimitReq(this, this.req)) return;
-        const params = this.request.body;
-        const {csrf, username, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, csrf)) return;
-
-        const updated = yield models.User.update({
-            monets: value
-        }, {
-            where: {
-                name: username
-            }
-        });
-        this.body = JSON.stringify({
-            user: updated
-        });
-    });
-
-    router.post('/user/update_money_total', koaBody, function*() {
-        if (rateLimitReq(this, this.req)) return;
-        const params = this.request.body;
-        const {csrf, username, value} = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, csrf)) return;
-
-        const updated = yield models.User.update({
-            money_total: value
-        }, {
-            where: {
-                name: username
-            }
-        });
-        this.body = JSON.stringify({
-            user: updated
-        });
-    });
-
     router.post('/user/update_money', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
