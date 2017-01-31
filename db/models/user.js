@@ -16,7 +16,16 @@ module.exports = function (sequelize, DataTypes) {
         remote_ip: DataTypes.STRING,
         verified: DataTypes.BOOLEAN,
         waiting_list: DataTypes.BOOLEAN,
-        bot: DataTypes.BOOLEAN
+        bot: DataTypes.BOOLEAN,
+        vesting_total: DataTypes.INTEGER,
+        monets: DataTypes.INTEGER,
+        money_total: DataTypes.INTEGER,
+        polk: DataTypes.INTEGER,
+        last_total_transaction: DataTypes.DATE,
+        total: DataTypes.INTEGER,
+        posts_monets: DataTypes.INTEGER,
+        comments_monets: DataTypes.INTEGER,
+        tasks_monets: DataTypes.INTEGER
     }, {
         tableName: 'users',
         createdAt   : 'created_at',

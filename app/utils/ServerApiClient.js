@@ -105,3 +105,67 @@ export function checkUser (username) {
         body: JSON.stringify({csrf: $STM_csrf, username})
     }).then(res => res.json())
 }
+
+export function updateVestingTotal (username, value) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch('/api/v1/user/update_vesting_total', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({csrf: $STM_csrf, username, value})
+    }).then(res => res.json())
+}
+
+export function updateMonets (username, value) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch('/api/v1/user/update_monets', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({csrf: $STM_csrf, username, value})
+    }).then(res => res.json())
+}
+
+export function updateMoneyTotal (username, value) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch('/api/v1/user/update_money_total', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({csrf: $STM_csrf, username, value})
+    }).then(res => res.json())
+}
+
+export function updateMoney (payload) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch('/api/v1/user/update_money', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            csrf: $STM_csrf,
+            payload
+        })
+    }).then(res => res.json());
+}
+
+export function getUsers () {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch('/api/v1/users').then(res => res.json());
+}

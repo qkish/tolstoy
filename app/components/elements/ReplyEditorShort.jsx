@@ -17,6 +17,8 @@ import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
+import {vestingSteem} from 'app/utils/StateFunctions';
+import {updateMoney} from 'app/redux/UserActions'
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -66,7 +68,7 @@ class ReplyEditor extends React.Component {
         hasCategory: React.PropTypes.bool.isRequired,
         isStory: React.PropTypes.bool.isRequired,
         username: React.PropTypes.string,
-        
+
 
         // redux-form
         fields: React.PropTypes.object.isRequired,
@@ -89,11 +91,6 @@ class ReplyEditor extends React.Component {
         type: 'submit_comment',
         metaLinkData: Map(),
         category: 'bm-open',
-
-        
-
-
-
     }
 
     constructor() {
@@ -222,7 +219,7 @@ class ReplyEditor extends React.Component {
             const np = nextProps.fields
             if(tp.body.value !== np.body.value ||
                 (np.category && tp.category.value !== np.category.value) ||
-                (np.title && tp.title.value !== np.title.value) || 
+                (np.title && tp.title.value !== np.title.value) ||
                 (np.money && tp.money.value) !== np.money.value)
              { // also prevents saving after parent deletes this information
                 const {fields: {category, title, body, money}, formId} = nextProps
@@ -435,7 +432,7 @@ class ReplyEditor extends React.Component {
             titleVisible = false
         }
 
-      
+
 
 
         return (
@@ -460,7 +457,7 @@ class ReplyEditor extends React.Component {
                                 <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onMouseDown={this.handleOnFocus} onTouchStart={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState}  />
                      </div>
                       <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_day')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onTouchStart={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className={titleVisible ? 'ReplyEditorShort__moneyVisible' : 'ReplyEditorShort__moneyInvisible'} />
-                       
+
                         <div className={vframe_section_shrink_class}>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
                         </div>
@@ -555,7 +552,7 @@ export default formId => reduxForm(
             formId,
             metaLinkData,
         }
-  
+
         return ret
     },
 
@@ -578,8 +575,13 @@ export default formId => reduxForm(
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
+            const gprops = state.global.getIn(['props']).toJS();
+            const account = state.global.getIn(['accounts', username]);
+            const vesting = vestingSteem(account.toJS(), gprops).toFixed(2)
 
-           
+            if (type === 'submit_story' || type === 'submit_comment') {
+                dispatch(updateMoney({username, vesting, money, type}))
+            }
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
@@ -597,9 +599,9 @@ export default formId => reduxForm(
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
 
-          
-           
-            
+
+
+
             const linkProps =
                 /^submit_/.test(type) ? { // submit new
                     parent_author: author,
@@ -641,7 +643,7 @@ export default formId => reduxForm(
             if(rtags.usertags.size) meta.users = rtags.usertags; else delete meta.users
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
-            
+
             if(money) meta.daySumm = money; else delete meta.daySumm
 
 

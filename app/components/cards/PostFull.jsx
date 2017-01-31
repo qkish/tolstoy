@@ -279,7 +279,7 @@ class PostFull extends React.Component {
                                 </Link>
                             </span>
                             <span className="PostFull__reply">
-                                {!$STM_Config.read_only_mode && <a onClick={onShowReply}>{translate('reply')}</a>}
+                                {!$STM_Config.read_only_mode && (content.category !== 'bm-tasks') && <a onClick={onShowReply}>{translate('reply')}</a>}
                                 {showEditOption && !showEdit && <span>
                                     &nbsp;&nbsp;
                                     <a onClick={onShowEdit}>{translate('edit')}</a>
@@ -295,7 +295,7 @@ class PostFull extends React.Component {
                 <div className="row">
                      <div className="column small-12">
                         {showReply && renderedEditor}
-                        {content.category === 'bm-tasks' ? <SubmitStory type="submit_story" taskId={p.json_metadata.tags[1]} taskTitle={p.title} /> : ''}
+                        {content.category === 'bm-tasks' ? <SubmitStory type="submit_story" taskId={p.json_metadata.tags[1]} taskTitle={p.title} successCallback={() => { window.location = '/created/bm-open' }} /> : ''}
                     </div>
                 </div>
             </article>
