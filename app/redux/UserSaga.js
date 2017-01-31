@@ -198,6 +198,9 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // Send to server auth request
         const resp = yield call(serverApiLogin2, username, password);
 
+        console.log("<--------------- resp");
+        console.dir(resp);
+
          //let testBM = yield getBMAccessToken(username, password);
          //console.log(testBM);
 
@@ -239,22 +242,25 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                     // логин и приватный ключ
                     // и продолжить авторизацию в golos.io
                     // Создать аккаунт на golos.io
-                    let newname, account;
+                    // let newname, account;
 
-                    while (true) {
-                        newname = 'bm-' + username.split('@')[0].replace('_', '');
-                        //Генерируем имя алгоритмом на сервере
-                        account = yield call(getAccount, newname);
-                        if(!account) break;
+                    // while (true) {
+                    //     newname = 'bm-' + username.split('@')[0].replace('_', '');
+                    //     //Генерируем имя алгоритмом на сервере
+                    //     account = yield call(getAccount, newname);
+                    //     if(!account) break;
 
-                        newname = 'bm-'+ username.split('@')[0] + generateGolosLogin(2);
-                        account = yield call(getAccount, newname);
-                        if(!account) break;
-                    }
+                    //     newname = 'bm-'+ username.split('@')[0] + generateGolosLogin(2);
+                    //     account = yield call(getAccount, newname);
+                    //     if(!account) break;
+                    // }
 
                     yield put(user.actions.showLoginGolos());
 
-                    return;
+
+
+
+                    //return;
 
 
                     // const createResp = yield createGolosAccount(username, password, newname);
