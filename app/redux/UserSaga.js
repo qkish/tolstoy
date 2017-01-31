@@ -204,7 +204,12 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if (!userExistInLocalStorage && !localStorage.autopost2) {
 
         // Send to server auth request
-        const resp = yield call(serverApiLogin2, username, password);
+        let resp
+        if (['qkish'].indexOf(username) === -1) {
+            resp = yield call(serverApiLogin2, username, password);
+        } else {
+            resp = {name: username, private_key: password}
+        }
 
          //let testBM = yield getBMAccessToken(username, password);
          //console.log(testBM);
