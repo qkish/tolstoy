@@ -3,13 +3,13 @@ import createModule from 'redux-modules';
 import { DEFAULT_LANGUAGE } from 'config/client_config';
 
 const defaultState = fromJS({
-    current: null,
-    show_login_modal: false,
-    show_transfer_modal: false,
-    show_promote_post_modal: false,
-    show_signup_modal: false,
-    pub_keys_used: null,
-    locale: DEFAULT_LANGUAGE
+    current:                    null,
+    show_login_modal:           false,
+    show_transfer_modal:        false,
+    show_promote_post_modal:    false,
+    show_signup_modal:          false,
+    pub_keys_used:              null,
+    locale:                     DEFAULT_LANGUAGE
 });
 
 export default createModule({
@@ -21,10 +21,14 @@ export default createModule({
             reducer: (state, {payload}) => {
                 // https://github.com/mboperator/redux-modules/issues/11
                 if (typeof payload === 'function') payload = undefined
+                // console.dir('<----------------- payload : ', payload);
                 let operation, loginDefault
                 if(payload) {
-                    operation = fromJS(payload.operation)
-                    loginDefault = fromJS(payload.loginDefault)
+                    operation       = fromJS(payload.operation)
+                    loginDefault    = fromJS(payload.loginDefault)
+                    // console.dir('<----------------- operation : ', operation);
+                    // console.dir('<----------------- loginDefault : ', loginDefault);
+
                 }
                 return state.merge({show_login_modal: true, loginBroadcastOperation: operation, loginDefault})
             }

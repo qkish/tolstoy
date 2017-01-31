@@ -16,8 +16,8 @@ class LoginForm extends Component {
 
     static propTypes = {
         //Steemit
-        login_error: PropTypes.string,
-        onCancel: PropTypes.func,
+        login_error : PropTypes.string,
+        onCancel    : PropTypes.func,
     };
 
     static defaultProps = {
@@ -26,7 +26,7 @@ class LoginForm extends Component {
 
     constructor(props) {
         super()
-        const cryptoTestResult = runTests();
+        const cryptoTestResult  = runTests();
         let cryptographyFailure = false;
         if (cryptoTestResult !== undefined) {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
