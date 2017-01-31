@@ -17,6 +17,7 @@ import capitalizeFirstLetter from 'capitalize';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import Products from 'app/components/elements/Products';
 import Beta from 'app/components/elements/Beta';
+import Apis from 'shared/api_client/ApiInstances'
 
 
 function sortOrderToLink(so, topic, account) {
@@ -28,6 +29,7 @@ function sortOrderToLink(so, topic, account) {
     return `/${so}`;
 }
 
+ 
 const formId = 'submitStory'
 const SubmitReplyEditor = ReplyEditorShort(formId)
 
@@ -57,6 +59,7 @@ class PostsIndex extends React.Component {
         if (window.innerHeight && window.innerHeight > 3000 && prevProps.discussions !== this.props.discussions) {
             this.refs.list.fetchIfNeeded();
         }
+
     }
 
     getPosts(order, category) {
@@ -80,6 +83,9 @@ class PostsIndex extends React.Component {
     onShowSpam = () => {
         this.setState({showSpam: !this.state.showSpam})
     }
+
+   
+
     render() {
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
         let topics_order = order;
@@ -118,7 +124,13 @@ class PostsIndex extends React.Component {
         let bmOpen = '';
         let bmTasks = '';
 
+
+        
+
         if (route.page === 'PostsIndex') {
+
+            if (route.params[0] === "tasks") bmTasks = 'active_tab';
+
             sort_order = route.params[0] ? translate(route.params[0]) : '';
             if (sort_order === 'home') {
                 page_title = translate('home')
@@ -129,7 +141,12 @@ class PostsIndex extends React.Component {
                 if (route.params.length > 1) {
 
                     if (route.params[1] === "bm-open") bmOpen = 'active_tab';
+
+                    
+                  
+
                     if (route.params[1] === "bm-tasks") bmTasks = 'active_tab';
+
 
 
                     topic = detransliterate(route.params[1]);
@@ -255,13 +272,14 @@ class PostsIndex extends React.Component {
 
                     {!bmTasks && <HorizontalMenu items={sort_order_menu_horizontal} />}
 
-                    <PostsList ref="list"
+                    {!bmTasks && <PostsList ref="list"
                         posts={posts ? posts.toArray() : []}
                         loading={fetching}
                         category={category}
                         loadMore={this.loadMore}
                         emptyText = {emptyText}
-                        showSpam={showSpam} />
+                        showSpam={showSpam} /> }
+
                 </div>
                 <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
 

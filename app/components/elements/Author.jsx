@@ -47,7 +47,7 @@ class Author extends Component {
 
         let username = account;
 
-      
+
 
         // get account from state if proper user object was not provided
         if (typeof account != 'object') {
@@ -57,7 +57,7 @@ class Author extends Component {
                     </div>;
         }
 
-        let fullName =''
+        let fullName = username.name
 
         // try to extract image url from users metaData
         try { let parseRes = JSON.parse(account.json_metadata)

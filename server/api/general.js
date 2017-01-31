@@ -534,8 +534,7 @@ export default function useGeneralApi(app) {
                 vk: getBMmeta.vkId,
                 website: getBMmeta.siteLink,
                 user_image: getBMmeta.avatar ? 'http://static.molodost.bz/thumb/160_160_2/img/avatars/' + getBMmeta.avatar : '',
-                email: getBMmeta.email,
-                phone: getBMmeta.phone
+               
             }
 
 

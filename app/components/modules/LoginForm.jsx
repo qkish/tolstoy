@@ -32,7 +32,8 @@ class LoginForm extends Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             cryptographyFailure = true
         }
-        this.state = {cryptographyFailure}
+        this.state = {cryptographyFailure, hiding: '',
+            preoloader: 'PreloaderShown'}
         this.usernameOnChange = e => {
             const value = e.target.value.toLowerCase()
             this.state.username.props.onChange(value)
@@ -79,6 +80,16 @@ class LoginForm extends Component {
             })
         })
     }
+
+    handleMouseDown = event => {
+      
+
+    
+            this.setState({hiding: 'SignUp_btnCovered'})
+            this.setState({preloader: ''})
+        
+    }
+
 
     saveLoginToggle = () => {
         const {saveLogin} = this.state
@@ -174,6 +185,11 @@ class LoginForm extends Component {
                 </div>;
             }
         }
+
+        let btnStatus = this.state.hiding;
+         let loaderStatus = this.state.PreloaderShown;
+
+
         const form = (
             <form onSubmit={handleSubmit(data => {
                 // bind redux-form to react-redux
@@ -205,11 +221,12 @@ class LoginForm extends Component {
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
               
-                <div>
-                    <button type="submit" disabled={submitting || disabled} className="button">
+                <div className={this.state.hiding}>
+                    <button type="submit" disabled={submitting || disabled} className='button' onClick={this.handleMouseDown} >
                         {submitLabel}
                     </button>
                 </div>
+                <div className={this.state.preoloader}> </div>
             </form>
         )
 

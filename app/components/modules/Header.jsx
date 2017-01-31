@@ -12,6 +12,8 @@ import { APP_NAME, APP_ICON } from 'config/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import capitalizeFirstLetter from 'capitalize'
 
+import { POLK_OSIPOV, POLK_DASHKIEV } from 'config/client_config';
+
 function sortOrderToLink(so, topic, account) {
     // to prevent probmes check if topic is not the same as account name
     if ('@' + account == topic) topic = ''
@@ -104,7 +106,13 @@ class Header extends React.Component {
                     topic_original_link = (route.params[1])
 
                     if (route.params[1] === "bm-open") bmOpen = 'active_tab';
+
+                   
+                    
+                  
+
                     if (route.params[1] === "bm-tasks") bmTasks = 'active_tab';
+
 
                     // Overwrite default created for more human readable title
                     if (route.params[0] === "created") {
@@ -138,10 +146,26 @@ class Header extends React.Component {
             page_title = translate('create_account');
         } else if (route.page == 'RecoverAccountStep1' || route.page == 'RecoverAccountStep2') {
             page_title = translate('stolen_account_recovery');
+        } else if (route.page == 'TaskProfile') {
+
+            if (route.params[0] === POLK_OSIPOV) bmTasks = 'active_tab';
+
+        } else if (route.page == 'TaskProfile2') {
+
+            if (route.params[0] === POLK_DASHKIEV) bmTasks = 'active_tab';
+
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
             page_title = user_name;
             // TODO
+
+
+           
+
+            
+            if (route.params[0] === POLK_OSIPOV) bmTasks = 'active_tab';
+            if (route.params[0] === POLK_DASHKIEV) bmTasks = 'active_tab';
+            
             if(route.params[1] === "followers") {
                 page_title = translate('people_following_user_name', {user_name}) + ' ';
             }
@@ -167,6 +191,7 @@ class Header extends React.Component {
 
         // Format first letter of all titles and lowercase user name
         if (route.page !== 'UserProfile') {
+
             page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
         }
 
@@ -206,6 +231,9 @@ class Header extends React.Component {
             });
 
         let sort_order_extra_menu = null;
+
+        let Osipov = '/' + POLK_OSIPOV;
+
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
                 {link: `/trending/${topic}`, value: translate('24_hour'), active: sort_order === 'trending'},
@@ -233,7 +261,10 @@ class Header extends React.Component {
                                     <Link to='/hot/bm-open'>Отчеты</Link>
                                 </li>
                                 <li className={'Header__toplinks ' + bmTasks}>
-                                    <Link to='/created/bm-tasks'>Задания</Link>
+                                    <Link to={Osipov}>Задания</Link>
+                                </li>
+                                <li className={'Header__toplinks ' + bmTasks}>
+                                    <Link to='/bitva'>Рейтинги</Link>
                                 </li>
                                 <li className='Header__toplinks'>
                                     <Link to='/top'>Рейтинг</Link>

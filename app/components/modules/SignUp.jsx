@@ -10,8 +10,22 @@ import { localizedCurrency } from 'app/components/elements/LocalizedCurrency';
 class SignUp extends React.Component {
     constructor() {
         super();
-        this.state = {waiting_list: false};
+        this.state = {waiting_list: false,
+            hiding: '',
+            preoloader: ''};
     }
+
+    handleMouseDown = event => {
+      
+
+    
+            this.setState({hiding: 'SignUp_btnCovered'})
+            this.setState({preloader: 'PreloaderShown'})
+        
+    }
+
+
+    
 
     render() {
         if ($STM_Config.read_only_mode) {
@@ -34,6 +48,11 @@ class SignUp extends React.Component {
                 </div>
             </div>;
         }
+
+
+         let btnStatus = this.state.hiding;
+         let loaderStatus = this.state.PreloaderShown;
+
 
         return <div className="SignUp">
             <div className="row">
@@ -66,7 +85,7 @@ class SignUp extends React.Component {
                     </div>
                     <br/>
                     <div className="col-xs-12">
-                        <input type="submit" className="btn btn-success" value={translate("register_submit_text")}/>
+                        <input type="submit" className={'btn btn-success' + this.state.hiding} value="Вход" onMouseDown={this.handleMouseDown}/>
                     </div>
                 </form>
             </div>
