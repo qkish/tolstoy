@@ -12,9 +12,7 @@ import {getLogger} from '../../app/utils/Logger'
 import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
-import isBefore from 'date-fns/is_before';
-import isAfter from 'date-fns/is_after';
-import getTime from 'date-fns/get_time';
+import isToday from 'date-fns/is_today';
 
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
@@ -704,12 +702,9 @@ export default function useGeneralApi(app) {
             }
         })
 
-        console.log('PAYLOAD', payload)
-
         const last_transaction = user.last_total_transaction
-        const was_before = isBefore(getTime(last_transaction), getTime(new Date()))
 
-        if (!last_transaction || !was_before) {
+        if (!last_transaction || isToday(last_transaction)) {
             if (payload.type === 'submit_story') {
                 yield user.update({
                     posts_monets: 1
