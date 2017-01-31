@@ -319,7 +319,7 @@ class CommentImpl extends React.Component {
                         <span className="Comment__header-user">
                             <Icon name="user" className="Comment__Userpic-small" />
                             <span itemProp="author" itemScope itemType="http://schema.org/Person">
-                                <Author author={comment.author} authorRepLog10={authorRepLog10} /></span>
+                                <Author account={comment.author} authorRepLog10={authorRepLog10} /></span>
                         </span>
                         &nbsp; &middot; &nbsp;
                         <Link to={comment_link} className="PlainLink">

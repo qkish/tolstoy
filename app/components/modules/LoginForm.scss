@@ -1,3 +1,13 @@
+.SignUp_btnCovered {
+  display: none;
+}
+.PreloaderShown {
+
+  background-size: 32px 32px;
+  background-position: center center;
+  height: 40px;
+}
+
 .LoginForm {
   padding: 18px 20px 20px 20px;
   label {
@@ -94,5 +104,6 @@
 	right: 20px;
 	top: 20px;
 }
+
 
     }

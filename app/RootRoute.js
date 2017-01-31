@@ -5,6 +5,7 @@ import App from 'app/components/App';
 import PostsIndex from 'app/components/pages/PostsIndex';
 import resolveRoute from './ResolveRoute';
 
+
 export default {
     path: '/',
     component: App,
@@ -40,6 +41,10 @@ export default {
         } else if (route.page === 'Tags') {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/TagsIndex')]);
+            //});
+         } else if (route.page === 'Bitva') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/Bitva')]);
             //});
         } else if (route.page === 'Tos') {
             //require.ensure([], (require) => {
@@ -78,6 +83,14 @@ export default {
         } else if (route.page === 'UserProfile') {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/UserProfile')]);
+            //});
+        } else if (route.page === 'TaskProfile') {
+            //require.ensure([], (require) => {
+                cb(null, [require('app/components/pages/TaskProfile')]);
+            //});
+        } else if (route.page === 'TaskProfile2') {
+            //require.ensure([], (require) => {
+                cb(null, [require('app/components/pages/TaskProfile2')]);
             //});
         } else if (route.page === 'Market') {
             //require.ensure([], (require) => {

@@ -5,7 +5,7 @@
     <link rel="icon" type="image/ico" href="/favicon.ico" />
     <title>Поиск - golos.io</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/foundation/6.2.3/foundation.min.css">
-    <style>
+   <style>
         a {
             color: #1a5099 !important;
         }
@@ -28,10 +28,7 @@
         .top-bar, .top-bar ul {
             background-color: #fefefe;
         }
-        .menu li, .menu li a {
-            padding: 0;
-            padding-left: 5px;
-        }
+      
         .menu li.logo {
             padding-left: 10px;
         }
@@ -46,28 +43,128 @@
             font-size: .7rem;
             color: #4ba2f2;
         }
+
+        .Header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  background-color: $white;
+  border-bottom: 1px solid #e1e3e4;
+  height: 60px;}
+
+   h3 {
+    padding-left: 1rem;
+    margin-bottom: 0;
+  }
+  ul.menu > li.toggle-menu > a {
+    padding-right: 0;
+  }
+  .menu-icon {
+    margin: 0.2rem 0;
+  }
+  .container {
+    width: 875px;
+
+  }
+  .Header__top {
+
+  padding: 0 0 0 0;
+  }
+  .Header__toplinks {
+  height: 59px;
+  vertical-align: middle;
+   margin-left: 10px;
+   margin-bottom: -1px;
+   
+}
+.Header__toplinks a {
+
+  color: #0c0c0c;
+ height: 59px;
+vertical-align: middle;
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ padding-top: 17px !important;
+
+  font-family:"museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700; 
+  text-decoration: none;
+ 
+  }
+.Header__toplinks a:hover, .Header__toplinks a:focus {
+  text-decoration: none;
+}
+  .active_tab {
+    color: #196aff;
+    border-bottom: 2px solid #196aff;
+  }
+ul > li.Header__top-logo > a {
+  padding: 0;
+  transition: none;
+}
+
+.menu li {
+    float: left;
+     list-style: none;
+     
+    
+}
+    .menu {
+        list-style: none;
+    }
+
+    .menu li a { 
+    padding: 22px 0 0 15px !important;
+    color: #0c0c0c !important; }
+
+
+
+
+
     </style>
 </head>
 <body>
-<div class="top-bar header">
-    <div class="top-bar-left">
-        <ul class="menu">
-            <li class="logo">
-                <a href="/"><span class="Icon steem Icon_2x" style="display: inline-block; width: 2rem; height: 2rem;">
-<img src="/images/golos.svg" />
-                  </span></a>
-            </li>
-            <li class="steemit"><a href="/">голос<span class="beta">alpha</span></a></li>
-        </ul>
-    </div>
+
+  <header class="Header noPrint">
+<div>
+                <div class="Header__top header container">
+                    <div class="expanded row">
+                        <div class="columns">
+                            <ul class="menu">
+                                <li class="Header__top-logo">
+                                   <a href="/" style="padding: 3px !important;">
+                                 <img style="display: inline-block; width: 41px; height: 36px; margin-top: 10px;" src="/images/bmproudlogo.png" alt="Система" /></a>
+                                  
+                                </li>
+                                <li class="Header__toplinks">
+                                    <a href='/hot/bm-open'>Отчеты</a>
+                                </li>
+                                <li class="Header__toplinks">
+                                    <a href='/@bm220dfda44215'>Задания</a>
+                                </li>
+
+
+
+
+
+                            </ul>
+                        </div>
+                       
+                    </div>
+                </div>
 </div>
-<div class="row medium-8 large-7 columns">
-    <br />
+            </header>
+
+            <div class="row medium-8 large-7 columns">
+    <br />  <br />  <br />
     <gcse:search></gcse:search>
 </div>
-<script type="text/javascript">
+<script>
   (function() {
-    var cx = '008787138283204063299:s8d-rn5r_ma';
+    var cx = '002782711228861808135:rvnp6mv2fm8';
     var gcse = document.createElement('script');
     gcse.type = 'text/javascript';
     gcse.async = true;
@@ -76,5 +173,10 @@
     s.parentNode.insertBefore(gcse, s);
   })();
 </script>
+
+
+
+
+
 </body>
 </html>

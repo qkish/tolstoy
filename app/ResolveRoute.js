@@ -50,6 +50,9 @@ export default function resolveRoute(path)
     if (path === '/market') {
         return {page: 'Market'};
     }
+    if (path === '/bitva') {
+        return {page: 'Bitva'};
+    }
     if (path === '/~witnesses') {
         return {page: 'Witnesses'};
     }
@@ -60,11 +63,30 @@ export default function resolveRoute(path)
     if (match) {
         return {page: 'PostsIndex', params: ['home', match[1]]};
     }
+    
+
+     match = path.match(/^\/(@bm220dfda44215)\/?$/)
+        
+    if (match) {
+        return {page: 'TaskProfile', params: match.slice(1)};
+    }
+
+      match = path.match(/^\/(@bmdfef8c9b77aa)\/?$/)
+        
+    if (match) {
+        return {page: 'TaskProfile2', params: match.slice(1)};
+    }
+
+
+
+
     match = path.match(/^\/(@[\w\.\d-]+)\/?$/) ||
         path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/);
     if (match) {
         return {page: 'UserProfile', params: match.slice(1)};
     }
+
+
     match = path.match(/^\/(\@[\w\d-]+)\/([\w\d-]+)\/?$/) ||
         path.match(/^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?$/) ||
         path.match(/^\/([\w\d\-\/]+)\/(\@[\w\d\.-]+)\/([\w\d-]+)\/?\?sort=(\w+)$/);
