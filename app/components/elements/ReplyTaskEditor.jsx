@@ -17,6 +17,8 @@ import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
+import {vestingSteem} from 'app/utils/StateFunctions';
+import {updateMoney} from 'app/redux/UserActions'
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -92,8 +94,8 @@ class ReplyTaskEditor extends React.Component {
         type: 'submit_story',
         metaLinkData: Map(),
         category: 'bm-open',
-        
-        
+
+
     }
 
     constructor() {
@@ -374,8 +376,8 @@ class ReplyTaskEditor extends React.Component {
             body: this.props.body,
             money: this.props.money,
             tag1: this.props.taskId,
-          
-           
+
+
         }
 
         const {onCancel, autoVoteOnChange} = this
@@ -527,7 +529,7 @@ export default formId => reduxForm(
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
            title: null,
-        
+
            category: null,
            money: null,
            //hasCategory,
@@ -578,18 +580,24 @@ export default formId => reduxForm(
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
+            const gprops = state.global.getIn(['props']).toJS();
+            const account = state.global.getIn(['accounts', username]);
+            const vesting = vestingSteem(account.toJS(), gprops).toFixed(2)
 
-            
+            if (type === 'submit_story' || type === 'submit_comment') {
+                dispatch(updateMoney({username, vesting, money, type: 'reply_to_task'}))
+            }
+
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
             // when transletirate it
             // This is needed to be able to detransletirate it back to russian in future (to show russian categories to user)
             // (all of this is needed because blockchain does not allow russian symbols in category)
-            
+
            // category = originalPost.newcategory;
-            
-           
+
+
 
            // title = originalPost.newtitle;
             let taskTag = originalPost.tag1;
@@ -598,7 +606,7 @@ export default formId => reduxForm(
 
 
 
-           
+
 
             if (category) {
                 category = category.split(' ')
@@ -651,8 +659,8 @@ export default formId => reduxForm(
             let allCategories = Set([...formCategories.toJS(), ...taskTagSet.toJS(), ...rtags.hashtags])
             if(rootTag) allCategories = allCategories.add(rootTag)
 
-            
-           
+
+
 
 
 
@@ -666,7 +674,7 @@ export default formId => reduxForm(
             if(money) meta.daySumm = money; else delete meta.daySumm
 
 
-            
+
 
 
 

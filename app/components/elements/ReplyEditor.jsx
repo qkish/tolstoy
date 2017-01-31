@@ -17,6 +17,8 @@ import {cleanReduxInput} from 'app/utils/ReduxForms'
 import Remarkable from 'remarkable'
 import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
+import {vestingSteem} from 'app/utils/StateFunctions';
+import {updateMoney} from 'app/redux/UserActions'
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -73,7 +75,7 @@ class ReplyEditor extends React.Component {
         submitting: React.PropTypes.bool.isRequired,
         invalid: React.PropTypes.bool.isRequired,
 
-        
+
     }
 
     static defaultProps = {
@@ -472,6 +474,13 @@ export default formId => reduxForm(
         }) => {
             // const post = state.global.getIn(['content', author + '/' + permlink])
             const username = state.user.getIn(['current', 'username'])
+            const gprops = state.global.getIn(['props']).toJS();
+            const account = state.global.getIn(['accounts', username]);
+            const vesting = vestingSteem(account.toJS(), gprops).toFixed(2)
+
+            if (type === 'submit_story' || type === 'submit_comment') {
+                dispatch(updateMoney({username, vesting, money: 0, type}))
+            }
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it

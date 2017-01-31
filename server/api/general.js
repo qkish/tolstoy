@@ -13,6 +13,8 @@ import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
 import isBefore from 'date-fns/is_before';
+import isAfter from 'date-fns/is_after';
+import getTime from 'date-fns/get_time';
 
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
@@ -696,35 +698,18 @@ export default function useGeneralApi(app) {
         const {csrf, payload} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
 
-        const weights = {
-            post: 1,
-            comment: 1,
-            task: 2
-        }
-
-        let weight
-        if (payload.type === 'submit_story') {
-            weight = weights['post']
-        }
-        if (payload.type === 'submit_comment') {
-            weight = weights['comment']
-        }
-        if (payload.type === 'reply_to_task') {
-            weight = weights['task']
-        }
-
         const user = yield models.User.findOne({
             where: {
                 name: payload.username
             }
         })
 
+        console.log('PAYLOAD', payload)
+
         const last_transaction = user.last_total_transaction
-        const was_yesterday = isBefore(last_transaction, new Date())
+        const was_before = isBefore(getTime(last_transaction), getTime(new Date()))
 
-        console.log('was yesterday', was_yesterday)
-
-        if (!last_transaction || isBefore(last_transaction, new Date())) {
+        if (!last_transaction || !was_before) {
             if (payload.type === 'submit_story') {
                 yield user.update({
                     posts_monets: 1
@@ -737,22 +722,38 @@ export default function useGeneralApi(app) {
             }
             if (payload.type === 'reply_to_task') {
                 yield user.update({
-                    tasks_monets: 1
+                    tasks_monets: 2
                 })
             }
             yield user.update({
                 last_total_transaction: new Date()
             })
+        } else {
+            const monets = user.posts_monets + user.comments_monets + user.tasks_monets
+            const monets_total = user.monets + monets
+            const total = Number(payload.vesting) * 0.51 + monets * 0.25 + Number(payload.money) * 0.24
+            console.log({
+                posts_monets: 0,
+                comments_monets: 0,
+                tasks_monets: 0,
+                last_total_transaction: new Date(),
+                total: total,
+                monets: monets_total,
+                vesting_total: Number(payload.vesting),
+                money_total: user.money_total + Number(payload.money)
+            })
+            yield user.update({
+                posts_monets: 0,
+                comments_monets: 0,
+                tasks_monets: 0,
+                last_total_transaction: new Date(),
+                total: total,
+                monets: monets_total,
+                vesting_total: Number(payload.vesting),
+                money_total: user.money_total + Number(payload.money)
+            })
         }
 
-        console.log('last transaction', last_transaction)
-        // const updated = yield models.User.update({
-        //     money_total: value
-        // }, {
-        //     where: {
-        //         name: username
-        //     }
-        // });
         this.body = JSON.stringify({
             'receive payload': payload
         });
