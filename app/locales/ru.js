@@ -499,7 +499,7 @@ const ru = {
 	profile: 'Профиль',
 	send_to_account: 'Отправить аккаунту',
 	confirm_email: 'Подтвердить электронную почту',
-	authenticate_for_this_transaction: 'Авторизируйтесь для этой транзакции',
+	authenticate_for_this_transaction: 'Вход с аккаунтом БМ',
 	login_to_your_APP_NAME_account: 'Вход с аккаунтом БМ',
 	// UserProfile > Permissions
 	posting: 'Постинг',
