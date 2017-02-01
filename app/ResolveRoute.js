@@ -68,7 +68,7 @@ export default function resolveRoute(path)
     }
     
 
-     match = path.match(/^\/(@bm220dfda44215)\/?$/)
+     match = path.match(/^\/(@bm-bmtasks)\/?$/)
         
     if (match) {
         return {page: 'TaskProfile', params: match.slice(1)};
