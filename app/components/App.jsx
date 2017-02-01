@@ -47,40 +47,14 @@ class App extends React.Component {
   ga('create', 'UA-91253232-1', 'auto');
   ga('send', 'pageview');
 
+       
+(function(){ var widget_id = 'zH9JAkINiJ';var d=document;var w=window;function l(){
+var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
 
-
-            !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-            n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-            document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
 
             
 
-
-
-
-            fbq('init', '1594659427507927');
-            fbq('track', "PageView");
-
-            
-
-            window.fbAsyncInit = function() {
-              FB.init({
-                appId      : '150154408771266',
-                xfbml      : true,
-                version    : 'v2.8'
-              });
-            };
-
-            (function(d, s, id){
-               var js, fjs = d.getElementsByTagName(s)[0];
-               if (d.getElementById(id)) {return;}
-               js = d.createElement(s); js.id = id;
-               js.src = "//connect.facebook.net/en_US/sdk.js";
-               fjs.parentNode.insertBefore(js, fjs);
-             }(document, 'script', 'facebook-jssdk'));
         }
     }
 
