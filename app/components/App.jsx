@@ -52,6 +52,12 @@ class App extends React.Component {
             t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
             document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
+
+            
+
+
+
+
             fbq('init', '1594659427507927');
             fbq('track', "PageView");
 
@@ -129,6 +135,11 @@ class App extends React.Component {
         const alert = this.props.error || flash.get('alert');
         const warning = flash.get('warning');
         const success = flash.get('success');
+
+        let bitva = '';
+         if (location.pathname === '/bitva') bitva = 'Bitva__overall';
+
+        
 
         let callout = null;
         if (this.state.showCallout && (alert || warning || success)) {
@@ -267,7 +278,7 @@ class App extends React.Component {
             );
         }
 
-        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '')} onMouseMove={this.onEntropyEvent}>
+        return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + bitva} onMouseMove={this.onEntropyEvent}>
                 {header_bar}
             <div className="App__content container">
                 {welcome_screen}

@@ -1,28 +1,126 @@
 import React from 'react';
 import { translate } from 'app/Translator';
-import { LANDING_PAGE_URL, WHITEPAPER_URL } from 'config/client_config';
+import resolveRoute from 'app/ResolveRoute';
 
-class About extends React.Component {
+
+class Bitva extends React.Component {
+    
+    componentWillMount () {
+
+
+        if (process.env.BROWSER) { 
+       
+(function(){ var widget_id = 'zH9JAkINiJ';var d=document;var w=window;function l(){
+var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+
+ }
+    }
+
     render() {
         return (
-            <div className="row">
-                <div className="column">
-                    <div className="float-right"><a href="#" onClick={e => {e.preventDefault(); alert(process.env.VERSION)}}>{translate('version')}</a></div>
-                <h2>{translate('about_APP_NAME')}</h2>
-                    <p>
-                        {translate('APP_NAME_is_a_social_media_platform_where_everyone_gets_paid')}
-                        <a href={LANDING_PAGE_URL}>{translate('learn_more_at_LANDING_PAGE_URL')}</a>.
-                    </p>
-                    <h2>{translate('resources')}</h2>
-                <h3><a href={WHITEPAPER_URL} onClick={this.navigate}>{translate('APP_NAME_whitepaper')}</a> <small>[PDF]</small></h3>
-            <h3><a href="http://steem.herokuapp.com" target="_blank">{translate('join_our_slack')}</a></h3>
+            
+            <section className="Bitva_section stats">
+    <div className="Bitva_container">
+        <div className="stats__content">
+            <div className="stats__content-top">
+                <div className="peter">
+                    <div className="name">Петр Осипов</div>
+                    <div className="number">
+                        48 000 человек
+                    </div>
+                </div>
+
+                <div className="counter">
+                    <div className="title">количество монет</div>
+
+                    <div className="number">
+                        0
+                    </div>
+                    <div className="number second">
+                        0
+                    </div>
+                </div>
+
+                <div className="michael">
+                    <div className="name">Михаил Дашкиев</div>
+                    <div className="number">
+                        50 000 человек
+                    </div>
                 </div>
             </div>
+
+            <div className="stats__content-live">
+                <div className="video">
+                    <iframe width="539" height="303"
+                            src="https://www.youtube.com/embed/p8eXQDf0qmc?rel=0&showinfo=0" frameborder="0"
+                            allowfullscreen></iframe>
+                </div>
+
+                <div className="text">
+                    <div className="top">идет вебинар</div>
+                    <div className="title">
+                        Как выбрать то, чем заниматься и сделать на этом первые деньги?
+                    </div>
+
+                    <div className="vote">
+                        <div className="vote__title">Проголосуйте за лучшего</div>
+
+                        <div className="vote__item">
+                            <button className="vote__item-button">Константин</button>
+                            <div className="vote__item-likes">73 530</div>
+                        </div>
+                        <div className="vote__item last">
+                            <button className="vote__item-button">Матильда</button>
+                            <div className="vote__item-likes">68 323</div>
+                        </div>
+                    </div>
+
+                    <div className="description">
+                       <a href="http://bmtt.ru" target="_blank" className="Bitva__special">Спецпредложение на ЦЕХ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div className="stats__widget">
+            <a className="stats__widget-item" href="">
+                <div className="number">12 215</div>
+                <div className="description">
+                    монет у вас<br/>
+                    Что это?
+                </div>
+            </a>
+            <a className="stats__widget-item" href="">
+                <div className="number">114</div>
+                <div className="description">
+                    Вы в общем<br/>
+                    рейтинге
+                </div>
+            </a>
+            <a className="stats__widget-item" href="">
+                <div className="number">17</div>
+                <div className="description">
+                    Вы в рейтинге<br/>
+                    сегодняшнего дня
+                </div>
+            </a>
+        </div>
+    </div>
+
+
+</section>
+
+
+
+
+
+
+
         );
     }
 }
 
 module.exports = {
-    path: 'about.html',
-    component: About
+    path: 'bitva',
+    component: Bitva
 };

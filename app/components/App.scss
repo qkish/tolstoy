@@ -25,6 +25,19 @@
 }
 
 
+.AppBitva__overall {
+    width: 100%;
+}
+.AppBitva__overall.App_content {
+    width: 100% !important;
+
+}
+.AppBitva__overall .container {
+    width: 100% !important;
+    margin: 0;
+    padding: 0 !important;
+}
+
 .reveal-overlay {
   background-color: rgba(0, 40, 100, 0.8);
 }

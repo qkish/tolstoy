@@ -230,6 +230,8 @@ class LoginForm extends Component {
                 <div className={this.state.preloader}> 
                 <LoadingIndicator type="circle" inline />
                 </div>
+
+                <div className="LoginForm__label-support">Техническая поддержка <a href="mailto:bitva@molodost.bz">bitva@molodost.bz</a></div>
             </form>
         )
 

@@ -1,0 +1,380 @@
+
+/* global */
+.text-overflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.display-block {
+    display: block;
+}
+
+.display-inline-block {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.overflow-hidden {
+    overflow: hidden !important;
+}
+
+.position-fixed {
+    position: fixed !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* placeholder */
+::-webkit-input-placeholder {
+    color: #c2c2c2;
+    text-overflow: ellipsis;
+}
+
+
+
+.Bitva__overall {
+    width: 100%;
+}
+
+.AppBitva__overall {
+    width: 100%;
+}
+.AppBitva__overall.App_content {
+    width: 100% !important;
+   
+}
+.AppBitva__overall .container {
+    width: 100% !important;
+   margin: 0;
+}
+
+.Bitva__special {
+  padding: 15px;
+  text-align: center;
+  background: #196aff;
+  color: #fff;
+  width: 280px;
+  border-radius: 3px;
+  font-size: 14px;
+  margin-top: 20px;
+  text-decoration: none;
+  
+}
+.Bitva__special:hover, .Bitva__special:focus {
+    color: #fff;
+    text-decoration: none;
+    
+}
+.Bitva_section {
+    font-family: "museo_sans_cyrl", "Helvetica Neue", Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 14px;
+    line-height: 20px;
+    position: relative;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    color: #767676;
+    min-width: 1240px;
+    min-height: 100%;
+    background: #ffffff url('../../assets/bitva/stats-page.jpg') center 0 no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    
+    margin-top:50px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.Bitva_container {
+    position: relative;
+    width: 1200px;
+    padding: 0 20px 0 20px;
+    margin: auto;
+}
+
+/* stats */
+.Bitva_section.stats {
+    position: relative;
+    color: #767676;
+    padding: 0 0 60px 0;
+}
+
+.Bitva_section.stats .stats__content {
+   
+    padding: 20px 0 0 100px;
+}
+
+.Bitva_section.stats .stats__content .stats-title {
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 0 22px 0;
+}
+
+.Bitva_section.stats .stats__content .stats-title .text {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 24px;
+    line-height: 32px;
+    color: #ffffff;
+}
+
+.Bitva_section.stats .stats__content .stats-title .icon {
+    display: inline-block;
+    vertical-align: top;
+    width: 6px;
+    height: 10px;
+    margin: 13px 0 0 9px;
+    position: relative;
+    background: url('../../assets/bitva/nav-title-stats.svg') 0 top no-repeat;
+}
+
+.Bitva_section.stats .stats__content .stats-title:hover .icon {
+    margin: 13px 0 0 12px;
+    background: url('../../assets/bitva/nav-title-stats.svg') 0 bottom no-repeat;
+}
+
+.Bitva_section.stats .stats__content .stats__content-top {
+    width: 940px;
+    height: 250px;
+    position: relative;
+    margin: 0 0 0 -65px;
+    background: url('../../assets/bitva/stats-page-top.png') 0 0 no-repeat;
+    background-size: 940px 168px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.Bitva_section.stats .stats__content .stats__content-top .peter,
+.Bitva_section.stats .stats__content .stats__content-top .michael {
+    position: absolute;
+    z-index: 2;
+    top: 168px;
+    left: 39px;
+    width: 200px;
+}
+
+.Bitva_section.stats .stats__content .stats__content-top .peter .name,
+.Bitva_section.stats .stats__content .stats__content-top .michael .name {
+    font-family: "museo_sans_cyrl", "Helvetica Neue", Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 15px;
+    line-height: 24px;
+    color: #ffffff;
+}
+
+.Bitva_section.stats .stats__content .stats__content-top .peter .number,
+.Bitva_section.stats .stats__content .stats__content-top .michael .number {
+    font-size: 12px;
+    line-height: 16px;
+    margin: 4px 0 0 0;
+}
+
+.Bitva_section.stats .stats__content .stats__content-top .michael {
+    left: auto;
+    right: 26px;
+}
+
+.Bitva_section.stats .stats__content .stats__content-top .counter {
+    padding: 0 0 0 20px;
+}
+
+.Bitva_section.stats .stats__content .stats__content-top .counter .title {
+    letter-spacing: 0.1em;
+    padding: 35px 0 0 0;
+}
+
+.Bitva_section.stats .stats__content .stats__content-top .counter .number {
+    display: inline-block;
+    vertical-align: top;
+    font-family: "museo_sans_cyrl", "Helvetica Neue", Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 62px;
+    line-height: 80px;
+    color: #54ff00;
+    position: absolute;
+    z-index: 2;
+    top: 64px;
+    right: 478px;
+    text-align: right;
+}
+
+.Bitva_section.stats .stats__content .stats__content-top .counter .number.second {
+    right: auto;
+    left: 505px;
+    text-align: left;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live {
+    overflow: hidden;
+    margin: 0 0 50px 0;
+     width: 900px;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .video {
+    width: 539px;
+    float: left;
+    margin: 0 31px 0 0;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text {
+    float: left;
+    width: 254px;
+}
+
+.video iframe {
+    border:0 none;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .top {
+    font-family: "museo_sans_cyrl", "Helvetica Neue", Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 10px;
+    line-height: 16px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #9f9f9f;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .title {
+    font-size: 22px;
+    line-height: 29px;
+    margin: 7px 0 0 0;
+    color: #ffffff;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .vote {
+    margin: 10px 0 0 0;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .vote .vote__title {
+    font-size: 15px;
+    line-height: 22px;
+    color: #838989;
+    margin: 0 0 10px 0;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .vote .vote__item {
+    display: inline-block;
+    vertical-align: top;
+    width: 117px;
+    margin: 0 15px 0 0;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .vote .vote__item .vote__item-button {
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 4px;
+    -ms-transition: opacity 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    -o-transition: opacity 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    -moz-transition: opacity 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    -webkit-transition: opacity 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: opacity 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    font-family: "museo_sans_cyrl", "Helvetica Neue", Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 13px;
+    line-height: 13px;
+    width: 117px;
+    padding: 10px 0 10px 0;
+    border: none;
+    text-align: center;
+    background: #54ff00;
+    cursor: pointer;
+    margin: 0 0 10px 0;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .vote .vote__item .vote__item-button:hover {
+    opacity: 0.8;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .vote .vote__item .vote__item-likes {
+    font-size: 12px;
+    line-height: 20px;
+    display: inline-block;
+    vertical-align: top;
+    color: #54ff00;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .vote .vote__item .vote__item-likes:before {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: top;
+    margin: 2px 5px 0 0;
+    content: "";
+    background: url('../../assets/bitva/like-icon-green.png') 0 0 no-repeat;
+    background-size: 14px 14px;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .vote .vote__item:last-child {
+    margin: 0;
+}
+
+.Bitva_section.stats .stats__content .stats__content-live .text .description {
+    font-size: 12px;
+    line-height: 20px;
+    color: #626565;
+    margin: 22px 0 0 0;
+}
+
+.Bitva_section.stats .stats__widget {
+    -ms-transition: top 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    -o-transition: top 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    -moz-transition: top 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    -webkit-transition: top 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: top 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    position: absolute;
+    z-index: 2;
+    width: 150px;
+    top: 40px;
+    right: 80px;
+}
+
+.Bitva_section.stats .stats__widget .stats__widget-item {
+    width: 150px;
+    height: 80px;
+    margin: 0 0 22px 0;
+    display: block;
+    text-align: center;
+}
+
+.Bitva_section.stats .stats__widget .stats__widget-item .number {
+    font-family: "museo_sans_cyrl", "Helvetica Neue", Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 0.4em;
+    color: #ffffff;
+    margin: 0 0 10px 0;
+}
+
+.Bitva_section.stats .stats__widget .stats__widget-item .description {
+    -ms-transition: color 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    -o-transition: color 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    -moz-transition: color 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    -webkit-transition: color 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition: color 600ms cubic-bezier(0.215, 0.61, 0.355, 1);
+    font-size: 13px;
+    line-height: 18px;
+    color: #767676;
+}
+
+.Bitva_section.stats .stats__widget .stats__widget-item:hover .description {
+    color: #ffffff;
+}
