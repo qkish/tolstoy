@@ -37,8 +37,8 @@ export const FRACTION_DIGITS_MARKET = 3 // accurate amount of deciaml digits (ex
 
 // meta info
 export const TWITTER_HANDLE = '@molodost_bz'
-export const SHARE_IMAGE = 'https://golos.io/images/golos-share.png'
-export const TWITTER_SHARE_IMAGE = 'https://golos.io/images/golos-twshare.png'
+export const SHARE_IMAGE = 'http://molodost.bz/thumb/960_328_2/img/bbm/bitva_bm.jpg'
+export const TWITTER_SHARE_IMAGE = 'http://molodost.bz/thumb/960_328_2/img/bbm/bitva_bm.jpg'
 export const SITE_DESCRIPTION = 'Платформа БМ для достижения финансового результата в автоматическом режиме.'
 
 // various
