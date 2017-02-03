@@ -64,6 +64,59 @@
   display: none;
 }
 
+.ReplyEditorShort__buttons-add {
+  width: 128px;
+  height: 37px;
+  border: 1px solid #e1e3e4;
+  border-radius: 3px;
+  float: left;
+  background-color: #fff;  
+  
+}
+
+.ReplyEditorShort__buttons-submit {
+  float: left;
+}
+
+.ReplyEditorShort__buttons-add ul, .ReplyEditorShort__buttons-add ul li {
+  list-style: none;
+  padding:0;
+  margin:0;
+}
+.ReplyEditorShort__buttons-add ul li {
+  float: left;
+  width: 42px;
+}
+.ReplyEditorShort__buttons-add-image {
+  float: left;
+  width: 42px;
+  height: 35px;
+  background: url('../../assets/images/addbuttons.png') left top no-repeat;
+  background-size: 126px 18px;
+  background-position: 13px 8px;
+  
+}
+.ReplyEditorShort__buttons-add-image:hover, .ReplyEditorShort__buttons-add-video:hover,.ReplyEditorShort__buttons-add-file:hover {
+  background-color: #f6f6f6;
+}
+.ReplyEditorShort__buttons-add-video {
+  float: left;
+  width: 42px;
+  height: 35px;
+  background: url('../../assets/images/addbuttons.png') left top no-repeat;
+  background-size: 126px 18px;
+  background-position: -42px 8px;
+}
+.ReplyEditorShort__buttons-add-file {
+  float: left;
+  width: 42px;
+  height: 35px;
+  background: url('../../assets/images/addbuttons.png') left top no-repeat;
+  background-size: 126px 18px;
+   background-position: -97px 8px;
+  
+}
+
 .ReplyEditorShort__body {
 
  

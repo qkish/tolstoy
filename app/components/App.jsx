@@ -72,7 +72,7 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
 
             window.fbAsyncInit = function() {
               FB.init({
-                appId      : '150154408771266',
+                appId      : '1064201830355991',
                 xfbml      : true,
                 version    : 'v2.8'
               });

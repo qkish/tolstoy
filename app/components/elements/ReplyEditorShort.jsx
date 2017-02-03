@@ -471,12 +471,22 @@ class ReplyEditor extends React.Component {
                         <div className={vframe_section_shrink_class}>
                             {postError && <div className="error">{translateError(postError)}</div>}
                         </div>
+
+
                         <div className={(vframe_section_shrink_class) + " " + (btnSubmit)}>
-                            {!loading && <button type="submit" className={"button " + (btnSubmit)} disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
+                            {!loading && <button type="submit" className={"button ReplyEditorShort__buttons-submit " + (btnSubmit)} disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
+                                <button type="button" className="secondary hollow button no-border ReplyEditorShort__buttons-submit " tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
                             }
+
+                            <div className="ReplyEditorShort__buttons-add">
+                            <ul>
+                                <li><a href="#" className="ReplyEditorShort__buttons-add-image"></a></li>
+                                <li><a href="#" className="ReplyEditorShort__buttons-add-video"></a></li>
+                                <li><a href="#" className="ReplyEditorShort__buttons-add-file"></a></li>
+                            </ul>
+                            </div>
 
                             {isStory && !isEdit && <div className="float-right">
 
