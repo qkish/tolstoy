@@ -251,6 +251,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                     let newname, account;
                     while (true) {
                         newname = 'bm-' + username.split('@')[0].replace('_', '');
+                        newname = newname.substring(0, 14)
                         //Генерируем имя алгоритмом на сервере
                         account = yield call(getAccount, newname);
                         if(!account) break;
