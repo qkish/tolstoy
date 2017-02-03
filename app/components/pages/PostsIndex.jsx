@@ -153,10 +153,10 @@ class PostsIndex extends React.Component {
                     topic_original_link = (route.params[1])
                     // Overwrite default created for more human readable title
                     if (route.params[0] === "created") {
-                        page_title = translate('new_topic_posts', {topic});
+                        page_title = translate('created_posts');
                     }
                     else {
-                        page_title = translate('sort_order_topic_posts', {sort_order, topic});
+                        page_title = translate('sort_order_topic_posts', {sort_order});
                     }
                 } else {
                     if (route.params[0] === "created") {

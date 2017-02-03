@@ -17,7 +17,7 @@ class Bitva extends React.Component {
                 <div className="peter">
                     <div className="name">Петр Осипов</div>
                     <div className="number">
-                        48 000 человек
+                        47 880 человек
                     </div>
                 </div>
 
@@ -25,17 +25,17 @@ class Bitva extends React.Component {
                     <div className="title">количество монет</div>
 
                     <div className="number">
-                        0
+                        2 273 710
                     </div>
                     <div className="number second">
-                        0
+                        2 554 990
                     </div>
                 </div>
 
                 <div className="michael">
                     <div className="name">Михаил Дашкиев</div>
                     <div className="number">
-                        50 000 человек
+                        53 157 человек
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@ class Bitva extends React.Component {
                         Как выбрать то, чем заниматься и сделать на этом первые деньги?
                     </div>
 
-                    <div className="vote">
+                    {/* <div className="vote">
                         <div className="vote__title">Проголосуйте за лучшего</div>
 
                         <div className="vote__item">
@@ -64,7 +64,7 @@ class Bitva extends React.Component {
                             <button className="vote__item-button">Матильда</button>
                             <div className="vote__item-likes">68 323</div>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="description">
                        <a href="http://bmtt.ru" target="_blank" className="Bitva__special">Спецпредложение на ЦЕХ</a>
@@ -88,13 +88,8 @@ class Bitva extends React.Component {
                     рейтинге
                 </div>
             </a>
-            <a className="stats__widget-item" href="">
-                <div className="number">17</div>
-                <div className="description">
-                    Вы в рейтинге<br/>
-                    сегодняшнего дня
-                </div>
-            </a>
+            
+            
         </div>
     </div>
 

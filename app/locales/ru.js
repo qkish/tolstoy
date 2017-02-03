@@ -585,7 +585,7 @@ const ru = {
 	create_a_post: 'Написать пост',
 	create_account: 'Создать аккаунт',
 	new_topic_posts: 'Новые "{topic}" посты',
-	sort_order_topic_posts: '{sort_order} "{topic}" посты',
+	sort_order_topic_posts: '{sort_order} посты',
 	new_posts: 'Новые посты',
 	sort_order_posts: '{sort_order} посты',
 	people_following_user_name: 'Подписчики {user_name}',
@@ -653,6 +653,13 @@ const ru = {
 
     undefined: 'Не задана',
     pay_me_100_in_VESTING_TOKEN: 'Pay 100 vesting',
+
+    created_posts: 'Новые отчеты',
+    trending_posts: 'Лучшие отчеты',
+    hot_posts: 'Актуальные отчеты',
+    active_posts: 'Обсуждаемые отчеты',
+    tasks_1: 'Задания',
+    bitva: 'Рейтинги',
 
 }
 

@@ -568,7 +568,7 @@ const en = 	{
   create_a_post: 'Create a Post',
   create_account: `Create Account`,
   new_topic_posts: 'New {topic} posts',
-  sort_order_topic_posts: '{sort_order} {topic} posts',
+  sort_order_topic_posts: '{sort_order} posts',
   new_posts: `New posts`,
   sort_order_posts: '{sort_order} posts',
   people_following_user_name: 'People following {user_name}',
@@ -589,7 +589,8 @@ const en = 	{
     leverage: 'Leverage',
 
     undefined: 'Unset',
-
+    tasks_1: 'Tasks',
+    bitva: 'Ratings',
 
 
 }

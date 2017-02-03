@@ -92,6 +92,7 @@ class Header extends React.Component {
 
         let bmOpen = '';
         let bmTasks = '';
+        let bmBitva = '';
 
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0] ? translate(route.params[0]) : '';
@@ -111,7 +112,8 @@ class Header extends React.Component {
                     
                   
 
-                    if (route.params[1] === "bm-tasks") bmTasks = 'active_tab';
+                    if (route.params[1] === "bm-tasks") {
+                        bmTasks = 'active_tab';}
 
 
                     // Overwrite default created for more human readable title
@@ -120,7 +122,7 @@ class Header extends React.Component {
 
                     }
                     else {
-                        page_title = translate('sort_order_topic_posts', {sort_order, topic});
+                        page_title = translate('sort_order_topic_posts', {sort_order});
                     }
                 } else {
                     if (route.params[0] === "created") {
@@ -136,7 +138,12 @@ class Header extends React.Component {
             topic = route.params[0];
         } else if (route.page == 'SubmitPost') {
             page_title = translate('create_a_post');
-        } else if (route.page == 'Privacy') {
+        
+        } else if (route.page == 'Bitva') {
+            page_title = translate('bitva');
+            bmBitva = 'active_tab';
+        } 
+        else if (route.page == 'Privacy') {
             page_title = translate('privacy_policy');
         } else if (route.page == 'Tos') {
             page_title = translate('terms_of_service');
@@ -149,6 +156,7 @@ class Header extends React.Component {
         } else if (route.page == 'TaskProfile') {
 
             if (route.params[0] === POLK_OSIPOV) bmTasks = 'active_tab';
+             page_title = translate('tasks_1');
 
         } else if (route.page == 'TaskProfile2') {
 
@@ -263,7 +271,7 @@ class Header extends React.Component {
                                 <li className={'Header__toplinks ' + bmTasks}>
                                     <Link to={Osipov}>Задания</Link>
                                 </li>
-                              {/* <li className={'Header__toplinks '}>
+                        {/*<li className={'Header__toplinks ' + bmBitva}>
                                     <Link to='/bitva'>Рейтинги</Link>
                                 </li> */}
                               
