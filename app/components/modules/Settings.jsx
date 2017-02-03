@@ -235,15 +235,15 @@ class Settings extends React.Component {
                         <input type="text" onChange={this.handleUserCityChange} value={state.city} placeholder={translate('city')} />
                     </label>
                     <label>
-                        <span>{translate('age')}</span>
-                        <input type="text" onChange={this.handleUserAgeChange} value={state.age} placeholder={translate('age')}/>
+                        <span>{translate('birth_date')}</span>
+                        <input type="text" onChange={this.handleUserAgeChange} value={state.age} placeholder={translate('birth_date')}/>
                     </label>
                     <label>
                         <span>{translate('occupation')}</span>
                         <textarea onChange={this.handleUserOccupationChange} value={state.occupation} placeholder={translate('occupation')}></textarea>
                     </label>
 
-                  
+
 
                     <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                         <input type="submit" className="button" value={translate('save')} />

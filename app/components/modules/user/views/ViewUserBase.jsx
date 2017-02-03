@@ -1,5 +1,6 @@
 import React, {Component, PropsTypes} from 'react';
 import {numberWithCommas, vestingSteem} from 'app/utils/StateFunctions';
+import parse from 'date-fns/parse';
 
 // -------------------------
 // Компонент отображает
@@ -40,6 +41,27 @@ class ViewUserBase extends Component {
     return txt;
     }
 
+    getAgeByBirthDate (birthDate) {
+        const date = parse(`${birthDate}T00:00Z`)
+        const ageDifMs = Date.now() - date.getTime()
+        const ageDate = new Date(ageDifMs)
+        return Math.abs(ageDate.getUTCFullYear() - 1970)
+    }
+
+    getYearsOldString (age) {
+        if ((age % 100) >= 5 && (age % 100) <=20) {
+            return 'лет'
+        } else {
+            if ((age % 10) === 1) {
+                return 'год'
+            }
+            if ((age % 10) >= 2 && (age % 10) <= 4) {
+                return 'года'
+            }
+            return 'лет'
+        }
+        return 'лет'
+    }
 
     InstaCorrect(text) {
 
@@ -100,6 +122,7 @@ class ViewUserBase extends Component {
 
         let yearsCorrect;
         yearsCorrect = this.AgeCalc(age);
+        const yearsOld = this.getAgeByBirthDate(age)
 
 
 
@@ -134,7 +157,7 @@ class ViewUserBase extends Component {
 
         let ageWithCity = '';
         if (age) {
-          ageWithCity += `${age} ${yearsCorrect}`
+          ageWithCity += `${yearsOld} ${this.getYearsOldString(yearsOld)}`
         }
         if (city) {
           ageWithCity += `, ${city}`

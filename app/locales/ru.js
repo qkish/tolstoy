@@ -603,6 +603,7 @@ const ru = {
     first_name: 'Имя',
     last_name: 'Фамилия',
     age: 'Возраст',
+    birth_date: 'Дата рождения',
     city: 'Город',
     occupation: 'Ниша',
     user_target_info: 'Бизнес цель',
