@@ -12,10 +12,14 @@
       "protocol": "http",
       "host": "localhost:3002"
     },
-
+     "vk": {
+      "client_id" : "5807072",
+      "redirect_uri" : "http://localhost:3002/handle_vk_callback",
+      "display": "popup"
+    },
     "facebook": {
-      "key": "",
-      "secret": "",
+      "key": "1064201830355991",
+      "secret": "9f2826485722adf0d67f8f9d9d28ce27",
       "callback": "/handle_facebook_callback",
       "scope": [
         "email",
@@ -34,28 +38,28 @@
   },
   "helmet": {},
   "registrar": {
-    "account": "qkish",
-    "signing_key": "5JRZkwjNad3Ln7vqT3ZyzEdiG3ZS8fz38WwzAYp8jd1tzJtoa52",
+    "account": "bm2",
+    "signing_key": "5JaqVXHYjm7JqCNAfRgj6ch79NqDdM4LE5vzwUMbDXV6bd57AiK",
     "fee": "5.000 GOLOS"
   },
   "requestAccountRecovery": {
     "signing_key": "5J.....",
     "recovery_account": "cyberfounder"
   },
-  "ws_connection_client": "wss://ws.golos.io",
+  "ws_connection_client": "ws://95.85.35.245:8090",
   "ws_connection_server": [
-    "wss://ws.golos.io"
+    "ws://95.85.35.245:8090"
   ],
   "sendgrid": {
-    "key": "SG.xxx_yyyy",
+    "key": "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",
     "from": "noreply@example.com",
     "templates": {
-      "confirm_email": "some_template_id"
+      "confirm_email": "8cc83f87-a5bf-4e3d-bc3c-f71eaf9ea6b3"
     }
   },
   "recaptcha": {
-    "site_key": "",
-    "secret_key": ""
+    "site_key": "6LcRmRAUAAAAAJ31AOfcbaPzqglFrmhCACkg-hO6",
+    "secret_key": "6LcRmRAUAAAAABL_zkvF94u34sv84HvcJZDcVsCE"
   },
   "img_proxy_prefix": "",
   "ipfs_prefix": "",
@@ -63,5 +67,6 @@
   "disable_signups": false,
   "read_only_mode": false,
   "uploadImage": "https://...",
-    "secret_key": "mZO6lInYf4yYFY4nRX7apUZgvAG96B1U0CTJ7WbZv1I"
+  "secret_key": "mZO6lInYf4yYFY4nRX7apUZgvAG96B1U0CTJ7WbZv1I"
+
 }

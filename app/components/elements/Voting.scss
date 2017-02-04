@@ -55,6 +55,14 @@
   margin-top: 3px;
 }
 
+.Voting__points-total {
+  
+  color: #9da5ab;
+  font-weight: 500;
+   font: 12px/15px 'museo_sans_cyrl', Arial, sans-serif;
+   margin-top: 5px;
+}
+
 .Voting__button--upvoted .Voting__upvote_ico{
 background-position: 0 -110px;
 }
@@ -63,6 +71,7 @@ background-position: 0 -110px;
   background-position: 0 -55px;
   text-decoration: none;
   color: #7f8991;
+  
 }
 .Voting__inner:hover a, .Voting__inner:focus a, .Voting__inner:active a {
   text-decoration: none;

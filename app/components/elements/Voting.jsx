@@ -163,10 +163,20 @@ class Voting extends React.Component {
 
         const {pending_payout, total_author_payout, total_curator_payout, cashout_time, promoted} = this.props;
         let payout = pending_payout + total_author_payout + total_curator_payout;
+
+
+
+        
+
         if (payout < 0.0) payout = 0.0;
 
         const up = <div className={votingUpActive ? 'Voting__upvote_ico' : 'Voting__upvote_ico'}>{translate('like')}</div>;
         const classUp = 'Voting__button Voting__button-up' + (myVote > 0 ? ' Voting__button--upvoted' : '') + (votingUpActive ? ' votingUp' : '');
+
+
+        let  postSila = payout;
+
+       
 
         const payoutItems = [
 
@@ -182,16 +192,34 @@ class Voting extends React.Component {
             payoutItems.push({value: translate('past_payouts') + ' ' + localizedCurrency(formatDecimal(total_author_payout + total_curator_payout).join(''))});
             payoutItems.push({value: ' - ' + translate('authors') + ': ' + localizedCurrency(formatDecimal(total_author_payout).join(''))});
             payoutItems.push({value: ' - ' + translate('curators') + ': ' + localizedCurrency(formatDecimal(total_curator_payout).join(''))});
+            
+           
+    
+            //let postSila = localizedCurrency(formatDecimal(total_author_payout + total_curator_payout).join(''));
         }
-       //const payoutEl = <DropdownMenu el="div" items={payoutItems} onClick={this.trackAnalytics.bind(this, 'rewards dropdown clicked')}>
-         //   <span>
-             //  {/* <FormattedAsset amount={payout} asset="$" /> */}
-             //  {/* TODO check FormattedAsset and it's possible replacememnt with LocalizedCurrency */}
-          //   <LocalizedCurrency amount={payout} />
+
+       
+        postSila = localizedCurrency(postSila, 0);
+        postSila = postSila.split(',');
+        postSila = postSila[0];
+
+
+     // const payoutEl = <DropdownMenu el="div" items={payoutItems} onClick={this.trackAnalytics.bind(this, 'rewards dropdown clicked')}>
+       //     <span>
+           //    {/* <FormattedAsset amount={payout} asset="$" /> */}
+           //    {/* TODO check FormattedAsset and it's possible replacememnt with LocalizedCurrency */}
+         //   <LocalizedCurrency amount={payout} />
                
-          //</span>
+         // </span>
         //</DropdownMenu>;
-        const payoutEl = <LocalizedCurrency amount={payout} />
+
+       
+
+        
+
+
+       
+        const payoutEl = <div className="Voting__points-total">{postSila}</div>
 
         const avotes = active_votes.toJS();
         avotes.sort((a, b) => Math.abs(parseInt(a.rshares)) > Math.abs(parseInt(b.rshares)) ? -1 : 1)
@@ -212,6 +240,7 @@ class Voting extends React.Component {
         }
 
         let voteUpClick = this.voteUp;
+
         let dropdown = null;
         if (myVote <= 0 && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
             voteUpClick = this.toggleWeightUp;
