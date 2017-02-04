@@ -1,5 +1,11 @@
 .VerticalMenu {
 
+   background: #fff;
+  border: 1px solid #e1e3e4;
+  -webkit-box-shadow: 0px 6px 6px 0px rgba(42,51,69,0.16);
+  -moz-box-shadow: 0px 6px 6px 0px rgba(42,51,69,0.16);
+  box-shadow: 0px 6px 6px 0px rgba(42,51,69,0.16);
+
   width: 200px;
   list-style: none;
   margin: 0;
@@ -49,10 +55,7 @@
 
 
 .dropdown-pane {
-  background: #fff;
-  border: 1px solid #e1e3e4;
-  -webkit-box-shadow: 0px 6px 6px 0px rgba(42,51,69,0.16);
-  -moz-box-shadow: 0px 6px 6px 0px rgba(42,51,69,0.16);
-  box-shadow: 0px 6px 6px 0px rgba(42,51,69,0.16);
+ border:0;
+ box-shadow: 0 none;
   
   }

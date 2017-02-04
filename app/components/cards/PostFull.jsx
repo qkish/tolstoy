@@ -263,7 +263,7 @@ class PostFull extends React.Component {
                 <div className="float-right"><Voting post={post} flag /></div>
                 <div className="PostFull__header">
                     {post_header}
-                    <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} showTags />
+                    <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10}  />
                 </div>
                 {showEdit ?
                     renderedEditor :
@@ -275,19 +275,15 @@ class PostFull extends React.Component {
                 {/* {username && firstPayout && rootComment && <div className="float-right">
                     <button className="button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>
                 </div>} */}
-                <TagList post={content} horizontal />
+              
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
-                        <TimeAuthorCategory content={content} authorRepLog10={authorRepLog10} />
+                        
                         <Voting post={post} />
                     </div>
-                    <div className="column shrink">
+                    <div className="column shrink PostFull_Footer-rightblock">
                             {!archived && <Reblog author={author} permlink={permlink} />}
-                            <span className="PostFull__responses">
-                                <Link to={link} title={translate('response_count', {responseCount: content.children})}>
-                                    <Icon name="chatboxes" className="space-right" />{content.children}
-                                </Link>
-                            </span>
+                            
                             <span className="PostFull__reply">
                                 {!$STM_Config.read_only_mode && (content.category !== 'bm-tasks') && <a onClick={onShowReply}>{translate('reply')}</a>}
                                 {showEditOption && !showEdit && <span>
@@ -299,7 +295,16 @@ class PostFull extends React.Component {
                                     <a onClick={onDeletePost}>{translate('delete')}</a>
                                 </span>}
                             </span>
-                            <FoundationDropdownMenu menu={share_menu} onClick={this.trackAnalytics.bind(this, '"share" dropdown menu clicked')} icon="share" label={translate('share')} dropdownPosition="bottom" dropdownAlignment="right" />
+                            {/* <FoundationDropdownMenu menu={share_menu} onClick={this.trackAnalytics.bind(this, '"share" dropdown menu clicked')} icon="share" label={translate('share')} dropdownPosition="bottom" dropdownAlignment="right" />*/}
+
+                            <div className="PostFull__Share">
+                            <span>Поделиться:</span>
+                            <a {...share_menu[0]} className="PostFull__share-vk"></a>
+                            <a {...share_menu[1]} className="PostFull__share-fb"></a>
+                            <a {...share_menu[2]} className="PostFull__share-tw"></a>
+
+
+                            </div>
                     </div>
                 </div>
                 <div className="row">

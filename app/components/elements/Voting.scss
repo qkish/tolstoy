@@ -61,6 +61,8 @@
   font-weight: 500;
    font: 12px/15px 'museo_sans_cyrl', Arial, sans-serif;
    margin-top: 5px;
+   float: left;
+   display: block;
 }
 
 .Voting__button--upvoted .Voting__upvote_ico{
@@ -167,7 +169,7 @@ background-position: 0 -110px;
 .Voting .DropdownMenu {
   display: block;
   float: left;
-  margin-top:3px;
+  margin-top:6px;
 }
 .DropdownMenu.Voting__voters_list ul {
   li > a {
@@ -185,7 +187,7 @@ background-position: 0 -110px;
 .Voting__inner {
 
   padding-right: 5px;
-  margin-right: 1rem;
+
   position: relative;
   .cancel {
     font-size: 80%;

@@ -1,8 +1,9 @@
 .PostFull {
-  padding-bottom: 1rem;
+  padding: 20px;
   margin: 0 auto;
   max-width: 50rem;
   border-bottom: 1px solid $light-gray;
+  background: #fff;
 
   .TimeAgo {
     color: $dark-gray;
@@ -29,7 +30,7 @@
     overflow: hidden;
   }
   > h1 {
-    font: 700 200% "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Arial, sans-serif;
+    font: 700 26px 'museo_sans_cyrl', Arial, sans-serif;
   }
   a {
     color: $dark-gray;
@@ -49,11 +50,9 @@
 
 .PostFull__body {
   padding: 1rem 0 2rem 0;
+  font: 500 15px/25px 'museo_sans_cyrl', Arial, sans-serif;
   clear: left;
 
-  font-family: Georgia, serif;
-  font-size: 120%;
-  line-height: 150%;
 
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -66,7 +65,8 @@
 
   p {
     font-size: 100%;
-    line-height: 150%;
+    line-height: 175%;
+ 
   }
 
   img {
@@ -82,8 +82,55 @@
   }
 }
 
+.PostFull__Share {
+  float: left;
+}
+.PostFull__share-vk {
+  width: 32px;
+  height: 32px;
+  background: url('../../assets/images/sharebtns.png') no-repeat;
+  background-size: 107px 16px;
+  background-position: 5px 5px;
+  float: left;
+  margin-top: -3px;
+
+}
+.PostFull__share-fb {
+  width: 32px;
+  height: 32px;
+  background: url('../../assets/images/sharebtns.png') no-repeat;
+  background-size: 107px 16px;
+  background-position: -40px 5px;
+  float: left;
+  margin-left: 5px;
+  margin-top: -3px;
+
+}
+.PostFull__share-tw {
+  width: 32px;
+  height: 32px;
+  background: url('../../assets/images/sharebtns.png') no-repeat;
+  background-size: 107px 16px;
+  background-position: -86px 5px;
+  float: left;
+    margin-left: 5px;
+    margin-top: -3px;
+}
+.PostFull__Share > span {
+  float: left;
+  width: 77px;
+  margin-left: 10px;
+  margin-top:5px;
+  font-size: 12px;
+  color: #9da5ab;
+}
+.PostFull_Footer-rightblock {
+  margin-top: 10px;
+}
 .PostFull__footer {
   clear: right;
+  margin-top: 5px;
+  
 
   font-size: 94%;
   svg path, svg polygon {
@@ -107,25 +154,36 @@
   }
   span {
     white-space: normal;
+    float: left;
+    margin-top: -1px;
+    
   }
 
   .Reblog__button {
     padding-right: 1rem;
     margin-right: 1rem;
-    border-right: 1px solid $medium-gray;
+
   }
 }
 
 .PostFull__responses {
   padding-right: 1rem;
   margin-right: 1rem;
-  border-right: 1px solid $medium-gray;
+
+}
+
+.PostFull__responses {
+  .Voting {
+    .Voting__upvote_ico {
+  margin-top: 2px;
+    }
+  }
 }
 
 .PostFull__reply {
   padding-right: 1rem;
   margin-right: 1rem;
-  border-right: 1px solid $medium-gray;
+
 }
 
 .PostFull__lifetime {

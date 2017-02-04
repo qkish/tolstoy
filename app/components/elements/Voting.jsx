@@ -236,7 +236,7 @@ class Voting extends React.Component {
 
         let voters_list = null;
         if (showList) {
-            voters_list = <DropdownMenu selected={translate('vote_count', {voteCount: count})} onClick={this.trackAnalytics.bind(this, 'votes dropdown clicked')} className="Voting__voters_list" items={voters} el="div" />;
+            voters_list = <DropdownMenu  onClick={this.trackAnalytics.bind(this, 'votes dropdown clicked')} className="Voting__voters_list" items={voters} el="div" />;
         }
 
         let voteUpClick = this.voteUp;
