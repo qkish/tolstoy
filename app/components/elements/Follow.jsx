@@ -63,10 +63,10 @@ export default class Follow extends React.Component {
         const cnActive = 'button'
         const cnInactive = cnActive + '  secondary'
         return <span>
-            {showFollow && !existingFollows.has(what) && <label className={cnInactive} onClick={this.follow}>{translate('follow')}</label>}
-            {showFollow && existingFollows.has(what) && <label className={cnInactive} onClick={this.unfollow}>{translate('unfollow')}</label>}
-            {showMute && !existingFollows.has('ignore') && <label className={cnInactive} onClick={this.ignore}>{translate('mute')}</label>}
-            {showMute && existingFollows.has('ignore') && <label className={cnInactive} onClick={this.unignore}>{translate('unmute')}</label>}
+            {showFollow && !existingFollows.has(what) && <label className={cnInactive + ' UserProfile__followbtn'} onClick={this.follow}>{translate('follow')}</label>}
+            {showFollow && existingFollows.has(what) && <label className={cnInactive + ' UserProfile__followbtn'} onClick={this.unfollow}>{translate('unfollow')}</label>}
+            {showMute && !existingFollows.has('ignore') && <label className={cnInactive + ' UserProfile__followbtn'} onClick={this.ignore}>{translate('mute')}</label>}
+            {showMute && existingFollows.has('ignore') && <label className={cnInactive + ' UserProfile__followbtn'} onClick={this.unignore}>{translate('unmute')}</label>}
             {children && <span>&nbsp;&nbsp;{children}</span>}
         </span>
     }

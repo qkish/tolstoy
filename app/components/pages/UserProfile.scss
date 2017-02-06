@@ -1,6 +1,102 @@
 .UserProfile .PostsList{
  margin-left: 10px;
 }
+.UserProfile__subscribers {
+  padding-bottom: 12px !important;
+}
+
+.UserProfile__followbtn {
+  
+padding: 10px;
+background-color: #196aff !important;
+color: #fff;
+margin-right: 10px;
+float: right;
+}
+.UserProfile__listInner {
+  padding: 0;
+  margin: 0 0 15px 10px;
+  background-color: #fff;
+  clear: left;
+  border: 1px solid #e1e3e4;
+  border-radius: 3px;
+  @include clearfix;
+  width: 560px;
+  
+  .row > .column > h3 {
+    padding: 15px;
+    font-size: 21px;
+    margin-bottom:0;
+  }
+  .row > .column > table {
+    border: 0 none;
+    border-top: 1px solid #e1e3e4;
+  }
+  .row > .column > table > tbody {
+    border: 0 none;
+  }
+  .row > .column > table > tbody > tr > td {
+    background: #fff;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1px solid #e1e3e4;
+    padding: 15px;
+    
+  }
+  .Author__name a {
+    color: #1f1f1f;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .Author__name a:hover, .Author__name a:focus {
+    color: #1f1f1f;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    
+  }
+
+ 
+
+  .UserProfile__followers-niche > div {
+    color: #7d7d7d;
+    font-size: 12px;
+    text-decoration: none;
+  }
+  .UserProfile__followers-niche > div:hover, .UserProfile__followers-niche > div:focus {
+    text-decoration: none;
+  }
+  ul.pager {
+    padding: 0 15px;
+    margin: 0;
+  }
+  .pager {
+    margin: 0;
+  }
+}
+
+.UserProfile__banner a.UserProfile__followerslink, .UserProfile__banner a.UserProfile__followerslink:hover, .UserProfile__banner a.UserProfile__followerslink:focus {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #3f3f3f;
+    font-weight: 700;
+    margin-top: 10px;
+     cursor: pointer;
+     text-decoration: none;
+  }
+.UserProfile__banner a.UserProfile__followedlink, .UserProfile__banner a.UserProfile__followedlink:hover, .UserProfile__banner a.UserProfile__followedlink:focus {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #9f9f9f;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-right: 22px;
+    cursor: pointer;
+     text-decoration: none;
+  }
 
 .UserProfile__top-nav {
   background-color: #333333;

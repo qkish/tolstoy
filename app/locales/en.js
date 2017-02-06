@@ -592,6 +592,10 @@ const en = 	{
     tasks_1: 'Tasks',
     bitva: 'Ratings',
 
+    followers: 'Followers',
+    follow:'Follow',
+    followed: 'Following',
+
 
 }
 

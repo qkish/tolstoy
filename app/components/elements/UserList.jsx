@@ -2,8 +2,9 @@
 import React from 'react';
 import UserListRow from 'app/components/cards/UserListRow';
 import { translate } from 'app/Translator';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 
-const PER_PAGE = 50;
+const PER_PAGE = 25;
 
 class UserList extends React.Component {
 
@@ -60,18 +61,20 @@ class UserList extends React.Component {
              </nav>
         );
 
-        return (<div className="UserList">
+        return (<div className="UserProfile__listInner">
             <div className="row">
-                <div className="column small-12">
+                {process.env.BROWSER ?
+                <div className="column small-12 ">
                     <h3>{title}</h3>
-                    {navButtons}
+                  
                     <table>
                         <tbody>
                             {user_list}
                         </tbody>
                     </table>
                     {navButtons}
-                </div>
+                </div> :
+                <LoadingIndicator type="circle" inline />}
             </div>
         </div>);
     }
