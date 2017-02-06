@@ -487,6 +487,7 @@ class ReplyEditor extends React.Component {
                                 <li>
                                     <Upload
                                         action='/api/v1/upload'
+                                        data={{ type: 'image' }}
                                         onStart={file => {
                                             const reader = new FileReader()
                                             reader.onloadend = () => {
@@ -513,7 +514,13 @@ class ReplyEditor extends React.Component {
                                     </Upload>
                                 </li>
                                 <li><a href="#" className="ReplyEditorShort__buttons-add-video"></a></li>
-                                <li><a href="#" className="ReplyEditorShort__buttons-add-file"></a></li>
+                                <li>
+                                    <Upload
+                                        action='/api/v1/upload'
+                                        data={{ type: 'attachment' }}>
+                                        <a href="#" className="ReplyEditorShort__buttons-add-file"></a>
+                                    </Upload>
+                                </li>
                             </ul>
                             </div>
 

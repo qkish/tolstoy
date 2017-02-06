@@ -728,6 +728,9 @@ export default function useGeneralApi(app) {
         if (rateLimitReq(this, this.req)) return;
         console.log('-- /upload -->', this.session.uid, this.session.user);
         try {
+            const data = this.request.body
+            const { fields: { type }} = this.request.body
+
             const { file }  = this.request.body.files
             const uploaded = yield cloudinary.uploader.upload(file.path)
             console.log('==== FINISH UPLOAD ==== ')
