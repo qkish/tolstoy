@@ -584,7 +584,7 @@ const ru = {
 	// page titles
 	create_a_post: 'Написать пост',
 	create_account: 'Создать аккаунт',
-	new_topic_posts: 'Новые "{topic}" посты',
+	new_topic_posts: 'Новые отчеты',
 	sort_order_topic_posts: '{sort_order} посты',
 	new_posts: 'Новые посты',
 	sort_order_posts: '{sort_order} посты',
@@ -660,6 +660,9 @@ const ru = {
     active_posts: 'Обсуждаемые отчеты',
     tasks_1: 'Задания',
     bitva: 'Рейтинги',
+    followers: 'Подписчики',
+    follow:'Подписки',
+    followed: 'Подписки',
 
 }
 

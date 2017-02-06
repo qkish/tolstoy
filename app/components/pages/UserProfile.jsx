@@ -12,6 +12,7 @@ import Settings from 'app/components/modules/Settings';
 import CurationRewards from 'app/components/modules/CurationRewards';
 import AuthorRewards from 'app/components/modules/AuthorRewards';
 import UserList from 'app/components/elements/UserList';
+import UserListEmpty from 'app/components/elements/UserListEmpty';
 import Follow from 'app/components/elements/Follow';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import PostsList from 'app/components/cards/PostsList';
@@ -29,6 +30,7 @@ import resolveRoute from 'app/ResolveRoute';
 import ViewUserBase from 'app/components/modules/user/views/ViewUserBase';
 import ViewUserTarget from 'app/components/modules/user/views/ViewUserTarget';
 import ViewUserMore from 'app/components/modules/user/views/ViewUserMore';
+import ViewUserSubscribers from 'app/components/modules/user/views/ViewUserSubscribers';
 // elements
 import Avatar from 'app/components/elements/Avatar';
 
@@ -155,15 +157,17 @@ export default class UserProfile extends React.Component {
                           title={translate('followers')}
                           account={account}
                           users={followers} />
-            }
+            } else  tab_content = <UserListEmpty
+                          title={translate('followers')} />
         }
         else if( section === 'followed' ) {
             if (following && following.has('result')) {
                 tab_content = <UserList
-                          title="Followed"
+                          title={translate('followed')}
                           account={account}
                           users={following} />
-            }
+            } else  tab_content = <UserListEmpty
+                          title={translate('followed')} />
         }
         else if( section === 'settings' ) {
             tab_content = <Settings routeParams={this.props.routeParams} />
@@ -337,8 +341,11 @@ export default class UserProfile extends React.Component {
 
                     <ViewUserTarget global={this.props.global} account={account} />
 
+                    <ViewUserSubscribers global={this.props.global} account={account} followers={followers} following={following}/>
+               
                     <ViewUserMore global={this.props.global} account={account} />
-                </div>
+
+                     </div>
 
                 {/* <div className="UserProfile__top-nav row expanded noPrint">
                     {top_menu}
@@ -353,7 +360,7 @@ export default class UserProfile extends React.Component {
                         {/*section_title && <h2 className="UserProfile__section-title">{section_title}</h2>*/}
 
                        {/* <HorizontalMenu items={sort_order_menu_horizontal} /> */}
-                        {tab_content}
+                      {process.env.BROWSER ? tab_content : <div className="UserProfile__listInner"><LoadingIndicator type="circle" inline /></div>}
                     </div>
                 </div>
             </div>

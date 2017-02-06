@@ -220,6 +220,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
           // const resp = yield call(serverApiLogin2, username, password)
         //const respStatus = 200;
 
+        console.log('ENTERED IF', resp);
+
         // Если пользователь найден в молодости и данные валидны,
         // тогда заменить имя и пароль на данные дя входа в golos.io
         if (resp.name && resp.private_key) {
