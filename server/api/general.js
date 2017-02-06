@@ -13,9 +13,16 @@ import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
 import isToday from 'date-fns/is_today';
+import cloudinary from 'cloudinary';
 
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
+
+cloudinary.config({
+  cloud_name: config.cloudinary.cloud_name,
+  api_key: config.cloudinary.api_key,
+  api_secret: config.cloudinary.api_secret
+});
 
 function dbStoreSingleMeta(name, k, v) {
     models.AccountMeta.findOne({
@@ -49,7 +56,7 @@ export default function useGeneralApi(app) {
         prefix: '/api/v1'
     });
     app.use(router.routes());
-    const koaBody = koa_body();
+    const koaBody = koa_body({multipart:true});
 
     router.post('/get_account_private_key', koaBody, function*() {
         if (rateLimitReq(this, this.req)) return;
@@ -534,7 +541,7 @@ export default function useGeneralApi(app) {
                 vk: getBMmeta.vkId,
                 website: getBMmeta.siteLink,
                 user_image: getBMmeta.avatar ? 'http://static.molodost.bz/thumb/160_160_2/img/avatars/' + getBMmeta.avatar : '',
-               
+
             }
 
 
@@ -715,6 +722,25 @@ export default function useGeneralApi(app) {
             osipov,
             dashkiev
         })
+    })
+
+    router.post('/upload', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return;
+        console.log('-- /upload -->', this.session.uid, this.session.user);
+        try {
+            const { file }  = this.request.body.files
+            const uploaded = yield cloudinary.uploader.upload(file.path)
+            console.log('==== FINISH UPLOAD ==== ')
+            this.body = JSON.stringify({
+                image: uploaded.url
+            })
+        } catch (error) {
+            console.error('Error in /upload api call', this.session.uid, error.toString());
+            this.body = JSON.stringify({
+                error: error.message
+            });
+            this.status = 500;
+        }
     })
 }
 

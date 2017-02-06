@@ -18,7 +18,8 @@ import Remarkable from 'remarkable'
 import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 import {vestingSteem} from 'app/utils/StateFunctions';
-import {updateMoney} from 'app/redux/UserActions'
+import {updateMoney} from 'app/redux/UserActions';
+import Upload from 'rc-upload'
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -442,7 +443,7 @@ class ReplyEditor extends React.Component {
 
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
-                            reply({ ...data, ...replyParams, loadingCallback })
+                            reply({ ...Object.assign({}, data, {body: `${this.state.uploadedImage || ''} ${data.body}`}), ...replyParams, loadingCallback })
                         })}
                         onChange={() => {this.setState({ postError: null })}}
                     >
@@ -482,7 +483,15 @@ class ReplyEditor extends React.Component {
 
                             <div className="ReplyEditorShort__buttons-add">
                             <ul>
-                                <li><a href="#" className="ReplyEditorShort__buttons-add-image"></a></li>
+                                <li>
+                                    <Upload
+                                        action='/api/v1/upload'
+                                        onStart={file => { console.log('start upload', file) }}
+                                        onError={err => { console.error(err) }}
+                                        onSuccess={res => { this.setState({ uploadedImage: res.image }) }}>
+                                            <a href="#" className="ReplyEditorShort__buttons-add-image"></a>
+                                    </Upload>
+                                </li>
                                 <li><a href="#" className="ReplyEditorShort__buttons-add-video"></a></li>
                                 <li><a href="#" className="ReplyEditorShort__buttons-add-file"></a></li>
                             </ul>
