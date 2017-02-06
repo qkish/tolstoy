@@ -20,6 +20,7 @@ import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters'
 import {vestingSteem} from 'app/utils/StateFunctions';
 import {updateMoney} from 'app/redux/UserActions';
 import Upload from 'rc-upload'
+import UploadImagePreview from 'app/components/elements/UploadImagePreview'
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -486,9 +487,28 @@ class ReplyEditor extends React.Component {
                                 <li>
                                     <Upload
                                         action='/api/v1/upload'
-                                        onStart={file => { console.log('start upload', file) }}
-                                        onError={err => { console.error(err) }}
-                                        onSuccess={res => { this.setState({ uploadedImage: res.image }) }}>
+                                        onStart={file => {
+                                            const reader = new FileReader()
+                                            reader.onloadend = () => {
+                                                this.setState({
+                                                    UploadImagePreviewPath: reader.result,
+                                                    uploading: true
+                                                })
+                                            }
+                                            reader.readAsDataURL(file)
+                                        }}
+                                        onError={err => {
+                                            console.error(err)
+                                            this.setState({
+                                                uploading: false
+                                            })
+                                        }}
+                                        onSuccess={res => {
+                                            this.setState({
+                                                uploadedImage: res.image,
+                                                uploading: false
+                                            })
+                                        }}>
                                             <a href="#" className="ReplyEditorShort__buttons-add-image"></a>
                                     </Upload>
                                 </li>
@@ -496,6 +516,10 @@ class ReplyEditor extends React.Component {
                                 <li><a href="#" className="ReplyEditorShort__buttons-add-file"></a></li>
                             </ul>
                             </div>
+
+                            <UploadImagePreview
+                                uploading={this.state.uploading}
+                                src={this.state.UploadImagePreviewPath} />
 
                             {isStory && !isEdit && <div className="float-right">
 
