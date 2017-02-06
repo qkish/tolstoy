@@ -524,10 +524,6 @@ class ReplyEditor extends React.Component {
                             </ul>
                             </div>
 
-                            <UploadImagePreview
-                                uploading={this.state.uploading}
-                                src={this.state.UploadImagePreviewPath} />
-
                             {isStory && !isEdit && <div className="float-right">
 
                                 <input type="hidden" onChange={this.toggleAllSteemPower} checked={allSteemPower} />
