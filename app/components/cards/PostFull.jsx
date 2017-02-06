@@ -197,10 +197,10 @@ class PostFull extends React.Component {
         };
 
         const share_menu = [
-            {link: '#', onClick: this.vkShare, value: 'VK', icon: 'vk'},
-            {link: '#', onClick: this.fbShare, value: 'Facebook', icon: 'facebook'},
-            {link: '#', onClick: this.twitterShare, value: 'Twitter', icon: 'twitter'},
-     
+            {href: '#', onClick: this.vkShare, value: 'VK', icon: 'vk'},
+            {href: '#', onClick: this.fbShare, value: 'Facebook', icon: 'facebook'},
+            {href: '#', onClick: this.twitterShare, value: 'Twitter', icon: 'twitter'},
+
         ];
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;
@@ -275,15 +275,15 @@ class PostFull extends React.Component {
                 {/* {username && firstPayout && rootComment && <div className="float-right">
                     <button className="button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>
                 </div>} */}
-              
+
                 <div className="PostFull__footer row align-middle">
                     <div className="column">
-                        
+
                         <Voting post={post} />
                     </div>
                     <div className="column shrink PostFull_Footer-rightblock">
                             {!archived && <Reblog author={author} permlink={permlink} />}
-                            
+
                             <span className="PostFull__reply">
                                 {!$STM_Config.read_only_mode && (content.category !== 'bm-tasks') && <a onClick={onShowReply}>{translate('reply')}</a>}
                                 {showEditOption && !showEdit && <span>
