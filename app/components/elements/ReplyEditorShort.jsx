@@ -372,7 +372,7 @@ class ReplyEditor extends React.Component {
 
     handleOnButtonsFocus = event => {
 
-      
+
         this.setState({btnVisible: 'uncovered'})
         this.setState({textareaState: 'expanded-area'})
     }
@@ -490,9 +490,12 @@ class ReplyEditor extends React.Component {
                             {postError && <div className="error">{translateError(postError)}</div>}
                         </div>
 
-                          <UploadImagePreview
-                              uploading={this.state.uploading}
-                              src={this.state.UploadImagePreviewPath} />
+                        {this.state.showPreview ? (
+                            <UploadImagePreview
+                                uploading={this.state.uploading}
+                                src={this.state.UploadImagePreviewPath}
+                                remove={() => { this.setState({ showPreview: false }) }} />
+                        ) : null}
 
                         <div className={(vframe_section_shrink_class) + " " + (btnSubmit)}>
                             {!loading && <button type="submit" className={"button ReplyEditorShort__buttons-submit " + (btnSubmit)} disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
@@ -512,7 +515,8 @@ class ReplyEditor extends React.Component {
                                             reader.onloadend = () => {
                                                 this.setState({
                                                     UploadImagePreviewPath: reader.result,
-                                                    uploading: true
+                                                    uploading: true,
+                                                    showPreview: true
                                                 })
                                             }
                                             reader.readAsDataURL(file)
@@ -568,7 +572,7 @@ class ReplyEditor extends React.Component {
                             </ul>
                             </div>
 
-                          
+
 
                             {isStory && !isEdit && <div className="float-right">
 
