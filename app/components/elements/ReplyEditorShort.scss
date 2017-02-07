@@ -13,6 +13,40 @@
   padding-right: 5px;
 }
 
+.ReplyEditorShort__uploaded {
+  width: 559px;
+  height: 300px;
+  background-size: cover;
+  border-radius: 3px;
+  display: block;
+  margin-bottom: 20px;
+  position: relative;
+
+}
+
+.ReplyEditorShort__deleteimage {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 0;
+  top:0;
+  background: url('../../assets/images/deleteimage.png') left top no-repeat;
+  background-size: 24px 24px;
+  display: block;
+}
+
+.ReplyEditorShort__uploading {
+  background-color: rgba(0,0,0,0.6);
+  color: #fff;
+  text-align: center;
+  width: 559px;
+  height: 300px;
+  padding-top: 10px;
+  font-size: 11px;
+  border-radius: 3px;
+  
+}
+
 .covered {
   display: none;
 }

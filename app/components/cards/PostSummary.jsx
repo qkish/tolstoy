@@ -127,6 +127,32 @@ class PostSummary extends React.Component {
             money = money.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
          }
 
+         
+        let fileLink
+         if (p.json_metadata.fileAttached) {
+            let filename = p.json_metadata.fileAttached;
+            filename = String(filename);
+
+            
+            let fileicon
+            var fileExt = filename.substring(filename.lastIndexOf(".")+1, filename.length).toLowerCase();
+
+            if (fileExt == 'doc' || fileExt == 'docx') { fileicon = 'PostSummary__file-word '}
+            if (fileExt == 'xls' || fileExt == 'xlsx') { fileicon = 'PostSummary__file-excel'}
+            if (fileExt == 'pdf') { fileicon = 'PostSummary__file-pdf'}
+            if (fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif' || fileExt == 'psd') { fileicon = 'PostSummary__file-image'}
+
+
+            
+            
+
+            fileLink = <a href={filename} className={'PostSummary__file ' + fileicon} >Скачать файл</a>
+
+
+
+
+         }
+
         let moneyCurrency = store.get('fetchedCurrency') || DEFAULT_CURRENCY
 
         let moneyToday = <div className="PostSummary__summToday">{translate('earned_in_post')} {money} {moneyCurrency}</div>
@@ -188,6 +214,7 @@ class PostSummary extends React.Component {
                 <div className="PostSummary__content">
 
                     {content_body}
+                    {fileLink}
 
 
 

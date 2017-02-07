@@ -664,6 +664,7 @@ const ru = {
     followers: 'Подписчики',
     follow:'Подписки',
     followed: 'Подписки',
+    uploading: 'Загрузка...',
 
 }
 

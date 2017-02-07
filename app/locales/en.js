@@ -596,6 +596,8 @@ const en = 	{
     follow:'Follow',
     followed: 'Following',
 
+    uploading: 'Uploading...',
+
 
 }
 

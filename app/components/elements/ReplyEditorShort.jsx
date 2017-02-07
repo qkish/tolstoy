@@ -59,6 +59,7 @@ class ReplyEditor extends React.Component {
         title: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
         money: React.PropTypes.string,
+        filemeta: React.PropTypes.string,
 
         //redux connect
         reply: React.PropTypes.func.isRequired,
@@ -93,6 +94,7 @@ class ReplyEditor extends React.Component {
         type: 'submit_comment',
         metaLinkData: Map(),
         category: 'bm-open',
+        filemeta: '',
     }
 
     constructor() {
@@ -100,7 +102,8 @@ class ReplyEditor extends React.Component {
         this.state = {
             btnVisible: 'covered',
             textareaState: 'collapsed-area',
-            isTextareaEmpty: true
+            isTextareaEmpty: true,
+            fileState:''
     }
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditorShort')
         this.onTitleChange = e => {
@@ -222,14 +225,17 @@ class ReplyEditor extends React.Component {
             if(tp.body.value !== np.body.value ||
                 (np.category && tp.category.value !== np.category.value) ||
                 (np.title && tp.title.value !== np.title.value) ||
-                (np.money && tp.money.value) !== np.money.value)
+                (np.money && tp.money.value !== np.money.value) ||
+                (np.filemeta && tp.filemeta.value !== np.filemeta.value))
              { // also prevents saving after parent deletes this information
-                const {fields: {category, title, body, money}, formId} = nextProps
+                const {fields: {category, title, body, money, filemeta}, formId} = nextProps
                 const data = {formId}
                 data.title = title ? title.value : undefined
                 data.category = category ? category.value : undefined
                 data.body = body.value
                 data.money = money ? money.value : undefined
+                data.filemeta = filemeta ? filemeta.value : undefined
+
                 clearTimeout(saveEditorTimeout)
                 saveEditorTimeout = setTimeout(() => {
                     // console.log('save formId', formId)
@@ -364,6 +370,13 @@ class ReplyEditor extends React.Component {
 
     }
 
+    handleOnButtonsFocus = event => {
+
+      
+        this.setState({btnVisible: 'uncovered'})
+        this.setState({textareaState: 'expanded-area'})
+    }
+
 
 
 
@@ -373,7 +386,8 @@ class ReplyEditor extends React.Component {
             title: this.props.title,
             category: this.props.category,
             body: this.props.body,
-            money: this.props.money
+            money: this.props.money,
+            filemeta: this.state.fileState,
         }
 
 
@@ -386,6 +400,8 @@ class ReplyEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
             state, successCallback, handleSubmit, submitting, invalid, resetForm //lastComment,
         } = this.props
+
+        let {filemeta} = this.props.fields
         const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
         const {onTitleChange, onMoneyChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
@@ -444,7 +460,7 @@ class ReplyEditor extends React.Component {
 
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
-                            reply({ ...Object.assign({}, data, {body: `${this.state.uploadedImage || ''} ${data.body}`}), ...replyParams, loadingCallback })
+                            reply({ ...Object.assign({}, data, {body: `${data.body} ${this.state.uploadedImage || ''}`}), ...replyParams, loadingCallback })
                         })}
                         onChange={() => {this.setState({ postError: null })}}
                     >
@@ -459,7 +475,7 @@ class ReplyEditor extends React.Component {
                                 <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onMouseDown={this.handleOnFocus} onTouchStart={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState}  />
                      </div>
                       <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_day')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onTouchStart={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className={titleVisible ? 'ReplyEditorShort__moneyVisible' : 'ReplyEditorShort__moneyInvisible'} />
-
+                      <input type="hidden" {...cleanReduxInput(filemeta)} value={this.state.fileState}/>
                         <div className={vframe_section_shrink_class}>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
                         </div>
@@ -474,6 +490,9 @@ class ReplyEditor extends React.Component {
                             {postError && <div className="error">{translateError(postError)}</div>}
                         </div>
 
+                          <UploadImagePreview
+                              uploading={this.state.uploading}
+                              src={this.state.UploadImagePreviewPath} />
 
                         <div className={(vframe_section_shrink_class) + " " + (btnSubmit)}>
                             {!loading && <button type="submit" className={"button ReplyEditorShort__buttons-submit " + (btnSubmit)} disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
@@ -482,7 +501,7 @@ class ReplyEditor extends React.Component {
                                 <button type="button" className="secondary hollow button no-border ReplyEditorShort__buttons-submit " tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
                             }
 
-                            <div className="ReplyEditorShort__buttons-add">
+                            <div className="ReplyEditorShort__buttons-add"  onMouseDown={this.handleOnButtonsFocus} onTouchStart={this.handleOnButtonsFocus} onClick={this.handleOnButtonsFocus}>
                             <ul>
                                 <li>
                                     <Upload
@@ -517,16 +536,39 @@ class ReplyEditor extends React.Component {
                                 <li>
                                     <Upload
                                         action='/api/v1/upload'
-                                        data={{ type: 'attachment' }}>
+                                        data={{ type: 'attachment' }}
+
+                                        onStart={file => {
+                                            const reader = new FileReader()
+                                            reader.onloadend = () => {
+                                                this.setState({
+                                                    UploadImagePreviewPath: reader.result,
+                                                    uploading: true
+                                                })
+                                            }
+                                            reader.readAsDataURL(file)
+                                        }}
+                                        onError={err => {
+                                            console.error(err)
+                                            this.setState({
+                                                uploading: false
+                                            })
+                                        }}
+                                        onSuccess={res => {
+                                            this.setState({
+                                                fileState: res.image,
+                                                uploadedImage: res.image,
+                                                uploading: false
+                                            })
+                                        }}>
+
                                         <a href="#" className="ReplyEditorShort__buttons-add-file"></a>
                                     </Upload>
                                 </li>
                             </ul>
                             </div>
 
-                            <UploadImagePreview
-                              uploading={this.state.uploading}
-                              src={this.state.UploadImagePreviewPath} />
+                          
 
                             {isStory && !isEdit && <div className="float-right">
 
@@ -564,6 +606,7 @@ export default formId => reduxForm(
 
         if (isStory) fields.push('title')
         if (isStory) fields.push('money')
+        if (isStory) fields.push('filemeta')
         if (hasCategory) fields.push('category')
 
 
@@ -577,14 +620,15 @@ export default formId => reduxForm(
            ),
            category: null,
            money: null,
+           filemeta: null,
            //hasCategory,
             body: !values.body ? translate('required') :
                   values.body.length > maxKb * 1024 ? translate('exceeds_maximum_length', { maxKb }) : null,
         })
-        let {category, title, body, money} = ownProps
+        let {category, title, body, money, filemeta} = ownProps
 
 
-        if (/submit_/.test(type)) title = body = money = ''
+        if (/submit_/.test(type)) title = body = money = filemeta = ''
 
         if(hasCategory && jsonMetadata && jsonMetadata.tags) {
             // detransletirate values to avoid disabled 'update post' button on load
@@ -597,7 +641,7 @@ export default formId => reduxForm(
         const ret = {
             ...ownProps,
             fields, validate, isStory, hasCategory, username,
-            initialValues: {title, body, category, money}, state,
+            initialValues: {title, body, category, money, filemeta}, state,
             // lastComment: current.get('lastComment'),
             formId,
             metaLinkData,
@@ -618,7 +662,7 @@ export default formId => reduxForm(
         setMetaData: (id, jsonMetadata) => {
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        reply: ({category, title, body, money, author, permlink, parent_author, parent_permlink,
+        reply: ({category, title, body, money, filemeta, author, permlink, parent_author, parent_permlink,
             type, originalPost, autoVote = false, allSteemPower = false,
             state, jsonMetadata, /*metaLinkData,*/
             successCallback, errorCallback, loadingCallback
@@ -632,6 +676,9 @@ export default formId => reduxForm(
             if (type === 'submit_story' || type === 'submit_comment') {
                 dispatch(updateMoney({username, vesting, money, type}))
             }
+
+
+            let placedFile = originalPost.filemeta;
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
@@ -695,6 +742,9 @@ export default formId => reduxForm(
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
 
             if(money) meta.daySumm = money; else delete meta.daySumm
+            if(placedFile) meta.fileAttached = placedFile; else delete meta.fileAttached
+
+            console.log('META IS: ', meta)
 
 
 

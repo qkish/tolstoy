@@ -65,6 +65,38 @@ margin-bottom: 15px;
   float: right;
 }
 
+.PostSummary__file {
+  margin-top:20px;
+  
+  height: 32px;
+  background-size: 32px 32px;
+  padding: 6px 0 0 40px;
+  vertical-align: center;
+  display: block;
+  font-size: 13px;
+  color: #141414;
+  font-family:"museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  margin-left: -3px;
+  
+}
+
+.PostSummary__file-word {
+  background: url('../../assets/icons/wordico.png') left top no-repeat;
+    background-size: 32px 32px;
+}
+.PostSummary__file-excel {
+  background: url('../../assets/icons/xlsico.png') left top no-repeat;
+    background-size: 32px 32px;
+}
+.PostSummary__file-pdf{
+  background: url('../../assets/icons/pdfico.png') left top no-repeat;
+    background-size: 32px 32px;
+}
+.PostSummary__file-image {
+  background: url('../../assets/icons/imgico.png') left top no-repeat;
+    background-size: 32px 32px;
+}
 
 .PostSummary__header {
   > h1 {
