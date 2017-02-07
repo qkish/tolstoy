@@ -144,9 +144,13 @@ class PostSummary extends React.Component {
 
 
             
-            
+            let exactName = filename.split('\\').pop().split('/').pop();
 
-            fileLink = <a href={filename} className={'PostSummary__file ' + fileicon} >Скачать файл</a>
+            exactName = decodeURI(exactName)
+
+            exactName = exactName.replace(/[^0-9A-Za-zА-Яа-яЁё _.-]/g, "")
+
+            fileLink = <a href={filename} className={'PostSummary__file ' + fileicon} >{exactName}</a>
 
 
 
