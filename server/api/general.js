@@ -13,15 +13,17 @@ import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
 import isToday from 'date-fns/is_today';
-import cloudinary from 'cloudinary';
+import AWS from 'aws-sdk';
+import pify from 'pify';
+import fs from 'fs';
 
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
 
-cloudinary.config({
-  cloud_name: config.cloudinary.cloud_name,
-  api_key: config.cloudinary.api_key,
-  api_secret: config.cloudinary.api_secret
+AWS.config.update({
+  accessKeyId: config.aws.accessKeyId,
+  secretAccessKey: config.aws.secretAccessKey,
+  signatureVersion: 'v4'
 });
 
 function dbStoreSingleMeta(name, k, v) {
@@ -727,15 +729,26 @@ export default function useGeneralApi(app) {
     router.post('/upload', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
         console.log('-- /upload -->', this.session.uid, this.session.user);
+
+        const s3 = new AWS.S3();
+
         try {
             const data = this.request.body
             const { fields: { type }} = this.request.body
-
             const { file }  = this.request.body.files
-            const uploaded = yield cloudinary.uploader.upload(file.path)
+            const fileData = yield pify(fs.readFile)(file.path)
+            const uploadParams = {
+              Bucket: 'bm-platform',
+              Key: file.name,
+              Body: fileData,
+              ContentType: file.type
+            }
+            console.log('==== START UPLOAD ==== ')
+            const uploadedFile = yield s3.upload(uploadParams).promise()
+            console.log(uploadedFile)
             console.log('==== FINISH UPLOAD ==== ')
             this.body = JSON.stringify({
-                image: uploaded.url
+                image: uploadedFile.Location
             })
         } catch (error) {
             console.error('Error in /upload api call', this.session.uid, error.toString());
