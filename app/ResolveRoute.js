@@ -59,29 +59,28 @@ export default function resolveRoute(path)
     if (path === '/submit.html') {
         return {page: 'SubmitPost'};
     }
-    if (path === '/top') {
-        return {page: 'Top'};
+    let match = path.match(/^\/rating\/?(all|polki|sotni|desyatki)?$/)
+    if (match) {
+        return {page: 'Rating', params: match[1]};
     }
-    let match = path.match(/^\/(@[\w\.\d-]+)\/feed\/?$/);
+
+    match = path.match(/^\/(@[\w\.\d-]+)\/feed\/?$/);
     if (match) {
         return {page: 'PostsIndex', params: ['home', match[1]]};
     }
-    
+
 
      match = path.match(/^\/(@bm-bmtasks)\/?$/)
-        
+
     if (match) {
         return {page: 'TaskProfile', params: match.slice(1)};
     }
 
       match = path.match(/^\/(@bmdfef8c9b77aa)\/?$/)
-        
+
     if (match) {
         return {page: 'TaskProfile2', params: match.slice(1)};
     }
-
-
-
 
     match = path.match(/^\/(@[\w\.\d-]+)\/?$/) ||
         path.match(/^\/(@[\w\.\d-]+)\/(blog|posts|recommended|transfers|curation-rewards|author-rewards|permissions|created|recent-replies|feed|password|followed|followers|settings)\/?$/);

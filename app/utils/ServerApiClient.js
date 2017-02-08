@@ -123,7 +123,9 @@ export function updateMoney (payload) {
     }).then(res => res.json());
 }
 
-export function getUsers () {
+export function getUsers (category) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    return fetch('/api/v1/users').then(res => res.json());
+    return fetch(`/api/v1/users?category=${category || 'all'}`)
+        .then(res => res.json())
+        .then(({ users }) => users);
 }

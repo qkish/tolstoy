@@ -54,6 +54,12 @@ export default combineReducers({
     routing: initReducer(routerReducer),
     app: initReducer(appReducer),
     form: formReducer,
+    rating: (state = {}, action) => {
+        if (action.type === 'USERS_FETCH_SUCCEEDED') {
+            return {...state, ratingUsers: action.users}
+        }
+        return state
+    }
 });
 
 /*

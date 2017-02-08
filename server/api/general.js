@@ -710,20 +710,27 @@ export default function useGeneralApi(app) {
 
     router.get('/users', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
-        const osipov = yield models.User.findAll({
-            where: {
-                polk: 1
+        const { category } = this.query
+        let where = {}
+        if (category === 'polki') {
+            where = {
+                polkovodec: true
             }
-        })
-        const dashkiev = yield models.User.findAll({
-            where: {
-                polk: 2
+        }
+        if (category === 'sotni') {
+            where = {
+                sotnik: true
             }
+        }
+        if (category === 'desyatki') {
+            where = {
+                desyatnik: true
+            }
+        }
+        const users = yield models.User.findAll({
+            where
         })
-        this.body = JSON.stringify({
-            osipov,
-            dashkiev
-        })
+        this.body = JSON.stringify({ users })
     })
 
     router.post('/upload', koaBody, function* () {
