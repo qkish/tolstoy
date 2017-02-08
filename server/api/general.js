@@ -728,6 +728,18 @@ export default function useGeneralApi(app) {
             }
         }
         const users = yield models.User.findAll({
+            attributes: [
+                'id',
+                'name',
+                'first_name',
+                'last_name',
+                'desyatka',
+                'sotnya',
+                'polk',
+                'desyatnik',
+                'sotnik',
+                'polkovodec'
+            ],
             where
         })
         this.body = JSON.stringify({ users })
