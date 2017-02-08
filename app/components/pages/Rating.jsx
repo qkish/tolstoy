@@ -6,6 +6,7 @@ import Userpic from 'app/components/elements/Userpic'
 import Apis from 'shared/api_client/ApiInstances'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu'
 import { getUsers } from 'app/utils/ServerApiClient'
+import User from 'app/components/elements/User'
 
 class Rating extends Component {
     constructor (props) {
@@ -24,12 +25,9 @@ class Rating extends Component {
     render () {
         const { users } = this.state
         const userList = users ? (
-            <div style={{ background: '#ccc', padding: '20px' }}>
+            <div style={{ padding: '20px' }}>
                 {users.map(user => (
-                    <div key={user.id}>
-                        <Userpic account={user.name||''} />
-                        <div>{user.first_name} {user.last_name}</div>
-                    </div>
+                    <User account={user.name} key={user.id} />
                 ))}
             </div>
         ) : (
