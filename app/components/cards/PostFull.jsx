@@ -204,6 +204,7 @@ class PostFull extends React.Component {
         ];
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;
+        let moneyToEdit = jsonMetadata.daySumm ? jsonMetadata.daySumm : '0'
         if (showReply || showEdit) {
             renderedEditor = <div key="editor">
                 <Editor {...replyParams} type={this.state.showReply ? 'submit_comment' : 'edit'}
@@ -215,8 +216,8 @@ class PostFull extends React.Component {
                                                 this.setState({showReply: false, showEdit: false});
                                                 saveOnShow(formId, null)
                                             }}
-                                         jsonMetadata={jsonMetadata}
-                                         money={jsonMetadata.daySumm}
+                                         jsonMetadata={{jsonMetadata}}
+                                         money={moneyToEdit}
                 />
             </div>
         }
