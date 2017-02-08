@@ -26,7 +26,7 @@ class Rating extends Component {
         const { users } = this.state
         const userList = users ? (
             <div style={{ padding: '20px' }}>
-                {users.map(user => (
+                {users.filter(user => user.first_name.includes(this.state.filter || '') || user.last_name.includes(this.state.filter || '')).map(user => (
                     <User account={user.name} key={user.id} />
                 ))}
             </div>
@@ -62,6 +62,14 @@ class Rating extends Component {
                         link: '/rating/my-group',
                         value: 'Моя группа'
                     }]} />
+                    <input
+                        type='text'
+                        placeholder='Поиск'
+                        onChange={e => {
+                            this.setState({
+                                filter: e.target.value
+                            })
+                        }} />
                     {userList}
                 </div>
                 <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
