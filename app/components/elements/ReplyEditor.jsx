@@ -2,7 +2,7 @@ import React from 'react';
 import {reduxForm} from 'redux-form'
 import transaction from 'app/redux/Transaction';
 import MarkdownViewer from 'app/components/cards/MarkdownViewer'
-import CategorySelectorTask from 'app/components/cards/CategorySelectorTask'
+import CategorySelector from 'app/components/cards/CategorySelector'
 import {validateCategory} from 'app/components/cards/CategorySelector'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate'
@@ -18,7 +18,9 @@ import Remarkable from 'remarkable'
 import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 import {vestingSteem} from 'app/utils/StateFunctions';
-import {updateMoney} from 'app/redux/UserActions'
+import {updateMoney} from 'app/redux/UserActions';
+import Upload from 'rc-upload'
+import UploadImagePreview from 'app/components/elements/UploadImagePreview'
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -56,6 +58,8 @@ class ReplyEditor extends React.Component {
         category: React.PropTypes.string, // initial value
         title: React.PropTypes.string, // initial value
         body: React.PropTypes.string, // initial value
+        money: React.PropTypes.string,
+        filemeta: React.PropTypes.string,
 
         //redux connect
         reply: React.PropTypes.func.isRequired,
@@ -68,12 +72,16 @@ class ReplyEditor extends React.Component {
         isStory: React.PropTypes.bool.isRequired,
         username: React.PropTypes.string,
 
+
         // redux-form
         fields: React.PropTypes.object.isRequired,
         handleSubmit: React.PropTypes.func.isRequired,
         resetForm: React.PropTypes.func.isRequired,
         submitting: React.PropTypes.bool.isRequired,
         invalid: React.PropTypes.bool.isRequired,
+
+
+
 
 
     }
@@ -85,18 +93,37 @@ class ReplyEditor extends React.Component {
         parent_permlink: '',
         type: 'submit_comment',
         metaLinkData: Map(),
+        category: 'bm-open',
+        filemeta: '',
     }
 
     constructor() {
         super()
-        this.state = {}
-        this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditor')
+        this.state = {
+            btnVisible: 'covered',
+            textareaState: 'collapsed-area',
+            isTextareaEmpty: true,
+            fileState:'',
+            uploadBtnsClicked: false,
+    }
+        this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditorShort')
         this.onTitleChange = e => {
             const value = e.target.value
             // TODO block links in title (the do not make good permlinks)
             const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
             this.setState({ titleWarn: hasMarkdown ? translate('markdown_not_supported') : ''})
             this.props.fields.title.onChange(e)
+        }
+
+        this.onMoneyChange = e => {
+
+           const value = e.target.value
+            // TODO block links in title (the do not make good permlinks)
+            const hasMarkdown = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/.test(value)
+            this.setState({ titleWarn: hasMarkdown ? translate('markdown_not_supported') : ''})
+            this.props.fields.money.onChange(e)
+
+
         }
         this.onCancel = e => {
             if(e) e.preventDefault()
@@ -114,9 +141,11 @@ class ReplyEditor extends React.Component {
             if(postRef)
                 postRef.focus()
             else {
-                if (e.target && e.target.className && e.target.className.indexOf('ReplyEditor__body') !== -1)
+                if (e.target && e.target.className && e.target.className.indexOf('ReplyEditorShort__body') !== -1)
                     rte._focus();
+
             }
+
         }
         this.autoVoteOnChange = () => {
             const {autoVote} = this.props.fields
@@ -133,11 +162,14 @@ class ReplyEditor extends React.Component {
             if(editorData) {
                 editorData = JSON.parse(editorData)
                 if(editorData.formId === formId) {
-                    const {fields: {category, title, body}} = this.props
+                    const {fields: {category, title, body, money}} = this.props
                     if(category) category.onChange(editorData.category)
                     if(title) title.onChange(editorData.title)
+                    if(money) money.onChange(editorData.money)
                     if (editorData.body) {
                         body.onChange(editorData.body)
+
+
                         // const html = getHtml(editorData.body)
                         // console.log('createValueFromString mnt1', html);
                         // this.state.rte_value = RichTextEditor.createValueFromString(html, 'html')
@@ -175,8 +207,9 @@ class ReplyEditor extends React.Component {
     componentDidMount() {
         // focus
         setTimeout(() => {
-            if (this.props.isStory) this.refs.titleRef.focus()
-            else if (this.refs.postRef) this.refs.postRef.focus()
+            if (this.props.isStory) {this.refs.titleRef.focus(); }
+            else if (this.refs.postRef) this.refs.postRef.focus();
+            else if (this.refs.moneyRef) this.refs.moneyRef.focus();
             else if (this.refs.rte) this.refs.rte._focus()
         }, 300)
     }
@@ -192,13 +225,18 @@ class ReplyEditor extends React.Component {
             const np = nextProps.fields
             if(tp.body.value !== np.body.value ||
                 (np.category && tp.category.value !== np.category.value) ||
-                (np.title && tp.title.value !== np.title.value)
-            ) { // also prevents saving after parent deletes this information
-                const {fields: {category, title, body}, formId} = nextProps
+                (np.title && tp.title.value !== np.title.value) ||
+                (np.money && tp.money.value !== np.money.value) ||
+                (np.filemeta && tp.filemeta.value !== np.filemeta.value))
+             { // also prevents saving after parent deletes this information
+                const {fields: {category, title, body, money, filemeta}, formId} = nextProps
                 const data = {formId}
                 data.title = title ? title.value : undefined
                 data.category = category ? category.value : undefined
                 data.body = body.value
+                data.money = money ? money.value : undefined
+                data.filemeta = filemeta ? filemeta.value : undefined
+
                 clearTimeout(saveEditorTimeout)
                 saveEditorTimeout = setTimeout(() => {
                     // console.log('save formId', formId)
@@ -220,12 +258,17 @@ class ReplyEditor extends React.Component {
     }
     onChange(rte_value) {
         this.setState({rte_value})
+
+
         let html = rte_value.toString('html');
         if (html === '<p><br></p>') html = '';
         else if (html.indexOf('<html>') !== 0) html = `<html>\n${html}\n</html>`;
         const body = this.props.fields.body
         body.onChange(html);
+
+
     }
+
     setAutoVote() {
         const {isStory} = this.props
         if(isStory) {
@@ -277,25 +320,103 @@ class ReplyEditor extends React.Component {
         this.setState({allSteemPower: !this.state.allSteemPower})
     }
 
+    handleOnFocus = event => {
+        this.refs.postRef.focus()
+        this.setState({btnVisible: 'uncovered'})
+        this.setState({textareaState: 'expanded-area'})
+    }
+    handleOnBlur = event => {
+        let bodynow = this.props.fields.body.value
+        let titlenow = this.props.fields.title.value
+        let moneynow = this.props.fields.money.value
+        let uploadClicked = this.state.uploadBtnsClicked
+
+        if (bodynow == '' && titlenow == '' && !moneynow && !uploadClicked) {
+            this.setState({btnVisible: 'covered'})
+            this.setState({textareaState: 'collapsed-area'})
+            this.setState({uploadBtnsClicked: false})
+
+
+        }
+    }
+
+    handleOnTitleFocus = event => {
+        this.refs.titleRef.focus()
+        this.setState({btnVisible: 'uncovered'})
+        this.setState({textareaState: 'expanded-area'})
+    }
+
+    handleOnTitleBlur = event => {
+        let bodynow = this.props.fields.body.value
+        let titlenow = this.props.fields.title.value
+        let moneynow = this.props.fields.money.value
+        let uploadClicked = this.state.uploadBtnsClicked
+
+        if (bodynow == '' && titlenow == '' && !moneynow && !uploadClicked) {
+            this.setState({btnVisible: 'covered'})
+            this.setState({textareaState: 'collapsed-area'})
+            this.setState({uploadBtnsClicked: false})
+        }
+    }
+
+    handleOnMoneyFocus = event => {
+        this.refs.moneyRef.focus()
+        this.setState({btnVisible: 'uncovered'})
+        this.setState({textareaState: 'expanded-area'})
+    }
+
+    handleOnMoneyBlur = event => {
+        let bodynow = this.props.fields.body.value
+        let titlenow = this.props.fields.title.value
+        let moneynow = this.props.fields.money.value
+        let uploadClicked = this.state.uploadBtnsClicked
+
+        if (bodynow == '' && titlenow == '' && !moneynow && !uploadClicked) {
+            this.setState({btnVisible: 'covered'})
+            this.setState({textareaState: 'collapsed-area'})
+            this.setState({uploadBtnsClicked: false})
+        }
+
+    }
+
+    handleOnButtonsFocus = event => {
+
+        this.setState({uploadBtnsClicked: true})
+        this.setState({btnVisible: 'uncovered'})
+        this.setState({textareaState: 'expanded-area'})
+    }
+
+
+
+
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
             title: this.props.title,
             category: this.props.category,
             body: this.props.body,
+            money: this.props.money,
+            filemeta: this.state.fileState,
         }
+
+
+
+
         const {onCancel, autoVoteOnChange} = this
-        const {title, category, body, autoVote} = this.props.fields
+        const {title, category, body, money, autoVote} = this.props.fields
         const {
             reply, username, hasCategory, isStory, formId, noImage,
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
-            state, successCallback, handleSubmit, submitting, invalid, //lastComment,
+            state, successCallback, handleSubmit, submitting, invalid, resetForm //lastComment,
         } = this.props
+
+        let {filemeta} = this.props.fields
         const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
-        const {onTitleChange} = this
+        const {onTitleChange, onMoneyChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
         const successCallbackWrapper = (...args) => {
             this.setState({ loading: false })
+            resetForm()
             if (successCallback) successCallback(args)
         }
         const isEdit = type === 'edit'
@@ -322,77 +443,160 @@ class ReplyEditor extends React.Component {
             isHtml = !isMarkdown;
         }
 
-        const vframe_class = isStory ? 'vframe' : '';
+        const vframe_class = isStory ? 'vframe-short' : '';
         const vframe_section_class = isStory ? 'vframe__section' : '';
         const vframe_section_shrink_class = isStory ? 'vframe__section--shrink' : '';
+
+        let btnSubmit = this.state.btnVisible;
+        let areaState = this.state.textareaState;
+        let isTextareaEmptyVal = this.state.isTextareaEmpty;
+
+        let titleVisible
+
+        if (areaState == 'expanded-area') {
+            titleVisible = true
+        } else {
+            titleVisible = false
+        }
+
+
+
 
         return (
             <div className="ReplyEditor row">
                 <div className="column small-12">
                     <form className={vframe_class}
+
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
-                            reply({ ...data, ...replyParams, loadingCallback })
+                            let imageAdded 
+                            imageAdded = this.state.uploadedImage ? '\n' + this.state.uploadedImage : '';
+                            reply({ ...Object.assign({}, data, {body: `${data.body} ${imageAdded || ''}`}), ...replyParams, loadingCallback })
                         })}
                         onChange={() => {this.setState({ postError: null })}}
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text" {...cleanReduxInput(title)} onChange={onTitleChange} disabled={loading} placeholder={translate('title')} autoComplete="off" ref="titleRef" tabIndex={1} />
-                                {titleError}
+                                <input type="text"  {...cleanReduxInput(title)} onChange={onTitleChange} onTouchStart={this.handleOnTitleFocus} disabled={loading} placeholder={translate('reporttitle')} autoComplete="off" ref="titleRef" tabIndex={1} onMouseDown={this.handleOnTitleFocus} onBlur={this.handleOnTitleBlur} className={titleVisible ? 'ReplyEditorShort__titleVisible' : 'ReplyEditorShort__titleInvisible'} />
                             </span>}
                         </div>
 
-                        <div className={'ReplyEditor__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
-                            <div className="float-right secondary" style={{marginRight: '1rem'}}>
-                                {rte && <a href="#" onClick={this.toggleRte}>{isHtml ? translate('raw_html') : 'Markdown'}</a>}
-                                {!rte && isStory && (isHtml || !body.value) && <a href="#" onClick={this.toggleRte}>{translate('editor')}</a>}
-                            </div>
-                            {process.env.BROWSER && rte ?
-                                <RichTextEditor ref="rte"
-                                    readOnly={loading}
-                                    value={this.state.rte_value}
-                                    onChange={this.onChange}
-                                    onBlur={body.onBlur} tabIndex={2} />
-                                :
-                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 10 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} />
-                            }
-                        </div>
+                        <div className={'ReplyEditorShort__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
+
+                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onMouseDown={this.handleOnFocus} onTouchStart={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState}  />
+                     </div>
+                      <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_day')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onTouchStart={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className={titleVisible ? 'ReplyEditorShort__moneyVisible' : 'ReplyEditorShort__moneyInvisible'} />
+                      <input type="hidden" {...cleanReduxInput(filemeta)} value={this.state.fileState}/>
                         <div className={vframe_section_shrink_class}>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
                         </div>
 
-                        <div className={vframe_section_shrink_class} style={{marginTop: '0.5rem'}}>
+
                             {hasCategory && <span>
-                                <CategorySelectorTask {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
-                                <div className="error">{category.touched && category.error && category.error}&nbsp;</div>
+                                <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
+
                             </span>}
-                        </div>
+
                         <div className={vframe_section_shrink_class}>
                             {postError && <div className="error">{translateError(postError)}</div>}
                         </div>
-                        <div className={vframe_section_shrink_class}>
-                            {!loading && <button type="submit" className="button" disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
+
+                        {this.state.showPreview ? (
+                            <UploadImagePreview
+                                uploading={this.state.uploading}
+                                src={this.state.UploadImagePreviewPath}
+                                isThisFile={this.state.isFile}
+                                remove={() => { this.setState({ showPreview: false, uploadBtnsClicked: false }); }} />
+                        ) : null}
+
+                        <div className={(vframe_section_shrink_class) + " " + (btnSubmit)}>
+                            {!loading && <button type="submit" className={"button ReplyEditorShort__buttons-submit " + (btnSubmit)} disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
+                                <button type="button" className="secondary hollow button no-border ReplyEditorShort__buttons-submit " tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
                             }
-                            {!loading && !this.props.onCancel && <button className="button hollow no-border uppercase" tabIndex={5} disabled={submitting} onClick={onCancel}>{translate("clear")}</button>}
+
+                            <div className="ReplyEditorShort__buttons-add"  onMouseDown={this.handleOnButtonsFocus} onTouchStart={this.handleOnButtonsFocus} onClick={this.handleOnButtonsFocus}>
+                            <ul>
+                                <li>
+                                    <Upload
+                                        action='/api/v1/upload'
+                                        data={{ type: 'image' }}
+                                        onStart={file => {
+                                            const reader = new FileReader()
+                                            reader.onloadend = () => {
+                                                this.setState({
+                                                    UploadImagePreviewPath: reader.result,
+                                                    uploading: true,
+                                                    showPreview: true,
+                                                    isFile: false,
+                                                })
+                                            }
+                                            reader.readAsDataURL(file)
+                                        }}
+                                        onError={err => {
+                                            console.error(err)
+                                            this.setState({
+                                                uploading: false
+                                            })
+                                        }}
+                                        onSuccess={res => {
+                                            this.setState({
+                                                uploadedImage: res.image,
+                                                uploading: false
+                                            })
+                                        }}>
+                                            <a href="#" className="ReplyEditorShort__buttons-add-image"></a>
+                                    </Upload>
+                                </li>
+                                <li><a href="#" className="ReplyEditorShort__buttons-add-video"></a></li>
+                                <li>
+                                    <Upload
+                                        action='/api/v1/upload'
+                                        data={{ type: 'attachment' }}
+
+                                        onStart={file => {
+                                            const reader = new FileReader()
+                                            reader.onloadend = () => {
+                                                this.setState({
+                                                    UploadImagePreviewPath: reader.result,
+                                                    uploading: true,
+                                                    showPreview: true,
+                                                    isFile: true,
+                                                })
+                                            }
+                                            reader.readAsDataURL(file)
+                                        }}
+                                        onError={err => {
+                                            console.error(err)
+                                            this.setState({
+                                                uploading: false
+                                            })
+                                        }}
+                                        onSuccess={res => {
+                                            this.setState({
+                                                fileState: res.image,
+                                              
+                                                uploading: false
+                                            })
+                                        }}>
+
+                                        <a href="#" className="ReplyEditorShort__buttons-add-file"></a>
+                                    </Upload>
+                                </li>
+                            </ul>
+                            </div>
+
+
+
                             {isStory && !isEdit && <div className="float-right">
-                                <small onClick={this.toggleAllSteemPower} title={translate('leave_this_unchecked_to_receive_half_your_reward')}>{translate('pay_me_100_in_VESTING_TOKEN')}</small>
-                                &nbsp;&nbsp;
-                                <input type="checkbox" onChange={this.toggleAllSteemPower} checked={allSteemPower} />
-                                <br />
-                                <small onClick={autoVoteOnChange}>{translate("upvote_post")}</small>
-                                &nbsp;&nbsp;
-                                <input type="checkbox" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />
+
+                                <input type="hidden" onChange={this.toggleAllSteemPower} checked={allSteemPower} />
+
+                                <input type="hidden" {...cleanReduxInput(autoVote)} onChange={autoVoteOnChange} />
                             </div>}
                         </div>
-                        {!loading && !rte && markdownViewerText && <div className={'Preview ' + vframe_section_shrink_class}>
-                            {!isHtml && <a target="_blank" href="https://guides.github.com/features/mastering-markdown/"><small>{translate("markdown_is_supported")}.</small></a>}
-                            <h6>{translate("preview")}</h6>
-                            <MarkdownViewer formId={formId} text={markdownViewerText} canEdit jsonMetadata={jsonMetadata} large={isStory} noImage={noImage} />
-                        </div>}
+
                     </form>
                 </div>
             </div>
@@ -411,30 +615,39 @@ export default formId => reduxForm(
         // const current = state.user.get('current')||Map()
         const username = state.user.getIn(['current', 'username'])
         const fields = ['body', 'autoVote']
-        const {type, parent_author, jsonMetadata} = ownProps
+        let {type, parent_author, jsonMetadata} = ownProps
         const isStory =   /submit_story/.test(type) || (
             /edit/.test(type) && parent_author === ''
         )
         const hasCategory = isStory // /submit_story/.test(type)
 
+
+
         if (isStory) fields.push('title')
+        if (isStory) fields.push('money')
+        if (isStory) fields.push('filemeta')
         if (hasCategory) fields.push('category')
+
 
         const isEdit = type === 'edit'
         const maxKb = isStory ? 100 : 16
         const validate = values => ({
-            title: isStory && (
-                !values.title || values.title.trim() === '' ? translate('required') :
-                values.title.length > 255 ? translate('shorten_title') :
-                null
-            ),
-            category: hasCategory && validateCategory(values.category, !isEdit),
+           title: isStory && (
+           !values.title || values.title.trim() === '' ? translate('required') :
+           values.title.length > 255 ? translate('shorten_title') :
+           null
+           ),
+           category: null,
+           money: null,
+           filemeta: null,
+           //hasCategory,
             body: !values.body ? translate('required') :
                   values.body.length > maxKb * 1024 ? translate('exceeds_maximum_length', { maxKb }) : null,
         })
-        let {category, title, body} = ownProps
+        let {category, title, body, money, filemeta} = ownProps
 
-        if (/submit_/.test(type)) title = body = ''
+
+        if (/submit_/.test(type)) title = body = money = filemeta = ''
 
         if(hasCategory && jsonMetadata && jsonMetadata.tags) {
             // detransletirate values to avoid disabled 'update post' button on load
@@ -443,15 +656,16 @@ export default formId => reduxForm(
         }
 
         const metaLinkData = state.global.getIn(['metaLinkData', formId])
+
         const ret = {
             ...ownProps,
             fields, validate, isStory, hasCategory, username,
-            initialValues: {title, body, category}, state,
+            initialValues: {title, body, category, money, filemeta}, state,
             // lastComment: current.get('lastComment'),
             formId,
             metaLinkData,
         }
-        // console.log('ret', ret)
+
         return ret
     },
 
@@ -467,7 +681,7 @@ export default formId => reduxForm(
         setMetaData: (id, jsonMetadata) => {
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        reply: ({category, title, body, author, permlink, parent_author, parent_permlink,
+        reply: ({category, title, body, money, filemeta, author, permlink, parent_author, parent_permlink,
             type, originalPost, autoVote = false, allSteemPower = false,
             state, jsonMetadata, /*metaLinkData,*/
             successCallback, errorCallback, loadingCallback
@@ -479,8 +693,11 @@ export default formId => reduxForm(
             const vesting = vestingSteem(account.toJS(), gprops).toFixed(2)
 
             if (type === 'submit_story' || type === 'submit_comment') {
-                dispatch(updateMoney({username, vesting, money: 0, type}))
+                dispatch(updateMoney({username, vesting, money, type}))
             }
+
+
+            let placedFile = originalPost.filemeta;
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
@@ -497,11 +714,15 @@ export default formId => reduxForm(
             if (category) {console.log(category);}else{console.log(author);}
             // Wire up the current and parent props for either an Edit or a Submit (new post)
             //'submit_story', 'submit_comment', 'edit'
+
+
+
+
             const linkProps =
                 /^submit_/.test(type) ? { // submit new
                     parent_author: author,
                     parent_permlink: permlink,
-                    author: username,
+                    author: username
                     // permlink,  assigned in TransactionSaga
                 } :
                 // edit existing
@@ -539,6 +760,16 @@ export default formId => reduxForm(
             if(rtags.images.size) meta.image = rtags.images; else delete meta.image
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
 
+            if(money) meta.daySumm = money; else delete meta.daySumm
+            if(placedFile) meta.fileAttached = placedFile; else delete meta.fileAttached
+
+            console.log('META IS: ', meta)
+
+
+
+
+
+
             // const cp = prop => { if(metaLinkData.has(prop)) json_metadata.steem[prop] = metaLinkData.get(prop) }
             // cp('link')
             // cp('image')
@@ -564,6 +795,8 @@ export default formId => reduxForm(
                     percent_steem_dollars: 0, // 10000 === 100%
                 }
             }
+
+            console.log('SUMBIT ', meta);
             const operation = {
                 ...linkProps,
                 category: rootCategory, title, body,

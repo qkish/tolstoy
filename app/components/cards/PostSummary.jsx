@@ -16,6 +16,9 @@ import {authorNameAndRep} from 'app/utils/ComponentFormatters';
 import {Map} from 'immutable';
 import Reputation from 'app/components/elements/Reputation';
 import Userpic from 'app/components/elements/Userpic';
+
+import User from 'app/components/elements/User';
+
 import Author from 'app/components/elements/Author';
 import UserNiche from 'app/components/elements/UserNiche';
 import { translate } from 'app/Translator';
@@ -164,7 +167,7 @@ class PostSummary extends React.Component {
         // author and category
         let author_category = <div className="vcard">
 
-             <div className="Author__avatar_wrapper">
+            {/* <div className="Author__avatar_wrapper">
                           <Link to={'/@' + p.author}>
                                 <Userpic account={p.author} width="50" height="50" />
                             </Link>
@@ -172,7 +175,8 @@ class PostSummary extends React.Component {
 
             <Author account={p.author}/>
             <TimeAgoWrapper date={p.created} className="updated" />
-            <div className="PostSummary__niche"><UserNiche account={p.author} /></div>
+            <div className="PostSummary__niche"><UserNiche account={p.author} /></div> */}
+            <User account={p.author} postdate={p.created} />
 
         </div>
 

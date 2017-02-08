@@ -216,6 +216,7 @@ class PostFull extends React.Component {
                                                 saveOnShow(formId, null)
                                             }}
                                          jsonMetadata={jsonMetadata}
+                                         money={jsonMetadata.daySumm}
                 />
             </div>
         }
@@ -286,14 +287,14 @@ class PostFull extends React.Component {
 
                             <span className="PostFull__reply">
                                 {!$STM_Config.read_only_mode && (content.category !== 'bm-tasks') && <a onClick={onShowReply}>{translate('reply')}</a>}
-                                {showEditOption && !showEdit && <span>
-                                    &nbsp;&nbsp;
+                                {showEditOption && !showEdit && 
+                                    
                                     <a onClick={onShowEdit}>{translate('edit')}</a>
-                                </span>}
-                                {showDeleteOption && !showReply && <span>
-                                    &nbsp;&nbsp;
+                                }
+                                {showDeleteOption && !showReply && 
+                                 
                                     <a onClick={onDeletePost}>{translate('delete')}</a>
-                                </span>}
+                                }
                             </span>
                             {/* <FoundationDropdownMenu menu={share_menu} onClick={this.trackAnalytics.bind(this, '"share" dropdown menu clicked')} icon="share" label={translate('share')} dropdownPosition="bottom" dropdownAlignment="right" />*/}
 

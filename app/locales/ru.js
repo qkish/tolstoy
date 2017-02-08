@@ -666,6 +666,8 @@ const ru = {
     followed: 'Подписки',
     uploading: 'Загрузка...',
 
+    file_uploaded: 'Файл прикреплен',
+
 }
 
 export { ru }

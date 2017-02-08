@@ -40,7 +40,7 @@ const isHtmlTest = text =>
     /^<p>[\S\s]*<\/p>/.test(text)
 
 
-class ReplyEditor extends React.Component {
+class ReplyEditorShort extends React.Component {
 
     static propTypes = {
 
@@ -103,7 +103,8 @@ class ReplyEditor extends React.Component {
             btnVisible: 'covered',
             textareaState: 'collapsed-area',
             isTextareaEmpty: true,
-            fileState:''
+            fileState:'',
+            uploadBtnsClicked: false,
     }
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditorShort')
         this.onTitleChange = e => {
@@ -328,10 +329,14 @@ class ReplyEditor extends React.Component {
         let bodynow = this.props.fields.body.value
         let titlenow = this.props.fields.title.value
         let moneynow = this.props.fields.money.value
+        let uploadClicked = this.state.uploadBtnsClicked
 
-        if (bodynow == '' && titlenow == '' && !moneynow) {
+        if (bodynow == '' && titlenow == '' && !moneynow && !uploadClicked) {
             this.setState({btnVisible: 'covered'})
             this.setState({textareaState: 'collapsed-area'})
+            this.setState({uploadBtnsClicked: false})
+
+
         }
     }
 
@@ -345,10 +350,12 @@ class ReplyEditor extends React.Component {
         let bodynow = this.props.fields.body.value
         let titlenow = this.props.fields.title.value
         let moneynow = this.props.fields.money.value
+        let uploadClicked = this.state.uploadBtnsClicked
 
-        if (bodynow == '' && titlenow == '' && !moneynow) {
+        if (bodynow == '' && titlenow == '' && !moneynow && !uploadClicked) {
             this.setState({btnVisible: 'covered'})
             this.setState({textareaState: 'collapsed-area'})
+            this.setState({uploadBtnsClicked: false})
         }
     }
 
@@ -362,17 +369,19 @@ class ReplyEditor extends React.Component {
         let bodynow = this.props.fields.body.value
         let titlenow = this.props.fields.title.value
         let moneynow = this.props.fields.money.value
+        let uploadClicked = this.state.uploadBtnsClicked
 
-        if (bodynow == '' && titlenow == '' && !moneynow) {
+        if (bodynow == '' && titlenow == '' && !moneynow && !uploadClicked) {
             this.setState({btnVisible: 'covered'})
             this.setState({textareaState: 'collapsed-area'})
+            this.setState({uploadBtnsClicked: false})
         }
 
     }
 
     handleOnButtonsFocus = event => {
 
-
+        this.setState({uploadBtnsClicked: true})
         this.setState({btnVisible: 'uncovered'})
         this.setState({textareaState: 'expanded-area'})
     }
@@ -460,7 +469,9 @@ class ReplyEditor extends React.Component {
 
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
-                            reply({ ...Object.assign({}, data, {body: `${data.body} ${this.state.uploadedImage || ''}`}), ...replyParams, loadingCallback })
+                            let imageAdded 
+                            imageAdded = this.state.uploadedImage ? '\n' + this.state.uploadedImage : '';
+                            reply({ ...Object.assign({}, data, {body: `${data.body} ${imageAdded || ''}`}), ...replyParams, loadingCallback })
                         })}
                         onChange={() => {this.setState({ postError: null })}}
                     >
@@ -494,7 +505,8 @@ class ReplyEditor extends React.Component {
                             <UploadImagePreview
                                 uploading={this.state.uploading}
                                 src={this.state.UploadImagePreviewPath}
-                                remove={() => { this.setState({ showPreview: false }) }} />
+                                isThisFile={this.state.isFile}
+                                remove={() => { this.setState({ showPreview: false, uploadBtnsClicked: false }); }} />
                         ) : null}
 
                         <div className={(vframe_section_shrink_class) + " " + (btnSubmit)}>
@@ -516,7 +528,8 @@ class ReplyEditor extends React.Component {
                                                 this.setState({
                                                     UploadImagePreviewPath: reader.result,
                                                     uploading: true,
-                                                    showPreview: true
+                                                    showPreview: true,
+                                                    isFile: false,
                                                 })
                                             }
                                             reader.readAsDataURL(file)
@@ -547,7 +560,9 @@ class ReplyEditor extends React.Component {
                                             reader.onloadend = () => {
                                                 this.setState({
                                                     UploadImagePreviewPath: reader.result,
-                                                    uploading: true
+                                                    uploading: true,
+                                                    showPreview: true,
+                                                    isFile: true,
                                                 })
                                             }
                                             reader.readAsDataURL(file)
@@ -561,7 +576,7 @@ class ReplyEditor extends React.Component {
                                         onSuccess={res => {
                                             this.setState({
                                                 fileState: res.image,
-                                                uploadedImage: res.image,
+                                              
                                                 uploading: false
                                             })
                                         }}>
@@ -798,4 +813,4 @@ export default formId => reduxForm(
             }))
         },
     })
-)(ReplyEditor)
+)(ReplyEditorShort)

@@ -142,6 +142,11 @@
     font-weight: 600;
     @include hoverUnderline;
   }
+
+  a:hover, a:focus {
+    text-decoration: none;
+    color: #282828;
+  }
   .FormattedAsset {
     font-size: 110%;
   }
@@ -185,7 +190,9 @@
   margin-right: 1rem;
 
 }
-
+.PostFull__reply a {
+  margin-right: 10px;
+}
 .PostFull__lifetime {
   color: $dark-gray;
   font-size: 80%;

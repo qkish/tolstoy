@@ -24,6 +24,36 @@
 
 }
 
+.ReplyEditorShort__fileuploaded {
+  width: 559px;
+  height: 50px;
+
+
+  display: block;
+  margin-bottom: 20px;
+
+
+}
+
+.ReplyEditorShort__file {
+  height: 32px;
+  background-size: 32px 32px;
+  padding: 6px 0 0 40px;
+  vertical-align: center;
+  display: block;
+  font-size: 13px;
+  color: #141414;
+  font-family:"museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  margin-left: 0;
+    background: url('../../assets/icons/imgico.png') left top no-repeat;
+    background-size: 32px 32px;
+    margin-bottom: 15px;
+    float: left;
+  
+}
+
+
 .ReplyEditorShort__deleteimage {
   width: 24px;
   height: 24px;
@@ -35,6 +65,21 @@
   display: block;
 }
 
+.ReplyEditorShort__deletefile {
+  width: 24px;
+  height: 24px;
+   float: left;
+
+  background: url('../../assets/images/deleteimage.png') left top no-repeat;
+  background-size: 24px 24px;
+margin-left: 10px;
+margin-top:5px;
+opacity: 0.4;
+}
+
+.ReplyEditorShort__deletefile:hover {
+  opacity: 0.6;
+}
 .ReplyEditorShort__uploading {
   background-color: rgba(0,0,0,0.6);
   color: #fff;
