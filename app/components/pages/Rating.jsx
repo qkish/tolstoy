@@ -24,6 +24,22 @@ class Rating extends Component {
     }
 
     componentDidMount () {
+        if (this.props.params.category === 'ten') {
+            getUsersByTen(this.props.params.id).then(users => this.setState({users}))
+            return
+        }
+        if (this.props.params.category === 'hundred') {
+            getUsersByHundred(this.props.params.id).then(users => this.setState({users}))
+            return
+        }
+        if (this.props.params.category === 'polk') {
+            getUsersByPolk(this.props.params.id).then(users => this.setState({users}))
+            return
+        }
+        if (this.props.params.category === 'my-ten') {
+            getMyTen(this.state.currentUserName).then(users => this.setState({users}))
+            return
+        }
         getUsersByCategory(this.props.params.category).then(users => this.setState({users}))
     }
 
