@@ -25,6 +25,30 @@
   }
 }
 
+.ReplyEditor__hide {
+  display: none;
+}
+
+button.ReplyEditor__buttons-cancel {
+  background-color: #edeeee;
+  text-decoration: none;
+}
+
+button.ReplyEditor__buttons-cancel:hover, button.ReplyEditor__buttons-cancel:focus {
+  text-decoration: none;
+  background-color: #edeeee;
+}
+.button.hollow.no-border.ReplyEditor__buttons-cancel {
+  text-decoration: none;
+}
+.button.hollow.ReplyEditor__buttons-cancel, .button.hollow.ReplyEditor__buttons-cancel:hover, .button.hollow.ReplyEditor__buttons-cancel:focus {
+    background-color: #edeeee;
+    height: 37px;
+}
+.button.hollow.ReplyEditor__buttons-cancel:hover, .button.hollow.ReplyEditor__buttons-cancel:focus {
+  background-color: #e1e4e4;
+}
+
 .ReplyEditor__body.rte {
   border: 1px solid $medium-gray;
 }

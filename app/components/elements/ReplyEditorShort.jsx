@@ -21,6 +21,9 @@ import {vestingSteem} from 'app/utils/StateFunctions';
 import {updateMoney} from 'app/redux/UserActions';
 import Upload from 'rc-upload'
 import UploadImagePreview from 'app/components/elements/UploadImagePreview'
+import Reveal from 'react-foundation-components/lib/global/reveal';
+import CloseButton from 'react-foundation-components/lib/global/close-button';
+
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -105,6 +108,9 @@ class ReplyEditorShort extends React.Component {
             isTextareaEmpty: true,
             fileState:'',
             uploadBtnsClicked: false,
+            showYoutube: false,
+            youtubeLinkError: 'ReplyEditorShort__youtube-no-error',
+            youtubeLink: '',
     }
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditorShort')
         this.onTitleChange = e => {
@@ -137,7 +143,7 @@ class ReplyEditorShort extends React.Component {
         this.toggleRte = this.toggleRte.bind(this);
         this.focus = (e) => {
             if(e) e.stopPropagation()
-            const {postRef, rte} = this.refs
+            const {postRef, rte, youtubeRef} = this.refs
             if(postRef)
                 postRef.focus()
             else {
@@ -386,6 +392,38 @@ class ReplyEditorShort extends React.Component {
         this.setState({textareaState: 'expanded-area'})
     }
 
+    hideYoutube = event => {
+        this.setState({showYoutube: false})
+    }
+
+    insertYoutube = event => {
+
+        event.preventDefault()
+
+        let currentYoutubeLink = this.refs.youtubeRef.value;
+
+        //if ()
+        var pattern = /^((http|https|ftp):\/\/(youtube.com|www.youtube.com)\/)/;
+
+        if(pattern.test(currentYoutubeLink)) {
+        this.setState({youtubeLink: currentYoutubeLink})
+        this.setState({youtubeLinkError: 'ReplyEditorShort__youtube-no-error'})
+        this.setState({showYoutube: false})
+        this.setState({showPreview: true})
+         } else {
+
+        this.setState({youtubeLinkError: 'ReplyEditorShort__youtube-error'})
+
+         }
+
+    }
+
+
+    handleUploadYoutube = event => {
+        event.preventDefault()
+        this.setState({showYoutube: true})
+
+    }
 
 
 
@@ -459,6 +497,28 @@ class ReplyEditorShort extends React.Component {
             titleVisible = false
         }
 
+        let loadingHide = loading ? 'ReplyEditorShort__hide' : ''
+
+
+
+        // Youtube Insert Modal
+        let youtubeError = this.state.youtubeLinkError;
+
+        let show_youtube_insert = <div className="">
+                                    <CloseButton onClick={this.hideYoutube} />
+                                    <h5>Вставьте ссылку на видео Youtube</h5>
+                                    <form><input type="text" className="ReplyEditorShort__input-youtube" name="youtube" ref="youtubeRef"/>
+                                    <div className={youtubeError}>Ошибка, неверная ссылка</div>
+                                    <input type="submit" className="ReplyEditorShort__submit-youtube ReplyEditorShort__buttons-submit button" value="Вставить"  onClick={this.insertYoutube}/>
+                                    <input type="button" className="ReplyEditorShort__submit-youtube secondary hollow button no-border ReplyEditorShort__buttons-submit ReplyEditor__buttons-cancel" value="Отмена" onClick={this.hideYoutube}/>
+
+                                    </form>
+
+                                 </div>
+        let show_youtube_bool = this.state.showYoutube;
+
+        let youtubeModal = <Reveal show={show_youtube_bool}>{show_youtube_insert}</Reveal>
+
 
 
 
@@ -471,7 +531,10 @@ class ReplyEditorShort extends React.Component {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
                             let imageAdded 
                             imageAdded = this.state.uploadedImage ? '\n' + this.state.uploadedImage : '';
-                            reply({ ...Object.assign({}, data, {body: `${data.body} ${imageAdded || ''}`}), ...replyParams, loadingCallback })
+
+                            let youtubeAdded
+                            youtubeAdded = this.state.youtubeLink ? '\n' + this.state.youtubeLink : '';
+                            reply({ ...Object.assign({}, data, {body: `${data.body} ${imageAdded || ''} ${youtubeAdded || ''}`}), ...replyParams, loadingCallback })
                         })}
                         onChange={() => {this.setState({ postError: null })}}
                     >
@@ -506,6 +569,7 @@ class ReplyEditorShort extends React.Component {
                                 uploading={this.state.uploading}
                                 src={this.state.UploadImagePreviewPath}
                                 isThisFile={this.state.isFile}
+                                youtube={this.state.youtubeLink}
                                 remove={() => { this.setState({ showPreview: false, uploadBtnsClicked: false }); }} />
                         ) : null}
 
@@ -516,7 +580,7 @@ class ReplyEditorShort extends React.Component {
                                 <button type="button" className="secondary hollow button no-border ReplyEditorShort__buttons-submit " tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
                             }
 
-                            <div className="ReplyEditorShort__buttons-add"  onMouseDown={this.handleOnButtonsFocus} onTouchStart={this.handleOnButtonsFocus} onClick={this.handleOnButtonsFocus}>
+                            <div className={'ReplyEditorShort__buttons-add ' + loadingHide}  onMouseDown={this.handleOnButtonsFocus} onTouchStart={this.handleOnButtonsFocus} onClick={this.handleOnButtonsFocus}>
                             <ul>
                                 <li>
                                     <Upload
@@ -549,7 +613,7 @@ class ReplyEditorShort extends React.Component {
                                             <a href="#" className="ReplyEditorShort__buttons-add-image"></a>
                                     </Upload>
                                 </li>
-                                <li><a href="#" className="ReplyEditorShort__buttons-add-video"></a></li>
+                                <li><a href="#" className="ReplyEditorShort__buttons-add-video" onClick={this.handleUploadYoutube}></a></li>
                                 <li>
                                     <Upload
                                         action='/api/v1/upload'
@@ -586,7 +650,7 @@ class ReplyEditorShort extends React.Component {
                                 </li>
                             </ul>
                             </div>
-
+                            {youtubeModal}
 
 
                             {isStory && !isEdit && <div className="float-right">
@@ -763,7 +827,7 @@ export default formId => reduxForm(
             if(money) meta.daySumm = money; else delete meta.daySumm
             if(placedFile) meta.fileAttached = placedFile; else delete meta.fileAttached
 
-            console.log('META IS: ', meta)
+          
 
 
 

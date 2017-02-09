@@ -206,6 +206,19 @@ class ReplyEditor extends React.Component {
     }
     componentDidMount() {
         // focus
+         if (this.props.fileattached) {
+
+         
+            this.setState({isFile: true, 
+                showPreview: true, 
+                uploading:false, 
+                UploadImagePreviewPath: this.props.fileattached,
+                fileState: this.props.fileattached,
+            })
+
+
+         }
+
         setTimeout(() => {
             if (this.props.isStory) {this.refs.titleRef.focus(); }
             else if (this.refs.postRef) this.refs.postRef.focus();
@@ -220,6 +233,9 @@ class ReplyEditor extends React.Component {
             markdownViewerText += body.value
             this.setState({ markdownViewerText })
         }
+
+        
+
         if(process.env.BROWSER) {
             const tp = this.props.fields
             const np = nextProps.fields
@@ -460,6 +476,9 @@ class ReplyEditor extends React.Component {
         }
 
 
+        let loadingHide = loading ? 'ReplyEditor__hide' : ''
+
+
 
 
         return (
@@ -477,16 +496,17 @@ class ReplyEditor extends React.Component {
                     >
                         <div className={vframe_section_shrink_class}>
                             {isStory && <span>
-                                <input type="text"  {...cleanReduxInput(title)} onChange={onTitleChange} onTouchStart={this.handleOnTitleFocus} disabled={loading} placeholder={translate('reporttitle')} autoComplete="off" ref="titleRef" tabIndex={1} onMouseDown={this.handleOnTitleFocus} onBlur={this.handleOnTitleBlur} className={titleVisible ? 'ReplyEditorShort__titleVisible' : 'ReplyEditorShort__titleInvisible'} />
+                                <input type="text"  {...cleanReduxInput(title)} onChange={onTitleChange} onTouchStart={this.handleOnTitleFocus} disabled={loading} placeholder={translate('reporttitle')} autoComplete="off" ref="titleRef" tabIndex={1} onMouseDown={this.handleOnTitleFocus} onBlur={this.handleOnTitleBlur} className='ReplyEditorShort__titleVisible' />
                             </span>}
                         </div>
 
                         <div className={'ReplyEditorShort__body ' + (rte ? `rte ${vframe_section_class}` : vframe_section_shrink_class)} onClick={this.focus}>
 
-                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onMouseDown={this.handleOnFocus} onTouchStart={this.handleOnFocus} onBlur={this.handleOnBlur} className={areaState}  />
+                                <textarea {...cleanReduxInput(body)} disabled={loading} rows={isStory ? 1 : 3} placeholder={translate(isStory ? 'write_your_story' : 'reply')} autoComplete="off" ref="postRef" tabIndex={2} onMouseDown={this.handleOnFocus} onTouchStart={this.handleOnFocus} onBlur={this.handleOnBlur} className='expanded-area'  />
                      </div>
-                      <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_day')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onTouchStart={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className={titleVisible ? 'ReplyEditorShort__moneyVisible' : 'ReplyEditorShort__moneyInvisible'} />
-                      <input type="hidden" {...cleanReduxInput(filemeta)} value={this.state.fileState}/>
+                      {isEdit && isStory ? <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_day')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onTouchStart={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className='ReplyEditorShort__moneyVisible'/> : ''}
+                      {isEdit && isStory ? <input type="hidden" {...cleanReduxInput(filemeta)} value={this.state.fileState}/> : ''}
+                      
                         <div className={vframe_section_shrink_class}>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
                         </div>
@@ -506,23 +526,25 @@ class ReplyEditor extends React.Component {
                                 uploading={this.state.uploading}
                                 src={this.state.UploadImagePreviewPath}
                                 isThisFile={this.state.isFile}
-                                remove={() => { this.setState({ showPreview: false, uploadBtnsClicked: false }); }} />
+                                remove={() => { this.setState({ showPreview: false, uploadBtnsClicked: false, fileState: '' }); }} />
                         ) : null}
 
-                        <div className={(vframe_section_shrink_class) + " " + (btnSubmit)}>
-                            {!loading && <button type="submit" className={"button ReplyEditorShort__buttons-submit " + (btnSubmit)} disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
+                        <div className={(vframe_section_shrink_class) + " uncovered"}>
+                            {!loading && <button type="submit" className={"button ReplyEditorShort__buttons-submit uncoveder"} disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
-                                <button type="button" className="secondary hollow button no-border ReplyEditorShort__buttons-submit " tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
+                                <button type="button" className="secondary hollow button no-border ReplyEditorShort__buttons-submit ReplyEditor__buttons-cancel" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
                             }
 
-                            <div className="ReplyEditorShort__buttons-add"  onMouseDown={this.handleOnButtonsFocus} onTouchStart={this.handleOnButtonsFocus} onClick={this.handleOnButtonsFocus}>
+                            <div className={'ReplyEditorShort__buttons-add ' + loadingHide}   onMouseDown={this.handleOnButtonsFocus} onTouchStart={this.handleOnButtonsFocus} onClick={this.handleOnButtonsFocus}>
                             <ul>
                                 <li>
                                     <Upload
                                         action='/api/v1/upload'
                                         data={{ type: 'image' }}
                                         onStart={file => {
+
+                                           
                                             const reader = new FileReader()
                                             reader.onloadend = () => {
                                                 this.setState({
@@ -535,12 +557,14 @@ class ReplyEditor extends React.Component {
                                             reader.readAsDataURL(file)
                                         }}
                                         onError={err => {
-                                            console.error(err)
+
+                                            console.error('ERR', err)
                                             this.setState({
                                                 uploading: false
                                             })
                                         }}
                                         onSuccess={res => {
+                                         
                                             this.setState({
                                                 uploadedImage: res.image,
                                                 uploading: false
@@ -556,6 +580,8 @@ class ReplyEditor extends React.Component {
                                         data={{ type: 'attachment' }}
 
                                         onStart={file => {
+                                         
+
                                             const reader = new FileReader()
                                             reader.onloadend = () => {
                                                 this.setState({
@@ -568,12 +594,13 @@ class ReplyEditor extends React.Component {
                                             reader.readAsDataURL(file)
                                         }}
                                         onError={err => {
-                                            console.error(err)
+                                            console.error('ERR', err)
                                             this.setState({
                                                 uploading: false
                                             })
                                         }}
                                         onSuccess={res => {
+                                          
                                             this.setState({
                                                 fileState: res.image,
                                               
@@ -763,7 +790,7 @@ export default formId => reduxForm(
             if(money) meta.daySumm = money; else delete meta.daySumm
             if(placedFile) meta.fileAttached = placedFile; else delete meta.fileAttached
 
-            console.log('META IS: ', meta)
+  
 
 
 

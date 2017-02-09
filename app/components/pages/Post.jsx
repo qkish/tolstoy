@@ -144,19 +144,9 @@ class Post extends React.Component {
                 <SvgImage name="404" width="640px" height="480px" />
             </center>
 
-        return (
-            <div className="Post">
-                <div className="row">
-                    <div className="column">
-                        <PostFull post={post} global={g} />
-                    </div>
-                </div>
-                {!current_user && <div className="row">
-                    <div className="column">
-                        
-                    </div>
-                </div>}
-                <div id="comments" className="Post_comments row hfeed">
+        let commentsHere
+        if (positiveComments.length) {
+        commentsHere = <div id="comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
                             {positiveComments.length ?
@@ -169,7 +159,23 @@ class Post extends React.Component {
                             {showNegativeComments && negativeComments}
                         </div>
                     </div>
+                </div> }
+
+        return (
+            <div className="Post">
+                <div className="row">
+                    <div className="column">
+                        <PostFull post={post} global={g} />
+                    </div>
                 </div>
+                {!current_user && <div className="row">
+                    <div className="column">
+                        
+                    </div>
+                </div>}
+
+                {commentsHere}
+                
             </div>
         );
     }

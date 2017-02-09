@@ -108,6 +108,7 @@ class User extends Component {
                 <span itemProp="author" itemScope itemType="http://schema.org/Person" className="Author__name">
                     <Link to={linkFromProps || '/@' + username.name}>{nameFromProps || fullName}</Link>
                 </span>
+                {postDateTime}
             </span>
 
 

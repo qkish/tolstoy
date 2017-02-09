@@ -65,7 +65,7 @@ class ViewUserBase extends Component {
 
     InstaCorrect(text) {
 
-     var pattern = /^((http|https|ftp):\/\/instagram.com\/)/;
+     var pattern = /^((http|https|ftp):\/\/(instagram.com|www.instagram.com)\/)/;
 
         if(!pattern.test(text)) {
         text = "http://instagram.com/" + text;
@@ -75,7 +75,7 @@ class ViewUserBase extends Component {
     }
     FbCorrect(text) {
 
-     var pattern = /^((http|https|ftp):\/\/facebook.com\/)/;
+     var pattern = /^((http|https|ftp):\/\/(facebook.com|www.facebook.com)\/)/;
 
         if(!pattern.test(text)) {
         text = "http://facebook.com/" + text;
@@ -86,10 +86,10 @@ class ViewUserBase extends Component {
 
     VkCorrect(text) {
 
-     var pattern = /^((http|https|ftp):\/\/(vk.com|vkontakte.ru)\/)/;
+     var pattern = /^((http|https|ftp):\/\/(vk.com|vkontakte.ru|www.vk.com|www.vkontakte.ru)\/)/;
 
         if(!pattern.test(text)) {
-        text = "http://vk.com/" + text;
+        text = "http://vk.com/id" + text;
          }
         return text;
 

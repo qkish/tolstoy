@@ -196,6 +196,36 @@ class PostFull extends React.Component {
             desc: p.desc
         };
 
+        
+        let fileLink
+         if (p.json_metadata.fileAttached) {
+            let filename = p.json_metadata.fileAttached;
+            filename = String(filename);
+
+            
+            let fileicon
+            var fileExt = filename.substring(filename.lastIndexOf(".")+1, filename.length).toLowerCase();
+
+            if (fileExt == 'doc' || fileExt == 'docx') { fileicon = 'PostSummary__file-word '}
+            if (fileExt == 'xls' || fileExt == 'xlsx') { fileicon = 'PostSummary__file-excel'}
+            if (fileExt == 'pdf') { fileicon = 'PostSummary__file-pdf'}
+            if (fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif' || fileExt == 'psd') { fileicon = 'PostSummary__file-image'}
+
+
+            
+            let exactName = filename.split('\\').pop().split('/').pop();
+
+            exactName = decodeURI(exactName)
+
+            exactName = exactName.replace(/[^0-9A-Za-zА-Яа-яЁё _.-]/g, "")
+
+            fileLink = <a href={filename} className={'PostSummary__file ' + fileicon} >{exactName}</a>
+
+         }
+
+
+
+
         const share_menu = [
             {href: '#', onClick: this.vkShare, value: 'VK', icon: 'vk'},
             {href: '#', onClick: this.fbShare, value: 'Facebook', icon: 'facebook'},
@@ -204,7 +234,13 @@ class PostFull extends React.Component {
         ];
         const Editor = this.state.showReply ? PostFullReplyEditor : PostFullEditEditor
         let renderedEditor = null;
-        let moneyToEdit = jsonMetadata.daySumm ? jsonMetadata.daySumm : '0'
+        
+        let moneyToEdit ='0'
+        if (jsonMetadata && jsonMetadata.daySumm) moneyToEdit = jsonMetadata.daySumm ? jsonMetadata.daySumm : '0'
+        
+        let fileToEdit = ''
+        if (jsonMetadata && jsonMetadata.fileAttached) fileToEdit = jsonMetadata.fileAttached ? jsonMetadata.fileAttached : ''
+        
         if (showReply || showEdit) {
             renderedEditor = <div key="editor">
                 <Editor {...replyParams} type={this.state.showReply ? 'submit_comment' : 'edit'}
@@ -218,6 +254,7 @@ class PostFull extends React.Component {
                                             }}
                                          jsonMetadata={{jsonMetadata}}
                                          money={moneyToEdit}
+                                         fileattached={fileToEdit}
                 />
             </div>
         }
@@ -258,6 +295,8 @@ class PostFull extends React.Component {
         const firstPayout = post_content.get('mode') === "first_payout"
         const rootComment = post_content.get('depth') == 0
 
+        
+
 
 
         return (
@@ -271,8 +310,11 @@ class PostFull extends React.Component {
                     renderedEditor :
                     <div className="PostFull__body entry-content">
                         <MarkdownViewer formId={formId + '-viewer'} text={content_body} jsonMetadata={jsonMetadata} large highQualityPost={high_quality_post} noImage={!content.stats.pictures} />
+                        {fileLink}
                     </div>
                 }
+
+               
 
                 {/* {username && firstPayout && rootComment && <div className="float-right">
                     <button className="button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>

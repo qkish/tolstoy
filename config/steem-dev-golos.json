@@ -57,6 +57,12 @@
     "site_key": "",
     "secret_key": ""
   },
+
+    "aws": {
+      "accessKeyId": "AKIAJQ5T2LSDOSTOGTTA",
+      "secretAccessKey": "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"
+  },
+
   "img_proxy_prefix": "",
   "ipfs_prefix": "",
   "google_analytics_id": "",
