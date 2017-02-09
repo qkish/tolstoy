@@ -710,7 +710,7 @@ export default function useGeneralApi(app) {
 
     router.get('/users', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
-        const { category, ten, hundred, search, myTen } = this.query
+        const { category, ten, hundred, polk, search, myTen } = this.query
         let where = {}
 
         if (category) {
@@ -740,6 +740,12 @@ export default function useGeneralApi(app) {
         if (hundred) {
             where = {
                 sotnya: hundred
+            }
+        }
+
+        if (polk) {
+            where = {
+                polk
             }
         }
 

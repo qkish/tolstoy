@@ -5,7 +5,14 @@ import Beta from 'app/components/elements/Beta'
 import Userpic from 'app/components/elements/Userpic'
 import Apis from 'shared/api_client/ApiInstances'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu'
-import { getUsersByCategory, searchUsers, getMyTen } from 'app/utils/ServerApiClient'
+import {
+    getUsersByCategory,
+    searchUsers,
+    getUsersByTen,
+    getUsersByHundred,
+    getUsersByPolk,
+    getMyTen
+} from 'app/utils/ServerApiClient'
 import User from 'app/components/elements/User'
 import { Link } from 'react-router'
 
@@ -21,6 +28,18 @@ class Rating extends Component {
     }
 
     componentWillReceiveProps (nextProps) {
+        if (nextProps.params.category === 'ten') {
+            getUsersByTen(nextProps.params.id).then(users => this.setState({users}))
+            return
+        }
+        if (nextProps.params.category === 'hundred') {
+            getUsersByHundred(nextProps.params.id).then(users => this.setState({users}))
+            return
+        }
+        if (nextProps.params.category === 'polk') {
+            getUsersByPolk(nextProps.params.id).then(users => this.setState({users}))
+            return
+        }
         getUsersByCategory(nextProps.params.category).then(users => this.setState({users}))
     }
 

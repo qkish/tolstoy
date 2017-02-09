@@ -144,6 +144,13 @@ export function getUsersByHundred (hundredId) {
         .then(({ users }) => users);
 }
 
+export function getUsersByPolk (polkId) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/users?polk=${polkId}`)
+        .then(res => res.json())
+        .then(({ users }) => users);
+}
+
 export function searchUsers (text) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     return fetch(`/api/v1/users?search=${text}`)
