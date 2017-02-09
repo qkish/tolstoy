@@ -710,7 +710,7 @@ export default function useGeneralApi(app) {
 
     router.get('/users', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
-        const { category, ten, hundred, polk, search, myTen } = this.query
+        const { category, ten, hundred, polk, search } = this.query
         let where = {}
 
         if (category) {
@@ -763,19 +763,6 @@ export default function useGeneralApi(app) {
             }
         }
 
-        if (myTen) {
-            const tenId = yield models.User.findOne({
-                attributes: ['id'],
-                where: {
-                    name: myTen
-                }
-            })
-
-            where = {
-                desyatka: tenId
-            }
-        }
-
         const users = yield models.User.findAll({
             attributes: [
                 'id',
@@ -792,6 +779,44 @@ export default function useGeneralApi(app) {
             where,
             limit: 50
         })
+        this.body = JSON.stringify({ users })
+    })
+
+    router.post('/get_ten_by_name', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {csrf, name} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        const tenId = yield models.User.findOne({
+            attributes: ['desyatka'],
+            where: {
+                name
+            }
+        })
+
+        console.log('desyatka:', tenId)
+        let users = []
+        if (tenId) {
+            users = yield models.User.findAll({
+                attributes: [
+                    'id',
+                    'name',
+                    'first_name',
+                    'last_name',
+                    'desyatka',
+                    'sotnya',
+                    'polk',
+                    'desyatnik',
+                    'sotnik',
+                    'polkovodec'
+                ],
+                where: {
+                    desyatka: tenId
+                },
+                limit: 50
+            })
+        }
         this.body = JSON.stringify({ users })
     })
 

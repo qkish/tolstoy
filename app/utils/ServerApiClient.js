@@ -160,7 +160,19 @@ export function searchUsers (text) {
 
 export function getMyTen (name) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    return fetch(`/api/v1/users?myTen=${name}`)
+    return fetch(`/api/v1/get_ten_by_name`, {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            csrf: $STM_csrf,
+            name
+        })
+    })
         .then(res => res.json())
         .then(({ users }) => users);
 }

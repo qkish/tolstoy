@@ -56,15 +56,15 @@ class Rating extends Component {
             getUsersByPolk(nextProps.params.id).then(users => this.setState({users}))
             return
         }
+        if (nextProps.params.category === 'my-ten') {
+            getMyTen(this.state.currentUserName).then(users => this.setState({users}))
+            return
+        }
         getUsersByCategory(nextProps.params.category).then(users => this.setState({users}))
     }
 
     search (text) {
         searchUsers(text).then(users => this.setState({isSearch: true, users}))
-    }
-
-    myTen (name) {
-        getMyTen(name).then(users => this.setState({users}))
     }
 
     render () {
@@ -167,7 +167,8 @@ class Rating extends Component {
 
 const mapStateToProps = state => {
     return {
-        users: state.rating.ratingUsers
+        users: state.rating.ratingUsers,
+        currentUserName: state.user.getIn(['current', 'username'])
     }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {
