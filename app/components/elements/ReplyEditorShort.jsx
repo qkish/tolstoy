@@ -529,7 +529,7 @@ class ReplyEditorShort extends React.Component {
 
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
-                            let imageAdded 
+                            let imageAdded
                             imageAdded = this.state.uploadedImage ? '\n' + this.state.uploadedImage : '';
 
                             let youtubeAdded
@@ -584,6 +584,7 @@ class ReplyEditorShort extends React.Component {
                             <ul>
                                 <li>
                                     <Upload
+                                        accept='image/*;capture=camera'
                                         action='/api/v1/upload'
                                         data={{ type: 'image' }}
                                         onStart={file => {
@@ -640,7 +641,7 @@ class ReplyEditorShort extends React.Component {
                                         onSuccess={res => {
                                             this.setState({
                                                 fileState: res.image,
-                                              
+
                                                 uploading: false
                                             })
                                         }}>
@@ -827,7 +828,7 @@ export default formId => reduxForm(
             if(money) meta.daySumm = money; else delete meta.daySumm
             if(placedFile) meta.fileAttached = placedFile; else delete meta.fileAttached
 
-          
+
 
 
 
