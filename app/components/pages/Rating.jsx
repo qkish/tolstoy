@@ -17,76 +17,62 @@ import {
 } from 'app/utils/ServerApiClient'
 import User from 'app/components/elements/User'
 import { Link } from 'react-router'
+import { vestingSteem } from 'app/utils/StateFunctions'
 
 class Rating extends Component {
     constructor (props) {
         super(props)
         this.state = {}
         this.search = this.search.bind(this)
+        this.getData = this.getData.bind(this)
+    }
+
+    getData (props) {
+        if (props.params.category === 'ten') {
+            getUsersByTen(props.params.id).then(users => this.setState({users}))
+            return
+        }
+        if (props.params.category === 'hundred') {
+            getUsersByHundred(props.params.id).then(users => this.setState({users}))
+            return
+        }
+        if (props.params.category === 'polk') {
+            getUsersByPolk(props.params.id).then(users => this.setState({users}))
+            return
+        }
+        if (props.params.category === 'couch-group') {
+            getUsersByCouchGroup(props.params.id).then(users => this.setState({users}))
+            return
+        }
+        if (props.params.category === 'my-ten') {
+            if (props.currentUserName) {
+                getMyTen(props.currentUserName).then(users => this.setState({users}))
+            }
+            return
+        }
+        if (props.params.category === 'my-group') {
+            if (props.currentUserName) {
+                getMyGroup(props.currentUserName).then(users => this.setState({users}))
+            }
+            return
+        }
+        getUsersByCategory(props.params.category)
+            .then(users => users.map(user => {
+                return Apis.db_api('get_accounts', [user.name]).then(([account]) => {
+                    const vesting = vestingSteem(account, props.gprops.toJS()).toFixed(2)
+                    return {...user, vesting }
+                })
+            }))
+            .then(users => Promise.all(users))
+            .then(users => this.setState({users}))
     }
 
     componentDidMount () {
-        if (this.props.params.category === 'ten') {
-            getUsersByTen(this.props.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (this.props.params.category === 'hundred') {
-            getUsersByHundred(this.props.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (this.props.params.category === 'polk') {
-            getUsersByPolk(this.props.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (this.props.params.category === 'couch-group') {
-            getUsersByCouchGroup(this.props.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (this.props.params.category === 'my-ten') {
-            if (this.props.currentUserName) {
-                getMyTen(this.props.currentUserName).then(users => this.setState({users}))
-            }
-            return
-        }
-        if (this.props.params.category === 'my-group') {
-            if (this.props.currentUserName) {
-                getMyGroup(this.props.currentUserName).then(users => this.setState({users}))
-            }
-            return
-        }
-        getUsersByCategory(this.props.params.category).then(users => this.setState({users}))
+        this.getData(this.props)
     }
 
     componentWillReceiveProps (nextProps) {
-        if (nextProps.params.category === 'ten') {
-            getUsersByTen(nextProps.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (nextProps.params.category === 'hundred') {
-            getUsersByHundred(nextProps.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (nextProps.params.category === 'polk') {
-            getUsersByPolk(nextProps.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (nextProps.params.category === 'couch-group') {
-            getUsersByCouchGroup(nextProps.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (nextProps.params.category === 'my-ten') {
-            if (nextProps.currentUserName) {
-                getMyTen(nextProps.currentUserName).then(users => this.setState({users}))
-            }
-            return
-        }
-        if (nextProps.params.category === 'my-group') {
-            if (nextProps.currentUserName) {
-                getMyGroup(nextProps.currentUserName).then(users => this.setState({users}))
-            }
-            return
-        }
-        getUsersByCategory(nextProps.params.category).then(users => this.setState({users}))
+        this.getData(nextProps)
     }
 
     search (text) {
@@ -97,9 +83,12 @@ class Rating extends Component {
         let view
         const { users } = this.state
         const userList = users ? (
-            <div style={{ padding: '20px' }}>
+            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
                 {users.map(user => (
-                    <User account={user.name} key={user.id} />
+                    <div>
+                        <User account={user.name} key={user.id} />
+                        vesting: {user.vesting}
+                    </div>
                 ))}
             </div>
         ) : (
@@ -210,19 +199,12 @@ class Rating extends Component {
 const mapStateToProps = state => {
     return {
         users: state.rating.ratingUsers,
-        currentUserName: state.user.getIn(['current', 'username'])
-    }
-}
-const mapDispatchToProps = (dispatch, ownProps) => {
-    return {
-        fetchUsers: () => dispatch({
-            type: 'USERS_FETCH_REQUESTED',
-            category: ownProps.params.category || 'all'
-        })
+        currentUserName: state.user.getIn(['current', 'username']),
+        gprops: state.global.get('props')
     }
 }
 
 module.exports = {
     path: 'rating(/:category(/:id))',
-    component: connect(mapStateToProps, mapDispatchToProps)(Rating)
-};
+    component: connect(mapStateToProps)(Rating)
+}
