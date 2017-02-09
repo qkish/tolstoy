@@ -422,6 +422,10 @@ class ReplyEditorShort extends React.Component {
     handleUploadYoutube = event => {
         event.preventDefault()
         this.setState({showYoutube: true})
+        // focus
+        setTimeout(() => {
+            this.refs.youtubeRef.focus();
+        }, 300)
 
     }
 
