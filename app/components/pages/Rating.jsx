@@ -5,34 +5,87 @@ import Beta from 'app/components/elements/Beta'
 import Userpic from 'app/components/elements/Userpic'
 import Apis from 'shared/api_client/ApiInstances'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu'
-import { getUsers } from 'app/utils/ServerApiClient'
+import { getUsersByCategory, searchUsers, getMyTen } from 'app/utils/ServerApiClient'
 import User from 'app/components/elements/User'
+import { Link } from 'react-router'
 
 class Rating extends Component {
     constructor (props) {
         super(props)
         this.state = {}
+        this.search = this.search.bind(this)
     }
 
     componentDidMount () {
-        getUsers(this.props.params.category).then(users => this.setState({users}))
+        getUsersByCategory(this.props.params.category).then(users => this.setState({users}))
     }
 
     componentWillReceiveProps (nextProps) {
-        getUsers(nextProps.params.category).then(users => this.setState({users}))
+        getUsersByCategory(nextProps.params.category).then(users => this.setState({users}))
+    }
+
+    search (text) {
+        searchUsers(text).then(users => this.setState({isSearch: true, users}))
+    }
+
+    myTen (name) {
+        getMyTen(name).then(users => this.setState({users}))
     }
 
     render () {
+        let view
         const { users } = this.state
         const userList = users ? (
             <div style={{ padding: '20px' }}>
-                {users.filter(user => user.first_name.includes(this.state.filter || '') || user.last_name.includes(this.state.filter || '')).map(user => (
+                {users.map(user => (
                     <User account={user.name} key={user.id} />
                 ))}
             </div>
         ) : (
             <div>Загрузка</div>
         )
+        view = userList
+
+        if (this.props.params.category === 'desyatki') {
+            view = users ? (
+                <div style={{ padding: '20px' }}>
+                    {users.map(user => (
+                        <User account={user.name} key={user.id} link={`/rating/ten/${user.id}`} name={`Десятка им. ${user.first_name} ${user.last_name}`} />
+                    ))}
+                </div>
+            ) : (
+                <div>Загрузка</div>
+            )
+        }
+
+        if (this.props.params.category === 'sotni') {
+            view = users ? (
+                <div style={{ padding: '20px' }}>
+                    {users.map(user => (
+                        <User account={user.name} key={user.id} link={`/rating/hundred/${user.id}`} name={`Сотня им. ${user.first_name} ${user.last_name}`} />
+                    ))}
+                </div>
+            ) : (
+                <div>Загрузка</div>
+            )
+        }
+
+        if (this.props.params.category === 'polki') {
+            view = users ? (
+                <div style={{ padding: '20px' }}>
+                    {users.map(user => (
+                        <User account={user.name} key={user.id} link={`/rating/polk/${user.id}`} name={`Полк им. ${user.first_name} ${user.last_name}`} />
+                    ))}
+                </div>
+            ) : (
+                <div>Загрузка</div>
+            )
+        }
+
+        if (this.state.isSearch) {
+            view = userList
+        }
+
         return (
             <div className='PostsIndex row'>
                 <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
@@ -55,7 +108,7 @@ class Rating extends Component {
                     }]} />
                     <HorizontalMenu items={[{
                         active: false,
-                        link: '/rating/my-desyatka',
+                        link: '/rating/my-ten',
                         value: 'Моя десятка'
                     }, {
                         active: false,
@@ -65,12 +118,8 @@ class Rating extends Component {
                     <input
                         type='text'
                         placeholder='Поиск'
-                        onChange={e => {
-                            this.setState({
-                                filter: e.target.value
-                            })
-                        }} />
-                    {userList}
+                        onKeyPress={e => e.key === 'Enter' ? this.search(e.target.value) : null} />
+                    {view}
                 </div>
                 <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
                     <Beta />
@@ -96,6 +145,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 module.exports = {
-    path: 'rating(/:category)',
+    path: 'rating(/:category(/:id))',
     component: connect(mapStateToProps, mapDispatchToProps)(Rating)
 };

@@ -710,23 +710,66 @@ export default function useGeneralApi(app) {
 
     router.get('/users', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
-        const { category } = this.query
+        const { category, ten, hundred, search, myTen } = this.query
         let where = {}
-        if (category === 'polki') {
-            where = {
-                polkovodec: true
+
+        if (category) {
+            if (category === 'polki') {
+                where = {
+                    polkovodec: true
+                }
+            }
+            if (category === 'sotni') {
+                where = {
+                    sotnik: true
+                }
+            }
+            if (category === 'desyatki') {
+                where = {
+                    desyatnik: true
+                }
             }
         }
-        if (category === 'sotni') {
+
+        if (ten) {
             where = {
-                sotnik: true
+                desyatka: ten
             }
         }
-        if (category === 'desyatki') {
+
+        if (hundred) {
             where = {
-                desyatnik: true
+                sotnya: hundred
             }
         }
+
+        if (search) {
+            where = {
+                $or: [{
+                    first_name: {
+                        $like: `%${search}%`
+                    }
+                }, {
+                    last_name: {
+                        $like: `%${search}%`
+                    }
+                }]
+            }
+        }
+
+        if (myTen) {
+            const tenId = yield models.User.findOne({
+                attributes: ['id'],
+                where: {
+                    name: myTen
+                }
+            })
+
+            where = {
+                desyatka: tenId
+            }
+        }
+
         const users = yield models.User.findAll({
             attributes: [
                 'id',
@@ -740,7 +783,8 @@ export default function useGeneralApi(app) {
                 'sotnik',
                 'polkovodec'
             ],
-            where
+            where,
+            limit: 50
         })
         this.body = JSON.stringify({ users })
     })

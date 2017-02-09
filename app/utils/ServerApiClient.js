@@ -123,9 +123,37 @@ export function updateMoney (payload) {
     }).then(res => res.json());
 }
 
-export function getUsers (category) {
+export function getUsersByCategory (category) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     return fetch(`/api/v1/users?category=${category || 'all'}`)
+        .then(res => res.json())
+        .then(({ users }) => users);
+}
+
+export function getUsersByTen (tenId) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/users?ten=${tenId}`)
+        .then(res => res.json())
+        .then(({ users }) => users);
+}
+
+export function getUsersByHundred (hundredId) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/users?hundred=${hundredId}`)
+        .then(res => res.json())
+        .then(({ users }) => users);
+}
+
+export function searchUsers (text) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/users?search=${text}`)
+        .then(res => res.json())
+        .then(({ users }) => users);
+}
+
+export function getMyTen (name) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/users?myTen=${name}`)
         .then(res => res.json())
         .then(({ users }) => users);
 }

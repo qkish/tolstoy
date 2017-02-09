@@ -28,7 +28,7 @@ class User extends Component {
         const {account, postdate} = this.props
         if (typeof account != 'object') {
             Apis.db_api('get_accounts', [account]).then(res => {
-              
+
                 this.setState({account: res[0]})
             });
         }
@@ -37,7 +37,7 @@ class User extends Component {
     onError = () => this.setState({image: '/images/user.png'})
 
 	render() {
-      
+
 
 		const {props, state} = this
 		let {dispatch, ...rest} = props
@@ -60,11 +60,11 @@ class User extends Component {
 
         let postDateTime
 
-        
+
         if (this.props.postdate) postDateTime = <TimeAgoWrapper date={this.props.postdate} className="updated" />
 
 		// try to extract image url from users metaData
-		
+
          // try to extract image url from users metaData
         try { let parseRes = JSON.parse(account.json_metadata)
             if (parseRes.first_name) fullName =  parseRes.first_name || username.name
@@ -84,13 +84,17 @@ class User extends Component {
 
 
 
-        
+
 		const proxy = $STM_Config.img_proxy_prefix
 		if (proxy && url) {
 			const size = props.width + 'x' + props.height
 			url = proxy + size + '/' + url;
 		}
-		return 	<div className="User"> 
+
+        const nameFromProps = this.props.name
+        const linkFromProps = this.props.link
+
+		return 	<div className="User">
 
             <div className="Author__avatar_wrapper">
             <div className="User">
@@ -102,7 +106,7 @@ class User extends Component {
 
                  <span className="Author">
                 <span itemProp="author" itemScope itemType="http://schema.org/Person" className="Author__name">
-                    <Link to={'/@' + username.name}>{fullName}</Link>
+                    <Link to={linkFromProps || '/@' + username.name}>{nameFromProps || fullName}</Link>
                 </span>
             </span>
 

@@ -59,7 +59,7 @@ export default function resolveRoute(path)
     if (path === '/submit.html') {
         return {page: 'SubmitPost'};
     }
-    let match = path.match(/^\/rating\/?(all|polki|sotni|desyatki)?$/)
+    let match = path.match(/^\/rating\/?(all|polki|sotni|desyatki|ten|hundred|polk)?\/?(\d+)?$/)
     if (match) {
         return {page: 'Rating', params: match[1]};
     }
