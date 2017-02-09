@@ -142,7 +142,7 @@ class Rating extends Component {
                         value: 'Десятки'
                     }]} />
                     <HorizontalMenu items={[{
-                        active: false,
+                        active: this.props.params.category === 'my-ten',
                         link: '/rating/my-ten',
                         value: 'Моя десятка'
                     }, {
