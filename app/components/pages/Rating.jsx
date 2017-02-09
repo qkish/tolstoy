@@ -11,7 +11,9 @@ import {
     getUsersByTen,
     getUsersByHundred,
     getUsersByPolk,
-    getMyTen
+    getUsersByCouchGroup,
+    getMyTen,
+    getMyGroup
 } from 'app/utils/ServerApiClient'
 import User from 'app/components/elements/User'
 import { Link } from 'react-router'
@@ -36,8 +38,20 @@ class Rating extends Component {
             getUsersByPolk(this.props.params.id).then(users => this.setState({users}))
             return
         }
+        if (this.props.params.category === 'couch-group') {
+            getUsersByCouchGroup(this.props.params.id).then(users => this.setState({users}))
+            return
+        }
         if (this.props.params.category === 'my-ten') {
-            getMyTen(this.state.currentUserName).then(users => this.setState({users}))
+            if (this.props.currentUserName) {
+                getMyTen(this.props.currentUserName).then(users => this.setState({users}))
+            }
+            return
+        }
+        if (this.props.params.category === 'my-group') {
+            if (this.props.currentUserName) {
+                getMyGroup(this.props.currentUserName).then(users => this.setState({users}))
+            }
             return
         }
         getUsersByCategory(this.props.params.category).then(users => this.setState({users}))
@@ -56,8 +70,20 @@ class Rating extends Component {
             getUsersByPolk(nextProps.params.id).then(users => this.setState({users}))
             return
         }
+        if (nextProps.params.category === 'couch-group') {
+            getUsersByCouchGroup(nextProps.params.id).then(users => this.setState({users}))
+            return
+        }
         if (nextProps.params.category === 'my-ten') {
-            getMyTen(this.state.currentUserName).then(users => this.setState({users}))
+            if (nextProps.currentUserName) {
+                getMyTen(nextProps.currentUserName).then(users => this.setState({users}))
+            }
+            return
+        }
+        if (nextProps.params.category === 'my-group') {
+            if (nextProps.currentUserName) {
+                getMyGroup(nextProps.currentUserName).then(users => this.setState({users}))
+            }
             return
         }
         getUsersByCategory(nextProps.params.category).then(users => this.setState({users}))
@@ -81,7 +107,7 @@ class Rating extends Component {
         )
         view = userList
 
-        if (this.props.params.category === 'desyatki') {
+        if (this.props.params.category === 'tens') {
             view = users ? (
                 <div style={{ padding: '20px' }}>
                     {users.map(user => (
@@ -93,7 +119,7 @@ class Rating extends Component {
             )
         }
 
-        if (this.props.params.category === 'sotni') {
+        if (this.props.params.category === 'hundreds') {
             view = users ? (
                 <div style={{ padding: '20px' }}>
                     {users.map(user => (
@@ -117,6 +143,18 @@ class Rating extends Component {
             )
         }
 
+        if (this.props.params.category === 'couches') {
+            view = users ? (
+                <div style={{ padding: '20px' }}>
+                    {users.map(user => (
+                        <User account={user.name} key={user.id} link={`/rating/couch-group/${user.id}`} name={`Тренерская группа им. ${user.first_name} ${user.last_name}`} />
+                    ))}
+                </div>
+            ) : (
+                <div>Загрузка</div>
+            )
+        }
+
         if (this.state.isSearch) {
             view = userList
         }
@@ -133,20 +171,24 @@ class Rating extends Component {
                         link: '/rating/polki',
                         value: 'Полки'
                     }, {
-                        active: this.props.params.category === 'sotni',
-                        link: '/rating/sotni',
+                        active: this.props.params.category === 'hundreds',
+                        link: '/rating/hundreds',
                         value: 'Сотни'
                     }, {
-                        active: this.props.params.category === 'desyatki',
-                        link: '/rating/desyatki',
+                        active: this.props.params.category === 'tens',
+                        link: '/rating/tens',
                         value: 'Десятки'
+                    }, {
+                        active: this.props.params.category === 'couches',
+                        link: '/rating/couches',
+                        value: 'Тренера'
                     }]} />
                     <HorizontalMenu items={[{
                         active: this.props.params.category === 'my-ten',
                         link: '/rating/my-ten',
                         value: 'Моя десятка'
                     }, {
-                        active: false,
+                        active: this.props.params.category === 'my-group',
                         link: '/rating/my-group',
                         value: 'Моя группа'
                     }]} />

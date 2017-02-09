@@ -710,43 +710,46 @@ export default function useGeneralApi(app) {
 
     router.get('/users', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
-        const { category, ten, hundred, polk, search } = this.query
+        const { category, ten, hundred, polk, couch_group, search } = this.query
         let where = {}
 
         if (category) {
             if (category === 'polki') {
                 where = {
-                    polkovodec: true
+                    polk_leader: true
                 }
             }
-            if (category === 'sotni') {
+            if (category === 'hundreds') {
                 where = {
-                    sotnik: true
+                    hundred_leader: true
                 }
             }
-            if (category === 'desyatki') {
+            if (category === 'tens') {
                 where = {
-                    desyatnik: true
+                    ten_leader: true
+                }
+            }
+            if (category === 'couches') {
+                where = {
+                    couch: true
                 }
             }
         }
 
         if (ten) {
-            where = {
-                desyatka: ten
-            }
+            where = { ten }
         }
 
         if (hundred) {
-            where = {
-                sotnya: hundred
-            }
+            where = { hundred }
         }
 
         if (polk) {
-            where = {
-                polk
-            }
+            where = { polk }
+        }
+
+        if (couch_group) {
+            where = { couch_group }
         }
 
         if (search) {
@@ -769,12 +772,12 @@ export default function useGeneralApi(app) {
                 'name',
                 'first_name',
                 'last_name',
-                'desyatka',
-                'sotnya',
+                'ten',
+                'hundred',
                 'polk',
-                'desyatnik',
-                'sotnik',
-                'polkovodec'
+                'ten_leader',
+                'hundred_leader',
+                'polk_leader'
             ],
             where,
             limit: 50
@@ -788,31 +791,65 @@ export default function useGeneralApi(app) {
         const {csrf, name} = typeof(params) === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
 
-        const tenId = yield models.User.findOne({
-            attributes: ['desyatka'],
+        const { ten } = yield models.User.findOne({
+            attributes: ['ten'],
             where: {
                 name
             }
         })
 
-        console.log('desyatka:', tenId)
         let users = []
-        if (tenId) {
+        if (ten) {
             users = yield models.User.findAll({
                 attributes: [
                     'id',
                     'name',
                     'first_name',
                     'last_name',
-                    'desyatka',
-                    'sotnya',
+                    'ten',
+                    'hundred',
                     'polk',
-                    'desyatnik',
-                    'sotnik',
-                    'polkovodec'
+                    'ten_leader',
+                    'hundred_leader',
+                    'polk_leader'
+                ],
+                where: { ten },
+                limit: 50
+            })
+        }
+        this.body = JSON.stringify({ users })
+    })
+
+    router.post('/get_group_by_name', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {csrf, name} = typeof(params) === 'string' ? JSON.parse(params) : params;
+        if (!checkCSRF(this, csrf)) return;
+
+        const { couch_group } = yield models.User.findOne({
+            attributes: ['couch_group'],
+            where: {
+                name
+            }
+        })
+
+        let users = []
+        if (couch_group) {
+            users = yield models.User.findAll({
+                attributes: [
+                    'id',
+                    'name',
+                    'first_name',
+                    'last_name',
+                    'ten',
+                    'hundred',
+                    'polk',
+                    'ten_leader',
+                    'hundred_leader',
+                    'polk_leader'
                 ],
                 where: {
-                    desyatka: tenId
+                    couch_group
                 },
                 limit: 50
             })

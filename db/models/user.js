@@ -26,11 +26,13 @@ module.exports = function (sequelize, DataTypes) {
         posts_monets: DataTypes.INTEGER,
         comments_monets: DataTypes.INTEGER,
         tasks_monets: DataTypes.INTEGER,
-        desyatka: DataTypes.INTEGER,
-        sotnya: DataTypes.INTEGER,
-        desyatnik: DataTypes.BOOLEAN,
-        sotnik: DataTypes.BOOLEAN,
-        polkovodec: DataTypes.BOOLEAN
+        ten: DataTypes.INTEGER,
+        hundred: DataTypes.INTEGER,
+        ten_leader: DataTypes.BOOLEAN,
+        hundred_leader: DataTypes.BOOLEAN,
+        polk_leader: DataTypes.BOOLEAN,
+        couch: DataTypes.BOOLEAN,
+        couch_group: DataTypes.INTEGER
     }, {
         tableName: 'users',
         createdAt   : 'created_at',

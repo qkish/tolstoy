@@ -151,6 +151,13 @@ export function getUsersByPolk (polkId) {
         .then(({ users }) => users);
 }
 
+export function getUsersByCouchGroup (couchGroupId) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/users?couch_group=${couchGroupId}`)
+        .then(res => res.json())
+        .then(({ users }) => users);
+}
+
 export function searchUsers (text) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     return fetch(`/api/v1/users?search=${text}`)
@@ -161,6 +168,25 @@ export function searchUsers (text) {
 export function getMyTen (name) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     return fetch(`/api/v1/get_ten_by_name`, {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            csrf: $STM_csrf,
+            name
+        })
+    })
+        .then(res => res.json())
+        .then(({ users }) => users);
+}
+
+export function getMyGroup (name) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/get_group_by_name`, {
         method: 'post',
         mode: 'no-cors',
         credentials: 'same-origin',
