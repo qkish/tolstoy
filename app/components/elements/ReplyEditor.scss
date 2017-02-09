@@ -29,6 +29,26 @@
   display: none;
 }
 
+.ReplyEditorShort__youtube-no-error {
+  display: none;
+}
+.ReplyEditorShort__youtube-error {
+  color: #e02608;
+  font-size: 12px;
+}
+
+.ReplyEditorShort__input-youtube {
+  margin-bottom: 10px;
+}
+.ReplyEditorShort__submit-youtube {
+  margin: 10px 10px 0 0;
+}
+
+.ReplyEditorShort__hide {
+  display: none;
+}
+
+
 button.ReplyEditor__buttons-cancel {
   background-color: #edeeee;
   text-decoration: none;
