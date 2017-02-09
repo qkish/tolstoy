@@ -1,3 +1,7 @@
+input[type="file"] {
+    cursor: pointer;
+}
+
 .App {
   // min-height: 100vh;
   padding-top: 50px;
@@ -148,6 +152,5 @@ z-index: 101 !important
   .container {
     width: 100%;
   }
-  
-}
 
+}
