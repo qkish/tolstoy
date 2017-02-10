@@ -1,0 +1,87 @@
+.HorizontalSubmenu {
+  float: left;
+  width: 380px;
+  .active > a {
+    background: none;
+    color: $black;
+    font-weight: 600;
+  }
+  li > a:hover {
+    color: $black;
+  }
+  > li:first-child > a {
+    padding-left: 0;
+  }
+  > li:last-child > a {
+    padding-right: 0;
+  }
+}
+
+
+
+.PostsIndex__left .HorizontalSubmenu {
+
+  padding: 0 0 0 10px;
+
+  border-bottom: 0 none;
+
+  height: 50px;
+  overflow: hidden;
+ 
+  
+
+
+}
+.PostsIndex__left .HorizontalSubmenu li {
+  margin-bottom: 0;
+  height: 49px;
+
+}
+.PostsIndex__left .HorizontalSubmenu li a {
+  padding: 11px 0 0 0;
+  margin: 0 10px 0 10px;
+    color: #2b2b2b;
+  font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  text-decoration: none;
+    height: 49px;
+
+    border-bottom: 2px solid transparent;
+}
+.PostsIndex__left .HorizontalSubmenu li a:focus {
+  text-decoration: none;
+}
+.PostsIndex__left .HorizontalSubmenu li.active a  {
+
+  color: map-get($foundation-palette, 'primary');
+
+
+}
+.PostsIndex__left .HorizontalSubmenu li a:hover {
+    text-decoration: none;
+    color: map-get($foundation-palette, 'primary');
+}
+
+
+/* Small only */
+@media screen and (max-width: 39.9375em) {
+  .PostsIndex__left {
+    padding: 0;
+    width: 100%;
+  }
+  .PostsIndex__topics_compact {
+    padding: 0 0.5rem;
+    float: none;
+    width: auto;
+  }
+
+  .PostsIndex__left .HorizontalSubmenu {
+    width: 100%;
+  }
+
+  .PostsIndex__left .HorizontalSubmenu li a {
+    font-size: 12px;
+    margin: 0 7px;
+    padding: 12px 0 0 0;
+  }
+}
