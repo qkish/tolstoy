@@ -23,7 +23,26 @@
 .container {
   width: 915px;
 }
+.ReplyEditorShort__buttons-add-image input[style] {
+  display: block !important;
+}
+.ReplyEditorShort__buttons-add-file input[style] {
+  display: block !important;
+}
 
+.rc-upload input[style] {
+  display: block !important; 
+}
+
+.rc-upload input {
+  position: fixed;
+  left:-10000px;
+}
+.rc-upload {
+  float: left;
+    width: 42px;
+    height: 35px;
+}
 
 .AppBitva__overall {
     width: 100%;
