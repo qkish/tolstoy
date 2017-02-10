@@ -249,7 +249,7 @@ export default class UserProfile extends React.Component {
         let printLink = null;
         let section_title = account.name + ' / ' + section;
         if( section === 'blog' ) {
-           section_title = translate('users_blog', {name});
+           section_title = fullName + translate('users_blog', {name});
         } else if( section === 'transfers' ) {
            section_title = fullName + translate('users_wallet', {name});
         } else if( section === 'curation-rewards' ) {
@@ -270,7 +270,7 @@ export default class UserProfile extends React.Component {
         } else if( section === 'posts' ) {
            section_title = fullName + translate('users_posts', {name});
         } else if( section === 'recent-replies' ) {
-           section_title = translate('recent_replies_to_users_posts', {name});
+           section_title = fullName + translate('recent_replies_to_users_posts', {name});
         }
 
         const wallet_tab_active = section === 'transfers' || section === 'password' || section === 'permissions' ? 'active' : ''; // className={wallet_tab_active}

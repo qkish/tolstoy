@@ -19,7 +19,7 @@ import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 import {vestingSteem} from 'app/utils/StateFunctions';
 import {updateMoney} from 'app/redux/UserActions';
-import Upload from 'rc-upload'
+import Upload from '@sadorlovsky/rc-upload'
 import UploadImagePreview from 'app/components/elements/UploadImagePreview'
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
