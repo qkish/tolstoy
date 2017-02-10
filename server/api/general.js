@@ -777,9 +777,13 @@ export default function useGeneralApi(app) {
                 'polk',
                 'ten_leader',
                 'hundred_leader',
-                'polk_leader'
+                'polk_leader',
+                'approved_money'
             ],
             where,
+            order: [
+                ['money_total', 'DESC']
+            ],
             limit: 50
         })
         this.body = JSON.stringify({ users })
@@ -811,9 +815,13 @@ export default function useGeneralApi(app) {
                     'polk',
                     'ten_leader',
                     'hundred_leader',
-                    'polk_leader'
+                    'polk_leader',
+                    'approved_money'
                 ],
                 where: { ten },
+                order: [
+                    ['money_total', 'DESC']
+                ],
                 limit: 50
             })
         }
@@ -846,11 +854,15 @@ export default function useGeneralApi(app) {
                     'polk',
                     'ten_leader',
                     'hundred_leader',
-                    'polk_leader'
+                    'polk_leader',
+                    'approved_money'
                 ],
                 where: {
                     couch_group
                 },
+                order: [
+                    ['money_total', 'DESC']
+                ],
                 limit: 50
             })
         }

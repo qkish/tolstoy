@@ -32,7 +32,10 @@ module.exports = function (sequelize, DataTypes) {
         hundred_leader: DataTypes.BOOLEAN,
         polk_leader: DataTypes.BOOLEAN,
         couch: DataTypes.BOOLEAN,
-        couch_group: DataTypes.INTEGER
+        couch_group: DataTypes.INTEGER,
+        current_program: DataTypes.STRING,
+        approved_money: DataTypes.INTEGER,
+        volunteer: DataTypes.BOOLEAN
     }, {
         tableName: 'users',
         createdAt   : 'created_at',
