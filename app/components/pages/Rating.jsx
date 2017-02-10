@@ -19,6 +19,20 @@ import {
 import User from 'app/components/elements/User'
 import { Link } from 'react-router'
 
+
+function moneyPrettify(text) {
+      let moneyInRating
+        if (text) {
+
+        moneyInRating = String(text);
+        moneyInRating = moneyInRating.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
+
+
+        } else moneyInRating='Нет данных'
+
+        return moneyInRating
+}
+
 class Rating extends Component {
     constructor (props) {
         super(props)
@@ -82,12 +96,17 @@ class Rating extends Component {
 
         let view
         const { users } = this.state
+
+        
+      
+
+
         const userList = users ? (
             <div className="Rating_wrapper">
                 {users.map(user => (
                     <div className="Rating__row">
                         <User account={user.name} key={user.id} />
-                        <div>{user.approved_money}</div>
+                        <div className="Rating__money">{moneyPrettify(user.money_total)}</div>
                     </div>
                 ))}
             </div>

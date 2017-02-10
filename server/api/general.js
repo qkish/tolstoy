@@ -778,6 +778,7 @@ export default function useGeneralApi(app) {
                 'ten_leader',
                 'hundred_leader',
                 'polk_leader',
+                'money_total',
                 'approved_money'
             ],
             where,
@@ -816,6 +817,7 @@ export default function useGeneralApi(app) {
                     'ten_leader',
                     'hundred_leader',
                     'polk_leader',
+                    'money_total',
                     'approved_money'
                 ],
                 where: { ten },
@@ -855,6 +857,7 @@ export default function useGeneralApi(app) {
                     'ten_leader',
                     'hundred_leader',
                     'polk_leader',
+                    'money_total',
                     'approved_money'
                 ],
                 where: {
