@@ -75,10 +75,10 @@ class Rating extends Component {
         let isAll = false
         if(this.props.params.category == 'all' ||
             this.props.params.category == 'my-ten' ||
-            this.props.params.category == 'my-group' 
+            this.props.params.category == 'my-group'
 
             ) {isAll = true}
-   
+
 
         let view
         const { users } = this.state
@@ -87,6 +87,7 @@ class Rating extends Component {
                 {users.map(user => (
                     <div className="Rating__row">
                         <User account={user.name} key={user.id} />
+                        <div>{user.approved_money}</div>
                     </div>
                 ))}
             </div>
@@ -167,12 +168,12 @@ class Rating extends Component {
                         active: this.props.params.category === 'my-group',
                         link: '/rating/my-group',
                         value: 'Моя группа'
-                    }]} /> 
+                    }]} />
                   <input
                         type='text'
                         placeholder='Поиск по имени'
                         onKeyPress={e => e.key === 'Enter' ? this.search(e.target.value) : null}
-                        className='Rating__search' /> 
+                        className='Rating__search' />
                     </div>
 
         return (

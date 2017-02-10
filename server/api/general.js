@@ -778,7 +778,7 @@ export default function useGeneralApi(app) {
                 'ten_leader',
                 'hundred_leader',
                 'polk_leader',
-                'money_total'
+                'approved_money'
             ],
             where,
             order: [
@@ -816,7 +816,7 @@ export default function useGeneralApi(app) {
                     'ten_leader',
                     'hundred_leader',
                     'polk_leader',
-                    'money_total'
+                    'approved_money'
                 ],
                 where: { ten },
                 order: [
@@ -855,7 +855,7 @@ export default function useGeneralApi(app) {
                     'ten_leader',
                     'hundred_leader',
                     'polk_leader',
-                    'money_total'
+                    'approved_money'
                 ],
                 where: {
                     couch_group
