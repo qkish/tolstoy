@@ -4,6 +4,8 @@ import Products from 'app/components/elements/Products'
 import Beta from 'app/components/elements/Beta'
 import Userpic from 'app/components/elements/Userpic'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu'
+import HorizontalSubmenu from 'app/components/elements/HorizontalSubmenu'
+
 import {
     getUsersByCategory,
     searchUsers,
@@ -70,12 +72,20 @@ class Rating extends Component {
     }
 
     render () {
+        let isAll = false
+        if(this.props.params.category == 'all' ||
+            this.props.params.category == 'my-ten' ||
+            this.props.params.category == 'my-group' 
+
+            ) {isAll = true}
+   
+
         let view
         const { users } = this.state
         const userList = users ? (
-            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column' }}>
+            <div className="Rating_wrapper">
                 {users.map(user => (
-                    <div>
+                    <div className="Rating__row">
                         <User account={user.name} key={user.id} />
                     </div>
                 ))}
@@ -87,9 +97,11 @@ class Rating extends Component {
 
         if (this.props.params.category === 'tens') {
             view = users ? (
-                <div style={{ padding: '20px' }}>
+                <div className="Rating_wrapper">
                     {users.map(user => (
+                        <div className="Rating__row">
                         <User account={user.name} key={user.id} link={`/rating/ten/${user.id}`} name={`Десятка им. ${user.first_name} ${user.last_name}`} />
+                        </div>
                     ))}
                 </div>
             ) : (
@@ -99,10 +111,12 @@ class Rating extends Component {
 
         if (this.props.params.category === 'hundreds') {
             view = users ? (
-                <div style={{ padding: '20px' }}>
+                <div className="Rating_wrapper">
+                <div className="Rating__row">
                     {users.map(user => (
                         <User account={user.name} key={user.id} link={`/rating/hundred/${user.id}`} name={`Сотня им. ${user.first_name} ${user.last_name}`} />
                     ))}
+                    </div>
                 </div>
             ) : (
                 <div>Загрузка</div>
@@ -111,7 +125,7 @@ class Rating extends Component {
 
         if (this.props.params.category === 'polki') {
             view = users ? (
-                <div style={{ padding: '20px' }}>
+                <div className="Rating_wrapper">
                     {users.map(user => (
                         <User account={user.name} key={user.id} link={`/rating/polk/${user.id}`} name={`Полк им. ${user.first_name} ${user.last_name}`} />
                     ))}
@@ -123,10 +137,12 @@ class Rating extends Component {
 
         if (this.props.params.category === 'couches') {
             view = users ? (
-                <div style={{ padding: '20px' }}>
+                <div className="Rating_wrapper">
+                <div className="Rating__row">
                     {users.map(user => (
                         <User account={user.name} key={user.id} link={`/rating/couch-group/${user.id}`} name={`Тренерская группа им. ${user.first_name} ${user.last_name}`} />
                     ))}
+                    </div>
                 </div>
             ) : (
                 <div>Загрузка</div>
@@ -137,11 +153,33 @@ class Rating extends Component {
             view = userList
         }
 
+        let submenu = <div className="Rating__submenu">
+                   <HorizontalSubmenu items={[{
+                        active: this.props.params.category === 'all',
+                        link: '/rating/all',
+                        value: 'Лучшие'
+                    },
+                    {
+                        active: this.props.params.category === 'my-ten',
+                        link: '/rating/my-ten',
+                        value: 'Моя десятка'
+                    }, {
+                        active: this.props.params.category === 'my-group',
+                        link: '/rating/my-group',
+                        value: 'Моя группа'
+                    }]} /> 
+                  <input
+                        type='text'
+                        placeholder='Поиск по имени'
+                        onKeyPress={e => e.key === 'Enter' ? this.search(e.target.value) : null}
+                        className='Rating__search' /> 
+                    </div>
+
         return (
             <div className='PostsIndex row'>
                 <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
                     <HorizontalMenu items={[{
-                        active: this.props.params.category === 'all',
+                        active: isAll,
                         link: '/rating/all',
                         value: 'Все'
                     }, {
@@ -161,19 +199,7 @@ class Rating extends Component {
                         link: '/rating/couches',
                         value: 'Тренера'
                     }]} />
-                    <HorizontalMenu items={[{
-                        active: this.props.params.category === 'my-ten',
-                        link: '/rating/my-ten',
-                        value: 'Моя десятка'
-                    }, {
-                        active: this.props.params.category === 'my-group',
-                        link: '/rating/my-group',
-                        value: 'Моя группа'
-                    }]} />
-                    <input
-                        type='text'
-                        placeholder='Поиск'
-                        onKeyPress={e => e.key === 'Enter' ? this.search(e.target.value) : null} />
+                {isAll && submenu}
                     {view}
                 </div>
                 <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">

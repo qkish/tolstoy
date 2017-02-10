@@ -277,7 +277,7 @@ class Header extends React.Component {
                                 </li>
                                
                                 <li className={'Header__toplinks ' + bmRating}>
-                                    <Link to='/rating'>Рейтинги</Link>
+                                    <Link to='/rating/all'>Рейтинги</Link>
                                 </li>
 
 
