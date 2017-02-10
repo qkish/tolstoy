@@ -588,6 +588,7 @@ class ReplyEditorShort extends React.Component {
                             <ul>
                                 <li>
                                     <Upload
+                                        component='label'
                                         accept='image/*;capture=camera'
                                         action='/api/v1/upload'
                                         data={{ type: 'image' }}
