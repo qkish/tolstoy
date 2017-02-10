@@ -28,7 +28,7 @@ function moneyPrettify(text) {
         moneyInRating = moneyInRating.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
 
 
-        } else moneyInRating='Нет данных'
+        } else moneyInRating='0'
 
         return moneyInRating
 }
