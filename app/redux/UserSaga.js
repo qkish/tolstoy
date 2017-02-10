@@ -204,8 +204,10 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if (!userExistInLocalStorage && !localStorage.autopost2) {
 
         // Send to server auth request
+        let isEmail = '@'
         let resp
-        if (['qkish'].indexOf(username) === -1) {
+        if (username.indexOf(isEmail) > -1) {
+            console.log('@')
             resp = yield call(serverApiLogin2, username, password);
         } else {
             resp = {name: username, private_key: password}
@@ -252,8 +254,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                     // Создать аккаунт на golos.io
                     let newname, account;
                     while (true) {
-                        newname = 'bm-' + username.split('@')[0].replace('_', '');
-                        newname = newname.substring(0, 14)
+                        newname = 'bm-' + username.split('@')[0].replace(/[^0-9A-Za-zА-Яа-яЁё]/g, '');
+                        newname = newname.substring(0, 12)
                         //Генерируем имя алгоритмом на сервере
                         account = yield call(getAccount, newname);
                         if(!account) break;

@@ -18,8 +18,8 @@ class User extends Component {
     }
 
 	static defaultProps = {
-		width: 48,
-		height: 48
+		width: 100,
+		height: 100
 	}
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'User')
