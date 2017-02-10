@@ -588,9 +588,8 @@ class ReplyEditorShort extends React.Component {
                             <ul>
                                 <li>
                                     <Upload
-                                        component='div'
-                                        className="ReplyEditorShort__buttons-add-image"
-                                        accept='image/*;capture=camera'
+                                        component='label'
+                                        accept='image/*'
                                         action='/api/v1/upload'
                                         data={{ type: 'image' }}
                                         onStart={file => {
@@ -617,6 +616,7 @@ class ReplyEditorShort extends React.Component {
                                                 uploading: false
                                             })
                                         }}>
+                                        <a href="#" className="ReplyEditorShort__buttons-add-image"></a>
                                     </Upload>
                                 </li>
                                 <li><a href="#" className="ReplyEditorShort__buttons-add-video" onClick={this.handleUploadYoutube}></a></li>
