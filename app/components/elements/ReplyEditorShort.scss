@@ -342,7 +342,36 @@ font-size: 16px;
    padding-right: 10px;
 }
 
+.ReplyEditorShort__buttons-add {
+  width: 189px;
+  height: 50px;
+}
+.ReplyEditorShort__buttons-submit {
+  height: 50px;
+}
 
+.ReplyEditorShort__buttons-add ul li {
+  width: 62px;
+}
+.ReplyEditorShort__buttons-add-image {
+  width: 62px;
+  height: 50px;
+  background-position: 20px 14px;
+}
+.ReplyEditorShort__buttons-add-video {
+  width: 62px;
+  height: 50px;
+  background-position: -34px 14px;
+}
+.ReplyEditorShort__buttons-add-file {
+  width: 62px;
+  height: 50px;
+  background-position: -89px 14px;
+}
+
+.button.hollow.ReplyEditor__buttons-cancel, .button.hollow.ReplyEditor__buttons-cancel:hover, .button.hollow.ReplyEditor__buttons-cancel:focus {
+   height: 50px;
+}
 
 }
 

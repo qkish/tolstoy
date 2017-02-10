@@ -193,6 +193,26 @@ ul > li > .button {
   color: #ec5840;
 }
 
+
+
+@media screen and (max-width: 39.9375em) {
+  
+  .Header__toplinks {
+    margin-left: 10px;
+  }
+
+  .Header__top {
+
+  padding: 0 0 0 0;
+
+  ul > li.Header__top-logo {
+    padding: 5px 0 .35rem 0;
+    }
+  }
+
+
+  }
+
 @media #{$medium-only} {
     .Header {
         .buttons {margin-right: 0;}
