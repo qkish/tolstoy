@@ -93,7 +93,7 @@
     "pluralize": "^2.0.0",
     "purest": "^2.0.1",
     "rc-progress": "^2.0.1",
-    "rc-upload": "^2.3.2",
+    "rc-upload": "git://github.com/sadorlovsky/upload.git#ios-fix",
     "react": "^15.3.2",
     "react-addons-pure-render-mixin": "^15.3.1",
     "react-bootstrap": "^0.30.7",
