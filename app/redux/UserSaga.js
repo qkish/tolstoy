@@ -315,6 +315,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     yield call(accountAuthLookup, {payload: {account, private_keys, highSecurityLogin, login_owner_pubkey}})
     let authority = yield select(state => state.user.getIn(['authority', username]))
+
+
     const hasActiveAuth = authority.get('active') === 'full'
     if(!highSecurityLogin) {
         const accountName = account.get('name')
@@ -352,6 +354,9 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     const active_pubkey = account.getIn(['active', 'key_auths', 0, 0])
     const posting_pubkey = account.getIn(['posting', 'key_auths', 0, 0])
 
+
+    
+
     if (private_keys.get('memo_private') &&
         account.get('memo_key') !== private_keys.get('memo_private').toPublicKey().toString()
     )
@@ -386,6 +391,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     } else {
         yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares')}))
     }
+
+
 
     if (!autopost && saveLogin)
         yield put(user.actions.saveLogin());

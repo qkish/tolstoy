@@ -592,6 +592,7 @@ class ReplyEditorShort extends React.Component {
                                         accept='image/*'
                                         action='/api/v1/upload'
                                         data={{ type: 'image' }}
+                                        className="ReplyEditorShort__buttons-add-image"
                                         onStart={file => {
                                             const reader = new FileReader()
                                             reader.onloadend = () => {
@@ -616,15 +617,16 @@ class ReplyEditorShort extends React.Component {
                                                 uploading: false
                                             })
                                         }}>
-                                        <a href="#" className="ReplyEditorShort__buttons-add-image"></a>
+                                        {/* <a href="#" className="ReplyEditorShort__buttons-add-image"></a> */}
                                     </Upload>
                                 </li>
                                 <li><a href="#" className="ReplyEditorShort__buttons-add-video" onClick={this.handleUploadYoutube}></a></li>
                                 <li>
                                     <Upload
+                                        component='label'
                                         action='/api/v1/upload'
                                         data={{ type: 'attachment' }}
-
+                                        className="ReplyEditorShort__buttons-add-file"
                                         onStart={file => {
                                             const reader = new FileReader()
                                             reader.onloadend = () => {
@@ -651,7 +653,8 @@ class ReplyEditorShort extends React.Component {
                                             })
                                         }}>
 
-                                        <a href="#" className="ReplyEditorShort__buttons-add-file"></a>
+                                       {/* <a href="#" className="ReplyEditorShort__buttons-add-file"></a> */}
+
                                     </Upload>
                                 </li>
                             </ul>
