@@ -617,7 +617,6 @@ class ReplyEditorShort extends React.Component {
                                                 uploading: false
                                             })
                                         }}>
-                                        <a></a>
                                     </Upload>
                                 </li>
                                 <li><a href="#" className="ReplyEditorShort__buttons-add-video" onClick={this.handleUploadYoutube}></a></li>
