@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import Products from 'app/components/elements/Products'
 import Beta from 'app/components/elements/Beta'
 import Userpic from 'app/components/elements/Userpic'
-import Apis from 'shared/api_client/ApiInstances'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu'
 import {
     getUsersByCategory,
@@ -17,7 +16,6 @@ import {
 } from 'app/utils/ServerApiClient'
 import User from 'app/components/elements/User'
 import { Link } from 'react-router'
-import { vestingSteem } from 'app/utils/StateFunctions'
 
 class Rating extends Component {
     constructor (props) {
@@ -56,15 +54,7 @@ class Rating extends Component {
             }
             return
         }
-        getUsersByCategory(props.params.category)
-            .then(users => users.map(user => {
-                return Apis.db_api('get_accounts', [user.name]).then(([account]) => {
-                    const vesting = vestingSteem(account, props.gprops.toJS()).toFixed(2)
-                    return {...user, vesting }
-                })
-            }))
-            .then(users => Promise.all(users))
-            .then(users => this.setState({users}))
+        getUsersByCategory(props.params.category).then(users => this.setState({users}))
     }
 
     componentDidMount () {
@@ -87,7 +77,6 @@ class Rating extends Component {
                 {users.map(user => (
                     <div>
                         <User account={user.name} key={user.id} />
-                        vesting: {user.vesting}
                     </div>
                 ))}
             </div>
