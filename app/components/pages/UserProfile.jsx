@@ -131,6 +131,8 @@ export default class UserProfile extends React.Component {
         const {first_name, last_name} = jsonMetaData
         const fullName = first_name || last_name ? `${first_name} ${last_name}` : account.name
 
+        console.log('FULL NAME', fullName)
+
         if( section === 'transfers' ) {
             tab_content = <UserWallet global={this.props.global}
                           account={account}

@@ -27,6 +27,25 @@ class ViewUserSubscribers extends Component {
         let followers = this.props.followers;
         let following = this.props.following;
 
+
+
+        let followerCount = 0, followingCount = 0;
+
+        if (followers && followers.has('result')) {
+            followerCount = followers.get('result').filter(a => {
+                return a.get(0) === "blog";
+            }).size;
+            // loadingFollowers = followers.get("loading");
+        }
+
+        if (following && following.has('result')) {
+            followingCount = following.get('result').filter(a => {
+                return a.get(0) === "blog";
+            }).size;
+            // loadingFollowing = following.get("loading");
+        }
+
+
        
 
         let currentTab = this.state.currentTab;
@@ -43,12 +62,12 @@ class ViewUserSubscribers extends Component {
 
             <Link to={`/@${account.name}/followers/`} >
                 
-                   {translate('followers')}</Link>
+                   {translate('followers')}&nbsp;{followerCount}</Link>
             </span>
            
             <span id="follow" onClick={this.setCurrentTab} className="UserProfile__subtitle UserProfile__followedlink">
                 <Link to={`/@${account.name}/followed/`} >
-                  {translate('follow')}</Link>
+                  {translate('follow')}&nbsp;{followingCount}</Link>
             </span>
             {currentTabContent}
         </div>
