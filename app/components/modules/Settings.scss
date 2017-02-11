@@ -154,5 +154,9 @@ width: 100%;
   @include clearfix;
   width: 100%;
 }
+.Settings__tabs::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
 
   }

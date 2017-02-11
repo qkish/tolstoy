@@ -91,10 +91,23 @@ margin: 18px 0 0 -15px;
 
   .PostsIndex__left .HorizontalMenu {
     width: 100%;
+
+    white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar; 
+  margin-bottom: 0;
+
   }
 
+   .PostsIndex__left .HorizontalMenu::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+
   .PostsIndex__left .HorizontalMenu li a {
-    font-size: 12px;
+    font-size: 14px;
     margin: 0 7px;
     padding: 12px 0 0 0;
   }
