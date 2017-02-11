@@ -26,3 +26,10 @@
 	text-decoration: none;
 	color: #1f1f1f;
 }
+
+@media screen and (max-width: 39.9375em) {
+.Author__avatar_wrapper {
+	width: 32px;
+	height: 32px;
+}
+}

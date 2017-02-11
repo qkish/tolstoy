@@ -1,6 +1,6 @@
 .Settings {
 	  padding: 0;
-  margin: 0 0 15px;
+  margin: 0 0 15px 10px;
   background-color: #fff;
   clear: left;
   border: 1px solid #e1e3e4;
@@ -88,6 +88,11 @@ width: 100%;
   border-radius: 3px 3px 0 0;
   height: 50px;
   
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar; 
 
   .active > a {
     background: none;
@@ -135,3 +140,19 @@ width: 100%;
     text-decoration: none;
     color: map-get($foundation-palette, 'primary');
 }
+
+
+@media screen and (max-width: 39.9375em) {
+
+.Settings {
+  padding: 0;
+  margin: 0;
+  background-color: #fff;
+  clear: left;
+  border: 1px solid #e1e3e4;
+  border-radius: 3px;
+  @include clearfix;
+  width: 100%;
+}
+
+  }

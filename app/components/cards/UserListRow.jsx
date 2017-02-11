@@ -10,7 +10,7 @@ class UserListRow extends React.Component {
         const {user, loggedIn} = this.props
         return(
             <tr> 
-            <td>
+            <td className="UserProfile__userlist-user">
             
             <User account={user} width="36" height="36" />
             
@@ -19,7 +19,7 @@ class UserListRow extends React.Component {
            
                 </td>
 
-                {loggedIn && <td width="250">
+                {loggedIn && <td className="UserProfile__userlist-buttons">
                     <Follow following={user} what="blog" />
                 </td>}
                

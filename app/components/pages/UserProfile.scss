@@ -10,7 +10,7 @@
 padding: 10px;
 background-color: #196aff !important;
 color: #fff;
-margin-right: 10px;
+margin: 0 5px 10px 0;
 float: right;
 }
 .UserProfile__listInner {
@@ -354,6 +354,16 @@ box-shadow: inset 0px 1px 0px 0px rgba(0,0,0,0.14);
   
 }
 
+.UserProfile__userlist-user {
+  width: 50%;
+  vertical-align: top;
+}
+
+.UserProfile__userlist-buttons {
+  width: 50%;
+  vertical-align: top;
+}
+
 .UserWallet__balance {
     > div:nth-child(2) {
         text-align: right;
@@ -366,6 +376,32 @@ box-shadow: inset 0px 1px 0px 0px rgba(0,0,0,0.14);
   position: absolute;
   right: 10px;
   top: 10px;
+}
+
+.UserProfile__listInner {
+  margin: 0;
+  width: 100%;
+
+  }
+
+
+  .UserProfile__userlist-user {
+  width: 75%;
+  padding: 0;
+}
+
+.UserProfile__userlist-buttons {
+  width: 25%;
+  padding: 0;
+}
+.UserProfile__userlist-buttons label {
+  padding: 5px 10px;
+  margin: 0 0 10px 0;
+}
+
+.UserProfile__listInner .row > .column > table > tbody > tr > td, .UserProfile__listInner .row > .columns > table > tbody > tr > td {
+  
+  padding: 10px;
 }
 
 
@@ -409,6 +445,11 @@ box-shadow: inset 0px 1px 0px 0px rgba(0,0,0,0.14);
 
     .UserProfile_tabcontent {
       padding: 0;
+    }
+
+    .UserProfile__listInner .Author__name a {
+      font-size: 12px;
+      line-height: 16px;
     }
 
     div.UserProfile__top-nav .menu li>a {

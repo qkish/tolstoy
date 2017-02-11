@@ -426,7 +426,7 @@ class Settings extends React.Component {
 
         let tabIsActive = id => { return id === currentTab }
 
-        return <div className="Settings" style={{marginLeft: "10px"}}>
+        return <div className="Settings">
 
 
 

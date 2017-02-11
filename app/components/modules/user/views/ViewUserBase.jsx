@@ -89,7 +89,7 @@ class ViewUserBase extends Component {
      var pattern = /^((http|https|ftp):\/\/(vk.com|vkontakte.ru|www.vk.com|www.vkontakte.ru)\/)/;
 
         if(!pattern.test(text)) {
-        text = "http://vk.com/id" + text;
+        text = "http://vk.com/" + text;
          }
         return text;
 

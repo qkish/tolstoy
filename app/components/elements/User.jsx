@@ -94,7 +94,7 @@ class User extends Component {
         const nameFromProps = this.props.name
         const linkFromProps = this.props.link
 
-		return 	<div className="User">
+		return 	<div className="User__wrap">
 
             <div className="Author__avatar_wrapper">
             <div className="User">
