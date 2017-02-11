@@ -199,12 +199,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     console.log('INCOME', username, password);
 
+    let isEmail = '@'
     // 1) Check local storage
     const userExistInLocalStorage = yield select(state => state.offchain.get('account'));
-    if (!userExistInLocalStorage && !localStorage.autopost2) {
+    if ((!userExistInLocalStorage && !localStorage.autopost2) || username.indexOf(isEmail) > -1) {
 
         // Send to server auth request
-        let isEmail = '@'
+       
         let resp
         if (username.indexOf(isEmail) > -1) {
             console.log('@')
@@ -283,7 +284,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         //console.log('UNAME', username, ': RESP.NAME', resp.name)
     }
 
-    //console.log(resp)
+    
+    console.log('Username pAsss: ', username, password)
     //password = resp.private_key
 
 
