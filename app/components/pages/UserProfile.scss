@@ -76,17 +76,17 @@ float: right;
   }
 }
 
-.UserProfile__banner a.UserProfile__followerslink, .UserProfile__banner a.UserProfile__followerslink:hover, .UserProfile__banner a.UserProfile__followerslink:focus {
+.UserProfile__followerslink a, .UserProfile__followerslink:hover a, .UserProfile__followerslink:focus a {
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #3f3f3f;
     font-weight: 700;
     margin-top: 10px;
-     cursor: pointer;
-     text-decoration: none;
+    cursor: pointer;
+    text-decoration: none;
   }
-.UserProfile__banner a.UserProfile__followedlink, .UserProfile__banner a.UserProfile__followedlink:hover, .UserProfile__banner a.UserProfile__followedlink:focus {
+.UserProfile__followedlink a, .UserProfile__followedlink:hover a, .UserProfile__followedlink:focus a {
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -95,7 +95,7 @@ float: right;
     margin-top: 10px;
     margin-right: 22px;
     cursor: pointer;
-     text-decoration: none;
+    text-decoration: none;
   }
 
 .UserProfile__top-nav {
@@ -152,9 +152,7 @@ float: right;
     text-align: center;
     color: $white;
     padding: 0 5px 0 5px;
-    a {
-        color: $white;
-    }
+    
 
     .UserProfile__buttons {
         position: absolute;

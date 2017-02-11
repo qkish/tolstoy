@@ -1,6 +1,7 @@
 import React, {Component, PropsTypes} from 'react';
 import { translate } from 'app/Translator';
 import UserListAvatars from 'app/components/elements/UserListAvatars';
+import { Link } from 'react-router';
 
 // -------------------------
 // Компонент отображает
@@ -38,14 +39,16 @@ class ViewUserSubscribers extends Component {
         
 
         return <div className="UserProfile__blockinfo UserProfile__subscribers">
-            <span id="followers"  className="UserProfile__subtitle">
+            <span id="followers"  className="UserProfile__subtitle UserProfile__followerslink">
+
+            <Link to={`/@${account.name}/followers/`} >
                 
-                   <a className="UserProfile__followerslink" href={'/@' + account.name + '/followers/'}>{translate('followers')}</a>
+                   {translate('followers')}</Link>
             </span>
            
-            <span id="follow" onClick={this.setCurrentTab} className="UserProfile__subtitle">
-                
-                    <a className="UserProfile__followedlink" href={'/@' + account.name + '/followed/'}>{translate('follow')}</a>
+            <span id="follow" onClick={this.setCurrentTab} className="UserProfile__subtitle UserProfile__followedlink">
+                <Link to={`/@${account.name}/followed/`} >
+                  {translate('follow')}</Link>
             </span>
             {currentTabContent}
         </div>
