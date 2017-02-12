@@ -112,6 +112,9 @@ app.use(mount('/mailru-verification92b53816046791c4.html', staticCache(path.join
 app.use(mount('/mailru-verification2f585ac3784b45be.html', staticCache(path.join(__dirname, '../app/assets/mailru-verification2f585ac3784b45be.html'), cacheOpts)));
 app.use(mount('/mailru-verification9a42734aa5b7e274.html', staticCache(path.join(__dirname, '../app/assets/mailru-verification9a42734aa5b7e274.html'), cacheOpts)));
 
+// loader.io verification page
+app.use(mount('/loaderio-cd837692bd23521fb7fb35f1550678ce.txt', staticCache(path.join(__dirname, '../app/assets/loaderio-cd837692bd23521fb7fb35f1550678ce.txt'), cacheOpts)));
+
 // Proxy asset folder to webpack development server in development mode
 console.log (env)
 
