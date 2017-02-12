@@ -97,7 +97,11 @@ margin-bottom: 15px;
   -moz-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
+    text-decoration: none;
   
+}
+.PostSummary__file:hover, .PostSummary__file:focus {
+  text-decoration: none;
 }
 
 .PostSummary__file-word {

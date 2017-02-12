@@ -48,8 +48,9 @@
 }
 
 .Comment__header {
-  margin-left: 62px;
+ 
   color: $dark-gray;
+   overflow: hidden;
 }
 
 .Comment__header-user {
@@ -85,6 +86,7 @@
   max-width: 50rem;
   font-size: 110%;
   word-wrap: break-word;
+
 }
 
 .Comment__footer {
@@ -127,10 +129,17 @@
       margin-left: 20px;
     }
   }
+  .Comment__header {
+    overflow: hidden;
+  }
 
   .Comment__header-user .Author__name {
     display: inline;
     margin-left: 0;
+  }
+
+  .Comment__body {
+      margin-top: 10px;
   }
 
   .Comment__footer .Voting {

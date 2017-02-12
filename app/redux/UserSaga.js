@@ -317,13 +317,15 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if (memoWif)
         private_keys = private_keys.set('memo_private', PrivateKey.fromWif(memoWif))
 
-    yield call(accountAuthLookup, {payload: {account, private_keys, highSecurityLogin, login_owner_pubkey}})
+    yield call(accountAuthLookup, {payload: {account, username, private_keys, highSecurityLogin, login_owner_pubkey}})
     let authority = yield select(state => state.user.getIn(['authority', username]))
+
+
 
 
     const hasActiveAuth = authority.get('active') === 'full'
     if(!highSecurityLogin) {
-        const accountName = account.get('name')
+        const accountName = account ? account.get('name') : username
         authority = authority.set('active', 'none')
         yield put(user.actions.setAuthority({accountName, auth: authority}))
     }
@@ -359,6 +361,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     const posting_pubkey = account.getIn(['posting', 'key_auths', 0, 0])
 
 
+
+        console.log('Private Keys: ', private_keys)
     
 
     if (private_keys.get('memo_private') &&

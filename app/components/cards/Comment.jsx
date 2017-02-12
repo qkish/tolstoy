@@ -15,6 +15,7 @@ import Userpic from 'app/components/elements/Userpic';
 import transaction from 'app/redux/Transaction'
 import {List} from 'immutable'
 import { translate } from 'app/Translator';
+import User from 'app/components/elements/User';
 
 export function sortComments( g, comments, sort_order ) {
 
@@ -307,24 +308,24 @@ class CommentImpl extends React.Component {
 
         return (
             <div className={commentClasses.join(' ')} id={anchor_link} itemScope itemType ="http://schema.org/comment">
-                <div className="Comment__Userpic show-for-medium">
-                    <Userpic account={comment.author||''} />
-                </div>
+               
                 <div className={innerCommentClass}>
                     <div className="Comment__header">
                         <div className="Comment__header_collapse">
                             <Voting post={post} flag />
                             <a title={translate('collapse_or_expand')} onClick={this.toggleCollapsed}>{ this.state.collapsed ? '[+]' : '[-]' }</a>
                         </div>
-                        <span className="Comment__header-user">
+                       
+                        <User account={comment.author} postdate={comment.created} />
+                        {/* <span className="Comment__header-user">
                             <Icon name="user" className="Comment__Userpic-small" />
                             <span itemProp="author" itemScope itemType="http://schema.org/Person">
                                 <Author account={comment.author} authorRepLog10={authorRepLog10} /></span>
-                        </span>
+                        </span> 
                         
                         <Link to={comment_link} className="PlainLink">
                             <TimeAgoWrapper date={comment.created} />
-                        </Link>
+                        </Link>*/}
                         { (this.state.collapsed || hide_body) &&
                           <Voting post={post} showList={false} /> }
                         { this.state.collapsed && comment.children > 0 &&

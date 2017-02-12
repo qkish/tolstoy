@@ -18,9 +18,11 @@ function* watchForAuth() {
     yield* takeEvery('user/ACCOUNT_AUTH_LOOKUP', accountAuthLookup);
 }
 
-export function* accountAuthLookup({payload: {account, private_keys, login_owner_pubkey}}) {
+export function* accountAuthLookup({payload: {account, username, private_keys, login_owner_pubkey}}) {
     console.log('accountAuthLookup', account);
     account = fromJS(account)
+
+
     private_keys = fromJS(private_keys)
 
     const stateUser = yield select(state => state.user)
@@ -30,20 +32,25 @@ export function* accountAuthLookup({payload: {account, private_keys, login_owner
     else
         keys = stateUser.getIn(['current', 'private_keys'])
 
+
+
     if (!keys || !keys.has('posting_private')) return
     const toPub = k => k ? k.toPublicKey().toString() : '-'
     const posting = keys.get('posting_private')
     const active = keys.get('active_private')
     const memo = keys.get('memo_private')
     const auth = {
-        posting: posting ? yield authorityLookup(
-            {pubkeys: Set([toPub(posting)]), authority: account.get('posting'), authType: 'posting'}) : 'none',
-        active: active ? yield authorityLookup(
-            {pubkeys: Set([toPub(active)]), authority: account.get('active'), authType: 'active'}) : 'none',
+        posting: account ? posting ? yield authorityLookup(
+            {pubkeys: Set([toPub(posting)]), authority: account.get('posting'), authType: 'posting'}) : 'none' : 'none',
+        active: account ? active ? yield authorityLookup(
+            {pubkeys: Set([toPub(active)]), authority: account.get('active'), authType: 'active'}) : 'none' : 'none',
         owner: 'none',
-        memo: account.get('memo_key') === toPub(memo) ? 'full' : 'none'
+        memo: account ? account.get('memo_key') === toPub(memo) ? 'full' : 'none' : 'none'
     }
-    const accountName = account.get('name')
+    let accountName
+
+    if (account) { accountName = account.get('name') } else { accountName = username }
+
     const pub_keys_used = {posting: toPub(posting), active: toPub(active), owner: login_owner_pubkey};
     yield put(user.actions.setAuthority({accountName, auth, pub_keys_used}))
 }
