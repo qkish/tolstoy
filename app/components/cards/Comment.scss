@@ -127,4 +127,17 @@
       margin-left: 20px;
     }
   }
+
+  .Comment__header-user .Author__name {
+    display: inline;
+    margin-left: 0;
+  }
+
+  .Comment__footer .Voting {
+    display: block;
+    overflow: hidden;
+    margin: 0;
+    padding: 10px 0;
+    border:0 none;
+  }
 }

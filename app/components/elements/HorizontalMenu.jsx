@@ -29,6 +29,7 @@ class HorizontalMenu extends React.Component {
                     }
                 </li>
             })}
+            <li className="HorizontalMenu__shadow"></li>
         </ul>;
     }
 }

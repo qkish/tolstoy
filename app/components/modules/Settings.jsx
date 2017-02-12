@@ -453,6 +453,7 @@ class Settings extends React.Component {
                     <li role="presentation" className={currentTab == 'system' ? 'active' : ''}>
                         <a id="system" onClick={this.tabsSelectHandle}>{translate('system_tab')}</a>
                     </li>
+                    <li className="Settings__tabs-shadow"></li>
                 </ul>
             <div className="Settings__FieldsTabs">{currentFieldsBlock}</div>
         </div>

@@ -102,8 +102,7 @@ margin: 18px 0 0 -15px;
   }
 
    .PostsIndex__left .HorizontalMenu::-webkit-scrollbar {
-    width: 0px;  /* remove scrollbar space */
-    background: transparent;  /* optional: just make scrollbar invisible */
+   display: none; 
 }
 
   .PostsIndex__left .HorizontalMenu li a {

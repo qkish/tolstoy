@@ -56,6 +56,18 @@
 
 .dropdown-pane {
  border:0;
- box-shadow: 0 none;
+ box-shadow: none;
   
   }
+
+@media screen and (max-width: 39.9375em) {
+  .VerticalMenu {
+    width: 250px;
+    
+  }
+  .VerticalMenu > li > a {
+    padding: 15px 15px;
+    font-size: 16px;
+  }
+
+}

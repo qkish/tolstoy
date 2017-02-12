@@ -30,6 +30,8 @@ ul.PostsList__summaries {
   width: 518px;
 }
 
+
+
 .PostSummary__author_with_userpic {
 
 display: block;
@@ -186,6 +188,10 @@ margin-bottom: 15px;
   }
 }
 
+.PostSummary__footer .Voting__upvote_ico {
+  margin-top: 5px;
+}
+
 .PostSummary__time_author_category {
   color: #7d7d7d;
    font-size: 12px;
@@ -244,7 +250,7 @@ width: 50px;
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   .PostSummary {
-    padding: 10px 15px;
+    padding: 15px 15px 10px 15px;
     margin-bottom: 15px;
     border: none;
     border: 1px solid #e1e3e4;

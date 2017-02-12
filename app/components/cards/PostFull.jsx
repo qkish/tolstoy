@@ -30,12 +30,14 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
 
     return (
         <span className="PostFull__time_author_category vcard">
+      {translate('by')} <Author account={content.author} />
+         
+
             <Tooltip t={new Date(content.created).toLocaleString()}>
                 <Icon name="clock" className="space-right" />
                 <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
             </Tooltip>
-            <span> {translate('by')} <Author account={content.author} /></span>
-            {showTags && <span> {translate('in')}&nbsp;<TagList post={content} /></span>}
+            
         </span>
      );
 }
@@ -320,15 +322,15 @@ class PostFull extends React.Component {
                     <button className="button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>
                 </div>} */}
 
-                <div className="PostFull__footer row align-middle">
-                    <div className="column">
+                <div className="PostFull__footer align-middle">
+                    <div className="PostFull_Footer-leftblock">
 
                         <Voting post={post} />
                     </div>
-                    <div className="column shrink PostFull_Footer-rightblock">
+                    <div className="PostFull_Footer-rightblock">
                             {!archived && <Reblog author={author} permlink={permlink} />}
 
-                            <span className="PostFull__reply">
+                            <div className="PostFull__reply">
                                 {!$STM_Config.read_only_mode && (content.category !== 'bm-tasks') && <a onClick={onShowReply}>{translate('reply')}</a>}
                                 {showEditOption && !showEdit && 
                                     
@@ -338,7 +340,7 @@ class PostFull extends React.Component {
                                  
                                     <a onClick={onDeletePost}>{translate('delete')}</a>
                                 }
-                            </span>
+                            </div>
                             {/* <FoundationDropdownMenu menu={share_menu} onClick={this.trackAnalytics.bind(this, '"share" dropdown menu clicked')} icon="share" label={translate('share')} dropdownPosition="bottom" dropdownAlignment="right" />*/}
 
                             <div className="PostFull__Share">

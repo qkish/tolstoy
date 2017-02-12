@@ -21,7 +21,7 @@
   left: 0;
   width: 100%;
   z-index: 310;
-  height: 2.5rem;
+  height: 59px;
   overflow-x: hidden;
   overflow-y: scroll;
   border-bottom: 1px solid $light-gray;
@@ -30,9 +30,9 @@
 .PostsList__post_top_bar {
   position: relative;
   width: 100%;
-  height: 2.5rem;
+  height: 59px;
   margin: 0 auto;
-  padding: 0.3rem 0.9rem 0;
+padding: 0;
   background-color: $white;
   > .close-button {
     visibility: hidden;
@@ -41,8 +41,11 @@
   }
   > .back-button {
     position: relative;
-    font-size: 2em;
-    line-height: 1;
+    padding: 10px;
+    height: 59px;
+    width: 70px;
+    text-align: left;
+
     cursor: pointer;
     path {
       fill: map-get($foundation-palette, 'primary');
@@ -88,6 +91,15 @@ body.with-post-overlay {
 .PostsList {
   margin-left: 0;
 }
+  .PostsList__post_container .Post {
+    margin: 0;
+    width: 100%;
+    }
+
+    .PostsList__post_container {
+      margin-top: 59px;
+      padding: 0;
+    }
 
 
   }

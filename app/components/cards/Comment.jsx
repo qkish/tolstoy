@@ -321,7 +321,7 @@ class CommentImpl extends React.Component {
                             <span itemProp="author" itemScope itemType="http://schema.org/Person">
                                 <Author account={comment.author} authorRepLog10={authorRepLog10} /></span>
                         </span>
-                        &nbsp; &middot; &nbsp;
+                        
                         <Link to={comment_link} className="PlainLink">
                             <TimeAgoWrapper date={comment.created} />
                         </Link>

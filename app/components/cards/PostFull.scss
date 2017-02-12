@@ -4,6 +4,7 @@
   max-width: 50rem;
   border-bottom: 1px solid $light-gray;
   background: #fff;
+ 
 
   .TimeAgo {
     color: $dark-gray;
@@ -18,8 +19,7 @@
   color: $dark-gray;
   font-weight: 400;
   border-right: 1px solid $medium-gray;
-  padding-right: 1rem;
-  margin-right: 1rem;
+
   > span {
     white-space: nowrap;
   }
@@ -125,14 +125,22 @@
   color: #9da5ab;
 }
 .PostFull_Footer-rightblock {
-  margin-top: 10px;
+  margin-top: 5px;
+  float: right;
+  display: block;
 }
+
+  .PostFull_Footer-leftblock {
+    float: left;
+    margin-top: 5px;
+    }
 .PostFull__footer {
   clear: right;
   margin-top: 5px;
+  overflow: hidden;
   
 
-  font-size: 94%;
+  
   svg path, svg polygon {
     fill: $dark-gray;
   }
@@ -186,8 +194,7 @@
 }
 
 .PostFull__reply {
-  padding-right: 1rem;
-  margin-right: 1rem;
+  float: left;
 
 }
 .PostFull__reply a {
@@ -211,13 +218,63 @@
 
 /* Small only */
 @media screen and (max-width: 39.9375em) {
-  .Post {
-    width: 100%;
+
+
+  .PostFull__footer {
+    display: block;
+    
+  }
+  .PostFull__reply {
+    display: block;
     overflow: hidden;
+    float: none;
+   
+  }
+  .PostFull__Share {
+    border-top: 1px solid #e1e3e4;
+    padding: 10px 0;
+    display: block;
+    float: none;
+    
+  }
+  .PostFull__Share > span {
+    margin-left: 0;
+  }
+  .PostFull__Share a {
+    padding: 5px 20px;
+   
+  }
+
+  .PostFull__reply a {
+    padding: 10px 5px 10px 0;
+     display: block;
+    float: left;
+  }
+  .PostFull_Footer-leftblock {
+    display: block;
+    overflow: hidden;
+  }
+  .PostFull_Footer-rightblock {
+    display: block;
+    overflow: hidden;
+    float: left;
+    width: 100%;
   }
   .PostFull__footer > .column {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 100%;
     flex: 0 0 100%;
+  }
+
+  .PostFull__header .Author__name {
+    margin: 0;
+  }
+
+  .PostFull__footer span {
+    margin: 0;
+  }
+
+  .PostFull__body {
+    padding: 0;
   }
 }
