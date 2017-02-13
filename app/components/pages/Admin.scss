@@ -23,7 +23,7 @@
 .Admin__choose {
 	float: left;
 	margin-right: 10px;
-	width: 120px;
+	width: 140px;
 	
 }
 
@@ -35,4 +35,9 @@
 
 .Admin__wrapper .Rating__row .User__wrap {
 	width: 200px;
+}
+.Admin__choose label {
+	font-size: 12px;
+	text-transform: normal;
+	letter-spacing: 0;
 }

@@ -113,6 +113,10 @@ class Admin extends Component {
                             <option value="3">Воронин</option>
                             <option value="4">Нестеренко</option>
                          </select>
+
+                          <label><input type="checkbox" />
+                                Полководец
+                            </label>
                         </div>
 
                         <div className="Admin__choose">
@@ -122,6 +126,10 @@ class Admin extends Component {
                             <option value="3">Воронин</option>
                             <option value="4">Нестеренко</option>
                             </select>
+
+                             <label><input type="checkbox" />
+                                Сотник
+                            </label>
                         </div>
 
                         <div className="Admin__choose">
@@ -131,6 +139,9 @@ class Admin extends Component {
                             <option value="3">Десятка им. Васнецова</option>
                             <option value="4">Десятка им. Полтавина</option>
                             </select>
+                             <label><input type="checkbox" />
+                                Десятник
+                            </label>
                         </div>
 
                         <div className="Admin__choose">
@@ -140,7 +151,12 @@ class Admin extends Component {
                             <option value="3">Косенко</option>
                             <option value="4">Костромина</option>
                             </select>
+
+                            <label><input type="checkbox" />
+                                Тренер
+                            </label>
                         </div>
+
 
                     
                     </div>
