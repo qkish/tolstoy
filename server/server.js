@@ -18,6 +18,7 @@ import csrf from 'koa-csrf';
 import flash from 'koa-flash';
 import minimist from 'minimist';
 import Grant from 'grant-koa';
+import cache from 'koa-redis-cache';
 import config from '../config';
 import {APP_NAME} from 'config/client_config'
 
@@ -35,6 +36,26 @@ app.use(session({maxAge: 1000 * 3600 * 24 * 7}, app));
 csrf(app);
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
+
+app.use(cache({
+    redis: {
+      host: config.redis.host || 'localhost',
+      port: config.redis.port || 6379
+    },
+    routes: [
+        '/',
+        '/hot',
+        '/hot/bm-open',
+        '/trending',
+        '/trending/bm-open',
+        '/active',
+        '/active/bm-open',
+        '/@bm-bmtasks',
+        '/rating',
+        '/rating/all'
+    ],
+    onerror: (err) => console.log('redis err', err)
+}))
 
 // redirect to home page if known account
 // remember ch, cn, r url params in the session and remove them from url
