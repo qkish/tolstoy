@@ -137,7 +137,8 @@
 .PostFull__footer {
   clear: right;
   margin-top: 5px;
-  overflow: hidden;
+  display: block;
+  height: 30px;
   
 
   
@@ -222,6 +223,8 @@
 
   .PostFull__footer {
     display: block;
+    overflow: hidden;
+    height: auto;
     
   }
   .PostFull__reply {

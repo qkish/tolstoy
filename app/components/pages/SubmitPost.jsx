@@ -1,7 +1,7 @@
 import React from 'react';
 // import {connect} from 'react-redux';
 import { browserHistory } from 'react-router';
-import ReplyEditor from 'app/components/elements/ReplyEditor'
+import ReplyEditor from 'app/components/elements/TaskEditor'
 
 const formId = 'submitStory'
 const SubmitReplyEditor = ReplyEditor(formId)
