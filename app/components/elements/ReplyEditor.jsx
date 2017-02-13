@@ -110,6 +110,7 @@ class ReplyEditor extends React.Component {
             showYoutube: false,
             youtubeLinkError: 'ReplyEditorShort__youtube-no-error',
             youtubeLink: '',
+            tagsInState: '',
     }
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditorShort')
         this.onTitleChange = e => {
@@ -219,10 +220,15 @@ class ReplyEditor extends React.Component {
                 uploading:false, 
                 UploadImagePreviewPath: this.props.fileattached,
                 fileState: this.props.fileattached,
+                
             })
 
 
+
+
          }
+
+         this.setState({tagsInState: this.props.jsonMetadata.jsonMetadata.tags})
 
         setTimeout(() => {
             if (this.props.isStory) {this.refs.titleRef.focus(); }
@@ -457,7 +463,12 @@ class ReplyEditor extends React.Component {
             body: this.props.body,
             money: this.props.money,
             filemeta: this.state.fileState,
+            tagsPlaced: this.state.tagsInState,
         }
+
+        let tempTags = this.props.jsonMetadata;
+
+   
 
 
 
@@ -800,6 +811,9 @@ export default formId => reduxForm(
 
             let placedFile = originalPost.filemeta;
 
+            let placedTags = originalPost.tagsPlaced;
+            
+
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
             // when transletirate it
@@ -863,6 +877,7 @@ export default formId => reduxForm(
 
             if(money) meta.daySumm = money; else delete meta.daySumm
             if(placedFile) meta.fileAttached = placedFile; else delete meta.fileAttached
+            if (placedTags) meta.tags = placedTags; else delete meta.tags
 
   
 

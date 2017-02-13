@@ -160,6 +160,13 @@ class PostSummary extends React.Component {
 
          }
 
+         let firstTag = p.json_metadata.tags[0];
+
+         let isTask = false
+
+         if (firstTag) {isTask = firstTag.substring(0,7) == 'bm-task' ? true : false }
+        
+
         let moneyCurrency = store.get('fetchedCurrency') || DEFAULT_CURRENCY
 
         let moneyToday = <div className="PostSummary__summToday">{translate('earned_in_post')} {money} {moneyCurrency}</div>
@@ -214,9 +221,14 @@ class PostSummary extends React.Component {
                     <div className="float-right"><Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} flag /></div>
                 </div>
                 {reblogged_by}
-                 <div className="PostSummary__header">
+                 {isTask && p.category == 'bm-open' ? 
+                    <div className="PostSummary__header-otvet">
+                    <div className="PostSummary__header-otvettitle">Выполнение задания</div>
                         {content_title}
                     </div>
+                    :<div className="PostSummary__header">
+                        {content_title}
+                    </div> }
 
 
                 <div className="PostSummary__content">

@@ -64,6 +64,12 @@ export default function resolveRoute(path)
         return {page: 'Rating', params: match[1]};
     }
 
+    match = path.match(/^\/admin\/?(all|polki|hundreds|tens|ten|hundred|polk|my-ten|couches|couch-group|my-group)?\/?(\d+)?$/)
+    if (match) {
+
+        return {page: 'Admin', params: match[1]};
+    }
+
     match = path.match(/^\/(@[\w\.\d-]+)\/feed\/?$/);
     if (match) {
         return {page: 'PostsIndex', params: ['home', match[1]]};

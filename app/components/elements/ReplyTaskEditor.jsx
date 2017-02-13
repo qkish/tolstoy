@@ -438,7 +438,7 @@ class ReplyTaskEditor extends React.Component {
 
         let currentTask = this.props.taskId;
 
-        let newTitle = "Ответ на задание: " + this.props.taskTitle;
+        let newTitle = this.props.taskTitle;
 
 
 

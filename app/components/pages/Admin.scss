@@ -1,0 +1,38 @@
+.Admin__wrapper {
+	 padding: 15px 20px 12px 20px;
+    overflow: hidden;
+    background-color: #fff;
+    clear: left;
+    border: 1px solid #e1e3e4;
+    border-radius: 0 0 3px 3px;
+    width: 100%;
+}
+
+.Admin__menu .HorizontalMenu {
+	width: 100%;
+}
+.Admin__submenu {
+	overflow: hidden;
+    background: #f4f5f5;
+    border: 1px solid #e1e3e4;
+    border-bottom: 0 none;
+    height: 50px;
+    width: 100%;
+}
+
+.Admin__choose {
+	float: left;
+	margin-right: 10px;
+	width: 120px;
+	
+}
+
+.Admin__choose select {
+	padding: 0 5px;
+	font-size: 12px;
+	height: 30px;
+}
+
+.Admin__wrapper .Rating__row .User__wrap {
+	width: 200px;
+}

@@ -40,7 +40,8 @@ app.use(flash({key: 'flash'}));
 app.use(cache({
     redis: {
       host: config.redis.host || 'localhost',
-      port: config.redis.port || 6379
+      port: config.redis.port || 6379, 
+      options: {return_buffers: true}
     },
     routes: [
         '/',

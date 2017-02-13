@@ -141,6 +141,44 @@ margin-bottom: 15px;
     }
   }
 }
+
+.PostSummary__header-otvet {
+
+  > h1 {
+    font-family:"museo_sans_cyrl", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin: 0 0 5px 0;
+    overflow: hidden;
+    
+    > a {
+      color: #333;
+    }
+    > a:visited {
+      color: #777;
+    }
+
+    >a:hover {
+      text-decoration: none;
+    }
+  }
+  margin: 0 -20px 10px -20px;
+  padding: 12px 20px 7px 20px;
+  background: #f7f8f9;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+  
+}
+
+.PostSummary__header-otvettitle {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #9f9f9f;
+  font-weight: 700;
+  
+}
+
 .PostSummary__collapse {
   visibility: hidden;
 }
@@ -291,5 +329,34 @@ width: 50px;
     margin-left: 42px;
  
   }
+
+  .PostSummary__header-otvet {
+
+  > h1 {
+    font-family:"museo_sans_cyrl", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin: 0 0 5px 0;
+    overflow: hidden;
+    
+    > a {
+      color: #333;
+    }
+    > a:visited {
+      color: #777;
+    }
+
+    >a:hover {
+      text-decoration: none;
+    }
+  }
+  margin: 0 -15px 10px -15px;
+  padding: 12px 15px 7px 15px;
+  background: #f7f8f9;
+  border-top: 1px solid #ebebeb;
+  border-bottom: 1px solid #ebebeb;
+  
+}
+
 
 }

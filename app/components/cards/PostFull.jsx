@@ -37,6 +37,7 @@ function TimeAuthorCategory({content, authorRepLog10, showTags}) {
                 <Icon name="clock" className="space-right" />
                 <span className="TimeAgo"><TimeAgoWrapper date={content.created} /></span>
             </Tooltip>
+
             
         </span>
      );
@@ -321,6 +322,9 @@ class PostFull extends React.Component {
                 {/* {username && firstPayout && rootComment && <div className="float-right">
                     <button className="button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>
                 </div>} */}
+
+               {/* <TagList post={content} horizontal /> */}
+
 
                 <div className="PostFull__footer align-middle">
                     <div className="PostFull_Footer-leftblock">
