@@ -14,8 +14,8 @@ export default {
     },
     output: {
         path: path.resolve(__dirname, '../dist'),
-        filename: '[name].[hash].js',
-        chunkFilename: '[id].[hash].js',
+        filename: '[name].js',
+        chunkFilename: '[id].js',
         publicPath: '/assets/'
     },
     module: {
@@ -54,7 +54,7 @@ export default {
     plugins: [
         function () { this.plugin('done', writeStats); },
         webpack_isomorphic_tools_plugin,
-        new ExtractTextPlugin('[name]-[chunkhash].css')
+        new ExtractTextPlugin('[name].css')
     ],
     resolve: {
         root: [
