@@ -37,27 +37,6 @@ csrf(app);
 app.use(mount(grant));
 app.use(flash({key: 'flash'}));
 
-app.use(cache({
-    redis: {
-      host: config.redis.host || 'localhost',
-      port: config.redis.port || 6379, 
-      options: {return_buffers: true}
-    },
-    routes: [
-        '/',
-        '/hot',
-        '/hot/bm-open',
-        '/trending',
-        '/trending/bm-open',
-        '/active',
-        '/active/bm-open',
-        '/@bm-bmtasks',
-        '/rating',
-        '/rating/all'
-    ],
-    onerror: (err) => console.log('redis err', err)
-}))
-
 // redirect to home page if known account
 // remember ch, cn, r url params in the session and remove them from url
 app.use(function *(next) {
@@ -91,8 +70,30 @@ if (env === 'production') {
     // load production middleware
     app.use(require('koa-conditional-get')());
     app.use(require('koa-etag')());
-    app.use(require('koa-compressor')());
     app.use(prod_logger());
+    // app.use(require('koa-compressor')()); // replace by github.com/koajs/compress
+    const REDIS_CACHE = config.redis.cache || false;
+    if (REDIS_CACHE) {
+        app.use(cache({
+            redis: {
+              host: config.redis.host || 'localhost',
+              port: config.redis.port || 6379
+            },
+            routes: [
+                '/',
+                '/hot',
+                '/hot/bm-open',
+                '/trending',
+                '/trending/bm-open',
+                '/active',
+                '/active/bm-open',
+                '/@bm-bmtasks',
+                '/rating',
+                '/rating/all'
+            ],
+            onerror: (err) => console.log('redis err', err)
+        }));
+    }
 } else {
     app.use(koa_logger());
 }
