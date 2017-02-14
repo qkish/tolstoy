@@ -71,25 +71,28 @@ if (env === 'production') {
     app.use(require('koa-conditional-get')());
     app.use(require('koa-etag')());
     // app.use(require('koa-compressor')());
-    app.use(cache({
-        redis: {
-          host: config.redis.host || 'localhost',
-          port: config.redis.port || 6379
-        },
-        routes: [
-            '/',
-            '/hot',
-            '/hot/bm-open',
-            '/trending',
-            '/trending/bm-open',
-            '/active',
-            '/active/bm-open',
-            '/@bm-bmtasks',
-            '/rating',
-            '/rating/all'
-        ],
-        onerror: (err) => console.log('redis err', err)
-    }));
+    REDIS_CACHE = config.redis.cache || false;
+    if (REDIS_CACHE) {
+        app.use(cache({
+            redis: {
+              host: config.redis.host || 'localhost',
+              port: config.redis.port || 6379
+            },
+            routes: [
+                '/',
+                '/hot',
+                '/hot/bm-open',
+                '/trending',
+                '/trending/bm-open',
+                '/active',
+                '/active/bm-open',
+                '/@bm-bmtasks',
+                '/rating',
+                '/rating/all'
+            ],
+            onerror: (err) => console.log('redis err', err)
+        }));
+    }
     app.use(prod_logger());
 } else {
     app.use(koa_logger());
