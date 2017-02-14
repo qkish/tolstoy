@@ -70,6 +70,7 @@ if (env === 'production') {
     // load production middleware
     app.use(require('koa-conditional-get')());
     app.use(require('koa-etag')());
+    app.use(prod_logger());
     // app.use(require('koa-compressor')()); // replace by github.com/koajs/compress
     const REDIS_CACHE = config.redis.cache || false;
     if (REDIS_CACHE) {
@@ -93,7 +94,6 @@ if (env === 'production') {
             onerror: (err) => console.log('redis err', err)
         }));
     }
-    app.use(prod_logger());
 } else {
     app.use(koa_logger());
 }
