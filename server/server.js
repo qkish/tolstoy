@@ -71,7 +71,7 @@ if (env === 'production') {
     app.use(require('koa-conditional-get')());
     app.use(require('koa-etag')());
     // app.use(require('koa-compressor')());
-    REDIS_CACHE = config.redis.cache || false;
+    const REDIS_CACHE = config.redis.cache || false;
     if (REDIS_CACHE) {
         app.use(cache({
             redis: {
