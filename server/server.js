@@ -75,6 +75,7 @@ if (env === 'production') {
     const REDIS_CACHE = config.redis.cache || false;
     if (REDIS_CACHE) {
         app.use(cache({
+            expire: 15 * 60,
             redis: {
               host: config.redis.host || 'localhost',
               port: config.redis.port || 6379
