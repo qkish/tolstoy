@@ -70,7 +70,7 @@ if (env === 'production') {
     // load production middleware
     app.use(require('koa-conditional-get')());
     app.use(require('koa-etag')());
-    // app.use(require('koa-compressor')());
+    // app.use(require('koa-compressor')()); // replace by github.com/koajs/compress
     const REDIS_CACHE = config.redis.cache || false;
     if (REDIS_CACHE) {
         app.use(cache({
