@@ -1,11 +1,15 @@
 .Admin__wrapper {
-	 padding: 15px 20px 12px 20px;
+	 padding: 0;
     overflow: hidden;
     background-color: #fff;
     clear: left;
     border: 1px solid #e1e3e4;
     border-radius: 0 0 3px 3px;
     width: 100%;
+}
+
+.Admin__wrapper .Rating__row:nth-child(2n) {
+	background: #f7f8f9;
 }
 
 .Admin__menu .HorizontalMenu {
@@ -34,10 +38,42 @@
 }
 
 .Admin__wrapper .Rating__row .User__wrap {
-	width: 200px;
+	width: 230px;
 }
 .Admin__choose label {
 	font-size: 12px;
 	text-transform: normal;
 	letter-spacing: 0;
+}
+.Admin__wrapper .Rating__row {
+	overflow: hidden;
+    display: block;
+    padding: 10px 10px 10px 10px;
+
+}
+
+.Admin__pagination {
+	padding: 10px;
+}
+.Admin__pagination .btn {
+	margin-right: 5px;
+}
+.Admin__pagination .btn-primary {
+	background: #196aff;
+	border: 1px soild #196aff;
+}
+
+.Admin__submenu .Rating__search {
+	float: left;
+    width: 250px;
+    height: 30px;
+    font-size: 13px;
+    box-shadow: none;
+    margin: 9px 10px 0px 10px;
+    border-radius: 3px;
+}
+.Admin__wrapper-addbtn {
+	margin: 10px;
+	background: #196aff;
+	border: 1px soild #196aff;
 }

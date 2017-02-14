@@ -123,12 +123,20 @@ export function updateMoney (payload) {
     }).then(res => res.json());
 }
 
-export function getUsersByCategory (category) {
+export function getUsersByCategory (category, offset) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    return fetch(`/api/v1/users?category=${category || 'all'}`)
+    return fetch(`/api/v1/users?category=${category || 'all'}&offsetVal=${offset || 0}`)
         .then(res => res.json())
         .then(({ users }) => users);
 }
+
+export function getUsersCount (category) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/usersCount?category=${category || 'all'}`)
+        .then(res => res.json())
+        .then(({ count }) => count);
+}
+
 
 export function getUsersByTen (tenId) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;

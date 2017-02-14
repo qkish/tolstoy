@@ -14,7 +14,8 @@ import {
     getUsersByPolk,
     getUsersByCouchGroup,
     getMyTen,
-    getMyGroup
+    getMyGroup,
+    getUsersCount
 } from 'app/utils/ServerApiClient'
 import UserEdit from 'app/components/elements/UserEdit'
 import { Link } from 'react-router'
@@ -33,12 +34,19 @@ function moneyPrettify(text) {
         return moneyInRating
 }
 
+
+
 class Admin extends Component {
     constructor (props) {
         super(props)
-        this.state = {}
+        this.state = {currPage: 0, count: 50}
         this.search = this.search.bind(this)
         this.getData = this.getData.bind(this)
+
+
+    
+
+
     }
 
     getData (props) {
@@ -70,8 +78,32 @@ class Admin extends Component {
             }
             return
         }
-        getUsersByCategory(props.params.category).then(users => this.setState({users}))
+
+
+        getUsersByCategory(props.params.category, this.state.currPage).then(users => this.setState({users}))
+        getUsersCount(props.params.category).then(count => this.setState({count}))
+        
+
+        getUsersByCategory('tens').then(allTens => this.setState({allTens}))
+        getUsersByCategory('hundreds').then(allHundreds => this.setState({allHundreds}))
+        getUsersByCategory('polki').then(allPolks => this.setState({allPolks}))
+        getUsersByCategory('couches').then(allTrainers => this.setState({allTrainers}))
+     
     }
+
+    handleChangePage = event => {
+
+            event.preventDefault();
+            console.log('CHANGEd')
+
+            this.setState({currPage: 50})
+
+
+            this.getData(this.props)
+        
+    }
+
+
 
     componentDidMount () {
         this.getData(this.props)
@@ -85,17 +117,40 @@ class Admin extends Component {
         searchUsers(text).then(users => this.setState({isSearch: true, users}))
     }
 
-    render () {
-        let isAll = false
-        if(this.props.params.category == 'all' ||
-            this.props.params.category == 'my-ten' ||
-            this.props.params.category == 'my-group'
 
-            ) {isAll = true}
+    pager(count) {
+    let result = ''
+   
+    if (count > 3)  {
+
+                    let countI = count
+                    let currentCount = 0
+                    let i = 1
+                    while (countI > 1) {
+                        currentCount = count - countI
+                        countI = countI - 3;
+                        i++
+                        
+                      result = result + '<a className="btn btn-primary" href="#" role="button" ref="pagenum' + currentCount + '" >' + i + '</a> '//+ <a className="btn btn-primary" href="#" ref="pagenum" + currentCount >i</a>
+
+                    }}
+
+    return result
+    }
+
+    render () {
+
+        console.log('CurrPage: ', this.state.currPage)
+        console.log('COUNT: ', this.state.count)
+        
+        let isAll = false
+        if(this.props.params.category == 'all' ) {isAll = true}
 
 
         let view
-        const { users } = this.state
+        const { users, allTens, allPolks, allHundreds, allTrainers, count } = this.state
+
+        let offset = 0
 
         
       
@@ -108,51 +163,55 @@ class Admin extends Component {
                         <UserEdit account={user.name} key={user.id} />
                         <div className="Admin__choose">
                          <select>
-                            <option value="1">Осипов</option>
-                            <option value="2">Дашкиев</option>
-                            <option value="3">Воронин</option>
-                            <option value="4">Нестеренко</option>
+
+                           {allPolks ? allPolks.map(userOption => (
+                            <option value={userOption.id}>{userOption.first_name + ' ' + userOption.last_name + ', ' + userOption.name}</option>
+
+                             )) : '' }
+
                          </select>
 
-                          <label><input type="checkbox" />
+                          <label><input type="checkbox" checked={user.polk_leader ? 'checked' : ''}/>
                                 Полководец
                             </label>
                         </div>
 
                         <div className="Admin__choose">
                          <select>
-                            <option value="1">Осипов</option>
-                            <option value="2">Дашкиев</option>
-                            <option value="3">Воронин</option>
-                            <option value="4">Нестеренко</option>
+                           {allHundreds ? allHundreds.map(user => (
+                            <option value={user.id}>{user.first_name + ' ' + user.last_name + ', ' + user.name}</option>
+
+                             )) : '' }
                             </select>
 
-                             <label><input type="checkbox" />
+                             <label><input type="checkbox" checked={user.hundred_leader ? 'checked' : ''}/>
                                 Сотник
                             </label>
                         </div>
 
                         <div className="Admin__choose">
                          <select>
-                            <option value="1">Десятка им. Петрова</option>
-                            <option value="2">Десятка им. Иванова</option>
-                            <option value="3">Десятка им. Васнецова</option>
-                            <option value="4">Десятка им. Полтавина</option>
+
+                            {allTens ? allTens.map(user => (
+                            <option value={user.id}>{user.first_name + ' ' + user.last_name + ', ' + user.name}</option>
+
+                             )) : '' }
+
                             </select>
-                             <label><input type="checkbox" />
+                             <label><input type="checkbox" checked={user.ten_leader ? 'checked' : ''}/>
                                 Десятник
                             </label>
                         </div>
 
                         <div className="Admin__choose">
                          <select>
-                            <option value="1">Нет тренерства</option>
-                            <option value="2">Нестеренко</option>
-                            <option value="3">Косенко</option>
-                            <option value="4">Костромина</option>
+                            {allTrainers? allTrainers.map(user => (
+                            <option value={user.id}>{user.first_name + ' ' + user.last_name + ', ' + user.name}</option>
+
+                             )) : '' }
                             </select>
 
-                            <label><input type="checkbox" />
+                            <label><input type="checkbox"  checked={user.couch ? 'checked' : ''}/>
                                 Тренер
                             </label>
                         </div>
@@ -161,6 +220,17 @@ class Admin extends Component {
                     
                     </div>
                 ))}
+
+                <div className="Admin__pagination">
+                    
+                {this.pager(count)}
+
+                    
+                    <a className="btn btn-default" href="#" role="button">2</a>
+                    <a className="btn btn-default" href="#" role="button">3</a>
+              
+
+                </div>
             </div>
         ) : (
             <div>Загрузка</div>
@@ -170,11 +240,14 @@ class Admin extends Component {
         if (this.props.params.category === 'tens') {
             view = users ? (
                 <div className="Admin__wrapper">
+                
+                    <div className="Rating__row">
                     {users.map(user => (
-                        <div className="Rating__row">
-                        <UserEdit account={user.name} key={user.id} link={`/rating/ten/${user.id}`} name={`Десятка им. ${user.first_name} ${user.last_name}`} />
-                        </div>
+                        
+                        <UserEdit account={user.name} key={user.id} link={`/admin/ten/${user.id}`} name={`Десятка им. ${user.first_name} ${user.last_name}`} />
+                        
                     ))}
+                </div>
                 </div>
             ) : (
                 <div>Загрузка</div>
@@ -184,9 +257,10 @@ class Admin extends Component {
         if (this.props.params.category === 'hundreds') {
             view = users ? (
                 <div className="Admin__wrapper">
+               
                 <div className="Rating__row">
                     {users.map(user => (
-                        <UserEdit account={user.name} key={user.id} link={`/rating/hundred/${user.id}`} name={`Сотня им. ${user.first_name} ${user.last_name}`} />
+                        <UserEdit account={user.name} key={user.id} link={`/admin/hundred/${user.id}`} name={`Сотня им. ${user.first_name} ${user.last_name}`} />
                     ))}
                     </div>
                 </div>
@@ -198,9 +272,12 @@ class Admin extends Component {
         if (this.props.params.category === 'polki') {
             view = users ? (
                 <div className="Admin__wrapper">
+                 
+                  <div className="Rating__row">
                     {users.map(user => (
-                        <UserEdit account={user.name} key={user.id} link={`/rating/polk/${user.id}`} name={`Полк им. ${user.first_name} ${user.last_name}`} />
+                        <UserEdit account={user.name} key={user.id} link={`/admin/polk/${user.id}`} name={`Полк им. ${user.first_name} ${user.last_name}`} />
                     ))}
+                </div>
                 </div>
             ) : (
                 <div>Загрузка</div>
@@ -210,9 +287,10 @@ class Admin extends Component {
         if (this.props.params.category === 'couches') {
             view = users ? (
                 <div className="Admin__wrapper">
+                
                 <div className="Rating__row">
                     {users.map(user => (
-                        <UserEdit account={user.name} key={user.id} link={`/rating/couch-group/${user.id}`} name={`Тренерская группа им. ${user.first_name} ${user.last_name}`} />
+                        <UserEdit account={user.name} key={user.id} link={`/admin/couch-group/${user.id}`} name={`Тренерская группа им. ${user.first_name} ${user.last_name}`} />
                     ))}
                     </div>
                 </div>
@@ -226,20 +304,7 @@ class Admin extends Component {
         }
 
         let submenu = <div className="Admin__submenu">
-                   <HorizontalSubmenu items={[{
-                        active: this.props.params.category === 'all',
-                        link: '/admin/all',
-                        value: 'Лучшие'
-                    },
-                    {
-                        active: this.props.params.category === 'my-ten',
-                        link: '/admin/my-ten',
-                        value: 'Моя десятка'
-                    }, {
-                        active: this.props.params.category === 'my-group',
-                        link: '/admin/my-group',
-                        value: 'Моя группа'
-                    }]} />
+                  
                   <input
                         type='text'
                         placeholder='Поиск по имени'
@@ -270,6 +335,10 @@ class Admin extends Component {
                         active: this.props.params.category === 'couches',
                         link: '/admin/couches',
                         value: 'Тренера'
+                    }, {
+                        active: this.props.params.category === 'volunteer',
+                        link: '/admin/volunteer',
+                        value: 'Волонтеры'
                     }]} />
                 {isAll && submenu}
                     {view}

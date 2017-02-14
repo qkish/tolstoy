@@ -64,7 +64,7 @@ export default function useGeneralApi(app) {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const {csrf, username} = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, csrf)) return;
+        //if (!checkCSRF(this, csrf)) return;
         const account = yield models.Account.findOne({
             attributes: ['private_key'],
             where: {
@@ -91,7 +91,7 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         print('params', params)
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, account.csrf)) return;
+        //  if (!checkCSRF(this, account.csrf)) return;
         console.log('-- /accounts -->', this.session.uid, this.session.user, account);
 
         if ($STM_Config.disable_signups) {
@@ -216,7 +216,7 @@ export default function useGeneralApi(app) {
             csrf,
             email
         } = typeof(params) === 'string' ? JSON.parse(params): params;
-        if (!checkCSRF(this, csrf)) return;
+       //  if (!checkCSRF(this, csrf)) return;
         console.log('-- /update_email -->', this.session.uid, email);
         try {
             if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
@@ -266,7 +266,7 @@ export default function useGeneralApi(app) {
 
         console.log('SERV', username, password);
 
-        if (!checkCSRF(this, csrf)) return;
+       // if (!checkCSRF(this, csrf)) return;
 
         try {
 
@@ -331,7 +331,7 @@ export default function useGeneralApi(app) {
             csrf,
             username
         } = typeof(params) === 'string' ? JSON.parse(params): params;
-        if (!checkCSRF(this, csrf)) return;
+        //if (!checkCSRF(this, csrf)) return;
         console.log('-- /check_user -->', this.session.uid, username);
         const account = yield models.Account.findOne({
             where: {
@@ -357,7 +357,7 @@ export default function useGeneralApi(app) {
             csrf,
             account
         } = typeof(params) === 'string' ? JSON.parse(params): params;
-        if (!checkCSRF(this, csrf)) return;
+        //if (!checkCSRF(this, csrf)) return;
         console.log('-- /login_account -->', this.session.uid, account);
         try {
             this.session.a = account;
@@ -387,7 +387,7 @@ export default function useGeneralApi(app) {
         const {
             csrf
         } = typeof(params) === 'string' ? JSON.parse(params): params;
-        if (!checkCSRF(this, csrf)) return;
+        //if (!checkCSRF(this, csrf)) return;
         console.log('-- /logout_account -->', this.session.uid);
         try {
             this.session.a = null;
@@ -414,7 +414,7 @@ export default function useGeneralApi(app) {
                 type,
                 value
             } = typeof(params) === 'string' ? JSON.parse(params): params;
-            if (!checkCSRF(this, csrf)) return;
+            //if (!checkCSRF(this, csrf)) return;
             console.log('-- /record_event -->', this.session.uid, type, value);
             const str_value = typeof value === 'string' ? value : JSON.stringify(value);
             this.body = JSON.stringify({
@@ -443,7 +443,7 @@ export default function useGeneralApi(app) {
         let {csrf, account_name} = typeof(params) === 'string'
             ? JSON.parse(params)
             : params;
-        if (!checkCSRF(this, csrf))
+        //if (!checkCSRF(this, csrf))
             return; // disable for mass operations
         console.log(account_name);
         // expect array
@@ -479,7 +479,7 @@ export default function useGeneralApi(app) {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const {csrf, username} = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, csrf)) return;
+        //if (!checkCSRF(this, csrf)) return;
         const account = yield models.Account.findOne({
             attributes: ['private_key'],
             where: {
@@ -509,7 +509,7 @@ export default function useGeneralApi(app) {
         const params = this.request.body;
         print('params', params)
         const account = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, account.csrf)) return;
+        // if (!checkCSRF(this, account.csrf)) return;
         console.log('-- /accounts -->', this.session.uid, this.session.user, account);
 
         if ($STM_Config.disable_signups) {
@@ -648,7 +648,7 @@ export default function useGeneralApi(app) {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const {csrf, payload} = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, csrf)) return;
+        //if (!checkCSRF(this, csrf)) return;
 
         const user = yield models.User.findOne({
             where: {
@@ -680,7 +680,7 @@ export default function useGeneralApi(app) {
         } else {
             const monets = user.posts_monets + user.comments_monets + user.tasks_monets
             const monets_total = user.monets + monets
-            const total = Number(payload.vesting) * 0.51 + monets * 0.25 + Number(payload.money) * 0.24
+            const total = Number(payload.vesting) * 0.51 + monets * 0.25 + Number(payload.money) * 0.00024
             console.log({
                 posts_monets: 0,
                 comments_monets: 0,
@@ -710,8 +710,11 @@ export default function useGeneralApi(app) {
 
     router.get('/users', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
-        const { category, ten, hundred, polk, couch_group, search } = this.query
+        const { category, ten, hundred, polk, couch_group, search, offsetVal } = this.query
         let where = {}
+        let offset = 0
+        let limit = 50
+        
 
         if (category) {
             if (category === 'polki') {
@@ -752,6 +755,13 @@ export default function useGeneralApi(app) {
             where = { couch_group }
         }
 
+        if (offsetVal) {offset = parseInt(offsetVal); limit = parseInt(offsetVal) + 50}
+            else {offset = 0; limit = 0;}
+
+      
+     
+        
+
         if (search) {
             where = {
                 $or: [{
@@ -765,6 +775,9 @@ export default function useGeneralApi(app) {
                 }]
             }
         }
+
+      
+       
 
         const users = yield models.User.findAll({
             attributes: [
@@ -785,7 +798,12 @@ export default function useGeneralApi(app) {
             order: [
                 ['money_total', 'DESC']
             ],
-            limit: 50
+            limit,
+            offset
+            
+      
+
+            
         })
         this.body = JSON.stringify({ users })
     })
@@ -794,7 +812,7 @@ export default function useGeneralApi(app) {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const {csrf, name} = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, csrf)) return;
+        //if (!checkCSRF(this, csrf)) return;
 
         const { ten } = yield models.User.findOne({
             attributes: ['ten'],
@@ -834,7 +852,7 @@ export default function useGeneralApi(app) {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const {csrf, name} = typeof(params) === 'string' ? JSON.parse(params) : params;
-        if (!checkCSRF(this, csrf)) return;
+        //if (!checkCSRF(this, csrf)) return;
 
         const { couch_group } = yield models.User.findOne({
             attributes: ['couch_group'],
@@ -871,6 +889,77 @@ export default function useGeneralApi(app) {
         }
         this.body = JSON.stringify({ users })
     })
+
+
+    router.get('/usersCount', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return;
+        const { category, ten, hundred, polk, couch_group, search, offsetVal } = this.query
+        let where = {}
+       
+        
+
+        if (category) {
+            if (category === 'polki') {
+                where = {
+                    polk_leader: true
+                }
+            }
+            if (category === 'hundreds') {
+                where = {
+                    hundred_leader: true
+                }
+            }
+            if (category === 'tens') {
+                where = {
+                    ten_leader: true
+                }
+            }
+            if (category === 'couches') {
+                where = {
+                    couch: true
+                }
+            }
+        }
+
+        if (ten) {
+            where = { ten }
+        }
+
+        if (hundred) {
+            where = { hundred }
+        }
+
+        if (polk) {
+            where = { polk }
+        }
+
+        if (couch_group) {
+            where = { couch_group }
+        }
+
+
+        if (search) {
+            where = {
+                $or: [{
+                    first_name: {
+                        $like: `%${search}%`
+                    }
+                }, {
+                    last_name: {
+                        $like: `%${search}%`
+                    }
+                }]
+            }
+        }
+
+
+        const count = yield models.User.count({
+            where
+        })
+        this.body = JSON.stringify({ count })
+    })
+
+
 
     router.post('/upload', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
