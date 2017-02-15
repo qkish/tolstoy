@@ -25,8 +25,7 @@ import pify from 'pify';
 import fs from 'fs';
 import {flatten, map} from 'lodash';
 import FormData from 'form-data';
-
-import Cookies from 'js-cookie'
+import shortid from 'shortid';
 
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
@@ -1358,7 +1357,8 @@ export default function useGeneralApi(app) {
 			const fileData = yield pify(fs.readFile)(file.path)
 			const uploadParams = {
 				Bucket: 'bm-platform',
-				Key: file.name,
+				// Key: file.name,
+				Key: `${shortid.generate()}-${file.name}`,
 				Body: fileData,
 				ContentType: file.type
 			}
@@ -1473,8 +1473,6 @@ function* getBMAccessTokenCredentialsOnly() {
 			client_id: config.bmapi.client_id,
 			client_secret: config.bmapi.client_secret,
 			grant_type: 'client_credentials'
-
-
 		})
 	}).then(res => res.json())
 }
