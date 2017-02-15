@@ -23,6 +23,7 @@ import Upload from '@sadorlovsky/rc-upload'
 import UploadImagePreview from 'app/components/elements/UploadImagePreview'
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
+import {deleteFromS3} from 'app/utils/ServerApiClient';
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -214,13 +215,13 @@ class ReplyEditor extends React.Component {
         // focus
          if (this.props.fileattached) {
 
-         
-            this.setState({isFile: true, 
-                showPreview: true, 
-                uploading:false, 
+
+            this.setState({isFile: true,
+                showPreview: true,
+                uploading:false,
                 UploadImagePreviewPath: this.props.fileattached,
                 fileState: this.props.fileattached,
-                
+
             })
 
 
@@ -245,7 +246,7 @@ class ReplyEditor extends React.Component {
             this.setState({ markdownViewerText })
         }
 
-        
+
 
         if(process.env.BROWSER) {
             const tp = this.props.fields
@@ -468,7 +469,7 @@ class ReplyEditor extends React.Component {
 
         let tempTags = this.props.jsonMetadata;
 
-   
+
 
 
 
@@ -562,8 +563,8 @@ class ReplyEditor extends React.Component {
 
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
-                            let imageAdded 
-                            imageAdded = this.state.uploadedImage ? '\n' + this.state.uploadedImage : '';
+                            let imageAdded
+                            imageAdded = (this.state.uploadedImage && this.state.uploadedImage.url) ? '\n' + this.state.uploadedImage.url : '';
 
                             let youtubeAdded
                             youtubeAdded = this.state.youtubeLink ? '\n' + this.state.youtubeLink : '';
@@ -584,7 +585,7 @@ class ReplyEditor extends React.Component {
                      </div>
                       {isEdit && isStory ? <input type="number" {...cleanReduxInput(money)} onChange={onMoneyChange} disabled={loading} placeholder={translate('money_for_day')} autoComplete="off" ref="moneyRef" tabIndex={7} onMouseDown={this.handleOnMoneyFocus} onTouchStart={this.handleOnMoneyFocus} onBlur={this.handleOnMoneyBlur} className='ReplyEditorShort__moneyVisible'/> : ''}
                       {isEdit && isStory ? <input type="hidden" {...cleanReduxInput(filemeta)} value={this.state.fileState}/> : ''}
-                      
+
                         <div className={vframe_section_shrink_class}>
                             <div className="error">{body.touched && body.error && body.error !== 'Required' && body.error}</div>
                         </div>
@@ -605,7 +606,15 @@ class ReplyEditor extends React.Component {
                                 src={this.state.UploadImagePreviewPath}
                                 isThisFile={this.state.isFile}
                                 youtube={this.state.youtubeLink}
-                                remove={() => { this.setState({ showPreview: false, uploadBtnsClicked: false, fileState: '' }); }} />
+                                remove={() => {
+                                    this.setState({
+                                        showPreview: false,
+                                        uploadBtnsClicked: false,
+                                        uploadedImage: null,
+                                        fileState: null
+                                    });
+                                    deleteFromS3(this.state.uploadedImage.key)
+                                }} />
                         ) : null}
 
                         <div className={(vframe_section_shrink_class) + " uncovered"}>
@@ -619,14 +628,12 @@ class ReplyEditor extends React.Component {
                             <ul>
                                 <li>
                                     <Upload
-                                        action='/api/v1/upload'
-                                        data={{ type: 'image' }}
                                         component='label'
                                         accept='image/*'
+                                        action='/api/v1/upload'
+                                        data={{ type: 'image' }}
                                         className="ReplyEditorShort__buttons-add-image"
                                         onStart={file => {
-
-                                           
                                             const reader = new FileReader()
                                             reader.onloadend = () => {
                                                 this.setState({
@@ -639,16 +646,17 @@ class ReplyEditor extends React.Component {
                                             reader.readAsDataURL(file)
                                         }}
                                         onError={err => {
-
                                             console.error('ERR', err)
                                             this.setState({
                                                 uploading: false
                                             })
                                         }}
-                                        onSuccess={res => {
-                                         
+                                        onSuccess={file => {
                                             this.setState({
-                                                uploadedImage: res.image,
+                                                uploadedImage: {
+                                                  url: file.url,
+                                                  key: file.key
+                                                },
                                                 uploading: false
                                             })
                                         }}>
@@ -660,12 +668,9 @@ class ReplyEditor extends React.Component {
                                     <Upload
                                         component='label'
                                         action='/api/v1/upload'
-                                        action='/api/v1/upload'
                                         data={{ type: 'attachment' }}
                                         className="ReplyEditorShort__buttons-add-file"
                                         onStart={file => {
-                                         
-
                                             const reader = new FileReader()
                                             reader.onloadend = () => {
                                                 this.setState({
@@ -683,11 +688,13 @@ class ReplyEditor extends React.Component {
                                                 uploading: false
                                             })
                                         }}
-                                        onSuccess={res => {
-                                          
+                                        onSuccess={file => {
                                             this.setState({
-                                                fileState: res.image,
-                                              
+                                                fileState: file.url,
+                                                uploadedImage: {
+                                                  url: file.url,
+                                                  key: file.key
+                                                },
                                                 uploading: false
                                             })
                                         }}>
@@ -812,7 +819,7 @@ export default formId => reduxForm(
             let placedFile = originalPost.filemeta;
 
             let placedTags = originalPost.tagsPlaced;
-            
+
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
@@ -879,7 +886,7 @@ export default formId => reduxForm(
             if(placedFile) meta.fileAttached = placedFile; else delete meta.fileAttached
             if (placedTags) meta.tags = placedTags; else delete meta.tags
 
-  
+
 
 
 
