@@ -20,21 +20,16 @@ import {
 import UserEdit from 'app/components/elements/UserEdit'
 import { Link } from 'react-router'
 
-
 function moneyPrettify(text) {
-      let moneyInRating
-        if (text) {
-
-        moneyInRating = String(text);
-        moneyInRating = moneyInRating.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
-
-
-        } else moneyInRating='0'
-
-        return moneyInRating
+    let moneyInRating
+    if (text) {
+        moneyInRating = String(text)
+        moneyInRating = moneyInRating.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ')
+    } else {
+        moneyInRating = '0'
+    }
+    return moneyInRating
 }
-
-
 
 class Admin extends Component {
     constructor (props) {
@@ -42,11 +37,6 @@ class Admin extends Component {
         this.state = {currPage: 0, count: 50}
         this.search = this.search.bind(this)
         this.getData = this.getData.bind(this)
-
-
-
-
-
     }
 
     getData (props) {
@@ -79,31 +69,20 @@ class Admin extends Component {
             return
         }
 
-
         getUsersByCategory(props.params.category, this.state.currPage).then(users => this.setState({users}))
         getUsersCount(props.params.category).then(count => this.setState({count}))
-
-
         getUsersByCategory('tens').then(allTens => this.setState({allTens}))
         getUsersByCategory('hundreds').then(allHundreds => this.setState({allHundreds}))
         getUsersByCategory('polki').then(allPolks => this.setState({allPolks}))
         getUsersByCategory('couches').then(allTrainers => this.setState({allTrainers}))
-
     }
 
     handleChangePage = event => {
-
-            event.preventDefault();
-            console.log('CHANGEd')
-
-            this.setState({currPage: 50})
-
-
-            this.getData(this.props)
-
+        event.preventDefault();
+        console.log('CHANGEd')
+        this.setState({currPage: 50})
+        this.getData(this.props)
     }
-
-
 
     componentDidMount () {
         this.getData(this.props)
@@ -117,44 +96,33 @@ class Admin extends Component {
         searchUsers(text).then(users => this.setState({isSearch: true, users}))
     }
 
-
-    pager(count) {
-    let result = ''
-
-    if (count > 3)  {
-
-                    let countI = count
-                    let currentCount = 0
-                    let i = 1
-                    while (countI > 1) {
-                        currentCount = count - countI
-                        countI = countI - 3;
-                        i++
-
-                      result = result + '<a className="btn btn-primary" href="#" role="button" ref="pagenum' + currentCount + '" >' + i + '</a> '//+ <a className="btn btn-primary" href="#" ref="pagenum" + currentCount >i</a>
-
-                    }}
-
-    return result
+    pager (count) {
+        let result = ''
+        if (count > 3)  {
+            let countI = count
+            let currentCount = 0
+            let i = 1
+            while (countI > 1) {
+                currentCount = count - countI
+                countI = countI - 3;
+                i++
+                result = result + '<a className="btn btn-primary" href="#" role="button" ref="pagenum' + currentCount + '" >' + i + '</a> '//+ <a className="btn btn-primary" href="#" ref="pagenum" + currentCount >i</a>
+            }
+        }
+        return result
     }
 
     render () {
-
         console.log('CurrPage: ', this.state.currPage)
         console.log('COUNT: ', this.state.count)
 
         let isAll = false
         if(this.props.params.category == 'all' ) {isAll = true}
 
-
         let view
         const { users, allTens, allPolks, allHundreds, allTrainers, count } = this.state
 
         let offset = 0
-
-
-
-
 
         const userList = users ? (
             <div className="Admin__wrapper">
@@ -215,20 +183,14 @@ class Admin extends Component {
                                 Тренер
                             </label>
                         </div>
-
-
-
                     </div>
                 ))}
 
                 <div className="Admin__pagination">
 
                 {this.pager(count)}
-
-
                     <a className="btn btn-default" href="#" role="button">2</a>
                     <a className="btn btn-default" href="#" role="button">3</a>
-
 
                 </div>
             </div>
