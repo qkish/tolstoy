@@ -210,3 +210,20 @@ export function getMyGroup (name) {
         .then(res => res.json())
         .then(({ users }) => users);
 }
+
+export function deleteFromS3 (key) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch('/api/v1/delete_from_s3', {
+        method: 'post',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+            Accept: 'application/json',
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            csrf: $STM_csrf,
+            key
+        })
+    })
+}

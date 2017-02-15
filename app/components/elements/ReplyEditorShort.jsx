@@ -23,7 +23,7 @@ import Upload from '@sadorlovsky/rc-upload'
 import UploadImagePreview from 'app/components/elements/UploadImagePreview'
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
-
+import {deleteFromS3} from 'app/utils/ServerApiClient';
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -534,7 +534,7 @@ class ReplyEditorShort extends React.Component {
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
                             let imageAdded
-                            imageAdded = this.state.uploadedImage ? '\n' + this.state.uploadedImage : '';
+                            imageAdded = (this.state.uploadedImage && this.state.uploadedImage.url) ? '\n' + this.state.uploadedImage.url : '';
 
                             let youtubeAdded
                             youtubeAdded = this.state.youtubeLink ? '\n' + this.state.youtubeLink : '';
@@ -574,7 +574,15 @@ class ReplyEditorShort extends React.Component {
                                 src={this.state.UploadImagePreviewPath}
                                 isThisFile={this.state.isFile}
                                 youtube={this.state.youtubeLink}
-                                remove={() => { this.setState({ showPreview: false, uploadBtnsClicked: false }); }} />
+                                remove={() => {
+                                    this.setState({
+                                        showPreview: false,
+                                        uploadBtnsClicked: false,
+                                        uploadedImage: null,
+                                        fileState: null
+                                    });
+                                    deleteFromS3(this.state.uploadedImage.key)
+                                }} />
                         ) : null}
 
                         <div className={(vframe_section_shrink_class) + " " + (btnSubmit)}>
@@ -611,9 +619,12 @@ class ReplyEditorShort extends React.Component {
                                                 uploading: false
                                             })
                                         }}
-                                        onSuccess={res => {
+                                        onSuccess={image => {
                                             this.setState({
-                                                uploadedImage: res.image,
+                                                uploadedImage: {
+                                                  url: image.url,
+                                                  key: image.key
+                                                },
                                                 uploading: false
                                             })
                                         }}>
@@ -645,10 +656,13 @@ class ReplyEditorShort extends React.Component {
                                                 uploading: false
                                             })
                                         }}
-                                        onSuccess={res => {
+                                        onSuccess={file => {
                                             this.setState({
-                                                fileState: res.image,
-
+                                                fileState: file.url,
+                                                uploadedImage: {
+                                                  url: file.url,
+                                                  key: file.key
+                                                },
                                                 uploading: false
                                             })
                                         }}>

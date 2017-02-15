@@ -714,7 +714,7 @@ export default function useGeneralApi(app) {
         let where = {}
         let offset = 0
         let limit = 50
-        
+
 
         if (category) {
             if (category === 'polki') {
@@ -758,9 +758,9 @@ export default function useGeneralApi(app) {
         if (offsetVal) {offset = parseInt(offsetVal); limit = parseInt(offsetVal) + 50}
             else {offset = 0; limit = 0;}
 
-      
-     
-        
+
+
+
 
         if (search) {
             where = {
@@ -776,8 +776,8 @@ export default function useGeneralApi(app) {
             }
         }
 
-      
-       
+
+
 
         const users = yield models.User.findAll({
             attributes: [
@@ -800,10 +800,10 @@ export default function useGeneralApi(app) {
             ],
             limit,
             offset
-            
-      
 
-            
+
+
+
         })
         this.body = JSON.stringify({ users })
     })
@@ -895,8 +895,8 @@ export default function useGeneralApi(app) {
         if (rateLimitReq(this, this.req)) return;
         const { category, ten, hundred, polk, couch_group, search, offsetVal } = this.query
         let where = {}
-       
-        
+
+
 
         if (category) {
             if (category === 'polki') {
@@ -983,7 +983,8 @@ export default function useGeneralApi(app) {
             console.log(uploadedFile)
             console.log('==== FINISH UPLOAD ==== ')
             this.body = JSON.stringify({
-                image: uploadedFile.Location
+                url: uploadedFile.Location,
+                key: file.name
             })
         } catch (error) {
             console.error('Error in /upload api call', this.session.uid, error.toString());
@@ -992,6 +993,32 @@ export default function useGeneralApi(app) {
             });
             this.status = 500;
         }
+    })
+
+    router.post('/delete_from_s3', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return;
+        console.log('-- /delete_from_s3 -->', this.session.uid, this.session.user);
+
+        const params = this.request.body;
+        const {csrf, key} = typeof(params) === 'string' ? JSON.parse(params) : params;
+
+        const s3 = new AWS.S3();
+
+        try {
+            const deleteResult = yield s3.deleteObject({
+                Bucket: 'bm-platform',
+                Key: key
+            }).promise()
+            console.log(deleteResult)
+            this.status = 200;
+        } catch (error) {
+            console.error('Error in /delete_from_s3 api call', this.session.uid, error.toString());
+            this.body = JSON.stringify({
+                error: error.message
+            });
+            this.status = 500;
+        }
+
     })
 }
 
