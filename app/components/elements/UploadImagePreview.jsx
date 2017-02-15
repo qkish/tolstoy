@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { translate } from 'app/Translator'
 
 function getYoutubeId(url) {
-	var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-	var match = url.match(regExp);
-	if (match && match[2].length == 11) {
-  	return match[2];
-	} else {
-		return ''
-	}
+    var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    if (match && match[2].length == 11) {
+      	return match[2];
+    } else {
+        return ''
+    }
 }
 
 class UploadImagePreview extends Component {
@@ -68,10 +68,10 @@ class UploadImagePreview extends Component {
 
     let returnVar
 
-    https://img.youtube.com/vi/-guCkycoXPg/0.jpg
+    // https://img.youtube.com/vi/-guCkycoXPg/0.jpg
 
     if (!isFile && !youtube) { returnVar = <div className={this.state.isShownClassState}><div style={backgroundUrl} className={this.state.isShownClassState}>
-        <a href="#" className={this.state.deleteBtnClass} onClick={this.handleOnDelete}></a>
+        {!isPosting ? <a href="#" className={this.state.deleteBtnClass} onClick={this.handleOnDelete}></a> : ''}
         {this.props.uploading ? <div className="ReplyEditorShort__uploading">{translate('uploading')}</div> : ''}
       </div></div>}
 
@@ -82,7 +82,7 @@ class UploadImagePreview extends Component {
                 <div className='ReplyEditorShort__file'>
                     {this.props.uploading ? translate('uploading') : translate('file_uploaded')}
                 </div>
-                {!isPosting ? <a href="#" className={this.state.deleteFileBtnState} onClick={this.handleOnDelete}></a> : null}
+                {!isPosting ? <a href="#" className={this.state.deleteFileBtnState} onClick={this.handleOnDelete}></a> : ''}
             </div>
         )
      }
@@ -100,7 +100,7 @@ class UploadImagePreview extends Component {
       	this.state.deleteBtnClass = 'ReplyEditorShort__deleteimage'
 
      	returnVar = <div className={this.state.isShownClassState}><div style={backgroundYoutubeUrl} className={this.state.isShownClassState}>
-		{!isPosting ? <a href="#" className={this.state.deleteBtnClass} onClick={this.handleOnDelete}></a> : null}
+    {!isPosting ? <a href="#" className={this.state.deleteBtnClass} onClick={this.handleOnDelete}></a> : ''}
 
       </div></div>
 
