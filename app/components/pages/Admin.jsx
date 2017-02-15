@@ -44,7 +44,7 @@ class Admin extends Component {
         this.getData = this.getData.bind(this)
 
 
-    
+
 
 
     }
@@ -82,13 +82,13 @@ class Admin extends Component {
 
         getUsersByCategory(props.params.category, this.state.currPage).then(users => this.setState({users}))
         getUsersCount(props.params.category).then(count => this.setState({count}))
-        
+
 
         getUsersByCategory('tens').then(allTens => this.setState({allTens}))
         getUsersByCategory('hundreds').then(allHundreds => this.setState({allHundreds}))
         getUsersByCategory('polki').then(allPolks => this.setState({allPolks}))
         getUsersByCategory('couches').then(allTrainers => this.setState({allTrainers}))
-     
+
     }
 
     handleChangePage = event => {
@@ -100,7 +100,7 @@ class Admin extends Component {
 
 
             this.getData(this.props)
-        
+
     }
 
 
@@ -120,7 +120,7 @@ class Admin extends Component {
 
     pager(count) {
     let result = ''
-   
+
     if (count > 3)  {
 
                     let countI = count
@@ -130,7 +130,7 @@ class Admin extends Component {
                         currentCount = count - countI
                         countI = countI - 3;
                         i++
-                        
+
                       result = result + '<a className="btn btn-primary" href="#" role="button" ref="pagenum' + currentCount + '" >' + i + '</a> '//+ <a className="btn btn-primary" href="#" ref="pagenum" + currentCount >i</a>
 
                     }}
@@ -142,7 +142,7 @@ class Admin extends Component {
 
         console.log('CurrPage: ', this.state.currPage)
         console.log('COUNT: ', this.state.count)
-        
+
         let isAll = false
         if(this.props.params.category == 'all' ) {isAll = true}
 
@@ -152,8 +152,8 @@ class Admin extends Component {
 
         let offset = 0
 
-        
-      
+
+
 
 
         const userList = users ? (
@@ -217,18 +217,18 @@ class Admin extends Component {
                         </div>
 
 
-                    
+
                     </div>
                 ))}
 
                 <div className="Admin__pagination">
-                    
+
                 {this.pager(count)}
 
-                    
+
                     <a className="btn btn-default" href="#" role="button">2</a>
                     <a className="btn btn-default" href="#" role="button">3</a>
-              
+
 
                 </div>
             </div>
@@ -240,12 +240,12 @@ class Admin extends Component {
         if (this.props.params.category === 'tens') {
             view = users ? (
                 <div className="Admin__wrapper">
-                
+
                     <div className="Rating__row">
                     {users.map(user => (
-                        
+
                         <UserEdit account={user.name} key={user.id} link={`/admin/ten/${user.id}`} name={`Десятка им. ${user.first_name} ${user.last_name}`} />
-                        
+
                     ))}
                 </div>
                 </div>
@@ -257,7 +257,7 @@ class Admin extends Component {
         if (this.props.params.category === 'hundreds') {
             view = users ? (
                 <div className="Admin__wrapper">
-               
+
                 <div className="Rating__row">
                     {users.map(user => (
                         <UserEdit account={user.name} key={user.id} link={`/admin/hundred/${user.id}`} name={`Сотня им. ${user.first_name} ${user.last_name}`} />
@@ -272,7 +272,7 @@ class Admin extends Component {
         if (this.props.params.category === 'polki') {
             view = users ? (
                 <div className="Admin__wrapper">
-                 
+
                   <div className="Rating__row">
                     {users.map(user => (
                         <UserEdit account={user.name} key={user.id} link={`/admin/polk/${user.id}`} name={`Полк им. ${user.first_name} ${user.last_name}`} />
@@ -287,7 +287,7 @@ class Admin extends Component {
         if (this.props.params.category === 'couches') {
             view = users ? (
                 <div className="Admin__wrapper">
-                
+
                 <div className="Rating__row">
                     {users.map(user => (
                         <UserEdit account={user.name} key={user.id} link={`/admin/couch-group/${user.id}`} name={`Тренерская группа им. ${user.first_name} ${user.last_name}`} />
@@ -304,7 +304,7 @@ class Admin extends Component {
         }
 
         let submenu = <div className="Admin__submenu">
-                  
+
                   <input
                         type='text'
                         placeholder='Поиск по имени'
@@ -343,7 +343,7 @@ class Admin extends Component {
                 {isAll && submenu}
                     {view}
                 </div>
-                
+
             </div>
         )
     }
