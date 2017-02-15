@@ -563,6 +563,9 @@ class ReplyEditor extends React.Component {
 
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
+                            this.setState({
+                                posting: true
+                            })
                             let imageAdded
                             imageAdded = (this.state.uploadedImage && this.state.uploadedImage.url) ? '\n' + this.state.uploadedImage.url : '';
 
@@ -603,6 +606,7 @@ class ReplyEditor extends React.Component {
                         {this.state.showPreview ? (
                             <UploadImagePreview
                                 uploading={this.state.uploading}
+                                posting={this.state.posting}
                                 src={this.state.UploadImagePreviewPath}
                                 isThisFile={this.state.isFile}
                                 youtube={this.state.youtubeLink}

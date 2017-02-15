@@ -34,7 +34,7 @@ class UploadImagePreview extends Component {
   handleOnDelete = event => {
 
   	event.preventDefault();
-  
+
     this.props.remove()
   //this.setState({deleted: true})
   //this.setState({isShownClassState: ''})
@@ -42,6 +42,7 @@ class UploadImagePreview extends Component {
   }
 
   render () {
+    const isPosting = this.props.posting ? true : false
     let imageUrl = this.props.src
     let backgroundUrl
     let stateDeleted = this.state.deleted
@@ -59,7 +60,7 @@ class UploadImagePreview extends Component {
     }
 
        if (imageUrl && !stateDeleted && isFile && !youtube) {
-      
+
       this.state.isFileShownClassState = 'ReplyEditorShort__file-uploaded'
       this.state.deleteFileBtnState = 'ReplyEditorShort__deletefile'
 
@@ -76,14 +77,14 @@ class UploadImagePreview extends Component {
 
 
      if (isFile && !youtube) {
-
-            returnVar = <div className={this.state.isShownClassState}><div className='ReplyEditorShort__file'>
-            {this.props.uploading ? translate('uploading') : translate('file_uploaded')}
-
-
-
-            </div>  <a href="#" className={this.state.deleteFileBtnState} onClick={this.handleOnDelete}></a> </div>
-
+        returnVar = (
+            <div className={this.state.isShownClassState}>
+                <div className='ReplyEditorShort__file'>
+                    {this.props.uploading ? translate('uploading') : translate('file_uploaded')}
+                </div>
+                {!isPosting ? <a href="#" className={this.state.deleteFileBtnState} onClick={this.handleOnDelete}></a> : null}
+            </div>
+        )
      }
 
      if (youtube) {
@@ -99,8 +100,8 @@ class UploadImagePreview extends Component {
       	this.state.deleteBtnClass = 'ReplyEditorShort__deleteimage'
 
      	returnVar = <div className={this.state.isShownClassState}><div style={backgroundYoutubeUrl} className={this.state.isShownClassState}>
-        <a href="#" className={this.state.deleteBtnClass} onClick={this.handleOnDelete}></a>
-       
+		{!isPosting ? <a href="#" className={this.state.deleteBtnClass} onClick={this.handleOnDelete}></a> : null}
+
       </div></div>
 
      }

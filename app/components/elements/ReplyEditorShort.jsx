@@ -455,9 +455,9 @@ class ReplyEditorShort extends React.Component {
         let {filemeta} = this.props.fields
         const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
         const {onTitleChange, onMoneyChange} = this
-        const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
+        const errorCallback = estr => { this.setState({ postError: estr, loading: false, posting: false }) }
         const successCallbackWrapper = (...args) => {
-            this.setState({ loading: false })
+            this.setState({ loading: false, posting: false })
             resetForm()
             if (successCallback) successCallback(args)
         }
@@ -533,6 +533,9 @@ class ReplyEditorShort extends React.Component {
 
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
+                            this.setState({
+                                posting: true
+                            })
                             let imageAdded
                             imageAdded = (this.state.uploadedImage && this.state.uploadedImage.url) ? '\n' + this.state.uploadedImage.url : '';
 
@@ -571,6 +574,7 @@ class ReplyEditorShort extends React.Component {
                         {this.state.showPreview ? (
                             <UploadImagePreview
                                 uploading={this.state.uploading}
+                                posting={this.state.posting}
                                 src={this.state.UploadImagePreviewPath}
                                 isThisFile={this.state.isFile}
                                 youtube={this.state.youtubeLink}
