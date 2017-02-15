@@ -25,6 +25,7 @@ import ReplyEditorShort from 'app/components/elements/ReplyEditorShort'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import resolveRoute from 'app/ResolveRoute';
 
+
 import Products from 'app/components/elements/Products';
 import Beta from 'app/components/elements/Beta';
 
@@ -85,7 +86,7 @@ export default class TaskProfile extends React.Component {
             account = accountImm.toJS();
         }
         else {
-            return <div><center>{translate('unknown_account')}</center></div>
+            return <LoadingIndicator type="circle" inline />
         }
 
         let followerCount = 0, followingCount = 0;
