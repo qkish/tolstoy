@@ -116,8 +116,7 @@ class Admin extends Component {
         console.log('CurrPage: ', this.state.currPage)
         console.log('COUNT: ', this.state.count)
 
-        let isAll = false
-        if(this.props.params.category == 'all' ) {isAll = true}
+        const isAll = this.props.params.category === 'all'
 
         let view
         const { users, allTens, allPolks, allHundreds, allTrainers, count } = this.state
