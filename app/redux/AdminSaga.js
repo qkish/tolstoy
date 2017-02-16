@@ -1,5 +1,6 @@
 import { takeEvery } from 'redux-saga'
 import { call, put, select } from 'redux-saga/effects'
+import { updateUser } from 'app/utils/ServerApiClient'
 
 // WTF? WHY IT DOESN`T WORK?
 // export default function* adminSaga () {
@@ -58,33 +59,57 @@ function* couchChangeWatch () {
 }
 
 function* tenChange (action) {
-    console.log('-- action --', action)
+    const payload = {
+        ten: action.payload.tenId
+    }
+    yield updateUser(action.payload.userId, payload)
 }
 
 function* hundredChange (action) {
-    console.log('-- action --', action)
+    const payload = {
+        hundred: action.payload.hundredId
+    }
+    yield updateUser(action.payload.userId, payload)
 }
 
 function* polkChange (action) {
-    console.log('-- action --', action)
+    const payload = {
+        polk: action.payload.polkId
+    }
+    yield updateUser(action.payload.userId, payload)
 }
 
 function* couchGroupChange (action) {
-    console.log('-- action --', action)
+    const payload = {
+        couch_group: action.payload.couchGroupId
+    }
+    yield updateUser(action.payload.userId, payload)
 }
 
 function* tenLeaderChange (action) {
-    console.log('-- action --', action)
+    const payload = {
+        ten_leader: action.payload.value
+    }
+    yield updateUser(action.payload.userId, payload)
 }
 
 function* hundredLeaderChange (action) {
-    console.log('-- action --', action)
+    const payload = {
+        hundred_leader: action.payload.value
+    }
+    yield updateUser(action.payload.userId, payload)
 }
 
 function* polkLeaderChange (action) {
-    console.log('-- action --', action)
+    const payload = {
+        polk_leader: action.payload.value
+    }
+    yield updateUser(action.payload.userId, payload)
 }
 
 function* couchChange (action) {
-    console.log('-- action --', action)
+    const payload = {
+        couch: action.payload.value
+    }
+    yield updateUser(action.payload.userId, payload)
 }

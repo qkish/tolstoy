@@ -227,3 +227,11 @@ export function deleteFromS3 (key) {
         })
     })
 }
+
+export function updateUser (userId, payload) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/users/${userId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ csrf: $STM_csrf, payload })
+    })
+}

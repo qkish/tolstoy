@@ -168,15 +168,16 @@ class Admin extends Component {
         const userList = users ? (
             <div className="Admin__wrapper">
                 {users.map(user => (
-                    <div className="Rating__row">
-                        <UserEdit account={user.name} key={user.id} />
+                    <div className="Rating__row" key={user.id}>
+                        <UserEdit account={user.name} />
                         <div className="Admin__choose">
                             <select defaultValue={user.polk} onChange={({ target }) => this.handlePolkChange({user, polk: target.value })}>
+                                <option value='' disabled>Полк не выбран</option>
                                 {allPolks ? allPolks.map(userOption => (
-                                    <option value={userOption.id}>
+                                    <option key={userOption.id} value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
                                     </option>
-                                )) : ''}
+                                )) : null}
                              </select>
                              <label>
                                  <input type="checkbox" defaultChecked={user.polk_leader} onChange={({ target }) => this.handlePolkLeaderChange({ user, value: target.checked })} />
@@ -187,10 +188,10 @@ class Admin extends Component {
                         <div className="Admin__choose">
                             <select defaultValue={user.hundred} onChange={({ target }) => this.handleHundredChange({ user, hundred: target.value })}>
                                 {allHundreds ? allHundreds.map(userOption => (
-                                    <option value={userOption.id}>
+                                    <option key={userOption.id} value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
                                     </option>
-                                )) : ''}
+                                )) : null}
                             </select>
                             <label>
                                 <input type="checkbox" defaultChecked={user.hundred_leader} onChange={({ target }) => this.handleHundredLeaderChange({ user, value: target.checked })} />
@@ -201,10 +202,10 @@ class Admin extends Component {
                         <div className="Admin__choose">
                             <select defaultValue={user.ten} onChange={({ target }) => this.handleTenChange({ user, ten: target.value })}>
                                 {allTens ? allTens.map(userOption => (
-                                    <option value={userOption.id}>
+                                    <option key={userOption.id} value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
                                     </option>
-                                )) : ''}
+                                )) : null}
                             </select>
                             <label>
                                 <input type="checkbox" defaultChecked={user.ten_leader} onChange={({ target }) => this.handleTenLeaderChange({ user, value: target.checked })} />
@@ -215,10 +216,10 @@ class Admin extends Component {
                         <div className="Admin__choose">
                             <select defaultValue={user.couch_group} onChange={({ target }) => this.handleCouchGroupChange({ user, couch_group: target.value })}>
                                 {allTrainers? allTrainers.map(userOption => (
-                                    <option value={userOption.id}>
+                                    <option key={userOption.id} value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
                                     </option>
-                                )) : ''}
+                                )) : null}
                             </select>
                             <label>
                                 <input type="checkbox" defaultChecked={user.couch} onChange={({ target }) => this.handleCouchChange({ user, value: target.checked })} />
@@ -247,9 +248,7 @@ class Admin extends Component {
 
                     <div className="Rating__row">
                     {users.map(user => (
-
                         <UserEdit account={user.name} key={user.id} link={`/admin/ten/${user.id}`} name={`Десятка им. ${user.first_name} ${user.last_name}`} />
-
                     ))}
                 </div>
                 </div>

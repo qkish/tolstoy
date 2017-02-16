@@ -1020,6 +1020,29 @@ export default function useGeneralApi(app) {
         }
 
     })
+
+    router.put('/users/:id', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return
+        const data = this.request.body
+        const userId = this.params.id
+        const {csrf, payload} = typeof(data) === 'string' ? JSON.parse(data) : data
+        console.log(`-- /users/${userId} -->`, this.session.uid, this.session.user)
+
+        try {
+            yield models.User.update(payload, {
+                where: { id: userId }
+            })
+            this.body = JSON.stringify({
+                status: 'ok'
+            })
+        } catch (error) {
+            console.error(`Error in /users/${userId} api call`, this.session.uid, error.toString())
+            this.body = JSON.stringify({
+                error: error.message
+            })
+            this.status = 500
+        }
+    })
 }
 
 
