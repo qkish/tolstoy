@@ -18,7 +18,7 @@ export const CURRENCY_SIGN = '₽≈' // '$'
 export const WIKI_URL = ''
 export const LANDING_PAGE_URL = ''
 export const TERMS_OF_SERVICE_URL = ''
-export const PRIVACY_POLICY_URL = ''
+export const PRIVACY_POLICY_URL = 'http://molodost.bz/confidential/'
 export const WHITEPAPER_URL = ''
 
 

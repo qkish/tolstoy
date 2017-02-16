@@ -17,6 +17,9 @@ export default function resolveRoute(path)
     if (path === '/login.html') {
         return {page: 'Login'};
     }
+    if (path === '/signup.html') {
+        return {page: 'SignUp'};
+    }
     if (path === '/privacy.html') {
         return {page: 'Privacy'};
     }

@@ -28,6 +28,7 @@ export const userWatches = [
     // getCurrentAccountWatch,
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
+    signUpWatch,
 ]
 
 const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
@@ -38,6 +39,11 @@ function* lookupPreviousOwnerAuthorityWatch() {
 function* loginWatch() {
     yield* takeLatest('user/USERNAME_PASSWORD_LOGIN', usernamePasswordLogin);
 }
+
+function* signUpWatch() {
+    yield* takeLatest('user/BM_SIGNUP', bmSignUp);
+}
+
 function* saveLoginWatch() {
     yield* takeLatest('user/SAVE_LOGIN', saveLogin_localStorage);
 }
@@ -150,6 +156,13 @@ function* usernamePasswordLogin(action) {
         yield fork(loadFollows, "get_following", username, 'ignore')
     }
 }
+
+
+function* bmSignUp(action) {
+   console.log('SIGN UP: ', action)
+
+}
+
 
 // const isHighSecurityOperations = ['transfer', 'transfer_to_vesting', 'withdraw_vesting',
 //     'limit_order_create', 'limit_order_cancel', 'account_update', 'account_witness_vote']
@@ -513,32 +526,6 @@ function* lookupPreviousOwnerAuthority({payload: {}}) {
 //     yield put(g.actions.receiveAccount({ account }))
 // }
 
-function* getBMAccessToken (username, password) {
-    return fetch('http://api.molodost.bz/oauth/token/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            client_id: 'renat.biktagirov',
-            client_secret: '6NbQvMElYMcBbOVWie7a1Bs4rfVt9FpNY4V4Fl6EEGt4xTEUa1K0ugMohlemqFQ5',
-            grant_type: 'password',
-            username: username,
-            password: password
-
-        })
-    }).then(res => res.json())
-}
-
-function* getBMUserMeta (acces_token) {
-    return fetch('http://api.molodost.bz/api/v3/user/me/', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + acces_token
-        }
-    }).then(res => res.json()).catch(e => console.log(e))
-}
 
 
 function dec2hex (dec) {

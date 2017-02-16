@@ -255,6 +255,81 @@ export default function useGeneralApi(app) {
         recordWebEvent(this, 'api/update_email', email);
     });
 
+    router.post('/bm_signup', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {
+            csrf,
+            email,
+            name,
+            lastname
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
+       //  if (!checkCSRF(this, csrf)) return;
+        console.log('-- /sign up BM -->', this.session.uid, email, name, lastname);
+        try {
+            if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
+            // TODO: limit by 1/min/ip
+            
+            const getBMtoken = yield getBMAccessTokenCredentialsOnly();
+           
+            const getBMNewUser = yield getBMSignUp(email, name, lastname, getBMtoken.access_token);
+        
+
+            console.log('BM SignUP Server: ', email, name, lastname)
+
+            this.body = JSON.stringify({
+                status: 'ok'
+            });
+
+
+        } catch (error) {
+            console.error('Error in /bmsignup api call', this.session.uid, error);
+            this.body = JSON.stringify({
+                error: error.message
+            });
+            this.status = 500;
+        }
+        recordWebEvent(this, 'api/bmsignup', email);
+    });
+
+
+    router.post('/bm_recovery', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {
+            csrf,
+            email
+           
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
+       //  if (!checkCSRF(this, csrf)) return;
+        console.log('-- /sign up BM -->', this.session.uid, email);
+        try {
+            if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
+            // TODO: limit by 1/min/ip
+            
+            const getBMtoken = yield getBMAccessTokenCredentialsOnly();
+           
+            const getBMRecovered = yield getBMRecovery(email, getBMtoken.access_token);
+        
+
+            console.log('BM Recovered: ', email)
+
+            this.body = JSON.stringify({
+                status: 'ok'
+            });
+
+
+        } catch (error) {
+            console.error('Error in /bm_recovery api call', this.session.uid, error);
+            this.body = JSON.stringify({
+                error: error.message
+            });
+            this.status = 500;
+        }
+        recordWebEvent(this, 'api/bm_recovery', email);
+    });
+
+
     router.post('/login2', koaBody, function* () {
       //  if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
@@ -1030,8 +1105,8 @@ function* getBMAccessToken (username, password) {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            client_id: 'renat.biktagirov',
-            client_secret: '6NbQvMElYMcBbOVWie7a1Bs4rfVt9FpNY4V4Fl6EEGt4xTEUa1K0ugMohlemqFQ5',
+            client_id: config.bmapi.client_id,
+            client_secret: config.bmapi.client_secret,
             grant_type: 'password',
             username: username,
             password: password
@@ -1039,6 +1114,68 @@ function* getBMAccessToken (username, password) {
         })
     }).then(res => res.json())
 }
+
+
+function* getBMAccessTokenCredentialsOnly () {
+    return fetch('http://api.molodost.bz/oauth/token/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            client_id: config.bmapi.client_id,
+            client_secret: config.bmapi.client_secret,
+            grant_type: 'client_credentials'
+            
+
+        })
+    }).then(res => res.json())
+}
+
+function* getBMSignUp (newemail, newname, lastname, access_token) {
+    
+
+   // newname = toString(newname).replace(/[^A-Za-zА-Яа-яЁё]/g, "")
+   // newemail = toString(newemail)
+    
+    var FormData = require('form-data');
+    var form = new FormData();
+    form.append('email', newemail);
+    form.append('firstname', newname);
+    form.append('lastname', lastname);
+
+    return fetch('http://api.molodost.bz/api/v3/auth/register/', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + access_token
+
+        },
+        body: form
+    }).then(res => res.json())
+}
+
+function* getBMRecovery (newemail, access_token) {
+    
+
+   // newname = toString(newname).replace(/[^A-Za-zА-Яа-яЁё]/g, "")
+   // newemail = toString(newemail)
+
+    
+    var FormData = require('form-data');
+    var form = new FormData();
+    form.append('email', newemail);
+
+
+    return fetch('http://api.molodost.bz/api/v3/auth/password/restore/', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + access_token
+
+        },
+        body: form
+    }).then(res => res.json())
+}
+
 
 function* getBMUserMeta (acces_token) {
     return fetch('http://api.molodost.bz/api/v3/user/me/', {

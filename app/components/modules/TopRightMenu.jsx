@@ -137,6 +137,12 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
 
 
                             <li className={lcn + ' image-wrapper'}>
+                                <a href="/signup.html">
+                                    <img src="images/user.png" width="36" height="36" />
+                                    <span>Регистрация</span>
+                                </a>
+                            </li>
+                            <li className={lcn + ' image-wrapper'}>
                                 <a href="/login.html">
                                     <img src="images/user.png" width="36" height="36" />
                                     <span>Вход</span>
@@ -192,7 +198,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                 </li>*/}
 
                 {!vertical && <li><a href="/static/search.html" title="Поиск"><div className="TopRightMenu__search-icon"></div></a></li>}
-               {/* <li className='TopRightMenu__signupbtn'><a className="TopRightMenu__signupbtn-link" href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li> */}
+               <li className='TopRightMenu__signupbtn'><a className="TopRightMenu__signupbtn-link" href="/create_account" onClick={showSignUp}>{translate('sign_up')}</a></li>
                 <li className='TopRightMenu__loginbtn'><a href="/login.html" onClick={showLogin}>{translate('login')}</a></li>
 
 

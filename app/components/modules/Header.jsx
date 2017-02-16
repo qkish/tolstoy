@@ -255,6 +255,8 @@ class Header extends React.Component {
             // sort_order_extra_menu = <HorizontalMenu items={items} />
         }
 
+        let hideOnMobile = current_account_name ? '' : ' Header__mobile-hide';
+
 
 
         return (
@@ -269,14 +271,14 @@ class Header extends React.Component {
                                         <img style={{display: 'inline-block', width: '41px', height: '36px'}} src="/images/bmproudlogo.png" alt="Система" />
                                     </Link>
                                 </li>
-                                <li className={'Header__toplinks ' + bmOpen}>
+                                <li className={'Header__toplinks ' + bmOpen + hideOnMobile}>
                                     <Link to='/hot/bm-open'>Отчеты</Link>
                                 </li>
-                                <li className={'Header__toplinks ' + bmTasks}>
+                                <li className={'Header__toplinks ' + bmTasks + hideOnMobile}>
                                     <Link to={Osipov}>Задания</Link>
                                 </li>
                                
-                                <li className={'Header__toplinks ' + bmRating}>
+                                <li className={'Header__toplinks ' + bmRating + hideOnMobile}>
                                     <Link to='/rating/all'>Рейтинги</Link>
                                 </li>
 

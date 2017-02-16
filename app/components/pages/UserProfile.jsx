@@ -172,7 +172,8 @@ export default class UserProfile extends React.Component {
                           title={translate('followed')} />
         }
         else if( section === 'settings' ) {
-            tab_content = <Settings routeParams={this.props.routeParams} />
+            tab_content = isMyAccount ? <Settings routeParams={this.props.routeParams} /> :
+            <div className="UserProfile__locked">Настройки этого аккаунта недоступны с вашей учетной записью</div>
         }
         else if( section === 'posts' && account.post_history ) {
            if( account.posts )

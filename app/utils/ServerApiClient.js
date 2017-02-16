@@ -28,22 +28,7 @@ export function serverApiLogin2 (username, password) {
     }).then(res => res.json())
 }
 
-export function getBMAccessToken (username, password) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    fetch('http://test2.api.molodost.bz/oauth/token/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            client_id: 'renat.biktagirov',
-            client_secret: '6NbQvMElYMcBbOVWie7a1Bs4rfVt9FpNY4V4Fl6EEGt4xTEUa1K0ugMohlemqFQ5',
-            grant_type: 'password',
-            username,
-            password
-        })
-    }).then(res => res.json())
-}
+
 
 // Auth controller
 export function serverApiGetAccountPrivateKey(username /* , password */) {

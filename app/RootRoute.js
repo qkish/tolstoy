@@ -26,6 +26,10 @@ export default {
             //require.ensure([], (require) => {
             cb(null, [require('app/components/pages/Login')]);
             //});
+        } else if (route.page === 'SignUp') {
+            //require.ensure([], (require) => {
+            cb(null, [require('app/components/pages/SignUp')]);
+            //});
         } else if (route.page === 'Privacy') {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/Privacy')]);

@@ -75,7 +75,7 @@ const ru = {
 	the_latest_versions_of: 'Последние версии',
 	and: 'и',
 	are_well_tested_and_known_to_work_with: 'хорошо тестированы и работают с ' + APP_URL + '.',
-	account_creation_succes: 'Твой аккаунт успешно создан!',
+	account_creation_succes: 'Ваш аккаунт создан! Вам на почту придет ссылка для подтверждения E-mail.',
 	account_recovery_succes: 'Твой аккаунт успено восстановлен!',
 	password_update_succes: 'Пароль для {accountName} был успешно обновлен',
 	password_is_bound_to_your_accounts_owner_key: "Этот пароль привязан к главному ключу аккаунта и не может быть использован для логинации на сайте",
@@ -668,6 +668,9 @@ const ru = {
 
     file_uploaded: 'Файл прикреплен',
 
+    business_category: 'Отрасль бизнеса',
+
+    password_recovery: 'Восстановить пароль'
 }
 
 export { ru }

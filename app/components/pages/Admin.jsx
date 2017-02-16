@@ -43,7 +43,6 @@ class Admin extends Component {
         this.search = this.search.bind(this)
         this.getData = this.getData.bind(this)
 
-
     
 
 

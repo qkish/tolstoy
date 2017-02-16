@@ -38,6 +38,7 @@ class Settings extends React.Component {
         looking_for: this.props.lookingFor || '',
         i_can: this.props.iCan || '',
         background_image: this.props.backgroundImage || '',
+        business_category: this.props.businessCategory || ''
     }
 
     handleCurrencyChange(event) { store.set('currency', event.target.value) }
@@ -72,6 +73,10 @@ class Settings extends React.Component {
     }
     handleUserPhoneChange = event => {
         this.setState({phone: event.target.value})
+    }
+
+    handleUserBusinessCategoryChange = event => {
+        this.setState({business_category: event.target.value})
     }
 
 
@@ -136,6 +141,9 @@ class Settings extends React.Component {
         if (!metaData) metaData = {}
         if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
 
+
+        const isMyAccount = username === account.name
+
         // Base
         metaData.first_name = this.state.first_name;
         metaData.last_name = this.state.last_name;
@@ -144,6 +152,7 @@ class Settings extends React.Component {
         metaData.occupation = this.state.occupation;
         metaData.email = this.state.email;
         metaData.phone = this.state.phone;
+        metaData.business_category = this.state.business_category;
 
         // Target
         metaData.target_plan = this.state.target_plan;
@@ -241,6 +250,42 @@ class Settings extends React.Component {
                     <label>
                         <span>{translate('occupation')}</span>
                         <textarea onChange={this.handleUserOccupationChange} value={state.occupation} placeholder={translate('occupation')}></textarea>
+                    </label>
+                    <label>
+                        <span>{translate('business_category')}</span>
+
+                        <select 
+                                onChange={this.handleUserBusinessCategoryChange}
+                                className="Settings__Busineses"
+                                value={state.business_category}>
+                                 <option value="cat1">Выберите отрасль бизнеса</option>
+                        <option value="cat1">Автомобильная сфера</option>
+                         <option value="cat2">Автомойка и автопарковка</option>
+                         <option value="cat3">Бытовая сфера</option>
+                         <option value="cat4">Зообизнес</option>
+                         <option value="cat5">Информационные технологии</option>
+                         <option value="cat6">Компьютерная и электро-техника</option>
+                         <option value="cat7">Спорт</option>
+                         <option value="cat8">Красота</option>
+                         <option value="cat9">Здоровье</option>
+                         <option value="cat10">Сфера развлечений</option>
+                         <option value="cat11">Мобильная связь</option>
+                         <option value="cat12">Ремонт и строительство</option>
+                         <option value="cat13">Грузоперевозки</option>
+                         <option value="cat14">Образование и исскуство</option>
+                         <option value="cat15">Сфера питания</option>
+                         <option value="cat16">Туристическая и гостиничная сфера</option>
+                         <option value="cat17">Финансы, бухгалтерия</option>
+                         <option value="cat18">Юридические услуги</option>
+                         <option value="cat19">Консалтинг</option>
+                         <option value="cat20">Производство</option>
+                         <option value="cat21">Недвижимость</option>
+                         <option value="cat22">Саморазвитие</option>
+                         <option value="cat23">Эзотерика</option>
+
+                       </select>
+
+                        {/* <textarea onChange={this.handleUserBusinessCategoryChange} value={state.business_category} placeholder={translate('business_category')}></textarea> */}
                     </label>
 
 
@@ -481,6 +526,7 @@ export default connect(
         const occupation = metaData ? metaData.occupation : '' // направление деятельности
         const email = metaData ? metaData.email : ''
         const phone = metaData ? metaData.phone : ''
+        const businessCategory = metaData ? metaData.business_category : ''
 
         // Target
         const targetPlan = metaData ? metaData.target_plan : ''
@@ -514,6 +560,7 @@ export default connect(
             age,
             city,
             occupation,
+            businessCategory,
             email,
             phone,
             targetPlan,

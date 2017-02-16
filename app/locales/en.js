@@ -81,7 +81,7 @@ const en = 	{
 	to_obtaion_a_more_secure_set_of_keys: "to obtain a more secure set of keys",
 	update_your_password: 'update your password',
 	enter_username: 'Enter your username',
-	password_or_wif: 'Password or WIF',
+	password_or_wif: 'Password',
 	requires_auth_key: 'This operation requires your password for security reasons',
 	keep_me_logged_in: 'Keep me logged in',
 	// this are used mainly in "submit a story" form
@@ -598,6 +598,9 @@ const en = 	{
 
     uploading: 'Uploading...',
     file_uploaded: 'File uploaded',
+    business_category: 'Business Area',
+
+    password_recovery: 'Password Recovery'
 
 
 }

@@ -12,6 +12,7 @@ import reactForm from 'app/utils/ReactForm'
 import { translate } from 'app/Translator';
 import { translateError } from 'app/utils/ParsersAndFormatters';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
+import { Link } from 'react-router';
 
 class LoginForm extends Component {
 
@@ -33,8 +34,19 @@ class LoginForm extends Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             cryptographyFailure = true
         }
-        this.state = {cryptographyFailure, hiding: '',
-            preloader: 'PreloaderNotShown'}
+        this.state = {email: '', 
+            loading: false,
+            cryptographyFailure, hiding: '',
+            preloader: 'PreloaderNotShown',
+            LoginClass: 'LoginForm__shown',
+            RecoveryClass: 'LoginForm__hidden',
+            Recovered: 'LoginForm__hidden'
+
+        }
+
+        this.onEmailChange = this.onEmailChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+
         this.usernameOnChange = e => {
             const value = e.target.value.toLowerCase()
             this.state.username.props.onChange(value)
@@ -67,6 +79,12 @@ class LoginForm extends Component {
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'LoginForm')
 
+    onEmailChange(e) {
+        const emailSet = e.target.value;
+      
+        this.setState({email: emailSet});
+    }
+
     initForm(props) {
         reactForm({
             name: 'login',
@@ -79,6 +97,20 @@ class LoginForm extends Component {
                     PublicKey.fromString(values.password) ? translate('you_need_private_password_or_key_not_a_public_key') :
                     null,
             })
+        })
+    }
+
+    handlePassRecovery = event => {
+        this.setState({
+            LoginClass: 'LoginForm__hidden',
+            RecoveryClass: 'LoginForm__shown'
+        })
+    }
+
+    handlePassRecoveryEnter = event => {
+        this.setState({
+            LoginClass: 'LoginForm__shown',
+            RecoveryClass: 'LoginForm__hidden'
         })
     }
 
@@ -102,6 +134,50 @@ class LoginForm extends Component {
         const {username, password} = this.state
         this.props.showChangePassword(username.value, password.value)
     }
+
+
+    onSubmit(e) {
+        e.preventDefault();
+        this.setState({server_error: '', loading: true});
+        const {email} = this.state;
+        if (!email) return;
+
+
+        console.log('TRY RECOVER: ', email)
+
+        fetch('/api/v1/bm_recovery', {
+            method: 'post',
+            mode: 'no-cors',
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf: $STM_csrf,
+                email
+               
+                //json_meta: JSON.stringify({"ico_address": icoAddress})
+            })
+        }).then(r => r.json()).then(res => {
+            if (res.error || res.status !== 'ok') {
+                console.error('SignUp server error', res.error);
+                
+                this.setState({server_error: res.error || translate('unknown'), loading: false});
+            } else {
+                this.setState({Recovered: 'LoginForm__shown', loading: false})
+               
+            }
+        }).catch(error => {
+            console.error('Caught CreateAccount server error', error);
+            this.setState({server_error: (error.message ? error.message : error), loading: false});
+        });
+    }
+
+
+
+
+
     render() {
         if (!process.env.BROWSER) {
             return <div className="row">
@@ -139,10 +215,12 @@ class LoginForm extends Component {
         }
 
         const {loginBroadcastOperation, dispatchSubmit, afterLoginRedirectToAccount, msg} = this.props;
-        const {username, password, saveLogin} = this.state
+        const {username, password, saveLogin, loading} = this.state
         const {submitting, valid, handleSubmit} = this.state.login
         const {usernameOnChange, onCancel, /*qrReader*/} = this
         const disabled = submitting || !valid;
+
+        const {email} = this.state
 
         const title = loginBroadcastOperation ?
             translate('authenticate_for_this_transaction') :
@@ -171,7 +249,7 @@ class LoginForm extends Component {
         let message = null;
         if (msg) {
             if (msg === 'accountcreated') {
-                message =<div className="callout primary">
+                message =<div className="alert alert-success" role="alert">
                         <p>{translate("account_creation_succes")}</p>
                     </div>;
             }
@@ -230,17 +308,49 @@ class LoginForm extends Component {
                 <div className={this.state.preloader}> 
                 <LoadingIndicator type="circle" inline />
                 </div>
-
+                <div className="LoginForm__password-recovery"><a href="#" onClick={this.handlePassRecovery}>Восстановить пароль</a></div>
                 <div className="LoginForm__label-support">Техническая поддержка <a href="mailto:bitva@molodost.bz">bitva@molodost.bz</a></div>
             </form>
         )
 
-        return (
-           <div className="LoginForm">
+        const formRecovery = (
+               <form onSubmit={this.onSubmit} autoComplete="off" noValidate method="post">
+
+                 <div className="LoginForm__login">
+                        <label className="LoginForm__label">
+                            {translate('enter_username')}</label>
+                            <input type="text" className="LoginForm__login-input" ref="email" name="email" onChange={this.onEmailChange} required value={email} placeholder={translate('enter_username')} />
+                       
+                    </div>
+
+                    <div className={this.state.hiding}>
+                        <input type="submit" className="button LoginForm__signup-button" value="Восстановить пароль" disabled={loading} />
+                    </div>
+
+                    <div className="LoginForm__password-recovery"><a href="#" onClick={this.handlePassRecoveryEnter}>Войти</a></div>
+
+                </form>
+
+            )
+
+        return (<div className="LoginForm__wrapper">
+             <div className={'LoginForm '  + this.state.LoginClass}>
                {message}
                <h3>{title}</h3>
               
                {form}
+             </div>
+
+            <div className={'LoginForm__recovery ' + this.state.RecoveryClass}>
+
+                <div className="LoginForm">
+                <h3>{translate('password_recovery')}</h3>
+
+                <div className={'alert alert-success '+ this.state.Recovered} role="alert">Ссылка для восстановления пароля отправлена на ваш E-mail</div>
+                {formRecovery} 
+                </div>
+             </div>
+
            </div>
        )
     }
