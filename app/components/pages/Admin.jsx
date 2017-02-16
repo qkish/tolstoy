@@ -37,6 +37,16 @@ class Admin extends Component {
         this.state = {currPage: 0, count: 50}
         this.search = this.search.bind(this)
         this.getData = this.getData.bind(this)
+
+        this.handleTenChange = this.handleTenChange.bind(this)
+        this.handleHundredChange = this.handleHundredChange.bind(this)
+        this.handlePolkChange = this.handlePolkChange.bind(this)
+        this.handleCouchGroupChange = this.handleCouchGroupChange.bind(this)
+
+        this.handleTenLeaderChange = this.handleTenLeaderChange.bind(this)
+        this.handleHundredLeaderChange = this.handleHundredLeaderChange.bind(this)
+        this.handlePolkLeaderChange = this.handlePolkLeaderChange.bind(this)
+        this.handleCouchGroupChange = this.handleCouchGroupChange.bind(this)
     }
 
     getData (props) {
@@ -84,6 +94,39 @@ class Admin extends Component {
         this.getData(this.props)
     }
 
+    handleTenChange ({ user, ten }) {
+        console.log('handle ten change', user, ten)
+        this.props.changeTen(user.id, ten)
+    }
+
+    handleHundredChange ({ user, hundred }) {
+        console.log('handle hundred change', user, hundred)
+    }
+
+    handlePolkChange ({ user, polk }) {
+        console.log('handle polk change', user, polk)
+    }
+
+    handleCouchGroupChange ({ user, couchGroup }) {
+        console.log('handle couch group change', user, couchGroup)
+    }
+
+    handleTenLeaderChange ({ user, value }) {
+        console.log('handle ten leader change', user, value)
+    }
+
+    handleHundredLeaderChange ({ user, value }) {
+        console.log('handle hundred leader change', user, value)
+    }
+
+    handlePolkLeaderChange ({ user, value }) {
+        console.log('handle polk leader change', user, value)
+    }
+
+    handleCouchChange ({ user, value }) {
+        console.log('handle couch change', user, value)
+    }
+
     componentDidMount () {
         this.getData(this.props)
     }
@@ -129,7 +172,7 @@ class Admin extends Component {
                     <div className="Rating__row">
                         <UserEdit account={user.name} key={user.id} />
                         <div className="Admin__choose">
-                            <select defaultValue={user.polk}>
+                            <select defaultValue={user.polk} onChange={({ target }) => this.handlePolkChange({user, polk: target.value })}>
                                 {allPolks ? allPolks.map(userOption => (
                                     <option value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
@@ -137,13 +180,13 @@ class Admin extends Component {
                                 )) : ''}
                              </select>
                              <label>
-                                 <input type="checkbox" defaultChecked={user.polk_leader} />
+                                 <input type="checkbox" defaultChecked={user.polk_leader} onChange={({ target }) => this.handlePolkLeaderChange({ user, value: target.checked })} />
                                  Полководец
                              </label>
                         </div>
 
                         <div className="Admin__choose">
-                            <select defaultValue={user.hundred}>
+                            <select defaultValue={user.hundred} onChange={({ target }) => this.handleHundredChange({ user, hundred: target.value })}>
                                 {allHundreds ? allHundreds.map(userOption => (
                                     <option value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
@@ -151,13 +194,13 @@ class Admin extends Component {
                                 )) : ''}
                             </select>
                             <label>
-                                <input type="checkbox" defaultChecked={user.hundred_leader} />
+                                <input type="checkbox" defaultChecked={user.hundred_leader} onChange={({ target }) => this.handleHundredLeaderChange({ user, value: target.checked })} />
                                 Сотник
                             </label>
                         </div>
 
                         <div className="Admin__choose">
-                            <select defaultValue={user.ten} onChange={e => console.log(e.target.value)}>
+                            <select defaultValue={user.ten} onChange={({ target }) => this.handleTenChange({ user, ten: target.value })}>
                                 {allTens ? allTens.map(userOption => (
                                     <option value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
@@ -165,13 +208,13 @@ class Admin extends Component {
                                 )) : ''}
                             </select>
                             <label>
-                                <input type="checkbox" defaultChecked={user.ten_leader} />
+                                <input type="checkbox" defaultChecked={user.ten_leader} onChange={({ target }) => this.handleTenLeaderChange({ user, value: target.checked })} />
                                 Десятник
                             </label>
                         </div>
 
                         <div className="Admin__choose">
-                            <select defaultValue={user.couch_group}>
+                            <select defaultValue={user.couch_group} onChange={({ target }) => this.handleCouchGroupChange({ user, couch_group: target.value })}>
                                 {allTrainers? allTrainers.map(userOption => (
                                     <option value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
@@ -179,7 +222,7 @@ class Admin extends Component {
                                 )) : ''}
                             </select>
                             <label>
-                                <input type="checkbox" defaultChecked={user.couch}/>
+                                <input type="checkbox" defaultChecked={user.couch} onChange={({ target }) => this.handleCouchChange({ user, value: target.checked })} />
                             </label>
                         </div>
                     </div>
@@ -318,7 +361,19 @@ const mapStateToProps = state => {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        changeTen: (userId, tenId) => dispatch({
+            type: 'admin/TEN_CHANGE',
+            payload: {
+                userId,
+                tenId
+            }
+        })
+    }
+}
+
 module.exports = {
     path: 'admin(/:category(/:id))',
-    component: connect(mapStateToProps)(Admin)
+    component: connect(mapStateToProps, mapDispatchToProps)(Admin)
 }
