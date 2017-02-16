@@ -41,7 +41,7 @@ const sagaMiddleware = createSagaMiddleware(
     ...transactionWatches,
     ...marketWatches,
     ratingWatch,
-    adminSaga
+    ...adminSaga
 );
 
 let middleware;

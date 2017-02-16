@@ -89,42 +89,41 @@ class Admin extends Component {
 
     handleChangePage = event => {
         event.preventDefault();
-        console.log('CHANGEd')
+        // console.log('CHANGEd')
         this.setState({currPage: 50})
         this.getData(this.props)
     }
 
     handleTenChange ({ user, ten }) {
-        console.log('handle ten change', user, ten)
-        this.props.changeTen(user.id, ten)
+        this.props.changeTen(user.id, Number(ten))
     }
 
     handleHundredChange ({ user, hundred }) {
-        console.log('handle hundred change', user, hundred)
+        this.props.changeHundred(user.id, Number(hundred))
     }
 
     handlePolkChange ({ user, polk }) {
-        console.log('handle polk change', user, polk)
+        this.props.changePolk(user.id, Number(polk))
     }
 
     handleCouchGroupChange ({ user, couchGroup }) {
-        console.log('handle couch group change', user, couchGroup)
+        this.props.changeCouchGroup(user.id, Number(couchGroup))
     }
 
     handleTenLeaderChange ({ user, value }) {
-        console.log('handle ten leader change', user, value)
+        this.props.changeTenLeader(user.id, value)
     }
 
     handleHundredLeaderChange ({ user, value }) {
-        console.log('handle hundred leader change', user, value)
+        this.props.changeHundredLeader(user.id, value)
     }
 
     handlePolkLeaderChange ({ user, value }) {
-        console.log('handle polk leader change', user, value)
+        this.props.changePolkLeader(user.id, value)
     }
 
     handleCouchChange ({ user, value }) {
-        console.log('handle couch change', user, value)
+        this.props.changeCouch(user.id, value)
     }
 
     componentDidMount () {
@@ -156,8 +155,8 @@ class Admin extends Component {
     }
 
     render () {
-        console.log('CurrPage: ', this.state.currPage)
-        console.log('COUNT: ', this.state.count)
+        // console.log('CurrPage: ', this.state.currPage)
+        // console.log('COUNT: ', this.state.count)
 
         const isAll = this.props.params.category === 'all'
 
@@ -223,6 +222,7 @@ class Admin extends Component {
                             </select>
                             <label>
                                 <input type="checkbox" defaultChecked={user.couch} onChange={({ target }) => this.handleCouchChange({ user, value: target.checked })} />
+                                Тренер
                             </label>
                         </div>
                     </div>
@@ -356,8 +356,7 @@ class Admin extends Component {
 const mapStateToProps = state => {
     return {
         users: state.rating.ratingUsers,
-        currentUserName: state.user.getIn(['current', 'username']),
-        gprops: state.global.get('props')
+        currentUserName: state.user.getIn(['current', 'username'])
     }
 }
 
@@ -368,6 +367,55 @@ const mapDispatchToProps = dispatch => {
             payload: {
                 userId,
                 tenId
+            }
+        }),
+        changeHundred: (userId, hundredId) => dispatch({
+            type: 'admin/HUNDRED_CHANGE',
+            payload: {
+                userId,
+                hundredId
+            }
+        }),
+        changePolk: (userId, polkId) => dispatch({
+            type: 'admin/POLK_CHANGE',
+            payload: {
+                userId,
+                polkId
+            }
+        }),
+        changeCouchGroup: (userId, couchGroupId) => dispatch({
+            type: 'admin/COUCH_GROUP_CHANGE',
+            payload: {
+                userId,
+                couchGroupId
+            }
+        }),
+        changeTenLeader: (userId, value) => dispatch({
+            type: 'admin/TEN_LEADER_CHANGE',
+            payload: {
+                userId,
+                value
+            }
+        }),
+        changeHundredLeader: (userId, value) => dispatch({
+            type: 'admin/HUNDRED_LEADER_CHANGE',
+            payload: {
+                userId,
+                value
+            }
+        }),
+        changePolkLeader: (userId, value) => dispatch({
+            type: 'admin/POLK_LEADER_CHANGE',
+            payload: {
+                userId,
+                value
+            }
+        }),
+        changeCouch: (userId, value) => dispatch({
+            type: 'admin/COUCH_CHANGE',
+            payload: {
+                userId,
+                value
             }
         })
     }
