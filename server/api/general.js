@@ -785,11 +785,10 @@ export default function useGeneralApi(app) {
 
     router.get('/users', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
-        const { category, ten, hundred, polk, couch_group, search, offsetVal } = this.query
+        const { category, ten, hundred, polk, couch_group, search, offset, limit } = this.query
         let where = {}
-        let offset = 0
-        let limit = 50
-
+        let _offset = Number(offset) || 0
+        let _limit = Number(limit) || 50
 
         if (category) {
             if (category === 'polki') {
@@ -830,13 +829,6 @@ export default function useGeneralApi(app) {
             where = { couch_group }
         }
 
-        if (offsetVal) {offset = parseInt(offsetVal); limit = parseInt(offsetVal) + 50}
-            else {offset = 0; limit = 0;}
-
-
-
-
-
         if (search) {
             where = {
                 $or: [{
@@ -850,9 +842,6 @@ export default function useGeneralApi(app) {
                 }]
             }
         }
-
-
-
 
         const users = yield models.User.findAll({
             attributes: [
@@ -873,12 +862,8 @@ export default function useGeneralApi(app) {
             order: [
                 ['money_total', 'DESC']
             ],
-            limit,
-            offset
-
-
-
-
+            offset: _offset,
+            limit: _limit
         })
         this.body = JSON.stringify({ users })
     })
@@ -1094,6 +1079,29 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
 
+    })
+
+    router.put('/users/:id', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return
+        const data = this.request.body
+        const userId = this.params.id
+        const {csrf, payload} = typeof(data) === 'string' ? JSON.parse(data) : data
+        console.log(`-- /users/${userId} -->`, this.session.uid, this.session.user)
+
+        try {
+            yield models.User.update(payload, {
+                where: { id: userId }
+            })
+            this.body = JSON.stringify({
+                status: 'ok'
+            })
+        } catch (error) {
+            console.error(`Error in /users/${userId} api call`, this.session.uid, error.toString())
+            this.body = JSON.stringify({
+                error: error.message
+            })
+            this.status = 500
+        }
     })
 }
 

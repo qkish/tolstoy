@@ -38,7 +38,7 @@ class App extends React.Component {
             analytics.page()
             }}();
 
-           
+
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -47,10 +47,10 @@ class App extends React.Component {
   ga('create', 'UA-91253232-1', 'auto');
   ga('send', 'pageview');
 
-       
+if (process.env.NODE_ENV === 'production') {
 (function(){ var widget_id = 'zH9JAkINiJ';var d=document;var w=window;function l(){
 var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
-
+}
 
 
             !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -60,7 +60,7 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
             document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
 
-            
+
 
 
 
@@ -68,7 +68,7 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
             fbq('init', '1594659427507927');
             fbq('track', "PageView");
 
-            
+
 
             window.fbAsyncInit = function() {
               FB.init({
@@ -146,7 +146,7 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
         let bitva = '';
          if (location.pathname === '/bitva') bitva = 'Bitva__overall';
 
-        
+
 
         let callout = null;
         if (this.state.showCallout && (alert || warning || success)) {
@@ -247,7 +247,7 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
                           {translate("change_account_password")}
                       </a>
                   </li>
-                  
+
                   <li>
                       <a href="http://golostools.com/" onClick={this.navigate} target="_blank" rel="noopener noreferrer">
                           {translate('APP_NAME_app_center')}&nbsp;<Icon name="extlink" />
@@ -293,7 +293,7 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
                 {children}
                 {lp ? <LpFooter /> : null}
                 {/* temporary disabled in favor of live chat */}
-               
+
             </div>
             <Dialogs />
             <Modals />

@@ -108,9 +108,9 @@ export function updateMoney (payload) {
     }).then(res => res.json());
 }
 
-export function getUsersByCategory (category, offset) {
+export function getUsersByCategory (category = 'all', offset = 0, limit = 50) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    return fetch(`/api/v1/users?category=${category || 'all'}&offsetVal=${offset || 0}`)
+    return fetch(`/api/v1/users?category=${category}&offset=${offset}&limit=${limit}`)
         .then(res => res.json())
         .then(({ users }) => users);
 }
@@ -210,5 +210,13 @@ export function deleteFromS3 (key) {
             csrf: $STM_csrf,
             key
         })
+    })
+}
+
+export function updateUser (userId, payload) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/users/${userId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ csrf: $STM_csrf, payload })
     })
 }
