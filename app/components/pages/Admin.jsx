@@ -5,6 +5,7 @@ import Beta from 'app/components/elements/Beta'
 import Userpic from 'app/components/elements/Userpic'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu'
 import HorizontalSubmenu from 'app/components/elements/HorizontalSubmenu'
+import Pagination from 'react-paginate'
 
 import {
     getUsersByCategory,
@@ -20,23 +21,16 @@ import {
 import UserEdit from 'app/components/elements/UserEdit'
 import { Link } from 'react-router'
 
-function moneyPrettify(text) {
-    let moneyInRating
-    if (text) {
-        moneyInRating = String(text)
-        moneyInRating = moneyInRating.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ')
-    } else {
-        moneyInRating = '0'
-    }
-    return moneyInRating
-}
-
 class Admin extends Component {
     constructor (props) {
         super(props)
-        this.state = {currPage: 0, count: 50}
+        this.state = {
+            perPage: 50,
+            currentPage: 1
+        }
         this.search = this.search.bind(this)
         this.getData = this.getData.bind(this)
+        this.getOffset = this.getOffset.bind(this)
 
         this.handleTenChange = this.handleTenChange.bind(this)
         this.handleHundredChange = this.handleHundredChange.bind(this)
@@ -47,6 +41,10 @@ class Admin extends Component {
         this.handleHundredLeaderChange = this.handleHundredLeaderChange.bind(this)
         this.handlePolkLeaderChange = this.handlePolkLeaderChange.bind(this)
         this.handleCouchGroupChange = this.handleCouchGroupChange.bind(this)
+    }
+
+    getOffset () {
+        return this.state.perPage * (this.state.currentPage - 1)
     }
 
     getData (props) {
@@ -79,19 +77,12 @@ class Admin extends Component {
             return
         }
 
-        getUsersByCategory(props.params.category, this.state.currPage).then(users => this.setState({users}))
+        getUsersByCategory(props.params.category, this.getOffset(), this.state.perPage).then(users => this.setState({users}))
         getUsersCount(props.params.category).then(count => this.setState({count}))
         getUsersByCategory('tens').then(allTens => this.setState({allTens}))
         getUsersByCategory('hundreds').then(allHundreds => this.setState({allHundreds}))
         getUsersByCategory('polki').then(allPolks => this.setState({allPolks}))
         getUsersByCategory('couches').then(allTrainers => this.setState({allTrainers}))
-    }
-
-    handleChangePage = event => {
-        event.preventDefault();
-        // console.log('CHANGEd')
-        this.setState({currPage: 50})
-        this.getData(this.props)
     }
 
     handleTenChange ({ user, ten }) {
@@ -138,32 +129,11 @@ class Admin extends Component {
         searchUsers(text).then(users => this.setState({isSearch: true, users}))
     }
 
-    pager (count) {
-        let result = ''
-        if (count > 3)  {
-            let countI = count
-            let currentCount = 0
-            let i = 1
-            while (countI > 1) {
-                currentCount = count - countI
-                countI = countI - 3;
-                i++
-                result = result + '<a className="btn btn-primary" href="#" role="button" ref="pagenum' + currentCount + '" >' + i + '</a> '//+ <a className="btn btn-primary" href="#" ref="pagenum" + currentCount >i</a>
-            }
-        }
-        return result
-    }
-
     render () {
-        // console.log('CurrPage: ', this.state.currPage)
-        // console.log('COUNT: ', this.state.count)
-
         const isAll = this.props.params.category === 'all'
 
         let view
         const { users, allTens, allPolks, allHundreds, allTrainers, count } = this.state
-
-        let offset = 0
 
         const userList = users ? (
             <div className="Admin__wrapper">
@@ -228,14 +198,6 @@ class Admin extends Component {
                         </div>
                     </div>
                 ))}
-
-                <div className="Admin__pagination">
-
-                {this.pager(count)}
-                    <a className="btn btn-default" href="#" role="button">2</a>
-                    <a className="btn btn-default" href="#" role="button">3</a>
-
-                </div>
             </div>
         ) : (
             <div>Загрузка</div>
@@ -345,8 +307,23 @@ class Admin extends Component {
                     }]} />
                 {isAll && submenu}
                     {view}
+                    {this.state.count ? (
+                        <Pagination
+                            pageCount={Math.ceil(this.state.count / this.state.perPage)}
+                            pageRangeDisplayed={3}
+                            marginPagesDisplayed={3}
+                            previousLabel='&laquo;'
+                            nextLabel='&raquo;'
+                            containerClassName='pagination'
+                            activeClassName='active'
+                            onPageChange={({ selected }) => {
+                                const currentPage = selected + 1
+                                const offset = this.state.perPage * selected
+                                this.setState({ currentPage })
+                                getUsersByCategory(this.props.params.category, offset, this.state.perPage).then(users => this.setState({users}))
+                            }} />
+                    ) : null}
                 </div>
-
             </div>
         )
     }

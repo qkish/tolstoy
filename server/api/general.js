@@ -710,11 +710,10 @@ export default function useGeneralApi(app) {
 
     router.get('/users', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
-        const { category, ten, hundred, polk, couch_group, search, offsetVal } = this.query
+        const { category, ten, hundred, polk, couch_group, search, offset, limit } = this.query
         let where = {}
-        let offset = 0
-        let limit = 50
-
+        let _offset = Number(offset) || 0
+        let _limit = Number(limit) || 50
 
         if (category) {
             if (category === 'polki') {
@@ -755,13 +754,6 @@ export default function useGeneralApi(app) {
             where = { couch_group }
         }
 
-        if (offsetVal) {offset = parseInt(offsetVal); limit = parseInt(offsetVal) + 50}
-            else {offset = 0; limit = 0;}
-
-
-
-
-
         if (search) {
             where = {
                 $or: [{
@@ -775,9 +767,6 @@ export default function useGeneralApi(app) {
                 }]
             }
         }
-
-
-
 
         const users = yield models.User.findAll({
             attributes: [
@@ -798,12 +787,8 @@ export default function useGeneralApi(app) {
             order: [
                 ['money_total', 'DESC']
             ],
-            limit,
-            offset
-
-
-
-
+            offset: _offset,
+            limit: _limit
         })
         this.body = JSON.stringify({ users })
     })
