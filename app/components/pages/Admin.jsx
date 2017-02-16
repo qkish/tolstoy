@@ -129,49 +129,57 @@ class Admin extends Component {
                     <div className="Rating__row">
                         <UserEdit account={user.name} key={user.id} />
                         <div className="Admin__choose">
-                            <select>
+                            <select defaultValue={user.polk}>
                                 {allPolks ? allPolks.map(userOption => (
-                                    <option value={userOption.id}>{userOption.first_name + ' ' + userOption.last_name + ', ' + userOption.name}</option>
+                                    <option value={userOption.id}>
+                                        {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
+                                    </option>
                                 )) : ''}
                              </select>
                              <label>
-                                 <input type="checkbox" checked={user.polk_leader} />
+                                 <input type="checkbox" defaultChecked={user.polk_leader} />
                                  Полководец
                              </label>
                         </div>
 
                         <div className="Admin__choose">
-                            <select>
-                                {allHundreds ? allHundreds.map(user => (
-                                    <option value={user.id}>{user.first_name + ' ' + user.last_name + ', ' + user.name}</option>
+                            <select defaultValue={user.hundred}>
+                                {allHundreds ? allHundreds.map(userOption => (
+                                    <option value={userOption.id}>
+                                        {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
+                                    </option>
                                 )) : ''}
                             </select>
                             <label>
-                                <input type="checkbox" checked={user.hundred_leader} />
+                                <input type="checkbox" defaultChecked={user.hundred_leader} />
                                 Сотник
                             </label>
                         </div>
 
                         <div className="Admin__choose">
-                            <select>
-                                {allTens ? allTens.map(user => (
-                                    <option value={user.id}>{user.first_name + ' ' + user.last_name + ', ' + user.name}</option>
+                            <select defaultValue={user.ten} onChange={e => console.log(e.target.value)}>
+                                {allTens ? allTens.map(userOption => (
+                                    <option value={userOption.id}>
+                                        {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
+                                    </option>
                                 )) : ''}
                             </select>
                             <label>
-                                <input type="checkbox" checked={user.ten_leader} />
+                                <input type="checkbox" defaultChecked={user.ten_leader} />
                                 Десятник
                             </label>
                         </div>
 
                         <div className="Admin__choose">
-                            <select>
-                                {allTrainers? allTrainers.map(user => (
-                                    <option value={user.id}>{user.first_name + ' ' + user.last_name + ', ' + user.name}</option>
+                            <select defaultValue={user.couch_group}>
+                                {allTrainers? allTrainers.map(userOption => (
+                                    <option value={userOption.id}>
+                                        {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
+                                    </option>
                                 )) : ''}
                             </select>
                             <label>
-                                <input type="checkbox" checked={user.couch}/>
+                                <input type="checkbox" defaultChecked={user.couch}/>
                             </label>
                         </div>
                     </div>
