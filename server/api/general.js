@@ -16,6 +16,7 @@ import isToday from 'date-fns/is_today';
 import AWS from 'aws-sdk';
 import pify from 'pify';
 import fs from 'fs';
+import {flatten, map} from 'lodash';
 
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
@@ -269,11 +270,11 @@ export default function useGeneralApi(app) {
         try {
             if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
-            
+
             const getBMtoken = yield getBMAccessTokenCredentialsOnly();
-           
+
             const getBMNewUser = yield getBMSignUp(email, name, lastname, getBMtoken.access_token);
-        
+
 
             console.log('BM SignUP Server: ', email, name, lastname)
 
@@ -299,18 +300,18 @@ export default function useGeneralApi(app) {
         const {
             csrf,
             email
-           
+
         } = typeof(params) === 'string' ? JSON.parse(params): params;
        //  if (!checkCSRF(this, csrf)) return;
         console.log('-- /sign up BM -->', this.session.uid, email);
         try {
             if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
-            
+
             const getBMtoken = yield getBMAccessTokenCredentialsOnly();
-           
+
             const getBMRecovered = yield getBMRecovery(email, getBMtoken.access_token);
-        
+
 
             console.log('BM Recovered: ', email)
 
@@ -831,16 +832,18 @@ export default function useGeneralApi(app) {
 
         if (search) {
             where = {
-                $or: [{
-                    first_name: {
-                        $like: `%${search}%`
-                    }
-                }, {
-                    last_name: {
-                        $like: `%${search}%`
-                    }
-                }]
+                $or: flatten(map(['first_name', 'last_name', 'name'], field => {
+                    return map(search.split(' '), q => {
+                        return {
+                            [field]: {
+                                $like: `%${q}%`
+                            }
+                        }
+                    })
+                }))
             }
+            _limit = null
+            _offset = 0
         }
 
         const users = yield models.User.findAll({
@@ -1134,18 +1137,18 @@ function* getBMAccessTokenCredentialsOnly () {
             client_id: config.bmapi.client_id,
             client_secret: config.bmapi.client_secret,
             grant_type: 'client_credentials'
-            
+
 
         })
     }).then(res => res.json())
 }
 
 function* getBMSignUp (newemail, newname, lastname, access_token) {
-    
+
 
    // newname = toString(newname).replace(/[^A-Za-zА-Яа-яЁё]/g, "")
    // newemail = toString(newemail)
-    
+
     var FormData = require('form-data');
     var form = new FormData();
     form.append('email', newemail);
@@ -1163,12 +1166,12 @@ function* getBMSignUp (newemail, newname, lastname, access_token) {
 }
 
 function* getBMRecovery (newemail, access_token) {
-    
+
 
    // newname = toString(newname).replace(/[^A-Za-zА-Яа-яЁё]/g, "")
    // newemail = toString(newemail)
 
-    
+
     var FormData = require('form-data');
     var form = new FormData();
     form.append('email', newemail);
