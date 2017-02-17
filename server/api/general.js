@@ -859,7 +859,8 @@ export default function useGeneralApi(app) {
                 'hundred_leader',
                 'polk_leader',
                 'money_total',
-                'approved_money'
+                'approved_money',
+                'volunteer'
             ],
             where,
             order: [

@@ -41,6 +41,7 @@ class Admin extends Component {
         this.handleHundredLeaderChange = this.handleHundredLeaderChange.bind(this)
         this.handlePolkLeaderChange = this.handlePolkLeaderChange.bind(this)
         this.handleCouchGroupChange = this.handleCouchGroupChange.bind(this)
+        this.handleVolunteerChange = this.handleVolunteerChange.bind(this)
     }
 
     getOffset () {
@@ -115,6 +116,10 @@ class Admin extends Component {
 
     handleCouchChange ({ user, value }) {
         this.props.changeCouch(user.id, value)
+    }
+
+    handleVolunteerChange ({ user, value }) {
+        this.props.changeVolunteer(user.id, value)
     }
 
     componentDidMount () {
@@ -282,6 +287,44 @@ class Admin extends Component {
             )
         }
 
+        if (this.props.params.category === 'volunteer') {
+            view = users ? (
+                <div className="Admin__wrapper">
+                    {users.map(user => (
+                        <div className="Rating__row" key={user.id}>
+                            <UserEdit account={user.name} />
+                            <div className="Admin__choose">
+                                 <label>
+                                     <input type="checkbox" defaultChecked={user.volunteer} onChange={({ target }) => this.handleVolunteerChange({ user, value: target.checked })} />
+                                     Волонтер
+                                 </label>
+                            </div>
+                        </div>
+                    ))}
+                    <div className="Admin__pagination">
+                        {this.state.count ? (
+                            <Pagination
+                                pageCount={Math.ceil(this.state.count / this.state.perPage)}
+                                pageRangeDisplayed={3}
+                                marginPagesDisplayed={3}
+                                previousLabel='&laquo;'
+                                nextLabel='&raquo;'
+                                containerClassName='pagination'
+                                activeClassName='active'
+                                onPageChange={({ selected }) => {
+                                    const currentPage = selected + 1
+                                    const offset = this.state.perPage * selected
+                                    this.setState({ currentPage })
+                                    getUsersByCategory(this.props.params.category, offset, this.state.perPage).then(users => this.setState({users}))
+                                }} />
+                        ) : null}
+                    </div>
+                </div>
+            ) : (
+                <div>Загрузка</div>
+            )
+        }
+
         if (this.state.isSearch) {
             view = userList
         }
@@ -391,6 +434,13 @@ const mapDispatchToProps = dispatch => {
         }),
         changeCouch: (userId, value) => dispatch({
             type: 'admin/COUCH_CHANGE',
+            payload: {
+                userId,
+                value
+            }
+        }),
+        changeVolunteer: (userId, value) => dispatch({
+            type: 'admin/VOLUNTEER_CHANGE',
             payload: {
                 userId,
                 value

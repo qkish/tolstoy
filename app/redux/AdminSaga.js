@@ -23,7 +23,8 @@ export default [
     tenLeaderChangeWatch,
     hundredLeaderChangeWatch,
     polkLeaderChangeWatch,
-    couchChangeWatch
+    couchChangeWatch,
+    volunteerChangeWatch
 ]
 
 function* tenChangeWatch () {
@@ -56,6 +57,10 @@ function* polkLeaderChangeWatch () {
 
 function* couchChangeWatch () {
     yield* takeEvery('admin/COUCH_CHANGE', couchChange)
+}
+
+function* volunteerChangeWatch () {
+    yield* takeEvery('admin/VOLUNTEER_CHANGE', volunteerChange)
 }
 
 function* tenChange (action) {
@@ -110,6 +115,13 @@ function* polkLeaderChange (action) {
 function* couchChange (action) {
     const payload = {
         couch: action.payload.value
+    }
+    yield updateUser(action.payload.userId, payload)
+}
+
+function* volunteerChange (action) {
+    const payload = {
+        volunteer: action.payload.value
     }
     yield updateUser(action.payload.userId, payload)
 }
