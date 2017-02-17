@@ -16,6 +16,7 @@ import isToday from 'date-fns/is_today';
 import AWS from 'aws-sdk';
 import pify from 'pify';
 import fs from 'fs';
+import {flatten, map} from 'lodash';
 
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
@@ -269,11 +270,11 @@ export default function useGeneralApi(app) {
         try {
             if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
-            
+
             const getBMtoken = yield getBMAccessTokenCredentialsOnly();
-           
+
             const getBMNewUser = yield getBMSignUp(email, name, lastname, getBMtoken.access_token);
-        
+
 
             console.log('BM SignUP Server: ', email, name, lastname)
 
@@ -299,18 +300,18 @@ export default function useGeneralApi(app) {
         const {
             csrf,
             email
-           
+
         } = typeof(params) === 'string' ? JSON.parse(params): params;
        //  if (!checkCSRF(this, csrf)) return;
         console.log('-- /recovery BM -->', this.session.uid, email);
         try {
             if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
-            
+
             const getBMtoken = yield getBMAccessTokenCredentialsOnly();
-           
+
             const getBMRecovered = yield getBMRecovery(email, getBMtoken.access_token);
-        
+
 
             console.log('BM Recovered: ', email)
 
@@ -841,11 +842,10 @@ export default function useGeneralApi(app) {
 
     router.get('/users', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
-        const { category, ten, hundred, polk, couch_group, search, offsetVal } = this.query
+        const { category, ten, hundred, polk, couch_group, search, offset, limit } = this.query
         let where = {}
-        let offset = 0
-        let limit = 50
-
+        let _offset = Number(offset) || 0
+        let _limit = Number(limit) || 50
 
         if (category) {
             if (category === 'polki') {
@@ -886,29 +886,21 @@ export default function useGeneralApi(app) {
             where = { couch_group }
         }
 
-        if (offsetVal) {offset = parseInt(offsetVal); limit = parseInt(offsetVal) + 50}
-            else {offset = 0; limit = 0;}
-
-
-
-
-
         if (search) {
             where = {
-                $or: [{
-                    first_name: {
-                        $like: `%${search}%`
-                    }
-                }, {
-                    last_name: {
-                        $like: `%${search}%`
-                    }
-                }]
+                $or: flatten(map(['first_name', 'last_name', 'name'], field => {
+                    return map(search.split(' '), q => {
+                        return {
+                            [field]: {
+                                $like: `%${q}%`
+                            }
+                        }
+                    })
+                }))
             }
+            _limit = null
+            _offset = 0
         }
-
-
-
 
         const users = yield models.User.findAll({
             attributes: [
@@ -923,18 +915,15 @@ export default function useGeneralApi(app) {
                 'hundred_leader',
                 'polk_leader',
                 'money_total',
-                'approved_money'
+                'approved_money',
+                'volunteer'
             ],
             where,
             order: [
                 ['money_total', 'DESC']
             ],
-            limit,
-            offset
-
-
-
-
+            offset: _offset,
+            limit: _limit
         })
         this.body = JSON.stringify({ users })
     })
@@ -1151,6 +1140,29 @@ export default function useGeneralApi(app) {
         }
 
     })
+
+    router.put('/users/:id', koaBody, function* () {
+        if (rateLimitReq(this, this.req)) return
+        const data = this.request.body
+        const userId = this.params.id
+        const {csrf, payload} = typeof(data) === 'string' ? JSON.parse(data) : data
+        console.log(`-- /users/${userId} -->`, this.session.uid, this.session.user)
+
+        try {
+            yield models.User.update(payload, {
+                where: { id: userId }
+            })
+            this.body = JSON.stringify({
+                status: 'ok'
+            })
+        } catch (error) {
+            console.error(`Error in /users/${userId} api call`, this.session.uid, error.toString())
+            this.body = JSON.stringify({
+                error: error.message
+            })
+            this.status = 500
+        }
+    })
 }
 
 
@@ -1182,18 +1194,18 @@ function* getBMAccessTokenCredentialsOnly () {
             client_id: config.bmapi.client_id,
             client_secret: config.bmapi.client_secret,
             grant_type: 'client_credentials'
-            
+
 
         })
     }).then(res => res.json())
 }
 
 function* getBMSignUp (newemail, newname, lastname, access_token) {
-    
+
 
    // newname = toString(newname).replace(/[^A-Za-zА-Яа-яЁё]/g, "")
    // newemail = toString(newemail)
-    
+
     var FormData = require('form-data');
     var form = new FormData();
     form.append('email', newemail);
@@ -1211,12 +1223,12 @@ function* getBMSignUp (newemail, newname, lastname, access_token) {
 }
 
 function* getBMRecovery (newemail, access_token) {
-    
+
 
    // newname = toString(newname).replace(/[^A-Za-zА-Яа-яЁё]/g, "")
    // newemail = toString(newemail)
 
-    
+
     var FormData = require('form-data');
     var form = new FormData();
     form.append('email', newemail);
