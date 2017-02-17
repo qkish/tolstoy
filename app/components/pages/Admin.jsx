@@ -198,6 +198,24 @@ class Admin extends Component {
                         </div>
                     </div>
                 ))}
+                <div className="Admin__pagination">
+                    {this.state.count ? (
+                        <Pagination
+                            pageCount={Math.ceil(this.state.count / this.state.perPage)}
+                            pageRangeDisplayed={3}
+                            marginPagesDisplayed={3}
+                            previousLabel='&laquo;'
+                            nextLabel='&raquo;'
+                            containerClassName='pagination'
+                            activeClassName='active'
+                            onPageChange={({ selected }) => {
+                                const currentPage = selected + 1
+                                const offset = this.state.perPage * selected
+                                this.setState({ currentPage })
+                                getUsersByCategory(this.props.params.category, offset, this.state.perPage).then(users => this.setState({users}))
+                            }} />
+                    ) : null}
+                </div>
             </div>
         ) : (
             <div>Загрузка</div>
@@ -307,22 +325,6 @@ class Admin extends Component {
                     }]} />
                 {isAll && submenu}
                     {view}
-                    {this.state.count ? (
-                        <Pagination
-                            pageCount={Math.ceil(this.state.count / this.state.perPage)}
-                            pageRangeDisplayed={3}
-                            marginPagesDisplayed={3}
-                            previousLabel='&laquo;'
-                            nextLabel='&raquo;'
-                            containerClassName='pagination'
-                            activeClassName='active'
-                            onPageChange={({ selected }) => {
-                                const currentPage = selected + 1
-                                const offset = this.state.perPage * selected
-                                this.setState({ currentPage })
-                                getUsersByCategory(this.props.params.category, offset, this.state.perPage).then(users => this.setState({users}))
-                            }} />
-                    ) : null}
                 </div>
             </div>
         )
