@@ -33,6 +33,25 @@ export default createModule({
             state.merge({show_login_modal: false, loginBroadcastOperation: undefined, loginDefault: undefined}) },
         { action: 'SAVE_LOGIN_CONFIRM', reducer: (state, {payload}) => state.set('saveLoginConfirm', payload) },
         { action: 'SAVE_LOGIN', reducer: (state) => state }, // Use only for low security keys (like posting only keys)
+
+        {/* action: 'SET_PROGRAM', reducer: (state, {payload}) => {
+            console.log('state = ', state)
+            console.log('state has cyurrent', state.has('current'))
+
+            if(state.has('current')) {
+                return state.setIn(['current', 'bla'], 1)
+                // return state.setIn(['current', 'currentProgram'], 1) 
+            }
+
+            return state
+        } }, */},
+
+
+        { action: 'SET_PROGRAM', reducer: (state, {payload}) => state.set(['currentProgram'], payload) },
+        { action: 'SET_VOLUNTEER', reducer: (state, {payload}) => state.set(['isVolunteer'], payload) },
+
+        
+
         { action: 'REMOVE_HIGH_SECURITY_KEYS', reducer: (state) => {
             if(!state.hasIn(['current', 'private_keys'])) return state
             let empty = false

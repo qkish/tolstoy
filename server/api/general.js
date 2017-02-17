@@ -302,7 +302,7 @@ export default function useGeneralApi(app) {
            
         } = typeof(params) === 'string' ? JSON.parse(params): params;
        //  if (!checkCSRF(this, csrf)) return;
-        console.log('-- /sign up BM -->', this.session.uid, email);
+        console.log('-- /recovery BM -->', this.session.uid, email);
         try {
             if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
@@ -327,6 +327,62 @@ export default function useGeneralApi(app) {
             this.status = 500;
         }
         recordWebEvent(this, 'api/bm_recovery', email);
+    });
+
+
+    router.post('/bm_program', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {
+            csrf,
+            email
+           // password
+           
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
+       //  if (!checkCSRF(this, csrf)) return;
+        console.log('-- /program  -->', this.session.uid, email);
+        try {
+            //if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
+            // TODO: limit by 1/min/ip
+            
+            //const getBMtoken = yield getBMAccessToken(email, password);
+
+          
+
+            let getBMProg = ''
+            
+           // if (getBMtoken) { 
+                
+                getBMProg = yield models.User.findOne({
+                attributes: [
+                'current_program',
+                'volunteer'
+                
+                ],
+                where: {
+                name: esc(email)
+                }
+
+                })
+            
+           // }
+
+ 
+
+            this.body = JSON.stringify({
+                status: 'ok',
+                bmprog: getBMProg
+            });
+
+
+        } catch (error) {
+            console.error('Error in /bm_recovery api call', this.session.uid, error);
+            this.body = JSON.stringify({
+                error: error.message
+            });
+            this.status = 500;
+        }
+        recordWebEvent(this, 'api/bm_program', email);
     });
 
 
@@ -1175,6 +1231,19 @@ function* getBMRecovery (newemail, access_token) {
         body: form
     }).then(res => res.json())
 }
+
+function* getBMProgram (event, access_token) {
+
+    return fetch('http://api.molodost.bz/api/v3/request/get-requests/?event_id=' + event, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + access_token
+        }
+        
+    }).then(res => res.json())
+}
+
 
 
 function* getBMUserMeta (acces_token) {
