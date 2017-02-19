@@ -35,7 +35,7 @@ const WebpackIsomorphicToolsConfig = require('../webpack/webpack-isotools-config
 global.webpackIsomorphicTools = new WebpackIsomorphicTools(WebpackIsomorphicToolsConfig);
 
 global.webpackIsomorphicTools
-    .development(process.env.NODE_ENV === 'development')
+//    .development(process.env.NODE_ENV === 'development') // deprecated
     .server(ROOT, () => {
         const SteemClient = require('shared/api_client/ApiInstances').default;
         const connect_promises = [SteemClient.instance().connect_promise()];
