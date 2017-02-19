@@ -3,6 +3,7 @@ import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import writeStats from './utils/write-stats'
 import HappyPack from 'happypack'
+import os from 'os'
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
 const webpack_isomorphic_tools_plugin =
@@ -64,13 +65,14 @@ export default {
 				{
 					path: 'babel',
 					query: {
+						plugins: [
+							'transform-runtime'
+						],
 						cacheDirectory: true,
 					},
-					plugins: [
-						'transform-runtime'
-					],
 				}
 			],
+			threads: os.cpus().length || 2
 			// customize as needed, see Configuration below
 		}),
 //		new webpack.DllPlugin({
