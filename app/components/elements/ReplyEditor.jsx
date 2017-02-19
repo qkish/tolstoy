@@ -245,6 +245,8 @@ class ReplyEditor extends React.Component {
                 if(program == '2') totalTags.push('bm-mzs17')
             }
 
+            totalTags.push('bm-ceh23')
+
             this.setState({tagsInState: totalTags})
 
             console.log('TAGS: ', totalTags)
@@ -837,7 +839,7 @@ export default formId => reduxForm(
 
             let placedFile = originalPost.filemeta;
 
-            let placedTags = originalPost.tagsPlaced;
+            let placedTags // = originalPost.tagsPlaced;
 
 
             // Parse categories:
@@ -909,6 +911,9 @@ export default formId => reduxForm(
 
 
 
+
+
+            
 
 
 

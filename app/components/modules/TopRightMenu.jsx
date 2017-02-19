@@ -110,7 +110,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                  <li className={lcn}><Link to={wallet_link} className="TopRightMenu_sila-link"><div className="TopRightMenu_sila">{vesting_steem && Math.round(vesting_steem)}</div></Link></li>
 
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <div className="TopRightMenu__search-icon"></div>}</a></li>
-
+                
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
