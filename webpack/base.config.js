@@ -73,10 +73,10 @@ export default {
 			],
 			// customize as needed, see Configuration below
 		}),
-		new webpack.DllPlugin({
-			path: path.join(__dirname, "js", "[name]-manifest.json"),
-			name: "[name]_[hash]"
-		}),
+//		new webpack.DllPlugin({
+//			path: path.join(__dirname, "js", "[name]-manifest.json"),
+//			name: "[name]_[hash]"
+//		}),
 		function () {
 			this.plugin('done', writeStats);
 		},
