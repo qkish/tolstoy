@@ -142,7 +142,7 @@ class Rating extends Component {
 		) : (
 			<div>Загрузка</div>
 		)
-//		const userList = UserMapper(users, )
+
 		view = userList
 		
 		if (this.props.params.category === 'tens') {
