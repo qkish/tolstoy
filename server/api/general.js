@@ -951,7 +951,7 @@ export default function useGeneralApi(app) {
 		if (rateLimitReq(this, this.req)) return;
 		const {category, ten, hundred, polk, couch_group, search, offset, limit} = this.query
 		let where = {}
-		let type = 'ten'
+		let type = null
 		let _offset = Number(offset) || 0
 		let _limit = Number(limit) || 50
 
@@ -1021,6 +1021,10 @@ export default function useGeneralApi(app) {
 			required: false,
 			attributes: ['money']
 		}
+		let order
+		category !== 'all'
+			? order = [groupsInclude, 'money', 'DESC']
+			: order = ['money_total', 'DESC']
 		const users = yield models.User.findAll({
 			attributes: [
 				'id',
@@ -1038,10 +1042,7 @@ export default function useGeneralApi(app) {
 				'volunteer'
 			],
 			where,
-			order: [
-				[groupsInclude, 'money', 'DESC'],
-				['money_total', 'DESC']
-			],
+			order: [order],
 			include: [groupsInclude],
 			offset: _offset,
 			limit: _limit

@@ -80,8 +80,6 @@ export default (sequelize, DataTypes) => {
 								type: leader.type
 							}
 						}).then( group => {
-
-
 							try {
 
 								if (group) {
