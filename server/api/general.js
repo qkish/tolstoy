@@ -338,22 +338,22 @@ export default function useGeneralApi(app) {
             csrf,
             email
            // password
-           
+
         } = typeof(params) === 'string' ? JSON.parse(params): params;
        //  if (!checkCSRF(this, csrf)) return;
         console.log('-- /program  -->', this.session.uid, email);
         try {
             //if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
-            
+
             //const getBMtoken = yield getBMAccessToken(email, password);
 
-          
+
 
             let getBMProg = ''
-            
-           // if (getBMtoken) { 
-                
+
+           // if (getBMtoken) {
+
                 getBMProg = yield models.User.findOne({
                 attributes: [
                 'current_program',
@@ -362,17 +362,17 @@ export default function useGeneralApi(app) {
                 'hundred',
                 'polk',
                 'couch_group'
-                
+
                 ],
                 where: {
                 name: esc(email)
                 }
 
                 })
-            
+
            // }
 
- 
+
 
             this.body = JSON.stringify({
                 status: 'ok',
@@ -397,22 +397,22 @@ export default function useGeneralApi(app) {
             csrf,
             email
            // password
-           
+
         } = typeof(params) === 'string' ? JSON.parse(params): params;
        //  if (!checkCSRF(this, csrf)) return;
-        
+
         try {
             //if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
-            
+
             //const getBMtoken = yield getBMAccessToken(email, password);
 
-          
+
 
             let getBMProg = ''
-            
-           // if (getBMtoken) { 
-                
+
+           // if (getBMtoken) {
+
                 getBMProg = yield models.User.findOne({
                 attributes: [
                 'current_program',
@@ -421,17 +421,17 @@ export default function useGeneralApi(app) {
                 'hundred',
                 'polk',
                 'couch_group'
-                
+
                 ],
                 where: {
                 name: esc(email)
                 }
 
                 })
-            
+
            // }
 
- 
+
 
             this.body = JSON.stringify({
                 status: 'ok',
@@ -457,22 +457,22 @@ export default function useGeneralApi(app) {
            // password
            } = typeof(params) === 'string' ? JSON.parse(params): params;
        //  if (!checkCSRF(this, csrf)) return;
-        
+
         try {
             //if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
-            
+
             //const getBMtoken = yield getBMAccessToken(email, password);
 
             let getBMProg = ''
-            
-           // if (getBMtoken) { 
-                
+
+           // if (getBMtoken) {
+
                 getBMProg = yield models.User.findOne({
                 attributes: [ 'name' ],
                 where: {id: esc(id)   }
                 })
-            
+
            // }
 
             this.body = JSON.stringify({
@@ -529,7 +529,7 @@ export default function useGeneralApi(app) {
                 // If user accoun have in DB
                 if (db_account) {
 
-                    let DectryptedKey = decryptPrivateKey(db_account.private_key);
+                    let DectryptedKey = db_account.private_key ? decryptPrivateKey(db_account.private_key) : null;
                     console.log('DECRYPTED: ', DectryptedKey)
                     this.session.a = username;
                     this.session.user = db_account.user_id;
@@ -1084,22 +1084,22 @@ export default function useGeneralApi(app) {
             csrf,
             email
            // password
-           
+
         } = typeof(params) === 'string' ? JSON.parse(params): params;
        //  if (!checkCSRF(this, csrf)) return;
-        
+
         try {
             //if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             // TODO: limit by 1/min/ip
-            
+
             //const getBMtoken = yield getBMAccessToken(email, password);
 
-          
+
 
             let getBMProg = ''
-            
-           // if (getBMtoken) { 
-                
+
+           // if (getBMtoken) {
+
                 getBMProg = yield models.User.findOne({
                 attributes: [
                 'id'
@@ -1109,9 +1109,9 @@ export default function useGeneralApi(app) {
                 }
 
                 })
-            
+
            // }
-         
+
 
 
             this.body = JSON.stringify({
@@ -1416,7 +1416,7 @@ function* getBMProgram (event, access_token) {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + access_token
         }
-        
+
     }).then(res => res.json())
 }
 

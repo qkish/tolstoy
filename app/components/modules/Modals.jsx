@@ -12,6 +12,7 @@ import BottomPanel from 'app/components/modules/BottomPanel';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import {NotificationStack} from 'react-notification';
+import EnterPrivate from 'app/components/modules/EnterPrivate';
 import {OrderedSet} from 'immutable';
 
 class Modals extends React.Component {
@@ -39,8 +40,11 @@ class Modals extends React.Component {
         const {
             show_login_modal, show_confirm_modal, show_transfer_modal, show_signup_modal,
             hideLogin, hideTransfer, hideConfirm, hideSignUp,
-            notifications, removeNotification, hidePromotePost, show_promote_post_modal
+            notifications, removeNotification, hidePromotePost, show_promote_post_modal,
+            show_private_key_modal, hidePrivateKeyModal
         } = this.props;
+
+        console.log('show private key modal', show_private_key_modal)
 
         const notifications_array = notifications ? notifications.toArray().map(n => {
             n.onClick = () => removeNotification(n.key);
@@ -65,6 +69,10 @@ class Modals extends React.Component {
                     <CloseButton onClick={hideSignUp} />
                     <SignUp />
                 </Reveal>}
+                {show_private_key_modal && <Reveal onHide={hidePrivateKeyModal} show={show_private_key_modal}>
+                    <CloseButton onClick={hidePrivateKeyModal} />
+                    <EnterPrivate />
+                </Reveal>}
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
@@ -83,6 +91,7 @@ export default connect(
             show_transfer_modal: state.user.get('show_transfer_modal'),
             show_promote_post_modal: state.user.get('show_promote_post_modal'),
             show_signup_modal: state.user.get('show_signup_modal'),
+            show_private_key_modal: state.user.get('show_private_key_modal'),
             notifications: state.app.get('notifications')
         }
     },
@@ -106,6 +115,10 @@ export default connect(
         hideSignUp: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.hideSignUp())
+        },
+        hidePrivateKeyModal: e => {
+            if (e) e.preventDefault();
+            dispatch(user.actions.hidePrivateKeyModal())
         },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
         removeNotification: (key) => dispatch({type: 'REMOVE_NOTIFICATION', payload: {key}})

@@ -8,6 +8,7 @@ const defaultState = fromJS({
     show_transfer_modal: false,
     show_promote_post_modal: false,
     show_signup_modal: false,
+    show_private_key_modal: false,
     pub_keys_used: null,
     locale: DEFAULT_LANGUAGE
 });
@@ -40,7 +41,7 @@ export default createModule({
 
             if(state.has('current')) {
                 return state.setIn(['current', 'bla'], 1)
-                // return state.setIn(['current', 'currentProgram'], 1) 
+                // return state.setIn(['current', 'currentProgram'], 1)
             }
 
             return state
@@ -50,8 +51,8 @@ export default createModule({
         { action: 'SET_PROGRAM', reducer: (state, {payload}) => state.set('currentProgram', payload) },
         { action: 'SET_VOLUNTEER', reducer: (state, {payload}) => state.set('isVolunteer', payload) },
         { action: 'SET_MY_HIERARCHY', reducer: (state, {payload}) => state.set('myHierarchy', payload) },
-       
-        
+
+
 
         { action: 'REMOVE_HIGH_SECURITY_KEYS', reducer: (state) => {
             if(!state.hasIn(['current', 'private_keys'])) return state
@@ -137,5 +138,8 @@ export default createModule({
             },
         },
         { action: 'HIDE_CONNECTION_ERROR_MODAL', reducer: state => state.set('hide_connection_error_modal', true) },
+        { action: 'SHOW_PRIVATE_KEY_MODAL', reducer: state => state.set('show_private_key_modal', true) },
+        { action: 'HIDE_PRIVATE_KEY_MODAL', reducer: state => state.set('show_private_key_modal', false) },
+        { action: 'SET_PRIVATE_KEY', reducer: (state, { payload: { private_key } }) => state.set('private_key', private_key) }
     ]
 });
