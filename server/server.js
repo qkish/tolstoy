@@ -57,14 +57,14 @@ app.use(function *(next) {
 });
 
 // redirect to "hot"
-{ /* app.use(function *(next) {
+app.use(function *(next) {
     if (this.method === 'GET' && this.url == '/') {
         this.status = 302;
         this.redirect('/hot/bm-open');
     } else {
         yield next;
     }
-}); */}
+}); 
 
 if (env === 'production') {
     // load production middleware
