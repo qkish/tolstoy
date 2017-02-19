@@ -28,7 +28,7 @@ export default {
     },
     webpack: {
         ...baseConfig,
-        devtool: 'source-map',
+        devtool: 'eval',
         entry: {
             app: [
                 './app/Main.js',
@@ -43,7 +43,7 @@ export default {
             ]
         },
         plugins: [
-            new webpack.optimize.OccurenceOrderPlugin(),
+//            new webpack.optimize.OccurenceOrderPlugin(), // Не нужно это юзать в дэве
             new webpack.HotModuleReplacementPlugin(),
             new webpack.NoErrorsPlugin(),
             new webpack.DefinePlugin({
@@ -56,7 +56,7 @@ export default {
                     'TYPED_ARRAY_SUPPORT': JSON.stringify(false)
                 }
             }),
-            new webpack.optimize.DedupePlugin(),
+//            new webpack.optimize.DedupePlugin(), // Не нужно это юзать в дэве
             new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.js'),
             ...baseConfig.plugins,
             function () { this.plugin('done', startKoa); }
