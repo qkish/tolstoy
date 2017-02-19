@@ -20,7 +20,7 @@ class ViewUserHierarchy extends Component {
 
    
     getHierarchy = (props) => {
-           let email = props.account.name;
+           let email = props.account.name ? props.account.name : '';
 
 
       
