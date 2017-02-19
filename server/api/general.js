@@ -6,7 +6,14 @@ import findUser from 'db/utils/find_user';
 import config from 'config';
 import recordWebEvent from 'server/record_web_event';
 import {esc, escAttrs} from 'db/models';
-import {emailRegex, getRemoteIp, rateLimitReq, checkCSRF, encryptPrivateKey, decryptPrivateKey} from 'server/utils';
+import {
+	emailRegex,
+	getRemoteIp,
+	rateLimitReq,
+	checkCSRF,
+	encryptPrivateKey,
+	decryptPrivateKey
+} from 'server/utils';
 import coBody from 'co-body';
 import {getLogger} from '../../app/utils/Logger'
 import {Apis} from 'shared/api_client';

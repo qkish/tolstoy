@@ -14,3 +14,7 @@ app/assets/static/*.js
 clean.sh
 db/config/config.json
 screenlog*
+/.history/
+/.idea/
+/.vscode/
+/.git/
