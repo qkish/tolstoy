@@ -301,6 +301,8 @@ class PostFull extends React.Component {
         const firstPayout = post_content.get('mode') === "first_payout"
         const rootComment = post_content.get('depth') == 0
 
+
+        console.log('TAGS from FP: ', p.json_metadata.tags)
         
 
 
@@ -326,7 +328,7 @@ class PostFull extends React.Component {
                     <button className="button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>
                 </div>} */}
 
-               <TagList post={content} horizontal />
+             {/* <TagList post={content} horizontal /> */}
 
 
                 <div className="PostFull__footer align-middle">
@@ -363,7 +365,7 @@ class PostFull extends React.Component {
                 <div className="row">
                      <div className="column small-12">
                         {showReply && renderedEditor}
-                        {content.category === 'bm-tasks' ? <SubmitStory type="submit_story" taskId={p.json_metadata.tags[1]} taskTitle={p.title} successCallback={() => { window.location = '/created/bm-open' }} /> : ''}
+                        {content.category === 'bm-tasks' ? <SubmitStory type="submit_story" taskId={p.json_metadata.tags} taskTitle={p.title} successCallback={() => { window.location = '/created/bm-open' }} /> : ''}
                     </div>
                 </div>
             </article>

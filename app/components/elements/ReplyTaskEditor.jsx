@@ -77,7 +77,7 @@ class ReplyTaskEditor extends React.Component {
         submitting: React.PropTypes.bool.isRequired,
         invalid: React.PropTypes.bool.isRequired,
 
-        taskId: React.PropTypes.string,
+        taskId: React.PropTypes.array,
         taskTitle: React.PropTypes.string,
 
 
@@ -380,6 +380,8 @@ class ReplyTaskEditor extends React.Component {
 
         }
 
+       
+
         const {onCancel, autoVoteOnChange} = this
         const {title, category, body, money, autoVote} = this.props.fields
         const {
@@ -654,7 +656,7 @@ export default formId => reduxForm(
                 return
             }
 
-            let taskTagSet = Set([taskTag]);
+            let taskTagSet = Set(taskTag);
 
             let allCategories = Set([...formCategories.toJS(), ...taskTagSet.toJS(), ...rtags.hashtags])
             if(rootTag) allCategories = allCategories.add(rootTag)

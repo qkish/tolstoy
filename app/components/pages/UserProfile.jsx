@@ -122,13 +122,15 @@ export default class UserProfile extends React.Component {
     }
 
 
-    componentDidMount () {
+    componentWillReceiveProps (nextProps) {
 
     
-       if(!this.props.current_hierarchy) { 
+       if(nextProps.current_hierarchy && !nextProps.current_hierarchy.myTen) { 
 
         this.getNameByID()
-        this.getData(this.props) 
+        this.getData(nextProps) 
+
+        
       }
     }
 
@@ -215,7 +217,8 @@ export default class UserProfile extends React.Component {
        
         let {allTens} = this.state
 
-        let userID = this.state.userID.id
+        let userID 
+        if(this.state.userID && this.state.userID.id) userID = this.state.userID.id
 
         let isPayed = false
         if (this.props.current_program) {
@@ -501,6 +504,7 @@ module.exports = {
             const current_user = state.user.get('current')
             const current_hierarchy = state.user.get('myHierarchy')
             const current_program = state.user.get('currentProgram')
+
             // const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
             return {
                 discussions: state.global.get('discussion_idx'),
