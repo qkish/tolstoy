@@ -257,6 +257,9 @@ class Header extends React.Component {
 
         let hideOnMobile = current_account_name ? '' : ' Header__mobile-hide';
 
+       let current_program = this.props.current_program ? this.props.current_program.programId : '';
+       
+
 
 
         return (
@@ -305,10 +308,14 @@ export {Header as _Header_};
 export default connect(
     state => {
         const current_user = state.user.get('current');
+
+        const current_program = state.user.get('currentProgram');
+
         const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
         return {
             location: state.app.get('location'),
-            current_account_name
+            current_account_name,
+            current_program
         }
     }
 )(Header);

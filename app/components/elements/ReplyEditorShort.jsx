@@ -712,6 +712,8 @@ export default formId => reduxForm(
         )
         const hasCategory = isStory // /submit_story/.test(type)
 
+        const current_program = state.user.get('currentProgram');
+
 
 
         if (isStory) fields.push('title')

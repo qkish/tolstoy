@@ -241,8 +241,19 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // Если пользователь найден в молодости и данные валидны,
         // тогда заменить имя и пароль на данные дя входа в golos.io
         if (resp.name && resp.private_key) {
+            
+            //let bmProgram = yield whatBMProgram(username, password)
+
+            
+
+           // yield put(user.actions.setProgram({ programId: bmProgram.bmprog }))
+
             username = resp.name // resp.name
             password = resp.private_key // resp.private_key
+           
+           // this.redirect('/hot/')
+
+           // window.location = `/hot/`;
         }
         // Сервер вернул ошибку
         // необходимо определить -
@@ -539,6 +550,40 @@ function generateGolosLogin (len) {
   return Array.from(arr).map(dec2hex).join('')
 }
 
+
+function* whatBMProgram(email, password) {
+
+        
+        if (!email) return;
+
+     
+
+        return fetch('/api/v1/bm_program', {
+            method: 'post',
+            mode: 'no-cors',
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf: $STM_csrf,
+                email,
+                password
+               
+                //json_meta: JSON.stringify({"ico_address": icoAddress})
+            })
+        }).then(r => r.json()).then(res => {
+            if (res.error || res.status !== 'ok') {
+                console.error('BM Program Error', res.error);
+            } else {
+                return res
+            }
+        }).catch(error => {
+            console.error('Caight BM Prgram Error', error);  
+        });
+
+}
 
 function* createGolosAccount(emailpassed, bmpasswordpassed, name) { // Юзера создаем для уникального email, пароль для проверки на сервере есть ли аккаунт oAuth
 

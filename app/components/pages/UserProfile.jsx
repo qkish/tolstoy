@@ -26,11 +26,17 @@ import ReplyEditorShort from 'app/components/elements/ReplyEditorShort'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import resolveRoute from 'app/ResolveRoute';
 
+import {
+    getUsersByCategory
+    
+} from 'app/utils/ServerApiClient'
+
 // BMChain components/modules
 import ViewUserBase from 'app/components/modules/user/views/ViewUserBase';
 import ViewUserTarget from 'app/components/modules/user/views/ViewUserTarget';
 import ViewUserMore from 'app/components/modules/user/views/ViewUserMore';
 import ViewUserSubscribers from 'app/components/modules/user/views/ViewUserSubscribers';
+import ViewUserHierarchy from 'app/components/modules/user/views/ViewUserHierarchy';
 // elements
 import Avatar from 'app/components/elements/Avatar';
 
@@ -40,9 +46,13 @@ const SubmitReplyEditor = ReplyEditorShort(formId);
 export default class UserProfile extends React.Component {
     constructor() {
         super()
-        this.state = {}
+        this.state = {userID: ''}
         this.onPrint = () => {window.print()}
         this.loadMore = this.loadMore.bind(this);
+
+        this.handleTenChange = this.handleTenChange.bind(this)
+        this.getData = this.getData.bind(this)
+        this.getNameByID = this.getNameByID.bind(this)
     }
 
     componentWillUnmount() {
@@ -65,6 +75,70 @@ export default class UserProfile extends React.Component {
         if (!author) author = accountname; // crutch
         this.props.requestData({author, permlink, order, category, accountname});
     }
+
+    handleTenChange ({id, ten}) {
+
+      console.log('ID TEN', id, ten)
+        this.props.changeTen(id, Number(ten))
+    }
+
+    getData (props) {
+
+        getUsersByCategory('tens').then(allTens => this.setState({allTens}))
+    }
+
+    getNameByID = () => {
+           let email = this.props.routeParams.accountname;
+
+
+
+        fetch('/api/v1/get_id_by_name', {
+            method: 'post',
+            mode: 'no-cors',
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf: $STM_csrf,
+                email
+                //json_meta: JSON.stringify({"ico_address": icoAddress})
+            })
+        }).then(r => r.json()).then(res => {
+            if (res.error || res.status !== 'ok') {
+                console.error('SignUp server error', res.error);
+                
+                this.setState({server_error: res.error || translate('unknown'), loading: false});
+            } else {
+                this.setState({userID: res.id});
+            
+       
+            }
+        }).catch(error => {
+            console.error('Caught CreateAccount server error', error);
+            this.setState({server_error: (error.message ? error.message : error), loading: false});
+        });
+    }
+
+
+    componentDidMount () {
+
+    
+       if(!this.props.current_hierarchy) { 
+
+        this.getNameByID()
+        this.getData(this.props) 
+      }
+    }
+
+    componentWillMount()  {
+
+    // this.getIdFromDB()
+     
+    }
+
+    
 
     render() {
         const {
@@ -132,6 +206,23 @@ export default class UserProfile extends React.Component {
         const fullName = first_name || last_name ? `${first_name} ${last_name}` : account.name
 
 
+        let current_hierarchy, myTen
+        
+        if(this.props.current_hierarchy) {
+          current_hierarchy = this.props.current_hierarchy;
+          myTen = current_hierarchy.myTen
+        }
+       
+        let {allTens} = this.state
+
+        let userID = this.state.userID.id
+
+        let isPayed = false
+        if (this.props.current_program) {
+          if (this.props.current_program.programId == '1' || this.props.current_program.programId == '2') {isPayed = true}
+        }
+
+
 
         if( section === 'transfers' ) {
             tab_content = <UserWallet global={this.props.global}
@@ -179,6 +270,9 @@ export default class UserProfile extends React.Component {
            if( account.posts )
            {
               tab_content = <section>
+
+                
+
                   {isMyAccount ?
                       <div className="SubmitPost" style={{marginLeft: "10px"}}>
                           <SubmitReplyEditor
@@ -199,6 +293,22 @@ export default class UserProfile extends React.Component {
         } else if(!section || section === 'blog') {
             if (account.blog) {
                 tab_content = <section>
+
+                  {isMyAccount && !myTen && isPayed ?
+                      <div className="PostSummary" style={{marginLeft: "10px"}} >
+                      <h5>Выберите своего десятника</h5>
+                          <select onChange={({ target }) => this.handleTenChange({ id: userID, ten: target.value })}> 
+
+                          <option>Не выбран десятник</option>
+                            {allTens ? allTens.map(userOption => (
+                                    <option key={userOption.id} value={userOption.id}>
+                                        {`${userOption.first_name} ${userOption.last_name}`}
+                                    </option>
+                                )) : null}
+                          </select>
+                      </div>: null}
+                    
+
                     {isMyAccount ?
                         <div className="SubmitPost" style={{marginLeft: "10px"}}>
                             <SubmitReplyEditor type="submit_story" />
@@ -323,6 +433,7 @@ export default class UserProfile extends React.Component {
         if (background) backgroundUrl = {backgroundImage: "url('" + background + "')"};
 
 
+
         return (
             <div className="UserProfile">
             <div className="row">
@@ -341,14 +452,11 @@ export default class UserProfile extends React.Component {
 
                 <div className="UserProfile__banner col-sm-4 col-xs-12">
                     <ViewUserBase global={this.props.global} account={account} />
-
                     <ViewUserTarget global={this.props.global} account={account} />
-
                     <ViewUserSubscribers global={this.props.global} account={account} followers={followers} following={following}/>
-               
+                    <ViewUserHierarchy global={this.props.global} account={account} /> 
                     <ViewUserMore global={this.props.global} account={account} />
-
-                     </div>
+                </div>
 
                 {/* <div className="UserProfile__top-nav row expanded noPrint">
                     {top_menu}
@@ -372,17 +480,34 @@ export default class UserProfile extends React.Component {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        changeTen: (userId, tenId) => dispatch({
+            type: 'admin/TEN_CHANGE',
+            payload: {
+                userId,
+                tenId
+            }
+        }) 
+      }
+
+  } 
+
 module.exports = {
     path: '@:accountname(/:section)',
     component: connect(
         state => {
             const wifShown = state.global.get('UserKeys_wifShown')
             const current_user = state.user.get('current')
+            const current_hierarchy = state.user.get('myHierarchy')
+            const current_program = state.user.get('currentProgram')
             // const current_account = current_user && state.global.getIn(['accounts', current_user.get('username')])
             return {
                 discussions: state.global.get('discussion_idx'),
                 global: state.global,
                 current_user,
+                current_hierarchy,
+                current_program,
                 // current_account,
                 wifShown,
                 loading: state.app.get('loading')
@@ -408,6 +533,14 @@ module.exports = {
                 }))
             },
             requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
+            changeTen: (userId, tenId) => dispatch({
+            type: 'admin/TEN_CHANGE',
+            payload: {
+                userId,
+                tenId
+            }
+        }) 
+
         })
     )(UserProfile)
 };

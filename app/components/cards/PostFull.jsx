@@ -55,6 +55,8 @@ class PostFull extends React.Component {
         unlock: React.PropTypes.func.isRequired,
         deletePost: React.PropTypes.func.isRequired,
         showPromotePost: React.PropTypes.func.isRequired,
+
+        current_program: React.PropTypes.object,
     };
 
     constructor() {
@@ -199,6 +201,7 @@ class PostFull extends React.Component {
             desc: p.desc
         };
 
+
         
         let fileLink
          if (p.json_metadata.fileAttached) {
@@ -323,7 +326,7 @@ class PostFull extends React.Component {
                     <button className="button hollow tiny" onClick={this.showPromotePost}>{translate('promote')}</button>
                 </div>} */}
 
-               {/* <TagList post={content} horizontal /> */}
+               <TagList post={content} horizontal />
 
 
                 <div className="PostFull__footer align-middle">
@@ -373,6 +376,9 @@ export default connect(
     (state, ownProps) => ({
         ...ownProps,
         username: state.user.getIn(['current', 'username']),
+        current_program: state.user.get(['currentProgram'])
+
+        
     }),
 
     // mapDispatchToProps

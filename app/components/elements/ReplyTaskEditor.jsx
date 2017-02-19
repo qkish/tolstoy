@@ -371,7 +371,7 @@ class ReplyTaskEditor extends React.Component {
     render() {
         // NOTE title, category, and body are UI form fields ..
         const originalPost = {
-            title: 'Ответ на задание: ' + this.props.taskTitle, //this.props.title,
+            title: this.props.taskTitle, //this.props.title,
             category: this.props.category,
             body: this.props.body,
             money: this.props.money,

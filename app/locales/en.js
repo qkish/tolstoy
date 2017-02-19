@@ -600,7 +600,10 @@ const en = 	{
     file_uploaded: 'File uploaded',
     business_category: 'Business Area',
 
-    password_recovery: 'Password Recovery'
+    password_recovery: 'Password Recovery',
+
+    first_name: 'First Name',
+    last_name: 'Last Name'
 
 
 }

@@ -94,6 +94,10 @@ class PostsIndex extends React.Component {
         let posts = [];
         let emptyText = '';
 
+        if (!category) {
+            category = 'bm-open'
+        }
+
 
         if (category === 'feed') {
             const account_name = order.slice(1);
@@ -261,6 +265,7 @@ class PostsIndex extends React.Component {
         if (current_account_name && !bmTasks) formFront = <div className="SubmitPost">
             <SubmitReplyEditor successCallback={() => {  }} type="submit_story" />
         </div>;
+
 
 
 

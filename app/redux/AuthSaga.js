@@ -22,6 +22,14 @@ export function* accountAuthLookup({payload: {account, username, private_keys, l
     console.log('accountAuthLookup', account);
     account = fromJS(account)
 
+    let bmProgram = yield whatBMProgram(username)
+  
+    yield put(user.actions.setProgram({ programId: bmProgram.bmprog.current_program }))
+    yield put(user.actions.setVolunteer({ isVolunteer: bmProgram.bmprog.volunteer }))
+    yield put(user.actions.setMyHierarchy({ myTen: bmProgram.bmprog.ten, myGroup: bmProgram.bmprog.couch_group, myHundred: bmProgram.bmprog.hundred, myPolk: bmProgram.bmprog.polk }))
+
+
+
 
     private_keys = fromJS(private_keys)
 
@@ -153,6 +161,41 @@ export function* findSigningKey({opType, username, password}) {
         }
     }
     return null
+}
+
+
+function* whatBMProgram(email, password) {
+
+        
+        if (!email) return;
+
+     
+
+        return fetch('/api/v1/bm_program', {
+            method: 'post',
+            mode: 'no-cors',
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                csrf: $STM_csrf,
+                email
+                //password
+               
+                //json_meta: JSON.stringify({"ico_address": icoAddress})
+            })
+        }).then(r => r.json()).then(res => {
+            if (res.error || res.status !== 'ok') {
+                console.error('BM Program Error', res.error);
+            } else {
+                return res
+            }
+        }).catch(error => {
+            console.error('Caight BM Prgram Error', error);  
+        });
+
 }
 
 // function isPostingOnlyKey(pubkey, account) {

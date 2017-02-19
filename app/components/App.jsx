@@ -137,6 +137,10 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
         const {location, params, children, loading, flash, showSignUp, new_visitor,
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
+
+        
+
+
         const params_keys = Object.keys(params);
         const ip = location.pathname === '/' || (params_keys.length === 2 && params_keys[0] === 'order' && params_keys[1] === 'category');
         const alert = this.props.error || flash.get('alert');
@@ -145,6 +149,9 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
 
         let bitva = '';
          if (location.pathname === '/bitva') bitva = 'Bitva__overall';
+
+        
+
 
 
 
@@ -313,6 +320,9 @@ App.propTypes = {
 
 export default connect(
     state => {
+
+     
+
         return {
             error: state.app.get('error'),
             flash: state.offchain.get('flash'),
