@@ -68,7 +68,7 @@ export default {
 						plugins: [
 							'transform-runtime'
 						],
-						cacheDirectory: true,
+						cacheDirectory: false,
 					},
 				}
 			],
