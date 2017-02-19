@@ -18,3 +18,4 @@ screenlog*
 /.idea/
 /.vscode/
 /.git/
+.happypack
