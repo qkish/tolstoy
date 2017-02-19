@@ -148,8 +148,10 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
 function* usernamePasswordLogin(action) {
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
     // Проверка наличия пользователя по email
+    yield put(user.actions.logining(true))
     yield call(usernamePasswordLogin2, action)
     const current = yield select(state => state.user.get('current'))
+    yield put(user.actions.logining(false))
     if(current) {
         const username = current.get('username')
         yield fork(loadFollows, "get_following", username, 'blog')

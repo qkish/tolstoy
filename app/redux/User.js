@@ -140,6 +140,7 @@ export default createModule({
         { action: 'HIDE_CONNECTION_ERROR_MODAL', reducer: state => state.set('hide_connection_error_modal', true) },
         { action: 'SHOW_PRIVATE_KEY_MODAL', reducer: state => state.set('show_private_key_modal', true) },
         { action: 'HIDE_PRIVATE_KEY_MODAL', reducer: state => state.set('show_private_key_modal', false) },
-        { action: 'SET_PRIVATE_KEY', reducer: (state, { payload: { private_key } }) => state.set('private_key', private_key) }
+        { action: 'SET_PRIVATE_KEY', reducer: (state, { payload: { private_key } }) => state.set('private_key', private_key) },
+        { action: 'LOGINING', reducer: (state, { payload }) => state.set('logining', payload) }
     ]
 });
