@@ -142,7 +142,7 @@ class Settings extends React.Component {
         if (metaData == '{created_at: \'GENESIS\'}') metaData = {created_at: "GENESIS"}
 
 
-        const isMyAccount = username === account.name
+        //const isMyAccount = username === account.name
 
         // Base
         metaData.first_name = this.state.first_name;

@@ -67,7 +67,7 @@ export default function useGeneralApi(app) {
 	});
 	app.use(router.routes());
 	const koaBody = koa_body({multipart: true});
-	
+
 	router.post('/get_account_private_key', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -93,7 +93,7 @@ export default function useGeneralApi(app) {
 		}
 		recordWebEvent(this, 'api/get_account_private_key', username);
 	});
-	
+
 	router.post('/accounts', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -101,7 +101,7 @@ export default function useGeneralApi(app) {
 		const account = typeof(params) === 'string' ? JSON.parse(params) : params;
 		//  if (!checkCSRF(this, account.csrf)) return;
 		console.log('-- /accounts -->', this.session.uid, this.session.user, account);
-		
+
 		if ($STM_Config.disable_signups) {
 			this.body = JSON.stringify({
 				error: 'New signups are temporary disabled.'
@@ -109,7 +109,7 @@ export default function useGeneralApi(app) {
 			this.status = 401;
 			return;
 		}
-		
+
 		try {
 			const meta = {}
 			const remote_ip = getRemoteIp(this.req);
@@ -121,7 +121,7 @@ export default function useGeneralApi(app) {
 				this.status = 401;
 				return;
 			}
-			
+
 			const user = yield models.User.findOne({
 				attributes: ['verified', 'waiting_list'],
 				where: {
@@ -135,7 +135,7 @@ export default function useGeneralApi(app) {
 				this.status = 401;
 				return;
 			}
-			
+
 			const existing_account = yield models.Account.findOne({
 				attributes: ['id', 'created_at'],
 				where: {user_id, ignored: false},
@@ -144,7 +144,7 @@ export default function useGeneralApi(app) {
 			if (existing_account) { //TODO
 				throw new Error("Only one Steem account per user is allowed in order to prevent abuse (Steemit, Inc. funds each new account with 3 STEEM)");
 			}
-			
+
 			const same_ip_account = yield models.Account.findOne({
 				attributes: ['created_at'],
 				where: {
@@ -189,7 +189,7 @@ export default function useGeneralApi(app) {
 				broadcast: true
 			});
 			console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
-			
+
 			this.body = JSON.stringify({
 				status: 'ok'
 			});
@@ -216,7 +216,7 @@ export default function useGeneralApi(app) {
 		}
 		recordWebEvent(this, 'api/accounts', account ? account.name : 'n/a');
 	});
-	
+
 	router.post('/update_email', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -262,7 +262,7 @@ export default function useGeneralApi(app) {
 		}
 		recordWebEvent(this, 'api/update_email', email);
 	});
-	
+
 	router.post('/bm_signup', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -277,19 +277,19 @@ export default function useGeneralApi(app) {
 		try {
 			if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
 			// TODO: limit by 1/min/ip
-			
+
 			const getBMtoken = yield getBMAccessTokenCredentialsOnly();
-			
+
 			const getBMNewUser = yield getBMSignUp(email, name, lastname, getBMtoken.access_token);
-			
-			
+
+
 			console.log('BM SignUP Server: ', email, name, lastname)
-			
+
 			this.body = JSON.stringify({
 				status: 'ok'
 			});
-			
-			
+
+
 		} catch (error) {
 			console.error('Error in /bmsignup api call', this.session.uid, error);
 			this.body = JSON.stringify({
@@ -299,34 +299,34 @@ export default function useGeneralApi(app) {
 		}
 		recordWebEvent(this, 'api/bmsignup', email);
 	});
-	
-	
+
+
 	router.post('/bm_recovery', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
 		const {
 			csrf,
 			email
-			
+
 		} = typeof(params) === 'string' ? JSON.parse(params) : params;
 		//  if (!checkCSRF(this, csrf)) return;
 		console.log('-- /recovery BM -->', this.session.uid, email);
 		try {
 			if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
 			// TODO: limit by 1/min/ip
-			
+
 			const getBMtoken = yield getBMAccessTokenCredentialsOnly();
-			
+
 			const getBMRecovered = yield getBMRecovery(email, getBMtoken.access_token);
-			
-			
+
+
 			console.log('BM Recovered: ', email)
-			
+
 			this.body = JSON.stringify({
 				status: 'ok'
 			});
-			
-			
+
+
 		} catch (error) {
 			console.error('Error in /bm_recovery api call', this.session.uid, error);
 			this.body = JSON.stringify({
@@ -336,8 +336,8 @@ export default function useGeneralApi(app) {
 		}
 		recordWebEvent(this, 'api/bm_recovery', email);
 	});
-	
-	
+
+
 	router.post('/bm_program', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -345,21 +345,21 @@ export default function useGeneralApi(app) {
 			csrf,
 			email
 			// password
-			
+
 		} = typeof(params) === 'string' ? JSON.parse(params) : params;
 		//  if (!checkCSRF(this, csrf)) return;
 		console.log('-- /program  -->', this.session.uid, email);
 		try {
 			//if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
 			// TODO: limit by 1/min/ip
-			
+
 			//const getBMtoken = yield getBMAccessToken(email, password);
-			
-			
+
+
 			let getBMProg = ''
-			
+
 			// if (getBMtoken) {
-			
+
 			getBMProg = yield models.User.findOne({
 				attributes: [
 					'current_program',
@@ -368,23 +368,23 @@ export default function useGeneralApi(app) {
 					'hundred',
 					'polk',
 					'couch_group'
-				
+
 				],
 				where: {
 					name: esc(email)
 				}
-				
+
 			})
-			
+
 			// }
-			
-			
+
+
 			this.body = JSON.stringify({
 				status: 'ok',
 				bmprog: getBMProg
 			});
-			
-			
+
+
 		} catch (error) {
 			console.error('Error in /bm_recovery api call', this.session.uid, error);
 			this.body = JSON.stringify({
@@ -394,7 +394,7 @@ export default function useGeneralApi(app) {
 		}
 		// recordWebEvent(this, 'api/bm_program', email);
 	});
-	
+
 	router.post('/user_hierarchy', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -402,21 +402,21 @@ export default function useGeneralApi(app) {
 			csrf,
 			email
 			// password
-			
+
 		} = typeof(params) === 'string' ? JSON.parse(params) : params;
 		//  if (!checkCSRF(this, csrf)) return;
-		
+
 		try {
 			//if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
 			// TODO: limit by 1/min/ip
-			
+
 			//const getBMtoken = yield getBMAccessToken(email, password);
-			
-			
+
+
 			let getBMProg = ''
-			
+
 			// if (getBMtoken) {
-			
+
 			getBMProg = yield models.User.findOne({
 				attributes: [
 					'current_program',
@@ -425,23 +425,23 @@ export default function useGeneralApi(app) {
 					'hundred',
 					'polk',
 					'couch_group'
-				
+
 				],
 				where: {
 					name: esc(email)
 				}
-				
+
 			})
-			
+
 			// }
-			
-			
+
+
 			this.body = JSON.stringify({
 				status: 'ok',
 				hierarchy: getBMProg
 			});
-			
-			
+
+
 		} catch (error) {
 			console.error('Error in /user_hierarchy api call', this.session.uid, error);
 			this.body = JSON.stringify({
@@ -451,8 +451,8 @@ export default function useGeneralApi(app) {
 		}
 		// recordWebEvent(this, 'api/user_hierarchy', email);
 	});
-	
-	
+
+
 	router.post('/get_group_by_id', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -461,30 +461,30 @@ export default function useGeneralApi(app) {
 			// password
 		} = typeof(params) === 'string' ? JSON.parse(params) : params;
 		//  if (!checkCSRF(this, csrf)) return;
-		
+
 		try {
 			//if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
 			// TODO: limit by 1/min/ip
-			
+
 			//const getBMtoken = yield getBMAccessToken(email, password);
-			
+
 			let getBMProg = ''
-			
+
 			// if (getBMtoken) {
-			
+
 			getBMProg = yield models.User.findOne({
 				attributes: ['name'],
 				where: {id: esc(id)}
 			})
-			
+
 			// }
-			
+
 			this.body = JSON.stringify({
 				status: 'ok',
 				name: getBMProg
 			});
-			
-			
+
+
 		} catch (error) {
 			console.error('Error in /user_hierarchy api call', this.session.uid, error);
 			this.body = JSON.stringify({
@@ -494,8 +494,8 @@ export default function useGeneralApi(app) {
 		}
 		// recordWebEvent(this, 'api/user_hierarchy', email);
 	});
-	
-	
+
+
 	router.post('/login2', koaBody, function*() {
 		//  if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -504,19 +504,19 @@ export default function useGeneralApi(app) {
 			username,
 			password
 		} = typeof(params) === 'string' ? JSON.parse(params) : params;
-		
+
 		console.log('SERV', username, password);
-		
+
 		// if (!checkCSRF(this, csrf)) return;
-		
+
 		try {
-			
+
 			// Первый этап
 			// Проверить есть ли пользователь на БМ
 			const userExistBM = yield getBMAccessToken(username, password);
-			
+
 			console.log('BM check: ' + userExistBM.access_token);
-			
+
 			// If user account have in DB
 			if (userExistBM.access_token) {
 				// Проверить есть ли пользователь в нашей БД
@@ -526,10 +526,10 @@ export default function useGeneralApi(app) {
 						email: esc(username)
 					}
 				});
-				
+
 				// If user accoun have in DB
 				if (db_account) {
-					
+
 					let DectryptedKey = decryptPrivateKey(db_account.private_key);
 					console.log('DECRYPTED: ', DectryptedKey)
 					this.session.a = username;
@@ -540,7 +540,7 @@ export default function useGeneralApi(app) {
 						name: db_account.name,
 						private_key: DectryptedKey
 					});
-					
+
 					console.log('Server response after login: ', this.body)
 				} else {
 					this.body = JSON.stringify({
@@ -564,7 +564,7 @@ export default function useGeneralApi(app) {
 		}
 		recordWebEvent(this, 'api/login2', username);
 	})
-	
+
 	router.post('/check_user', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -590,7 +590,7 @@ export default function useGeneralApi(app) {
 		}
 		recordWebEvent(this, 'api/check_user', account);
 	})
-	
+
 	router.post('/login_account', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -621,7 +621,7 @@ export default function useGeneralApi(app) {
 		}
 		recordWebEvent(this, 'api/login_account', account);
 	});
-	
+
 	router.post('/logout_account', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return; // - logout maybe immediately followed with login_attempt event
 		const params = this.request.body;
@@ -646,7 +646,7 @@ export default function useGeneralApi(app) {
 			this.status = 500;
 		}
 	});
-	
+
 	router.post('/record_event', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		try {
@@ -671,14 +671,14 @@ export default function useGeneralApi(app) {
 			this.status = 500;
 		}
 	});
-	
+
 	router.post('/csp_violation', function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = yield coBody.json(this);
 		console.log('-- /csp_violation -->', this.req.headers['user-agent'], params);
 		this.body = '';
 	});
-	
+
 	router.post('/account_update_hook', koaBody, function *() {
 		//if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -715,8 +715,8 @@ export default function useGeneralApi(app) {
 			console.log("error when updating account meta table", error)
 		});
 	});
-	
-	
+
+
 	router.post('/get_account_private_key', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -742,17 +742,17 @@ export default function useGeneralApi(app) {
 		}
 		recordWebEvent(this, 'api/get_account_private_key', username);
 	});
-	
+
 	router.post('/accounts2', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
-		
-		
+
+
 		const params = this.request.body;
 		print('params', params)
 		const account = typeof(params) === 'string' ? JSON.parse(params) : params;
 		// if (!checkCSRF(this, account.csrf)) return;
 		console.log('-- /accounts -->', this.session.uid, this.session.user, account);
-		
+
 		if ($STM_Config.disable_signups) {
 			this.body = JSON.stringify({
 				error: 'New signups are temporary disabled.'
@@ -760,11 +760,11 @@ export default function useGeneralApi(app) {
 			this.status = 401;
 			return;
 		}
-		
+
 		try {
 			const meta = {}
 			const remote_ip = getRemoteIp(this.req);
-			
+
 			/* if (same_ip_account) {
 			 const minutes = (Date.now() - same_ip_account.created_at) / 60000;
 			 if (minutes < 10) {
@@ -772,8 +772,8 @@ export default function useGeneralApi(app) {
 			 throw new Error('Only one Steem account allowed per IP address every 10 minutes');
 			 }
 			 } */
-			
-			
+
+
 			const getBMtoken = yield getBMAccessToken(account.email, account.bmpassword);
 			const getBMmeta = yield getBMUserMeta(getBMtoken.access_token);
 			const accountMetaData = {
@@ -784,10 +784,10 @@ export default function useGeneralApi(app) {
 				vk: getBMmeta.vkId,
 				website: getBMmeta.siteLink,
 				user_image: getBMmeta.avatar ? 'http://static.molodost.bz/thumb/160_160_2/img/avatars/' + getBMmeta.avatar : '',
-				
+
 			}
-			
-			
+
+
 			const attrs = {
 				uid: this.session.uid ? this.session.uid : account.name,
 				name: account.name,
@@ -806,7 +806,7 @@ export default function useGeneralApi(app) {
 				waiting_list: false,
 				facebook_id: getBMmeta.fbId ? getBMmeta.fbId : ''
 			};
-			
+
 			const i_attrs = {
 				provider: 'bm',
 				uid: account.name,
@@ -815,23 +815,23 @@ export default function useGeneralApi(app) {
 				verified: true,
 				provider_user_id: null
 			};
-			
+
 			let user;
 			let identity;
 			user = yield models.User.create(attrs);
-			
+
 			i_attrs.user_id = user.id;
-			
-			
+
+
 			console.log('-- BM created user -->', user.id);
-			
+
 			identity = yield models.Identity.create(i_attrs);
 			console.log('-- BM created identity -->', this.session.uid, identity.id);
-			
-			
+
+
 			this.session.user = user.id;
-			
-			
+
+
 			console.log('MetaData:', accountMetaData)
 			yield createAccount({
 				signingKey: config.registrar.signing_key,
@@ -846,9 +846,9 @@ export default function useGeneralApi(app) {
 				broadcast: true
 			});
 			console.log('-- create_account_with_keys created -->', this.session.uid, account.name, user.id, account.owner_key);
-			
+
 			const encryptedPassword = encryptPrivateKey(account.password);
-			
+
 			this.body = JSON.stringify({
 				status: 'ok',
 				account: account,
@@ -878,25 +878,25 @@ export default function useGeneralApi(app) {
 			this.status = 500;
 		}
 		recordWebEvent(this, 'api/accounts2', account ? account.name : 'n/a');
-		
+
 		console.log('SERVER RETURNED ACCOUNT: ', account);
 		return account;
 	});
-	
+
 	router.post('/user/update_money', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
 		const {csrf, payload} = typeof(params) === 'string' ? JSON.parse(params) : params;
 		//if (!checkCSRF(this, csrf)) return;
-		
+
 		const user = yield models.User.findOne({
 			where: {
 				name: payload.username
 			}
 		})
-		
+
 		const last_transaction = user.last_total_transaction
-		
+
 		if (!last_transaction || isToday(last_transaction)) {
 			if (payload.type === 'submit_story') {
 				yield user.update({
@@ -941,12 +941,12 @@ export default function useGeneralApi(app) {
 				money_total: user.money_total + Number(payload.money)
 			})
 		}
-		
+
 		this.body = JSON.stringify({
 			'receive payload': payload
 		});
 	});
-	
+
 	router.get('/users', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const {category, ten, hundred, polk, couch_group, search, offset, limit} = this.query
@@ -954,7 +954,7 @@ export default function useGeneralApi(app) {
 		let type = null
 		let _offset = Number(offset) || 0
 		let _limit = Number(limit) || 50
-		
+
 		if (category) {
 			if (category === 'polki') {
 				where = {
@@ -981,23 +981,23 @@ export default function useGeneralApi(app) {
 				type = 'couch'
 			}
 		}
-		
+
 		if (ten) {
 			where = {ten}
 		}
-		
+
 		if (hundred) {
 			where = {hundred}
 		}
-		
+
 		if (polk) {
 			where = {polk}
 		}
-		
+
 		if (couch_group) {
 			where = {couch_group}
 		}
-		
+
 		if (search) {
 			where = {
 				$or: flatten(map(['first_name', 'last_name', 'name'], field => {
@@ -1049,20 +1049,20 @@ export default function useGeneralApi(app) {
 		})
 		this.body = JSON.stringify({users})
 	})
-	
+
 	router.post('/get_ten_by_name', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
 		const {csrf, name} = typeof(params) === 'string' ? JSON.parse(params) : params;
 		//if (!checkCSRF(this, csrf)) return;
-		
+
 		const {ten} = yield models.User.findOne({
 			attributes: ['ten'],
 			where: {
 				name
 			}
 		})
-		
+
 		let users = []
 		if (ten) {
 			users = yield models.User.findAll({
@@ -1089,8 +1089,8 @@ export default function useGeneralApi(app) {
 		}
 		this.body = JSON.stringify({users})
 	})
-	
-	
+
+
 	router.post('/get_id_by_name', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
@@ -1098,21 +1098,21 @@ export default function useGeneralApi(app) {
 			csrf,
 			email
 			// password
-			
+
 		} = typeof(params) === 'string' ? JSON.parse(params) : params;
 		//  if (!checkCSRF(this, csrf)) return;
-		
+
 		try {
 			//if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
 			// TODO: limit by 1/min/ip
-			
+
 			//const getBMtoken = yield getBMAccessToken(email, password);
-			
-			
+
+
 			let getBMProg = ''
-			
+
 			// if (getBMtoken) {
-			
+
 			getBMProg = yield models.User.findOne({
 				attributes: [
 					'id'
@@ -1120,18 +1120,18 @@ export default function useGeneralApi(app) {
 				where: {
 					name: esc(email)
 				}
-				
+
 			})
-			
+
 			// }
-			
-			
+
+
 			this.body = JSON.stringify({
 				status: 'ok',
 				id: getBMProg
 			});
-			
-			
+
+
 		} catch (error) {
 			console.error('Error in /get_id_by_name api call', this.session.uid, error);
 			this.body = JSON.stringify({
@@ -1141,21 +1141,21 @@ export default function useGeneralApi(app) {
 		}
 		// recordWebEvent(this, 'api/user_hierarchy', email);
 	});
-	
-	
+
+
 	router.post('/get_group_by_name', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;
 		const {csrf, name} = typeof(params) === 'string' ? JSON.parse(params) : params;
 		//if (!checkCSRF(this, csrf)) return;
-		
+
 		const {couch_group} = yield models.User.findOne({
 			attributes: ['couch_group'],
 			where: {
 				name
 			}
 		})
-		
+
 		let users = []
 		if (couch_group) {
 			users = yield models.User.findAll({
@@ -1184,14 +1184,14 @@ export default function useGeneralApi(app) {
 		}
 		this.body = JSON.stringify({users})
 	})
-	
-	
+
+
 	router.get('/usersCount', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const {category, ten, hundred, polk, couch_group, search, offsetVal} = this.query
 		let where = {}
-		
-		
+
+
 		if (category) {
 			if (category === 'polki') {
 				where = {
@@ -1214,24 +1214,24 @@ export default function useGeneralApi(app) {
 				}
 			}
 		}
-		
+
 		if (ten) {
 			where = {ten}
 		}
-		
+
 		if (hundred) {
 			where = {hundred}
 		}
-		
+
 		if (polk) {
 			where = {polk}
 		}
-		
+
 		if (couch_group) {
 			where = {couch_group}
 		}
-		
-		
+
+
 		if (search) {
 			where = {
 				$or: [{
@@ -1245,21 +1245,21 @@ export default function useGeneralApi(app) {
 				}]
 			}
 		}
-		
-		
+
+
 		const count = yield models.User.count({
 			where
 		})
 		this.body = JSON.stringify({count})
 	})
-	
-	
+
+
 	router.post('/upload', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		console.log('-- /upload -->', this.session.uid, this.session.user);
-		
+
 		const s3 = new AWS.S3();
-		
+
 		try {
 			const data = this.request.body
 			const {fields: {type}} = this.request.body
@@ -1287,16 +1287,16 @@ export default function useGeneralApi(app) {
 			this.status = 500;
 		}
 	})
-	
+
 	router.post('/delete_from_s3', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		console.log('-- /delete_from_s3 -->', this.session.uid, this.session.user);
-		
+
 		const params = this.request.body;
 		const {csrf, key} = typeof(params) === 'string' ? JSON.parse(params) : params;
-		
+
 		const s3 = new AWS.S3();
-		
+
 		try {
 			const deleteResult = yield s3.deleteObject({
 				Bucket: 'bm-platform',
@@ -1311,16 +1311,16 @@ export default function useGeneralApi(app) {
 			});
 			this.status = 500;
 		}
-		
+
 	})
-	
+
 	router.put('/users/:id', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return
 		const data = this.request.body
 		const userId = this.params.id
 		const {csrf, payload} = typeof(data) === 'string' ? JSON.parse(data) : data
 		console.log(`-- /users/${userId} -->`, this.session.uid, this.session.user)
-		
+
 		try {
 			yield models.User.update(payload, {
 				where: {id: userId}
@@ -1351,7 +1351,7 @@ function* getBMAccessToken(username, password) {
 			grant_type: 'password',
 			username: username,
 			password: password
-			
+
 		})
 	}).then(res => res.json())
 }
@@ -1367,65 +1367,65 @@ function* getBMAccessTokenCredentialsOnly() {
 			client_id: config.bmapi.client_id,
 			client_secret: config.bmapi.client_secret,
 			grant_type: 'client_credentials'
-			
-			
+
+
 		})
 	}).then(res => res.json())
 }
 
 function* getBMSignUp(newemail, newname, lastname, access_token) {
-	
-	
+
+
 	// newname = toString(newname).replace(/[^A-Za-zА-Яа-яЁё]/g, "")
 	// newemail = toString(newemail)
-	
+
 	var FormData = require('form-data');
 	var form = new FormData();
 	form.append('email', newemail);
 	form.append('firstname', newname);
 	form.append('lastname', lastname);
-	
+
 	return fetch('http://api.molodost.bz/api/v3/auth/register/', {
 		method: 'POST',
 		headers: {
 			'Authorization': 'Bearer ' + access_token
-			
+
 		},
 		body: form
 	}).then(res => res.json())
 }
 
 function* getBMRecovery(newemail, access_token) {
-	
-	
+
+
 	// newname = toString(newname).replace(/[^A-Za-zА-Яа-яЁё]/g, "")
 	// newemail = toString(newemail)
-	
-	
+
+
 	var FormData = require('form-data');
 	var form = new FormData();
 	form.append('email', newemail);
-	
-	
+
+
 	return fetch('http://api.molodost.bz/api/v3/auth/password/restore/', {
 		method: 'POST',
 		headers: {
 			'Authorization': 'Bearer ' + access_token
-			
+
 		},
 		body: form
 	}).then(res => res.json())
 }
 
 function* getBMProgram(event, access_token) {
-	
+
 	return fetch('http://api.molodost.bz/api/v3/request/get-requests/?event_id=' + event, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
 			'Authorization': 'Bearer ' + access_token
 		}
-		
+
 	}).then(res => res.json())
 }
 

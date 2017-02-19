@@ -34,14 +34,15 @@ class LoginForm extends Component {
             console.error('CreateAccount - cryptoTestResult: ', cryptoTestResult);
             cryptographyFailure = true
         }
-        this.state = {email: '', 
+        this.state = {
+            email: '',
             loading: false,
-            cryptographyFailure, hiding: '',
+            cryptographyFailure,
+            hiding: '',
             preloader: 'PreloaderNotShown',
             LoginClass: 'LoginForm__shown',
             RecoveryClass: 'LoginForm__hidden',
             Recovered: 'LoginForm__hidden'
-
         }
 
         this.onEmailChange = this.onEmailChange.bind(this);
@@ -81,7 +82,7 @@ class LoginForm extends Component {
 
     onEmailChange(e) {
         const emailSet = e.target.value;
-      
+
         this.setState({email: emailSet});
     }
 
@@ -115,14 +116,8 @@ class LoginForm extends Component {
     }
 
     handleMouseDown = event => {
-      
-
-    
-            this.setState({hiding: 'SignUp_btnCovered', preloader: 'preloaderShown'})
-           
-        
+        this.setState({hiding: 'SignUp_btnCovered', preloader: 'preloaderShown'})
     }
-
 
     saveLoginToggle = () => {
         const {saveLogin} = this.state
@@ -156,17 +151,17 @@ class LoginForm extends Component {
             body: JSON.stringify({
                 csrf: $STM_csrf,
                 email
-               
+
                 //json_meta: JSON.stringify({"ico_address": icoAddress})
             })
         }).then(r => r.json()).then(res => {
             if (res.error || res.status !== 'ok') {
                 console.error('SignUp server error', res.error);
-                
+
                 this.setState({server_error: res.error || translate('unknown'), loading: false});
             } else {
                 this.setState({Recovered: 'LoginForm__shown', loading: false})
-               
+
             }
         }).catch(error => {
             console.error('Caught CreateAccount server error', error);
@@ -265,10 +260,6 @@ class LoginForm extends Component {
             }
         }
 
-        let btnStatus = this.state.hiding;
-         let loaderStatus = this.state.PreloaderShown;
-
-
         const form = (
             <form onSubmit={handleSubmit(data => {
                 // bind redux-form to react-redux
@@ -299,15 +290,19 @@ class LoginForm extends Component {
                         {translate("keep_me_logged_in") + ' '}
                         <input id="saveLogin" type="checkbox" ref="pw" {...saveLogin.props} onChange={this.saveLoginToggle} disabled={submitting} /></label>
                 </div>}
-              
-                <div className={this.state.hiding}>
-                    <button type="submit" disabled={submitting || disabled} className='button' onClick={this.handleMouseDown} >
-                        {submitLabel}
+
+                <div>
+                    <button type="submit" disabled={submitting || this.props.logining || disabled || this.props.login_error} className='button' onClick={this.handleMouseDown} >
+                        {this.props.logining ? (
+                            <div>
+                                <LoadingIndicator type="circle" inline /> Входим...
+                            </div>
+                        ) : submitLabel}
                     </button>
                 </div>
-                <div className={this.state.preloader}> 
-                <LoadingIndicator type="circle" inline />
-                </div>
+                {/* <div>
+                    <LoadingIndicator type="circle" inline />
+                </div> */}
                 <div className="LoginForm__password-recovery"><a href="#" onClick={this.handlePassRecovery}>Восстановить пароль</a></div>
                 <div className="LoginForm__label-support">Техническая поддержка <a href="mailto:bitva@molodost.bz">bitva@molodost.bz</a></div>
             </form>
@@ -320,10 +315,10 @@ class LoginForm extends Component {
                         <label className="LoginForm__label">
                             {translate('enter_username')}</label>
                             <input type="text" className="LoginForm__login-input" ref="email" name="email" onChange={this.onEmailChange} required value={email} placeholder={translate('enter_username')} />
-                       
+
                     </div>
 
-                    <div className={this.state.hiding}>
+                    <div>
                         <input type="submit" className="button LoginForm__signup-button" value="Восстановить пароль" disabled={loading} />
                     </div>
 
@@ -337,7 +332,6 @@ class LoginForm extends Component {
              <div className={'LoginForm '  + this.state.LoginClass}>
                {message}
                <h3>{title}</h3>
-              
                {form}
              </div>
 
@@ -347,7 +341,7 @@ class LoginForm extends Component {
                 <h3>{translate('password_recovery')}</h3>
 
                 <div className={'alert alert-success '+ this.state.Recovered} role="alert">Ссылка для восстановления пароля отправлена на ваш E-mail</div>
-                {formRecovery} 
+                    {formRecovery}
                 </div>
              </div>
 
@@ -401,7 +395,8 @@ export default connect(
             initialValues,
             initialUsername,
             msg,
-            offchain_user: state.offchain.get('user')
+            offchain_user: state.offchain.get('user'),
+            logining: state.user.get('logining')
         }
     },
 
