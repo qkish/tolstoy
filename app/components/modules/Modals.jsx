@@ -44,8 +44,6 @@ class Modals extends React.Component {
             show_private_key_modal, hidePrivateKeyModal
         } = this.props;
 
-        console.log('show private key modal', show_private_key_modal)
-
         const notifications_array = notifications ? notifications.toArray().map(n => {
             n.onClick = () => removeNotification(n.key);
             return n;
