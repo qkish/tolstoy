@@ -19,6 +19,12 @@ import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 import {vestingSteem} from 'app/utils/StateFunctions';
 import {updateMoney} from 'app/redux/UserActions'
+import Upload from '@sadorlovsky/rc-upload'
+import UploadImagePreview from 'app/components/elements/UploadImagePreview'
+
+import Reveal from 'react-foundation-components/lib/global/reveal';
+import CloseButton from 'react-foundation-components/lib/global/close-button';
+import {deleteFromS3} from 'app/utils/ServerApiClient';
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -94,6 +100,7 @@ class ReplyTaskEditor extends React.Component {
         type: 'submit_story',
         metaLinkData: Map(),
         category: 'bm-open',
+        filemeta: ''
 
 
     }
@@ -103,7 +110,13 @@ class ReplyTaskEditor extends React.Component {
         this.state = {
             btnVisible: 'covered',
             textareaState: 'collapsed-area',
-            isTextareaEmpty: true
+            isTextareaEmpty: true,
+            fileState:'',
+            uploadBtnsClicked: false,
+            showYoutube: false,
+            youtubeLinkError: 'ReplyEditorShort__youtube-no-error',
+            youtubeLink: '',
+            tagsInState: '',
     }
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyTaskEditor')
         this.onTitleChange = e => {
@@ -202,7 +215,45 @@ class ReplyTaskEditor extends React.Component {
         setMetaData(formId, jsonMetadata)
     }
     componentDidMount() {
-        // focus
+         // focus
+         if (this.props.fileattached) {
+
+
+            this.setState({isFile: true,
+                showPreview: true,
+                uploading:false,
+                UploadImagePreviewPath: this.props.fileattached,
+                fileState: this.props.fileattached,
+
+            })
+
+
+
+
+         }
+
+
+         if(this.props.jsonMetadata && this.props.jsonMetadata.jsonMetadata && this.props.jsonMetadata.jsonMetadata.tags) {
+
+            let totalTags, program
+            totalTags = this.props.jsonMetadata.jsonMetadata.tags
+
+            program = this.props.current_program
+            //console.log('CUR PROG ', program)
+
+            if (totalTags) {
+                if(program == '1') totalTags.push('bm-ceh23')
+                if(program == '2') totalTags.push('bm-mzs17')
+            }
+
+            totalTags.push('bm-ceh23')
+
+            this.setState({tagsInState: totalTags})
+
+            console.log('TAGS: ', totalTags)
+
+         }
+
         setTimeout(() => {
             if (this.props.isStory) {this.refs.titleRef.focus(); }
             else if (this.refs.postRef) this.refs.postRef.focus();
@@ -223,14 +274,17 @@ class ReplyTaskEditor extends React.Component {
             if(tp.body.value !== np.body.value ||
                 (np.category && tp.category.value !== np.category.value) ||
                 (np.title && tp.title.value !== np.title.value) ||
-                (np.money && tp.money.value) !== np.money.value)
+                (np.money && tp.money.value !== np.money.value) ||
+                (np.filemeta && tp.filemeta.value !== np.filemeta.value))
              { // also prevents saving after parent deletes this information
-                const {fields: {category, title, body, money}, formId} = nextProps
+                const {fields: {category, title, body, money, filemeta}, formId} = nextProps
                 const data = {formId}
                 data.title = title ? title.value : undefined
                 data.category = category ? category.value : undefined
                 data.body = body.value
                 data.money = money ? money.value : undefined
+                data.filemeta = filemeta ? filemeta.value : undefined
+
                 clearTimeout(saveEditorTimeout)
                 saveEditorTimeout = setTimeout(() => {
                     // console.log('save formId', formId)
@@ -366,6 +420,52 @@ class ReplyTaskEditor extends React.Component {
     }
 
 
+    handleOnButtonsFocus = event => {
+
+        this.setState({uploadBtnsClicked: true})
+        this.setState({btnVisible: 'uncovered'})
+        this.setState({textareaState: 'expanded-area'})
+    }
+    
+
+      hideYoutube = event => {
+        this.setState({showYoutube: false})
+    }
+
+    insertYoutube = event => {
+
+        event.preventDefault()
+
+        let currentYoutubeLink = this.refs.youtubeEditRef.value;
+
+        //if ()
+        var pattern = /^((http|https|ftp):\/\/(youtube.com|www.youtube.com)\/)/;
+
+        if(pattern.test(currentYoutubeLink)) {
+        this.setState({youtubeLink: currentYoutubeLink})
+        this.setState({youtubeLinkError: 'ReplyEditorShort__youtube-no-error'})
+        this.setState({showYoutube: false})
+        this.setState({showPreview: true})
+         } else {
+
+        this.setState({youtubeLinkError: 'ReplyEditorShort__youtube-error'})
+
+         }
+
+    }
+
+
+    handleUploadYoutube = event => {
+        event.preventDefault()
+        this.setState({showYoutube: true})
+        // focus
+        setTimeout(() => {
+           this.refs.youtubeEditRef.focus();
+        }, 300)
+
+    }
+
+
 
 
     render() {
@@ -376,6 +476,7 @@ class ReplyTaskEditor extends React.Component {
             body: this.props.body,
             money: this.props.money,
             tag1: this.props.taskId,
+            filemeta: this.state.fileState
 
 
         }
@@ -389,6 +490,9 @@ class ReplyTaskEditor extends React.Component {
             author, permlink, parent_author, parent_permlink, type, jsonMetadata, metaLinkData,
             state, successCallback, handleSubmit, submitting, invalid, resetForm //lastComment,
         } = this.props
+
+        let {filemeta} = this.props.fields
+
         const {postError, markdownViewerText, loading, titleWarn, rte, allSteemPower} = this.state
         const {onTitleChange, onMoneyChange} = this
         const errorCallback = estr => { this.setState({ postError: estr, loading: false }) }
@@ -443,6 +547,27 @@ class ReplyTaskEditor extends React.Component {
         let newTitle = this.props.taskTitle;
 
 
+        let loadingHide = loading ? 'ReplyEditor__hide' : ''
+
+         // Youtube Insert Modal
+        let youtubeError = this.state.youtubeLinkError;
+
+        let show_youtube_insert = <div className="">
+                                    <CloseButton onClick={this.hideYoutube} />
+                                    <h5>Вставьте ссылку на видео Youtube</h5>
+                                    <form><input type="text" className="ReplyEditorShort__input-youtube" name="youtube" ref="youtubeEditRef"/>
+                                    <div className={youtubeError}>Ошибка, неверная ссылка</div>
+                                    <input type="submit" className="ReplyEditorShort__submit-youtube ReplyEditorShort__buttons-submit button" value="Вставить"  onClick={this.insertYoutube}/>
+                                    <input type="button" className="ReplyEditorShort__submit-youtube secondary hollow button no-border ReplyEditorShort__buttons-submit ReplyEditor__buttons-cancel" value="Отмена" onClick={this.hideYoutube}/>
+
+                                    </form>
+
+                                 </div>
+        let show_youtube_bool = this.state.showYoutube;
+
+        let youtubeModal = <Reveal show={show_youtube_bool}>{show_youtube_insert}</Reveal>
+
+
 
 
         return (
@@ -452,7 +577,16 @@ class ReplyTaskEditor extends React.Component {
 
                         onSubmit={handleSubmit(data => {
                             const loadingCallback = () => this.setState({loading: true, postError: undefined})
-                            reply({ ...data, ...replyParams, loadingCallback })
+                            this.setState({
+                                posting: true
+                            })
+                            let imageAdded
+                            imageAdded = (this.state.uploadedImage && this.state.uploadedImage.url) ? '\n' + this.state.uploadedImage.url : '';
+
+                            let youtubeAdded
+                            youtubeAdded = this.state.youtubeLink ? '\n' + this.state.youtubeLink : '';
+
+                            reply({ ...Object.assign({}, data, {body: `${data.body} ${imageAdded || ''} ${youtubeAdded || ''}`}), ...replyParams, loadingCallback })
                         })}
                         onChange={() => {this.setState({ postError: null })}}
                     >
@@ -481,12 +615,115 @@ class ReplyTaskEditor extends React.Component {
                         <div className={vframe_section_shrink_class}>
                             {postError && <div className="error">{translateError(postError)}</div>}
                         </div>
+
+
+                            {this.state.showPreview ? (
+                            <UploadImagePreview
+                                uploading={this.state.uploading}
+                                posting={this.state.posting}
+                                src={this.state.UploadImagePreviewPath}
+                                isThisFile={this.state.isFile}
+                                youtube={this.state.youtubeLink}
+                                remove={() => {
+                                    this.setState({
+                                        showPreview: false,
+                                        uploadBtnsClicked: false,
+                                        uploadedImage: null,
+                                        fileState: null
+                                    });
+                                    deleteFromS3(this.state.uploadedImage.key)
+                                }} />
+                        ) : null}
+
+
                         <div className={(vframe_section_shrink_class) + " " + (btnSubmit)}>
-                            {!loading && <button type="submit" className={"button " + (btnSubmit)} disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
+                            {!loading && <button type="submit" className={"button ReplyEditorShort__buttons-submit uncoveder"} disabled={submitting || invalid} tabIndex={4}>{isEdit ? translate('update_post') : postLabel}</button>}
                             {loading && <span><br /><LoadingIndicator type="circle" /></span>}
                             &nbsp; {!loading && this.props.onCancel &&
                                 <button type="button" className="secondary hollow button no-border" tabIndex={5} onClick={(e) => {e.preventDefault(); onCancel()}}>{translate("cancel")}</button>
                             }
+
+                            <div className={'ReplyEditorShort__buttons-add ' + loadingHide}   onMouseDown={this.handleOnButtonsFocus} onTouchStart={this.handleOnButtonsFocus} onClick={this.handleOnButtonsFocus}>
+                            <ul>
+                                <li>
+                                    <Upload
+                                        component='label'
+                                        accept='image/*'
+                                        action='/api/v1/upload'
+                                        data={{ type: 'image' }}
+                                        className="ReplyEditorShort__buttons-add-image"
+                                        onStart={file => {
+                                            const reader = new FileReader()
+                                            reader.onloadend = () => {
+                                                this.setState({
+                                                    UploadImagePreviewPath: reader.result,
+                                                    uploading: true,
+                                                    showPreview: true,
+                                                    isFile: false,
+                                                })
+                                            }
+                                            reader.readAsDataURL(file)
+                                        }}
+                                        onError={err => {
+                                            console.error('ERR', err)
+                                            this.setState({
+                                                uploading: false
+                                            })
+                                        }}
+                                        onSuccess={file => {
+                                            this.setState({
+                                                uploadedImage: {
+                                                  url: file.url,
+                                                  key: file.key
+                                                },
+                                                uploading: false
+                                            })
+                                        }}>
+                                           {/*  <a href="#" className="ReplyEditorShort__buttons-add-image"></a> */}
+                                    </Upload>
+                                </li>
+                                <li><a href="#" className="ReplyEditorShort__buttons-add-video" onClick={this.handleUploadYoutube}></a></li>
+                                <li>
+                                    <Upload
+                                        component='label'
+                                        action='/api/v1/upload'
+                                        data={{ type: 'attachment' }}
+                                        className="ReplyEditorShort__buttons-add-file"
+                                        onStart={file => {
+                                            const reader = new FileReader()
+                                            reader.onloadend = () => {
+                                                this.setState({
+                                                    UploadImagePreviewPath: reader.result,
+                                                    uploading: true,
+                                                    showPreview: true,
+                                                    isFile: true,
+                                                })
+                                            }
+                                            reader.readAsDataURL(file)
+                                        }}
+                                        onError={err => {
+                                            console.error('ERR', err)
+                                            this.setState({
+                                                uploading: false
+                                            })
+                                        }}
+                                        onSuccess={file => {
+                                            this.setState({
+                                                fileState: file.url,
+                                                uploadedImage: {
+                                                  url: file.url,
+                                                  key: file.key
+                                                },
+                                                uploading: false
+                                            })
+                                        }}>
+
+                                        {/* <a href="#" className="ReplyEditorShort__buttons-add-file"></a> */}
+                                    </Upload>
+                                </li>
+                            </ul>
+                            </div>
+                            {youtubeModal}
 
                             {isStory && !isEdit && <div className="float-right">
 
@@ -524,6 +761,7 @@ export default formId => reduxForm(
 
         if (isStory) fields.push('title')
         if (isStory) fields.push('money')
+        if (isStory) fields.push('filemeta')
         if (hasCategory) fields.push('category')
 
 
@@ -534,11 +772,12 @@ export default formId => reduxForm(
 
            category: null,
            money: null,
+           filemeta: null,
            //hasCategory,
             body: !values.body ? translate('required') :
                   values.body.length > maxKb * 1024 ? translate('exceeds_maximum_length', { maxKb }) : null,
         })
-        let {category, title, body, money} = ownProps
+        let {category, title, body, money, filemeta} = ownProps
 
 
         if (/submit_/.test(type)) title = body = money = ''
@@ -554,10 +793,11 @@ export default formId => reduxForm(
         const ret = {
             ...ownProps,
             fields, validate, isStory, hasCategory, username,
-            initialValues: {title, body, category, money}, state,
+            initialValues: {title, body, category, money, filemeta}, state,
             // lastComment: current.get('lastComment'),
             formId,
             metaLinkData,
+            current_program: state.user.get('currentProgram')
         }
 
         return ret
@@ -575,7 +815,7 @@ export default formId => reduxForm(
         setMetaData: (id, jsonMetadata) => {
             dispatch(g.actions.setMetaData({id, meta: jsonMetadata ? jsonMetadata.steem : null}))
         },
-        reply: ({category, title, body, money, author, permlink, parent_author, parent_permlink,
+        reply: ({category, title, body, money, filemeta, author, permlink, parent_author, parent_permlink,
             type, originalPost, autoVote = false, allSteemPower = false,
             state, jsonMetadata, /*metaLinkData,*/
             successCallback, errorCallback, loadingCallback
@@ -602,6 +842,9 @@ export default formId => reduxForm(
 
 
            // title = originalPost.newtitle;
+
+           let placedFile = originalPost.filemeta;
+
             let taskTag = originalPost.tag1;
 
             title = originalPost.title;
@@ -674,6 +917,8 @@ export default formId => reduxForm(
             if(rtags.links.size) meta.links = rtags.links; else delete meta.links
 
             if(money) meta.daySumm = money; else delete meta.daySumm
+
+             if(placedFile) meta.fileAttached = placedFile; else delete meta.fileAttached
 
 
 

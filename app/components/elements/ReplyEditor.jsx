@@ -245,7 +245,7 @@ class ReplyEditor extends React.Component {
                 if(program == '2') totalTags.push('bm-mzs17')
             }
 
-            totalTags.push('bm-ceh23')
+            //totalTags.push('bm-ceh23')
 
             this.setState({tagsInState: totalTags})
 
@@ -376,10 +376,11 @@ class ReplyEditor extends React.Component {
         this.setState({textareaState: 'expanded-area'})
     }
     handleOnBlur = event => {
-        let bodynow = this.props.fields.body.value
-        let titlenow = this.props.fields.title.value
-        let moneynow = this.props.fields.money.value
-        let uploadClicked = this.state.uploadBtnsClicked
+        let bodynow = this.props.fields.body? this.props.fields.body.value : ''
+        let titlenow = this.props.fields.title ? this.props.fields.title.value : ''
+      
+        let moneynow = this.props.fields.money ? this.props.fields.money.value : ''
+        let uploadClicked = this.state.uploadBtnsClicked ? this.state.uploadBtnsClicked : ''
 
         if (bodynow == '' && titlenow == '' && !moneynow && !uploadClicked) {
             this.setState({btnVisible: 'covered'})
@@ -492,6 +493,8 @@ class ReplyEditor extends React.Component {
         let tempTags = this.props.jsonMetadata;
 
 
+
+
         const {onCancel, autoVoteOnChange} = this
         const {title, category, body, money, autoVote} = this.props.fields
         const {
@@ -572,7 +575,7 @@ class ReplyEditor extends React.Component {
         let youtubeModal = <Reveal show={show_youtube_bool}>{show_youtube_insert}</Reveal>
 
 
-
+  
 
         return (
             <div className="ReplyEditor row">
@@ -804,6 +807,7 @@ export default formId => reduxForm(
             // lastComment: current.get('lastComment'),
             formId,
             metaLinkData,
+            current_program: state.user.get('currentProgram')
         }
 
         return ret
@@ -839,7 +843,7 @@ export default formId => reduxForm(
 
             let placedFile = originalPost.filemeta;
 
-            let placedTags // = originalPost.tagsPlaced;
+            let placedTags = originalPost.tagsPlaced;
 
 
             // Parse categories:
