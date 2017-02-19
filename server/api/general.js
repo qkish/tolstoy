@@ -357,7 +357,11 @@ export default function useGeneralApi(app) {
                 getBMProg = yield models.User.findOne({
                 attributes: [
                 'current_program',
-                'volunteer'
+                'volunteer',
+                'ten',
+                'hundred',
+                'polk',
+                'couch_group'
                 
                 ],
                 where: {
@@ -383,8 +387,112 @@ export default function useGeneralApi(app) {
             });
             this.status = 500;
         }
-        recordWebEvent(this, 'api/bm_program', email);
+        // recordWebEvent(this, 'api/bm_program', email);
     });
+
+     router.post('/user_hierarchy', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {
+            csrf,
+            email
+           // password
+           
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
+       //  if (!checkCSRF(this, csrf)) return;
+        
+        try {
+            //if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
+            // TODO: limit by 1/min/ip
+            
+            //const getBMtoken = yield getBMAccessToken(email, password);
+
+          
+
+            let getBMProg = ''
+            
+           // if (getBMtoken) { 
+                
+                getBMProg = yield models.User.findOne({
+                attributes: [
+                'current_program',
+                'volunteer',
+                'ten',
+                'hundred',
+                'polk',
+                'couch_group'
+                
+                ],
+                where: {
+                name: esc(email)
+                }
+
+                })
+            
+           // }
+
+ 
+
+            this.body = JSON.stringify({
+                status: 'ok',
+                hierarchy: getBMProg
+            });
+
+
+        } catch (error) {
+            console.error('Error in /user_hierarchy api call', this.session.uid, error);
+            this.body = JSON.stringify({
+                error: error.message
+            });
+            this.status = 500;
+        }
+        // recordWebEvent(this, 'api/user_hierarchy', email);
+    });
+
+
+     router.post('/get_group_by_id', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {csrf, id
+           // password
+           } = typeof(params) === 'string' ? JSON.parse(params): params;
+       //  if (!checkCSRF(this, csrf)) return;
+        
+        try {
+            //if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
+            // TODO: limit by 1/min/ip
+            
+            //const getBMtoken = yield getBMAccessToken(email, password);
+
+            let getBMProg = ''
+            
+           // if (getBMtoken) { 
+                
+                getBMProg = yield models.User.findOne({
+                attributes: [ 'name' ],
+                where: {id: esc(id)   }
+                })
+            
+           // }
+
+            this.body = JSON.stringify({
+                status: 'ok',
+                name: getBMProg
+            });
+
+
+        } catch (error) {
+            console.error('Error in /user_hierarchy api call', this.session.uid, error);
+            this.body = JSON.stringify({
+                error: error.message
+            });
+            this.status = 500;
+        }
+        // recordWebEvent(this, 'api/user_hierarchy', email);
+    });
+
+
+
 
 
     router.post('/login2', koaBody, function* () {
@@ -967,6 +1075,62 @@ export default function useGeneralApi(app) {
         }
         this.body = JSON.stringify({ users })
     })
+
+
+     router.post('/get_id_by_name', koaBody, function*() {
+        if (rateLimitReq(this, this.req)) return;
+        const params = this.request.body;
+        const {
+            csrf,
+            email
+           // password
+           
+        } = typeof(params) === 'string' ? JSON.parse(params): params;
+       //  if (!checkCSRF(this, csrf)) return;
+        
+        try {
+            //if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
+            // TODO: limit by 1/min/ip
+            
+            //const getBMtoken = yield getBMAccessToken(email, password);
+
+          
+
+            let getBMProg = ''
+            
+           // if (getBMtoken) { 
+                
+                getBMProg = yield models.User.findOne({
+                attributes: [
+                'id'
+                ],
+                where: {
+                name: esc(email)
+                }
+
+                })
+            
+           // }
+         
+
+
+            this.body = JSON.stringify({
+                status: 'ok',
+                id: getBMProg
+            });
+
+
+        } catch (error) {
+            console.error('Error in /get_id_by_name api call', this.session.uid, error);
+            this.body = JSON.stringify({
+                error: error.message
+            });
+            this.status = 500;
+        }
+        // recordWebEvent(this, 'api/user_hierarchy', email);
+    });
+
+
 
     router.post('/get_group_by_name', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;

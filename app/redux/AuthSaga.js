@@ -23,8 +23,12 @@ export function* accountAuthLookup({payload: {account, username, private_keys, l
     account = fromJS(account)
 
     let bmProgram = yield whatBMProgram(username)
+  
     yield put(user.actions.setProgram({ programId: bmProgram.bmprog.current_program }))
     yield put(user.actions.setVolunteer({ isVolunteer: bmProgram.bmprog.volunteer }))
+    yield put(user.actions.setMyHierarchy({ myTen: bmProgram.bmprog.ten, myGroup: bmProgram.bmprog.couch_group, myHundred: bmProgram.bmprog.hundred, myPolk: bmProgram.bmprog.polk }))
+
+
 
 
     private_keys = fromJS(private_keys)

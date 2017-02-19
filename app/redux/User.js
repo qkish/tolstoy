@@ -47,9 +47,10 @@ export default createModule({
         } }, */},
 
 
-        { action: 'SET_PROGRAM', reducer: (state, {payload}) => state.set(['currentProgram'], payload) },
-        { action: 'SET_VOLUNTEER', reducer: (state, {payload}) => state.set(['isVolunteer'], payload) },
-
+        { action: 'SET_PROGRAM', reducer: (state, {payload}) => state.set('currentProgram', payload) },
+        { action: 'SET_VOLUNTEER', reducer: (state, {payload}) => state.set('isVolunteer', payload) },
+        { action: 'SET_MY_HIERARCHY', reducer: (state, {payload}) => state.set('myHierarchy', payload) },
+       
         
 
         { action: 'REMOVE_HIGH_SECURITY_KEYS', reducer: (state) => {

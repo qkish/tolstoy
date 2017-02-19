@@ -160,7 +160,8 @@ class PostSummary extends React.Component {
 
          }
 
-         let firstTag = p.json_metadata.tags[0];
+         let firstTag 
+         if(p.json_metadata && p.json_metadata.tags && p.json_metadata.tags[0]) firstTag = p.json_metadata.tags[0];
 
          let isTask = false
 

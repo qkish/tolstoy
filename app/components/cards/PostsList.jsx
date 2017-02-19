@@ -223,6 +223,9 @@ class PostsList extends React.Component {
         const {posts, loading, category, emptyText} = this.props;
         const {comments} = this.props
         const {thumbSize, showPost} = this.state
+
+        
+
         if (!loading && !posts.length && emptyText) {
             return <Callout body={emptyText} type="success" />;
         }

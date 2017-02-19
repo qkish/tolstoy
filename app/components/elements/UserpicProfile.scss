@@ -35,6 +35,38 @@ width: 84px;
 padding: 15px 5px 4px 5px;
 }
 
+.UserProfile__Group-avatar {
+    float: left;
+  position: relative;
+
+  > a > img {
+    width: 30px;
+    height: 30px;
+   
+  }
+}
+
+.UserProfile__group {
+  margin: 10px 0 0 0;
+  overflow: hidden;
+  display: block;
+}
+
+.UserProfile__group-wrap {
+  display: block;
+  overflow: hidden;
+}
+
+.UserProfile__Group-avatarwrapper {
+  width: 30px;
+  height: 30px;
+  float: left;
+  background: $bg-gray;
+  margin-right: 10px;
+}
+.UserProfile__groupinfo {
+  padding-bottom: 6px;
+}
 
 .UserpicProfile__name:hover, .UserpicProfile__name:focus {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#020101+0,196aff+100&0+3,0.81+49 */

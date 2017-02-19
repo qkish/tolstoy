@@ -24,6 +24,7 @@ import UploadImagePreview from 'app/components/elements/UploadImagePreview'
 import Reveal from 'react-foundation-components/lib/global/reveal';
 import CloseButton from 'react-foundation-components/lib/global/close-button';
 import {deleteFromS3} from 'app/utils/ServerApiClient';
+import {connect} from 'react-redux';
 
 const remarkable = new Remarkable({ html: true, linkify: false })
 const RichTextEditor = process.env.BROWSER ? require('react-rte-image').default : null;
@@ -82,6 +83,8 @@ class ReplyEditor extends React.Component {
         resetForm: React.PropTypes.func.isRequired,
         submitting: React.PropTypes.bool.isRequired,
         invalid: React.PropTypes.bool.isRequired,
+
+        current_program: React.PropTypes.object,
 
 
 
@@ -229,7 +232,24 @@ class ReplyEditor extends React.Component {
 
          }
 
-         if(this.props.jsonMetadata.jsonMetadata && this.props.jsonMetadata.jsonMetadata.tags) this.setState({tagsInState: this.props.jsonMetadata.jsonMetadata.tags})
+         if(this.props.jsonMetadata && this.props.jsonMetadata.jsonMetadata && this.props.jsonMetadata.jsonMetadata.tags) {
+
+            let totalTags, program
+            totalTags = this.props.jsonMetadata.jsonMetadata.tags
+
+            program = this.props.current_program
+            //console.log('CUR PROG ', program)
+
+            if (totalTags) {
+                if(program == '1') totalTags.push('bm-ceh23')
+                if(program == '2') totalTags.push('bm-mzs17')
+            }
+
+            this.setState({tagsInState: totalTags})
+
+            console.log('TAGS: ', totalTags)
+
+         }
 
         setTimeout(() => {
             if (this.props.isStory) {this.refs.titleRef.focus(); }
@@ -468,10 +488,6 @@ class ReplyEditor extends React.Component {
         }
 
         let tempTags = this.props.jsonMetadata;
-
-
-
-
 
 
         const {onCancel, autoVoteOnChange} = this
@@ -745,7 +761,6 @@ export default formId => reduxForm(
         const hasCategory = isStory // /submit_story/.test(type)
 
 
-
         if (isStory) fields.push('title')
         if (isStory) fields.push('money')
         if (isStory) fields.push('filemeta')
@@ -941,3 +956,6 @@ export default formId => reduxForm(
         },
     })
 )(ReplyEditor)
+
+
+
