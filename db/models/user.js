@@ -79,6 +79,7 @@ export default (sequelize, DataTypes) => {
 								type: leader.type
 							}
 						}).then( group => {
+							console.log()
 							try {
 								const {dataValues: {id, money}} = group
 								Group.update({
