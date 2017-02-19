@@ -73,7 +73,6 @@ export default {
 				}
 			],
 			threads: os.cpus().length || 2
-			// customize as needed, see Configuration below
 		}),
 //		new webpack.DllPlugin({
 //			path: path.join(__dirname, "js", "[name]-manifest.json"),
@@ -90,12 +89,10 @@ export default {
 			path.resolve(__dirname, '..')
 		],
 		extensions: ['', '.js', '.json', '.jsx'],
-		modulesDirectories: ['node_modules']
+		modulesDirectories: ['node_modules'],
+		unsafeCache: /node_modules/
+	},
+	performance: {
+		hints: 'warning'
 	}
 };
-/* medium-editor, add to plugins[]
- 
- new webpack.ProvidePlugin({
- $: 'jquery'
- })
- */

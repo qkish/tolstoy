@@ -71,14 +71,6 @@ export default (sequelize, DataTypes) => {
 				if (userMoney) {
 					// TODO Оптимизировать до двух запросов к базе (findAll => bulkUpdate/Create)
 					leaders.forEach( leader => {
-						User.findAll({
-							attributes: ['id', 'money_group'],
-							where: {
-								id: leadersId
-							}
-						}).then(users => {
-							// Bulk update
-						})
 						
 						Group.findOne({
 							attributes: ['id', 'user_id', 'type'],
