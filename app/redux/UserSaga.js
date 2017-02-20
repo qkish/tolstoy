@@ -1,6 +1,6 @@
 import {fromJS, Set} from 'immutable'
 import {takeLatest} from 'redux-saga'
-import {call, put, select, fork} from 'redux-saga/effects'
+import {call, put, select, fork, take} from 'redux-saga/effects'
 import {accountAuthLookup} from 'app/redux/AuthSaga'
 import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
@@ -148,8 +148,10 @@ function* removeHighSecurityKeys({payload: {pathname}}) {
 function* usernamePasswordLogin(action) {
     // Sets 'loading' while the login is taking place.  The key generation can take a while on slow computers.
     // Проверка наличия пользователя по email
+    yield put(user.actions.logining(true))
     yield call(usernamePasswordLogin2, action)
     const current = yield select(state => state.user.get('current'))
+    yield put(user.actions.logining(false))
     if(current) {
         const username = current.get('username')
         yield fork(loadFollows, "get_following", username, 'blog')
@@ -218,7 +220,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if ((!userExistInLocalStorage && !localStorage.autopost2) || username.indexOf(isEmail) > -1) {
 
         // Send to server auth request
-       
+
         let resp
         if (username.indexOf(isEmail) > -1) {
             console.log('@')
@@ -241,20 +243,32 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         // Если пользователь найден в молодости и данные валидны,
         // тогда заменить имя и пароль на данные дя входа в golos.io
         if (resp.name && resp.private_key) {
-            
+
             //let bmProgram = yield whatBMProgram(username, password)
 
-            
+
 
            // yield put(user.actions.setProgram({ programId: bmProgram.bmprog }))
 
             username = resp.name // resp.name
             password = resp.private_key // resp.private_key
-           
+
            // this.redirect('/hot/')
 
            // window.location = `/hot/`;
-        }
+       } else if (resp.name && !resp.private_key) {
+           console.log('no private key')
+           yield put(user.actions.showPrivateKeyModal())
+           let pk = yield select(state => state.user.get('private_key'))
+           while (!pk) {
+               yield take()
+               pk = yield select(state => state.user.get('private_key'))
+           }
+           yield put(user.actions.hidePrivateKeyModal())
+           console.log('pk:', pk)
+           username = resp.name
+           password = pk
+       }
         // Сервер вернул ошибку
         // необходимо определить -
         // ошибка в БМ авторизации,
@@ -308,7 +322,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         //console.log('UNAME', username, ': RESP.NAME', resp.name)
     }
 
-    
+
     console.log('Username pAsss: ', username, password)
     //password = resp.private_key
 
@@ -387,7 +401,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
 
         console.log('Private Keys: ', private_keys)
-    
+
 
     if (private_keys.get('memo_private') &&
         account.get('memo_key') !== private_keys.get('memo_private').toPublicKey().toString()
@@ -553,10 +567,10 @@ function generateGolosLogin (len) {
 
 function* whatBMProgram(email, password) {
 
-        
+
         if (!email) return;
 
-     
+
 
         return fetch('/api/v1/bm_program', {
             method: 'post',
@@ -570,7 +584,7 @@ function* whatBMProgram(email, password) {
                 csrf: $STM_csrf,
                 email,
                 password
-               
+
                 //json_meta: JSON.stringify({"ico_address": icoAddress})
             })
         }).then(r => r.json()).then(res => {
@@ -580,7 +594,7 @@ function* whatBMProgram(email, password) {
                 return res
             }
         }).catch(error => {
-            console.error('Caight BM Prgram Error', error);  
+            console.error('Caight BM Prgram Error', error);
         });
 
 }

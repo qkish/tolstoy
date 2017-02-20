@@ -56,9 +56,9 @@ export default (sequelize, DataTypes) => {
 				const {
 					id: userId,
 					money_total: moneyTotal,
-					ten_leader: tenLeader,
-					hundred_leader: hundredLeader,
-					polk_leader: polkLeader,
+					ten: tenLeader,
+					hundred: hundredLeader,
+					polk: polkLeader,
 					couch_group: couchGroup,
 				} = values
 				
@@ -72,6 +72,7 @@ export default (sequelize, DataTypes) => {
 					// TODO Оптимизировать до двух запросов к базе (findAll => bulkUpdate/Create)
 					leaders.forEach( leader => {
 						
+						leader.id = Number(leader.id)
 						Group.findOne({
 							attributes: ['id', 'user_id', 'type'],
 							where: {
@@ -79,8 +80,11 @@ export default (sequelize, DataTypes) => {
 								type: leader.type
 							}
 						}).then( group => {
-							console.log()
 							try {
+
+								if (group) {
+
+
 								const {dataValues: {id, money}} = group
 								Group.update({
 									money: userMoney + (Number(money) ? Number(money) : 0)
@@ -88,8 +92,14 @@ export default (sequelize, DataTypes) => {
 									where: {
 										id: id
 									}
-								})
+								}) 
+
+								return 0 } 
+								console.log('HOOK TRY NOT ENTEDED IF')
+								throw new Error
+
 							} catch (e) {
+									console.log('HOOK CATCH', leader.id, leader.type, userMoney)
 								Group.create({
 									user_id: leader.id,
 									type: leader.type,

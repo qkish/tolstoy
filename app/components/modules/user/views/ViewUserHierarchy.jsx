@@ -19,8 +19,9 @@ class ViewUserHierarchy extends Component {
     }
 
    
-    getHierarchy = () => {
-           let email = this.props.account.name;
+    getHierarchy = (props) => {
+           let email = props.account.name;
+
 
       
 
@@ -52,14 +53,14 @@ class ViewUserHierarchy extends Component {
         });
     }
 
-   componentDidMount()  {
+   componentWillReceiveProps(nextProps)  {
 
-    this.getHierarchy()
+    this.getHierarchy(nextProps)
      
     }
 
-    componentWillReceiveProps() {
-     //   this.getHierarchy()
+    componentDidMount() {
+     this.getHierarchy(this.props)
     }
 
     static defaultProps = {}
