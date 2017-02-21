@@ -179,7 +179,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     const usernameFromCookies = Cookies.get('molodost_user')
 
-    if (usernameFromCookies) {
+    if (!username && usernameFromCookies) {
       username = usernameFromCookies
     }
 
