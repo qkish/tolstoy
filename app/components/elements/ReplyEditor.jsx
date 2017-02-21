@@ -241,8 +241,8 @@ class ReplyEditor extends React.Component {
             //console.log('CUR PROG ', program)
 
             if (totalTags) {
-                if(program == '1') totalTags.push('bm-ceh23')
-                if(program == '2') totalTags.push('bm-mzs17')
+             //   if(program == '1') totalTags.push('bm-ceh23')
+             //   if(program == '2') totalTags.push('bm-mzs17')
             }
 
             //totalTags.push('bm-ceh23')

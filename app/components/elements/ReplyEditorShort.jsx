@@ -83,6 +83,7 @@ class ReplyEditorShort extends React.Component {
         submitting: React.PropTypes.bool.isRequired,
         invalid: React.PropTypes.bool.isRequired,
 
+        current_program: React.PropTypes.object,
 
 
 
@@ -111,6 +112,7 @@ class ReplyEditorShort extends React.Component {
             showYoutube: false,
             youtubeLinkError: 'ReplyEditorShort__youtube-no-error',
             youtubeLink: '',
+            tagsInState: '',
     }
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ReplyEditorShort')
         this.onTitleChange = e => {
@@ -211,6 +213,7 @@ class ReplyEditorShort extends React.Component {
         setMetaData(formId, jsonMetadata)
     }
     componentDidMount() {
+
         // focus
         setTimeout(() => {
             if (this.props.isStory) {this.refs.titleRef.focus(); }
@@ -430,6 +433,11 @@ class ReplyEditorShort extends React.Component {
     }
 
 
+    handleAddTag(tags) {
+        this.setState({tagsInState: tags})
+    }
+
+
 
     render() {
         // NOTE title, category, and body are UI form fields ..
@@ -439,7 +447,34 @@ class ReplyEditorShort extends React.Component {
             body: this.props.body,
             money: this.props.money,
             filemeta: this.state.fileState,
+            tagsPlaced: this.state.tagsInState,
         }
+
+        let totalTags = []
+        let program
+
+         if(this.props.current_program && this.state.tagsInState == '') {
+
+            
+            
+
+            program = this.props.current_program
+            //console.log('CUR PROG ', program)
+
+            
+                if(program == '1') totalTags.push('bm-ceh23')
+                if(program == '2') totalTags.push('bm-mzs17')
+            
+
+            //totalTags.push('bm-ceh23')
+            this.handleAddTag(totalTags)
+            
+
+            console.log('TAGS: ', totalTags)
+            console.log('PROGRAM: ', this.props.current_program)
+
+         }
+    
 
 
 
@@ -750,6 +785,8 @@ export default formId => reduxForm(
 
         const metaLinkData = state.global.getIn(['metaLinkData', formId])
 
+
+
         const ret = {
             ...ownProps,
             fields, validate, isStory, hasCategory, username,
@@ -757,6 +794,7 @@ export default formId => reduxForm(
             // lastComment: current.get('lastComment'),
             formId,
             metaLinkData,
+            current_program: state.user.get('currentProgram')
         }
 
         return ret
@@ -791,6 +829,8 @@ export default formId => reduxForm(
 
 
             let placedFile = originalPost.filemeta;
+
+            let placedTags = originalPost.tagsPlaced;
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it
@@ -855,6 +895,8 @@ export default formId => reduxForm(
 
             if(money) meta.daySumm = money; else delete meta.daySumm
             if(placedFile) meta.fileAttached = placedFile; else delete meta.fileAttached
+
+            if (placedTags) meta.tags = placedTags; else delete meta.tags
 
 
 

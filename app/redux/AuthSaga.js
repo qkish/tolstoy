@@ -59,6 +59,8 @@ export function* accountAuthLookup({payload: {account, username, private_keys, l
 
     const pub_keys_used = {posting: toPub(posting), active: toPub(active), owner: login_owner_pubkey};
     yield put(user.actions.setAuthority({accountName, auth, pub_keys_used}))
+
+   
 }
 
 /**

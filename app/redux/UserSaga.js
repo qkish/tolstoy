@@ -177,9 +177,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 }}) {
 
 
+    console.log('USERNAME PASSWORD LOGIN2', username, password)
+
+
     // login, using saved password
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey
     if (!username && !password) {
+
         const data = localStorage.getItem('autopost2')
         if (data) { // auto-login with a low security key (like a posting key)
             console.log('Before: ', username, password)

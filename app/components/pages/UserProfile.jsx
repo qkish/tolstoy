@@ -225,6 +225,8 @@ export default class UserProfile extends React.Component {
           if (this.props.current_program == '1' || this.props.current_program == '2') {isPayed = true}
         }
 
+        let isThereAnyTens = allTens ? allTens.length : ''
+
 
 
         if( section === 'transfers' ) {
@@ -297,7 +299,7 @@ export default class UserProfile extends React.Component {
             if (account.blog) {
                 tab_content = <section>
 
-                  {isMyAccount && !myTen && isPayed ?
+                  {isMyAccount && !myTen && isPayed && isThereAnyTens ?
                       <div className="PostSummary" style={{marginLeft: "10px"}} >
                       <h5>Выберите своего десятника</h5>
                           <select onChange={({ target }) => this.handleTenChange({ id: userID, ten: target.value })}>

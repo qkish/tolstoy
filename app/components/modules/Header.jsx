@@ -277,6 +277,11 @@ class Header extends React.Component {
         Task = '/' + TASKS_MZS
        }
 
+       let TasksTab
+       if (Task) TasksTab = <li className={'Header__toplinks ' + bmTasks + hideOnMobile}>
+                                    <Link to={Task}>Задания</Link>
+                                </li>
+
 
         return (
             <header className="Header noPrint">
@@ -293,9 +298,7 @@ class Header extends React.Component {
                                 <li className={'Header__toplinks ' + bmOpen + hideOnMobile}>
                                     <Link to='/hot/bm-open'>Отчеты</Link>
                                 </li>
-                                <li className={'Header__toplinks ' + bmTasks + hideOnMobile}>
-                                    <Link to={Task}>Задания</Link>
-                                </li>
+                                {TasksTab}
                                 <li className={'Header__toplinks ' + bmRating + hideOnMobile}>
                                     <Link to='/rating/all'>Рейтинги</Link>
                                 </li>
