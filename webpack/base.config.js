@@ -3,6 +3,7 @@ import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import writeStats from './utils/write-stats'
 import HappyPack from 'happypack'
+import HardSourceWebpackPlugin from 'hard-source-webpack-plugin'
 import os from 'os'
 
 const Webpack_isomorphic_tools_plugin = require('webpack-isomorphic-tools/plugin');
@@ -10,16 +11,62 @@ const webpack_isomorphic_tools_plugin =
 	new Webpack_isomorphic_tools_plugin(require('./webpack-isotools-config'))
 //		.development(); // depricated
 
+const outputPath = path.resolve(__dirname, '../dist')
+const plugincfgHappyPack = {
+  loaders: [
+    {
+      path: 'babel',
+      query: {
+        plugins: [
+          'transform-runtime'
+        ],
+        cacheDirectory: false,
+      },
+    }
+  ],
+  threads: os.cpus().length || 2
+}
+const plugincfgHardSource = { // https://goo.gl/XLfMMz
+    cacheDirectory: path.resolve(outputPath,'[confighash]'),
+    recordsPath: path.resolve(outputPath,'[confighash]', 'records.json'),
+    configHash: function(webpackConfig) {
+    return require('node-object-hash')().hash(webpackConfig);
+  },
+  environmentHash: {
+    root: process.cwd(),
+      directories: ['node_modules'],
+      files: ['package.json'],
+  },
+}
+const plugincfgCommonChunk = { // https://goo.gl/GjpAg5
+  names: ['react', 'manifest'],
+  minChunks: function (module) {
+    return module.context && module.context.indexOf('node_modules') !== -1;
+  }
+}
+
+const plugincfgDll = {
+  path: path.resolve(outputPath, '[name]-manifest.json'),
+  name: '[name]_dll'
+}
+
 export default {
 	entry: {
 		app: ['babel-polyfill', './app/Main.js'],
-		vendor: ['react', 'react-dom', 'react-router']
+		react: [
+		  'react',
+      'react-dom',
+      'react-router',
+      'react-redux',
+      'redux-saga',
+    ]
 	},
 	output: {
-		path: path.resolve(__dirname, '../dist'),
-		filename: '[name].js',
+		path: outputPath,
+		filename: '[hash].[name].js',
 		chunkFilename: '[id].js',
-		publicPath: '/assets/'
+		publicPath: '/assets/',
+    library: '[name]_dll',
 	},
 	module: {
 		loaders: [
@@ -58,32 +105,17 @@ export default {
 			}
 		]
 	},
+  cache: true,
 	plugins: [
-		new HappyPack({
-			// loaders is the only required parameter:
-			loaders: [
-				{
-					path: 'babel',
-					query: {
-						plugins: [
-							'transform-runtime'
-						],
-						cacheDirectory: false,
-					},
-				}
-			],
-			threads: os.cpus().length || 2
-		}),
-//		new webpack.DllPlugin({
-//			path: path.join(__dirname, "js", "[name]-manifest.json"),
-//			name: "[name]_[hash]"
-//		}),
-		function () {
-			this.plugin('done', writeStats);
-		},
+    new webpack.optimize.CommonsChunkPlugin(plugincfgCommonChunk),
+    new HardSourceWebpackPlugin(plugincfgHardSource),
+    //new webpack.DllPlugin(plugincfgDll),
+    function(){this.plugin('done', writeStats)},
 		webpack_isomorphic_tools_plugin,
-		new ExtractTextPlugin('[name].css')
-	],
+		new ExtractTextPlugin('[name].css'),
+    new HappyPack(plugincfgHappyPack),
+  
+  ],
 	resolve: {
 		root: [
 			path.resolve(__dirname, '..')
