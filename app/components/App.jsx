@@ -292,6 +292,13 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
             );
         }
 
+
+        if (location.pathname.indexOf("/ceh") == 0 || location.pathname.indexOf("/mzs") == 0) {
+          header_bar = null
+        }
+
+
+
         return <div className={'App' + (lp ? ' LP' : '') + (ip ? ' index-page' : '') + bitva} onMouseMove={this.onEntropyEvent}>
                 {header_bar}
             <div className="App__content container">

@@ -17,6 +17,12 @@ export default function resolveRoute(path)
     if (path === '/login.html') {
         return {page: 'Login'};
     }
+    if (path === '/ceh') {
+        return {page: 'LoginCeh'};
+    }
+     if (path === '/mzs') {
+        return {page: 'LoginCeh'};
+    }
     if (path === '/signup.html') {
         return {page: 'SignUp'};
     }
