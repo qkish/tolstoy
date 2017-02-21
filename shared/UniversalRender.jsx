@@ -25,6 +25,7 @@ import {userWatches} from 'app/redux/UserSaga';
 import {authWatches} from 'app/redux/AuthSaga';
 import ratingWatch from 'app/redux/RatingSaga';
 import adminSaga from 'app/redux/AdminSaga';
+import redirectWatch from 'app/redux/RedirectSaga';
 import {transactionWatches} from 'app/redux/TransactionSaga';
 import PollDataSaga from 'app/redux/PollDataSaga';
 import {component as NotFound} from 'app/components/pages/NotFound';
@@ -41,7 +42,8 @@ const sagaMiddleware = createSagaMiddleware(
     ...transactionWatches,
     ...marketWatches,
     ratingWatch,
-    ...adminSaga
+    ...adminSaga,
+    redirectWatch
 );
 
 let middleware;
