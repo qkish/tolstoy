@@ -115,10 +115,11 @@ export default {
             //});
         } else if (route.page === 'Rating') {
             cb(null, [require('app/components/pages/Rating')]);
-        
+
         } else if (route.page === 'Admin') {
             cb(null, [require('app/components/pages/Admin')]);
-       
+        } else if (route.page === 'Choose') {
+            cb(null, [require('app/components/pages/Choose')]);
         } else {
             //require.ensure([], (require) => {
                 cb(process.env.BROWSER ? null : Error(404), [require('app/components/pages/NotFound')]);

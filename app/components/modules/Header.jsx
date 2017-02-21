@@ -95,6 +95,7 @@ class Header extends React.Component {
         let bmTasks = '';
         let bmBitva = '';
         let bmRating = '';
+        let bmAdmin = '';
 
         if (route.page === 'PostsIndex') {
             sort_order = route.params[0] ? translate(route.params[0]) : '';
@@ -147,6 +148,16 @@ class Header extends React.Component {
         } else if (route.page == 'Rating') {
             page_title = 'Рейтинг';
             bmRating = 'active_tab';
+        } else if (route.page === 'Admin') {
+            page_title = 'Админка';
+            bmAdmin = 'active_tab';
+        } else if (route.page === 'Choose') {
+            if (route.params === 'tens') {
+              page_title = 'Выберите десятников';
+            }
+            if (route.parans === 'hundreds') {
+              page_title = 'Выберите сотников';
+            }
         }
         else if (route.page == 'Privacy') {
             page_title = translate('privacy_policy');
@@ -241,7 +252,7 @@ class Header extends React.Component {
 
         let sort_order_extra_menu = null;
 
-        
+
 
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
@@ -288,7 +299,7 @@ class Header extends React.Component {
                                 <li className={'Header__toplinks ' + bmRating + hideOnMobile}>
                                     <Link to='/rating/all'>Рейтинги</Link>
                                 </li>
-                                <AdminLink />
+                                <AdminLink className={'Header__toplinks ' + bmAdmin + hideOnMobile} />
                             </ul>
                         </div>
                         <div className="shrink">
@@ -309,8 +320,8 @@ const VisibleOnlyAdmin = UserAuthWrapper({
   predicate: user => user.get('isVolunteer')
 })
 
-const AdminLink = VisibleOnlyAdmin(() => (
-  <li className={'Header__toplinks'}>
+const AdminLink = VisibleOnlyAdmin(props => (
+  <li className={props.className}>
     <Link to='/admin'>Админка</Link>
   </li>
 ))
