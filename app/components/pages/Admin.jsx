@@ -6,7 +6,8 @@ import Userpic from 'app/components/elements/Userpic'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu'
 import HorizontalSubmenu from 'app/components/elements/HorizontalSubmenu'
 import Pagination from 'react-paginate'
-
+import { UserAuthWrapper } from 'redux-auth-wrapper'
+import { routerActions } from 'react-router-redux'
 import {
     getUsersByCategory,
     searchUsers,
@@ -449,7 +450,16 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
+const UserIsAuthenticated = UserAuthWrapper({
+    authSelector: state => state.user,
+    authenticatingSelector: state => state.user.get('logining') && state.user.get('current') === null,
+    wrapperDisplayName: 'UserIsAuthenticated',
+    FailureComponent: () => <div>Доступ запрещен</div>,
+    LoadingComponent: () => <div>Загрузка...</div>,
+    predicate: user => user.get('isVolunteer')
+})
+
 module.exports = {
     path: 'admin(/:category(/:id))',
-    component: connect(mapStateToProps, mapDispatchToProps)(Admin)
+    component: UserIsAuthenticated(connect(mapStateToProps, mapDispatchToProps)(Admin))
 }

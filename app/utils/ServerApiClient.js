@@ -217,6 +217,7 @@ export function updateUser (userId, payload) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     return fetch(`/api/v1/users/${userId}`, {
         method: 'PUT',
+        credentials: 'same-origin',
         body: JSON.stringify({ csrf: $STM_csrf, payload })
     })
 }

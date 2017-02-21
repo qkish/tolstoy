@@ -28,7 +28,7 @@ import resolveRoute from 'app/ResolveRoute';
 
 import {
     getUsersByCategory
-    
+
 } from 'app/utils/ServerApiClient'
 
 // BMChain components/modules
@@ -108,12 +108,12 @@ export default class UserProfile extends React.Component {
         }).then(r => r.json()).then(res => {
             if (res.error || res.status !== 'ok') {
                 console.error('SignUp server error', res.error);
-                
+
                 this.setState({server_error: res.error || translate('unknown'), loading: false});
             } else {
                 this.setState({userID: res.id});
-            
-       
+
+
             }
         }).catch(error => {
             console.error('Caught CreateAccount server error', error);
@@ -124,23 +124,23 @@ export default class UserProfile extends React.Component {
 
     componentWillReceiveProps (nextProps) {
 
-    
-       if(nextProps.current_hierarchy && !nextProps.current_hierarchy.myTen) { 
+
+       if(nextProps.current_hierarchy && !nextProps.current_hierarchy.myTen) {
 
         this.getNameByID()
-        this.getData(nextProps) 
+        this.getData(nextProps)
 
-        
+
       }
     }
 
     componentWillMount()  {
 
     // this.getIdFromDB()
-     
+
     }
 
-    
+
 
     render() {
         const {
@@ -209,20 +209,20 @@ export default class UserProfile extends React.Component {
 
 
         let current_hierarchy, myTen
-        
+
         if(this.props.current_hierarchy) {
           current_hierarchy = this.props.current_hierarchy;
           myTen = current_hierarchy.myTen
         }
-       
+
         let {allTens} = this.state
 
-        let userID 
+        let userID
         if(this.state.userID && this.state.userID.id) userID = this.state.userID.id
 
         let isPayed = false
         if (this.props.current_program) {
-          if (this.props.current_program.programId == '1' || this.props.current_program.programId == '2') {isPayed = true}
+          if (this.props.current_program == '1' || this.props.current_program == '2') {isPayed = true}
         }
 
 
@@ -274,7 +274,7 @@ export default class UserProfile extends React.Component {
            {
               tab_content = <section>
 
-                
+
 
                   {isMyAccount ?
                       <div className="SubmitPost" style={{marginLeft: "10px"}}>
@@ -300,7 +300,7 @@ export default class UserProfile extends React.Component {
                   {isMyAccount && !myTen && isPayed ?
                       <div className="PostSummary" style={{marginLeft: "10px"}} >
                       <h5>Выберите своего десятника</h5>
-                          <select onChange={({ target }) => this.handleTenChange({ id: userID, ten: target.value })}> 
+                          <select onChange={({ target }) => this.handleTenChange({ id: userID, ten: target.value })}>
 
                           <option>Не выбран десятник</option>
                             {allTens ? allTens.map(userOption => (
@@ -310,7 +310,7 @@ export default class UserProfile extends React.Component {
                                 )) : null}
                           </select>
                       </div>: null}
-                    
+
 
                     {isMyAccount ?
                         <div className="SubmitPost" style={{marginLeft: "10px"}}>
@@ -457,7 +457,7 @@ export default class UserProfile extends React.Component {
                     <ViewUserBase global={this.props.global} account={account} />
                     <ViewUserTarget global={this.props.global} account={account} />
                     <ViewUserSubscribers global={this.props.global} account={account} followers={followers} following={following}/>
-                    <ViewUserHierarchy global={this.props.global} account={account} /> 
+                    <ViewUserHierarchy global={this.props.global} account={account} />
                     <ViewUserMore global={this.props.global} account={account} />
                 </div>
 
@@ -491,10 +491,10 @@ const mapDispatchToProps = dispatch => {
                 userId,
                 tenId
             }
-        }) 
+        })
       }
 
-  } 
+  }
 
 module.exports = {
     path: '@:accountname(/:section)',
@@ -543,7 +543,7 @@ module.exports = {
                 userId,
                 tenId
             }
-        }) 
+        })
 
         })
     )(UserProfile)
