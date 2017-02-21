@@ -50,35 +50,6 @@ class Admin extends Component {
     }
 
     getData (props) {
-        if (props.params.category === 'ten') {
-            getUsersByTen(props.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (props.params.category === 'hundred') {
-            getUsersByHundred(props.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (props.params.category === 'polk') {
-            getUsersByPolk(props.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (props.params.category === 'couch-group') {
-            getUsersByCouchGroup(props.params.id).then(users => this.setState({users}))
-            return
-        }
-        if (props.params.category === 'my-ten') {
-            if (props.currentUserName) {
-                getMyTen(props.currentUserName).then(users => this.setState({users}))
-            }
-            return
-        }
-        if (props.params.category === 'my-group') {
-            if (props.currentUserName) {
-                getMyGroup(props.currentUserName).then(users => this.setState({users}))
-            }
-            return
-        }
-
         getUsersByCategory(props.params.category, this.getOffset(), this.state.perPage).then(users => this.setState({users}))
         getUsersCount(props.params.category).then(count => this.setState({count}))
         getUsersByCategory('tens').then(allTens => this.setState({allTens}))
@@ -228,66 +199,6 @@ class Admin extends Component {
         )
         view = userList
 
-        if (this.props.params.category === 'tens') {
-            view = users ? (
-                <div className="Admin__wrapper">
-
-                    <div className="Rating__row">
-                    {users.map(user => (
-                        <UserEdit account={user.name} key={user.id} link={`/admin/ten/${user.id}`} name={`Десятка им. ${user.first_name} ${user.last_name}`} />
-                    ))}
-                </div>
-                </div>
-            ) : (
-                <div>Загрузка</div>
-            )
-        }
-
-        if (this.props.params.category === 'hundreds') {
-            view = users ? (
-                <div className="Admin__wrapper">
-
-                <div className="Rating__row">
-                    {users.map(user => (
-                        <UserEdit account={user.name} key={user.id} link={`/admin/hundred/${user.id}`} name={`Сотня им. ${user.first_name} ${user.last_name}`} />
-                    ))}
-                    </div>
-                </div>
-            ) : (
-                <div>Загрузка</div>
-            )
-        }
-
-        if (this.props.params.category === 'polki') {
-            view = users ? (
-                <div className="Admin__wrapper">
-
-                  <div className="Rating__row">
-                    {users.map(user => (
-                        <UserEdit account={user.name} key={user.id} link={`/admin/polk/${user.id}`} name={`Полк им. ${user.first_name} ${user.last_name}`} />
-                    ))}
-                </div>
-                </div>
-            ) : (
-                <div>Загрузка</div>
-            )
-        }
-
-        if (this.props.params.category === 'couches') {
-            view = users ? (
-                <div className="Admin__wrapper">
-
-                <div className="Rating__row">
-                    {users.map(user => (
-                        <UserEdit account={user.name} key={user.id} link={`/admin/couch-group/${user.id}`} name={`Тренерская группа им. ${user.first_name} ${user.last_name}`} />
-                    ))}
-                    </div>
-                </div>
-            ) : (
-                <div>Загрузка</div>
-            )
-        }
-
         if (this.props.params.category === 'volunteer') {
             view = users ? (
                 <div className="Admin__wrapper">
@@ -330,14 +241,15 @@ class Admin extends Component {
             view = userList
         }
 
-        let submenu = <div className="Admin__submenu">
-
-                  <input
-                        type='text'
-                        placeholder='Поиск по имени'
-                        onKeyPress={e => e.key === 'Enter' ? this.search(e.target.value) : null}
-                        className='Rating__search' />
-                    </div>
+        const submenu = (
+          <div className="Admin__submenu">
+            <input
+              type='text'
+              placeholder='Поиск по имени'
+              onKeyPress={e => e.key === 'Enter' ? this.search(e.target.value) : null}
+              className='Rating__search' />
+          </div>
+        )
 
         return (
             <div className='PostsIndex row'>
@@ -347,38 +259,15 @@ class Admin extends Component {
                         link: '/admin/all',
                         value: 'Все'
                     }, {
-                        active: this.props.params.category === 'polki',
-                        link: '/admin/polki',
-                        value: 'Полки'
-                    }, {
-                        active: this.props.params.category === 'hundreds',
-                        link: '/admin/hundreds',
-                        value: 'Сотни'
-                    }, {
-                        active: this.props.params.category === 'tens',
-                        link: '/admin/tens',
-                        value: 'Десятки'
-                    }, {
-                        active: this.props.params.category === 'couches',
-                        link: '/admin/couches',
-                        value: 'Тренера'
-                    }, {
                         active: this.props.params.category === 'volunteer',
                         link: '/admin/volunteer',
                         value: 'Волонтеры'
                     }]} />
-                {isAll && submenu}
+                    {isAll && submenu}
                     {view}
                 </div>
             </div>
         )
-    }
-}
-
-const mapStateToProps = state => {
-    return {
-        users: state.rating.ratingUsers,
-        currentUserName: state.user.getIn(['current', 'username'])
     }
 }
 
@@ -461,5 +350,5 @@ const UserIsAuthenticated = UserAuthWrapper({
 
 module.exports = {
     path: 'admin(/:category(/:id))',
-    component: UserIsAuthenticated(connect(mapStateToProps, mapDispatchToProps)(Admin))
+    component: UserIsAuthenticated(connect(null, mapDispatchToProps)(Admin))
 }
