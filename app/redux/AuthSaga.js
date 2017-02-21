@@ -22,12 +22,12 @@ export function* accountAuthLookup({payload: {account, username, private_keys, l
     console.log('accountAuthLookup', account);
     account = fromJS(account)
 
-    let bmProgram = yield whatBMProgram(username)
-		console.log('bm program', bmProgram)
+    // let bmProgram = yield whatBMProgram(username)
+	//	console.log('bm program', bmProgram)
 
-    yield put(user.actions.setProgram(bmProgram.bmprog.current_program))
-    yield put(user.actions.setVolunteer(bmProgram.bmprog.volunteer))
-    yield put(user.actions.setMyHierarchy({ myTen: bmProgram.bmprog.ten, myGroup: bmProgram.bmprog.couch_group, myHundred: bmProgram.bmprog.hundred, myPolk: bmProgram.bmprog.polk }))
+    // yield put(user.actions.setProgram(bmProgram.bmprog.current_program))
+    // yield put(user.actions.setVolunteer(bmProgram.bmprog.volunteer))
+    // yield put(user.actions.setMyHierarchy({ myTen: bmProgram.bmprog.ten, myGroup: bmProgram.bmprog.couch_group, myHundred: bmProgram.bmprog.hundred, myPolk: bmProgram.bmprog.polk }))
 
     private_keys = fromJS(private_keys)
 
@@ -60,7 +60,7 @@ export function* accountAuthLookup({payload: {account, username, private_keys, l
     const pub_keys_used = {posting: toPub(posting), active: toPub(active), owner: login_owner_pubkey};
     yield put(user.actions.setAuthority({accountName, auth, pub_keys_used}))
 
-   
+
 }
 
 /**

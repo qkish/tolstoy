@@ -917,7 +917,7 @@ export default formId => reduxForm(
                 return
             }
 
-            if(meta.tags.length > 5) {
+            if(meta && meta.tags && meta.tags.length > 5) {
                 const includingCategory = /edit/.test(type) ? translate('including_the_category', {rootCategory: detransliterate(rootCategory)}) : ''
                 errorCallback(translate('use_limited_amount_of_tags', {tagsLength: meta.tags.length, includingCategory}))
                 return

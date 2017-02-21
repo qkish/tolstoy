@@ -179,18 +179,19 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     const usernameFromCookies = Cookies.get('molodost_user')
 
-    if (!username && usernameFromCookies) {
-      username = usernameFromCookies
-    }
+    
+
+
 
     console.log('USERNAME PASSWORD LOGIN2', username, password)
 
 
     // login, using saved password
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey
-    if (!username && !password) {
+    if ((!username && !password) || usernameFromCookies) {
 
         const data = localStorage.getItem('autopost2')
+        console.log('DATA UserSaga: ', data)
         if (data) { // auto-login with a low security key (like a posting key)
             console.log('Before: ', username, password)
             autopost = true; // must use simi-colon
@@ -201,6 +202,14 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
             login_owner_pubkey = clean(login_owner_pubkey);
         }
     }
+
+
+    console.log('USERNAME AFTER BUFFER', username, password)
+
+    if (!username && usernameFromCookies) {
+      username = usernameFromCookies
+    }
+
     // no saved password
     if (!username && !password) {
         const offchain_account = yield select(state => state.offchain.get('account'))
@@ -223,6 +232,17 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     const isRole = (role, fn) => (!userProvidedRole || role === userProvidedRole ? fn() : undefined)
 
     console.log('INCOME', username, password);
+
+
+
+whatBMProgram
+    let bmProgram = yield whatBMProgram(username, password)
+    console.log('bm program', bmProgram)
+
+    if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.current_program) yield put(user.actions.setProgram(bmProgram.bmprog.current_program))
+    if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.volunteer) yield put(user.actions.setVolunteer(bmProgram.bmprog.volunteer))
+    if (bmProgram && bmProgram.bmprog) yield put(user.actions.setMyHierarchy({ myTen: bmProgram.bmprog.ten, myGroup: bmProgram.bmprog.couch_group, myHundred: bmProgram.bmprog.hundred, myPolk: bmProgram.bmprog.polk }))
+
 
     let isEmail = '@'
     // 1) Check local storage
@@ -581,12 +601,8 @@ function generateGolosLogin (len) {
 
 function* whatBMProgram(email, password) {
 
-
-        if (!email) return;
-
-
-
-        return fetch('/api/v1/bm_program', {
+if (!email) return;
+    return fetch('/api/v1/bm_program', {
             method: 'post',
             mode: 'no-cors',
             credentials: 'same-origin',
@@ -605,6 +621,7 @@ function* whatBMProgram(email, password) {
             if (res.error || res.status !== 'ok') {
                 console.error('BM Program Error', res.error);
             } else {
+                console.log('USER SAGA PROGRAM: ', res)
                 return res
             }
         }).catch(error => {

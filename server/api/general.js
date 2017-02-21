@@ -344,8 +344,8 @@ export default function useGeneralApi(app) {
 		const params = this.request.body;
 		const {
 			csrf,
-			email
-			// password
+			email,
+			password
 
 		} = typeof(params) === 'string' ? JSON.parse(params) : params;
 		//  if (!checkCSRF(this, csrf)) return;
@@ -355,8 +355,7 @@ export default function useGeneralApi(app) {
 			// TODO: limit by 1/min/ip
 
 			//const getBMtoken = yield getBMAccessToken(email, password);
-
-
+console.log('GET BM SERV: ', email, password)
 			let getBMProg = ''
 
 			// if (getBMtoken) {
@@ -372,7 +371,7 @@ export default function useGeneralApi(app) {
 
 				],
 				where: {
-					name: esc(email)
+					email: esc(email)
 				}
 
 			})
@@ -382,9 +381,9 @@ export default function useGeneralApi(app) {
 			if (!getBMProg.current_program) {
 
 				
-
 			}
 
+			console.log('A BMProgram = ', getBMProg)
 
 			this.body = JSON.stringify({
 				status: 'ok',
@@ -393,7 +392,7 @@ export default function useGeneralApi(app) {
 
 
 		} catch (error) {
-			console.error('Error in /bm_recovery api call', this.session.uid, error);
+			console.error('Error in /bm_program api call', this.session.uid, error);
 			this.body = JSON.stringify({
 				error: error.message
 			});
@@ -511,6 +510,8 @@ export default function useGeneralApi(app) {
 			username,
 			password
 		} = typeof(params) === 'string' ? JSON.parse(params) : params;
+
+		console.log('session', this.session)
 
 		console.log('SERV', username, password);
 
