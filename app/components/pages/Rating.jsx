@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import Products from 'app/components/elements/Products'
+import CardMyTen from 'app/components/elements/CardMyTen'
 import Beta from 'app/components/elements/Beta'
 import Userpic from 'app/components/elements/Userpic'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu'
@@ -80,7 +81,10 @@ class Rating extends Component {
 			}
 			return
 		}
-		getUsersByCategory(props.params.category).then(users => this.setState({users}))
+		getUsersByCategory(props.params.category)
+			.then(users => {
+				this.setState({users})
+			})
 	}
 	
 	componentDidMount() {
@@ -107,27 +111,8 @@ class Rating extends Component {
 		
 		
 		let view
-		const {users} = this.state
-		
-//		const UserMapper = (users, path, namePrefix) => {
-//			const loader = <div>Загрузка</div>
-//			const list = (
-//				<div className="Rating_wrapper">
-//					<div className="Rating__row">
-//						{users.map(user => (
-//							<User
-//								account={user.name}
-//								key={user.id}
-//								link={`${path}/${user.id}`}
-//								name={`${namePrefix} им. ${user.first_name} ${user.last_name}`}
-//							/>
-//						))}
-//					</div>
-//				</div>
-//			)
-//			return users ? list : loader
-//		}
-		
+		const {users, myTenCardUsers} = this.state
+		console.log(myTenCardUsers)
 		
 		const userList = users ? (
 			<div className="Rating_wrapper">
@@ -273,6 +258,7 @@ class Rating extends Component {
 					className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
 					<Beta />
 					<Products />
+					<CardMyTen />
 				</div>
 			</div>
 		)
@@ -281,7 +267,7 @@ class Rating extends Component {
 
 const mapStateToProps = state => {
 	return {
-		users: state.rating.ratingUsers,
+		users: state.rating.ratingsUsers,
 		currentUserName: state.user.getIn(['current', 'username']),
 		gprops: state.global.get('props')
 	}

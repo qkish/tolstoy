@@ -16,6 +16,7 @@ import { APP_NAME, APP_ICON } from 'config/client_config';
 import capitalizeFirstLetter from 'capitalize';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import Products from 'app/components/elements/Products';
+import CardMyTen from 'app/components/elements/CardMyTen'
 import Beta from 'app/components/elements/Beta';
 import Apis from 'shared/api_client/ApiInstances'
 
@@ -290,7 +291,7 @@ class PostsIndex extends React.Component {
 
                     <Beta />
                     <Products />
-
+	                  <CardMyTen/>
                 </div>
             </div>
         );

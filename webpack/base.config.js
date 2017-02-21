@@ -31,7 +31,7 @@ export default {
 			},
 			{test: /\.json$/, loader: 'json'},
 			{
-				test: /\.js$|\.jsx$/,
+				test: /\.jsx?$/,
 				exclude: /node_modules/,
 				loader: 'happypack/loader',
 			},
