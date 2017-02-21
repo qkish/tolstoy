@@ -85,10 +85,10 @@ export default function resolveRoute(path)
         return {page: 'TaskProfile', params: match.slice(1)};
     }
 
-      match = path.match(/^\/(@bmdfef8c9b77aa)\/?$/)
+      match = path.match(/^\/(@bm-bmtasksmz)\/?$/)
 
     if (match) {
-        return {page: 'TaskProfile2', params: match.slice(1)};
+        return {page: 'TaskProfile', params: match.slice(1)};
     }
 
     match = path.match(/^\/(@[\w\.\d-]+)\/?$/) ||

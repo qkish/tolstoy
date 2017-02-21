@@ -95,6 +95,7 @@ class PostSummary extends React.Component {
 
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
+
         
 
         let desc = p.desc

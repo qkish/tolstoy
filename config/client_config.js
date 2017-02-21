@@ -46,5 +46,5 @@ export const SUPPORT_EMAIL = 'gqkish@gmail.com'
 export const SEGMENT_ANALYTICS_KEY = 'F7tldQJxt491gXYqDGi5TkTT4wFpSPps'
 export const FIRST_DATE = new Date(Date.UTC(2016, 7, 1)); //1 september
 
-export const POLK_OSIPOV = '@bm-bmtasks'
-export const POLK_DASHKIEV = '@bmdfef8c9b77aa'
+export const TASKS_CEH = '@bm-bmtasks'
+export const TASKS_MZS = '@bm-bmtasksmz'

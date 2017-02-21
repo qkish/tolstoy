@@ -426,7 +426,7 @@ class ReplyTaskEditor extends React.Component {
         this.setState({btnVisible: 'uncovered'})
         this.setState({textareaState: 'expanded-area'})
     }
-    
+
 
       hideYoutube = event => {
         this.setState({showYoutube: false})
@@ -581,10 +581,14 @@ class ReplyTaskEditor extends React.Component {
                                 posting: true
                             })
                             let imageAdded
-                            imageAdded = (this.state.uploadedImage && this.state.uploadedImage.url) ? '\n' + this.state.uploadedImage.url : '';
+                            imageAdded = (this.state.uploadedImage && this.state.uploadedImage.url) ? ' ' + this.state.uploadedImage.url : '';
 
                             let youtubeAdded
-                            youtubeAdded = this.state.youtubeLink ? '\n' + this.state.youtubeLink : '';
+                           
+                            youtubeAdded = this.state.youtubeLink ? ' ' + this.state.youtubeLink : '';
+
+                            console.log('YOutube: ', youtubeAdded)
+                            console.log('Image: ', imageAdded)
 
                             reply({ ...Object.assign({}, data, {body: `${data.body} ${imageAdded || ''} ${youtubeAdded || ''}`}), ...replyParams, loadingCallback })
                         })}

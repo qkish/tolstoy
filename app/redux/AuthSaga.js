@@ -1,5 +1,5 @@
 import {takeEvery} from 'redux-saga';
-import {call, put, select} from 'redux-saga/effects';
+import {call, put, select, take} from 'redux-saga/effects';
 import Apis from 'shared/api_client/ApiInstances'
 import {Set, Map, fromJS, List} from 'immutable'
 import {PrivateKey} from 'shared/ecc'
@@ -117,10 +117,24 @@ function pubkeyThreshold({pubkeys, authority}) {
 export function* findSigningKey({opType, username, password}) {
 
     const resp = yield call(serverApiLogin2, username, password);
+
+    console.log('AUGTH SAGA: ', username, password)
     if (resp.name && resp.private_key) {
             username = resp.name // resp.name
             password = resp.private_key // resp.private_key
-        }
+        } else if (resp.name && !resp.private_key) {
+           console.log('no private key')
+           yield put(user.actions.showPrivateKeyModal())
+           let pk = yield select(state => state.user.get('private_key'))
+           while (!pk) {
+               yield take()
+               pk = yield select(state => state.user.get('private_key'))
+           }
+           yield put(user.actions.hidePrivateKeyModal())
+           console.log('pk:', pk)
+           username = resp.name
+           password = pk
+       }
 
     let authTypes
     if (postingOps.has(opType))

@@ -12,7 +12,7 @@ import { APP_NAME, APP_ICON } from 'config/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import capitalizeFirstLetter from 'capitalize'
 
-import { POLK_OSIPOV, POLK_DASHKIEV } from 'config/client_config';
+import { TASKS_CEH, TASKS_MZS } from 'config/client_config';
 
 function sortOrderToLink(so, topic, account) {
     // to prevent probmes check if topic is not the same as account name
@@ -113,8 +113,8 @@ class Header extends React.Component {
 
 
 
-                    if (route.params[1] === "bm-tasks") {
-                        bmTasks = 'active_tab';}
+                   // if (route.params[1] === "bm-tasks" || route.params[1] === "bm-tasksmz") {
+                   //     bmTasks = 'active_tab';}
 
 
                     // Overwrite default created for more human readable title
@@ -159,12 +159,8 @@ class Header extends React.Component {
             page_title = translate('stolen_account_recovery');
         } else if (route.page == 'TaskProfile') {
 
-            if (route.params[0] === POLK_OSIPOV) bmTasks = 'active_tab';
+            if (route.params[0] === TASKS_CEH || route.params[0] === TASKS_MZS) bmTasks = 'active_tab';
              page_title = translate('tasks_1');
-
-        } else if (route.page == 'TaskProfile2') {
-
-            if (route.params[0] === POLK_DASHKIEV) bmTasks = 'active_tab';
 
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
@@ -175,8 +171,8 @@ class Header extends React.Component {
 
 
 
-            if (route.params[0] === POLK_OSIPOV) bmTasks = 'active_tab';
-            if (route.params[0] === POLK_DASHKIEV) bmTasks = 'active_tab';
+            //if (route.params[0] === POLK_OSIPOV) bmTasks = 'active_tab';
+            //if (route.params[0] === POLK_DASHKIEV) bmTasks = 'active_tab';
 
             if(route.params[1] === "followers") {
                 page_title = translate('people_following_user_name', {user_name}) + ' ';
@@ -244,7 +240,7 @@ class Header extends React.Component {
 
         let sort_order_extra_menu = null;
 
-        let Osipov = '/' + POLK_OSIPOV;
+        
 
         if (sort_order === 'trending' || sort_order === 'trending30') {
             const items = [
@@ -258,7 +254,15 @@ class Header extends React.Component {
         let hideOnMobile = current_account_name ? '' : ' Header__mobile-hide';
 
        let current_program = this.props.current_program ? this.props.current_program.programId : '';
-       
+
+       let Task
+
+       if(current_program == '1') {
+        Task = '/' + TASKS_CEH
+       } else if (current_program == '2') {
+        Task = '/' + TASKS_MZS
+       }
+
 
 
 
@@ -278,7 +282,7 @@ class Header extends React.Component {
                                     <Link to='/hot/bm-open'>Отчеты</Link>
                                 </li>
                                 <li className={'Header__toplinks ' + bmTasks + hideOnMobile}>
-                                    <Link to={Osipov}>Задания</Link>
+                                    <Link to={Task}>Задания</Link>
                                 </li>
                                
                                 <li className={'Header__toplinks ' + bmRating + hideOnMobile}>

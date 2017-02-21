@@ -662,7 +662,7 @@ const ru = {
     tasks_1: 'Задания',
     bitva: 'Рейтинги',
     followers: 'Подписчики',
-    follow:'Подписки',
+    follow:'Подписаться',
     followed: 'Подписки',
     uploading: 'Загрузка...',
 

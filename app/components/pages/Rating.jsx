@@ -135,7 +135,7 @@ class Rating extends Component {
 					<div className="Rating__row">
 						<User account={user.name} key={user.id}/>
 						<div
-							className="Rating__money">{moneyPrettify(user.money_total)}</div>
+							className="Rating__money">{moneyPrettify(user.money_total)} ₽</div>
 					</div>
 				))}
 			</div>
@@ -153,7 +153,7 @@ class Rating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/rating/ten/${user.id}`}
 							      name={`Десятка им. ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{userGroupGetMoney(user)}</div>
+							<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
 						</div>
 					))}
 				</div>
@@ -172,7 +172,7 @@ class Rating extends Component {
 								link={`/rating/hundred/${user.id}`}
 								name={`Сотня им. ${user.first_name} ${user.last_name}`}
 							/>
-							<div className="Rating__money">{userGroupGetMoney(user)}</div>
+							<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
 						</div>
 					))}
 				</div>
@@ -189,7 +189,7 @@ class Rating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/rating/polk/${user.id}`}
 							      name={`Полк им. ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{userGroupGetMoney(user)}</div>
+							<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
 						</div>
 					))}
 				</div>
@@ -207,7 +207,7 @@ class Rating extends Component {
 								<User account={user.name} key={user.id}
 								      link={`/rating/couch-group/${user.id}`}
 								      name={`Тренерская группа им. ${user.first_name} ${user.last_name}`}/>
-								<div className="Rating__money">{userGroupGetMoney(user)}</div>
+								<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
 							</div>
 						))}
 				</div>

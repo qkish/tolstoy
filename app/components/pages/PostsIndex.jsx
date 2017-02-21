@@ -95,7 +95,7 @@ class PostsIndex extends React.Component {
         let emptyText = '';
 
         if (!category) {
-            category = 'bm-open'
+           // category = 'bm-open'
         }
 
 

@@ -588,10 +588,11 @@ class ReplyEditor extends React.Component {
                                 posting: true
                             })
                             let imageAdded
-                            imageAdded = (this.state.uploadedImage && this.state.uploadedImage.url) ? '\n' + this.state.uploadedImage.url : '';
+                            imageAdded = (this.state.uploadedImage && this.state.uploadedImage.url) ? ' ' + this.state.uploadedImage.url : '';
 
                             let youtubeAdded
-                            youtubeAdded = this.state.youtubeLink ? '\n' + this.state.youtubeLink : '';
+                            youtubeAdded = this.state.youtubeLink ? ' ' + this.state.youtubeLink : '';
+                            console.log('YOutube: ', youtubeAdded)
 
                             reply({ ...Object.assign({}, data, {body: `${data.body} ${imageAdded || ''} ${youtubeAdded || ''}`}), ...replyParams, loadingCallback })
                         })}
