@@ -379,6 +379,12 @@ export default function useGeneralApi(app) {
 
 			// }
 
+			if (!getBMProg.current_program) {
+
+				
+
+			}
+
 
 			this.body = JSON.stringify({
 				status: 'ok',
@@ -513,10 +519,15 @@ export default function useGeneralApi(app) {
     const user_agent = this.headers['user-agent']
 
     let isAuth = false
+
+
     if (username && !password) {
       isAuth = yield isUserAuthOnBM(user, hash, user_agent)
       console.log('is auth', isAuth)
+
     }
+
+    console.log('LOGIN2 Auth: ', isAuth, user, username, password)
 
 		// if (!checkCSRF(this, csrf)) return;
 
@@ -785,8 +796,23 @@ export default function useGeneralApi(app) {
 			 } */
 
 
-			const getBMtoken = yield getBMAccessToken(account.email, account.bmpassword);
-			const getBMmeta = yield getBMUserMeta(getBMtoken.access_token);
+			let getBMtoken 
+
+			
+
+
+			if (account.bmpassword) {getBMtoken = yield getBMAccessToken(account.email, account.bmpassword);
+				getBMtoken = getBMtoken.access_token}
+			if (account.email && !account.bmpassword)  {
+
+				 const user = decodeURIComponent(this.cookies.get('molodost_user'))
+    		const hash = this.cookies.get('molodost_hash')
+    		const user_agent = this.headers['user-agent']
+   	 
+      		getBMtoken = yield isUserAuthOnBM(user, hash, user_agent)
+      		}
+
+			const getBMmeta = yield getBMUserMeta(getBMtoken);
 			const accountMetaData = {
 				first_name: getBMmeta.firstName,
 				last_name: getBMmeta.lastName,
@@ -794,7 +820,7 @@ export default function useGeneralApi(app) {
 				facebook: getBMmeta.fbId,
 				vk: getBMmeta.vkId,
 				website: getBMmeta.siteLink,
-				user_image: getBMmeta.avatar ? 'http://static.molodost.bz/thumb/160_160_2/img/avatars/' + getBMmeta.avatar : '',
+				user_image: 'http://static.molodost.bz/thumb/160_160_2/img/avatars/' + getBMmeta.avatar,
 
 			}
 
@@ -1465,22 +1491,35 @@ function* getBMUserMeta(acces_token) {
 }
 
 function* isUserAuthOnBM (user, hash, ua) {
+
   const form = new FormData();
   form.append('user', user);
   form.append('hash', hash);
   form.append('user_agent', ua);
+  form.append('grant_type', 'user_hash')
 
   const { access_token } = yield getBMAccessTokenCredentialsOnly()
 
-  const resp = yield fetch('http://api.molodost.bz/api/v3/user/hash/', {
+  const resp = yield fetch('http://api.molodost.bz/oauth/token/', {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer ' + access_token
-    },
-    body: form
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			client_id: config.bmapi.client_id,
+			client_secret: config.bmapi.client_secret,
+			user: user,
+			hash: hash,
+			user_agent: ua,
+			grant_type: 'user_hash'
+
+
+		})
   }).then(res => res.json())
 
-  return resp.valid
+ 
+
+  return resp.access_token
 }
 
 /**

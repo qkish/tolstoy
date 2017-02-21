@@ -337,7 +337,11 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     //password = resp.private_key
 
 
+
+
     const account = yield call(getAccount, username)
+
+     console.log('ACCOUNT: ', account, username)
 
     //if (!account) {
     //   yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
