@@ -22,7 +22,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location, gprops, account}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location, gprops, account, logining}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -110,7 +110,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                  <li className={lcn}><Link to={wallet_link} className="TopRightMenu_sila-link"><div className="TopRightMenu_sila">{vesting_steem && Math.round(vesting_steem)}</div></Link></li>
 
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <div className="TopRightMenu__search-icon"></div>}</a></li>
-                
+
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -128,7 +128,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             </ul>
         );
     }
-    if (probablyLoggedIn) {
+    if (probablyLoggedIn || logining) {
         if (location && location.pathname.indexOf("/ico") != -1) {
             return      <ul className={mcn + mcl + ' landing'}>
                             {/* <li className={lcn + ' buttons'}>
@@ -241,7 +241,8 @@ export default connect(
             loggedIn,
             probablyLoggedIn: false,
             gprops,
-            account
+            account,
+            logining: state.user.get('logining')
         }
     },
     dispatch => ({
