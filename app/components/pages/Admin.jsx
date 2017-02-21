@@ -452,7 +452,7 @@ const mapDispatchToProps = dispatch => {
 
 const UserIsAuthenticated = UserAuthWrapper({
     authSelector: state => state.user,
-    authenticatingSelector: state => state.user.get('logining') && state.user.get('current') === null,
+    authenticatingSelector: state => !state.user.get('current'),
     wrapperDisplayName: 'UserIsAuthenticated',
     FailureComponent: () => <div>Доступ запрещен</div>,
     LoadingComponent: () => <div>Загрузка...</div>,
