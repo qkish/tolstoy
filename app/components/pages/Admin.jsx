@@ -107,8 +107,6 @@ class Admin extends Component {
     }
 
     render () {
-        const isAll = this.props.params.category === 'all'
-
         let view
         const { users, allTens, allPolks, allHundreds, allTrainers, count } = this.state
 
@@ -255,7 +253,7 @@ class Admin extends Component {
             <div className='PostsIndex row'>
                 <div className="PostsIndex__left col-md-12 col-sm-12 small-collapse Admin__menu">
                     <HorizontalMenu items={[{
-                        active: isAll,
+                        active: !this.props.params.category || this.props.params.category === 'all',
                         link: '/admin/all',
                         value: 'Все'
                     }, {
@@ -263,7 +261,7 @@ class Admin extends Component {
                         link: '/admin/volunteer',
                         value: 'Волонтеры'
                     }]} />
-                    {isAll && submenu}
+                    {submenu}
                     {view}
                 </div>
             </div>
