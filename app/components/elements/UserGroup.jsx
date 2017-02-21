@@ -141,7 +141,7 @@ class UserGroup extends Component {
 
         const proxy = $STM_Config.img_proxy_prefix
         if (proxy && url) {
-            const size = props.width + 'x' + props.height
+            const size = this.props.width + 'x' + this.props.height
             url = proxy + size + '/' + url;
         }
 
