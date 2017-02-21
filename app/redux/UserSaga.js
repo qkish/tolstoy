@@ -18,6 +18,7 @@ import {
 import {loadFollows} from 'app/redux/FollowSaga'
 import {translate} from 'app/Translator'
 import {key_utils} from 'shared/ecc'
+import Cookies from 'js-cookie'
 
 export const userWatches = [
     watchRemoveHighSecurityKeys, // keep first to remove keys early when a page change happens
@@ -176,6 +177,11 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         operationType /*high security*/, afterLoginRedirectToAccount
 }}) {
 
+    const usernameFromCookies = Cookies.get('molodost_user')
+
+    if (usernameFromCookies) {
+      username = usernameFromCookies
+    }
 
     // login, using saved password
     let autopost, memoWif, login_owner_pubkey, login_wif_owner_pubkey
@@ -192,7 +198,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         }
     }
     // no saved password
-    if (!username || !password) {
+    if (!username && !password) {
         const offchain_account = yield select(state => state.offchain.get('account'))
         if (offchain_account) serverApiLogout()
         return

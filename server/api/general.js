@@ -24,6 +24,7 @@ import AWS from 'aws-sdk';
 import pify from 'pify';
 import fs from 'fs';
 import {flatten, map} from 'lodash';
+import FormData from 'form-data';
 
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
@@ -507,6 +508,16 @@ export default function useGeneralApi(app) {
 
 		console.log('SERV', username, password);
 
+    const user = decodeURIComponent(this.cookies.get('molodost_user'))
+    const hash = this.cookies.get('molodost_hash')
+    const user_agent = this.headers['user-agent']
+
+    let isAuth = false
+    if (username && !password) {
+      isAuth = yield isUserAuthOnBM(user, hash, user_agent)
+      console.log('is auth', isAuth)
+    }
+
 		// if (!checkCSRF(this, csrf)) return;
 
 		try {
@@ -518,7 +529,7 @@ export default function useGeneralApi(app) {
 			console.log('BM check: ' + userExistBM.access_token);
 
 			// If user account have in DB
-			if (userExistBM.access_token) {
+			if (userExistBM.access_token || isAuth) {
 				// Проверить есть ли пользователь в нашей БД
 				const db_account = yield models.Account.findOne({
 					attributes: ['user_id', 'private_key', 'name'],
@@ -1393,8 +1404,6 @@ function* getBMSignUp(newemail, newname, lastname, access_token) {
 
 	// newname = toString(newname).replace(/[^A-Za-zА-Яа-яЁё]/g, "")
 	// newemail = toString(newemail)
-
-	var FormData = require('form-data');
 	var form = new FormData();
 	form.append('email', newemail);
 	form.append('firstname', newname);
@@ -1453,6 +1462,25 @@ function* getBMUserMeta(acces_token) {
 			'Authorization': 'Bearer ' + acces_token
 		}
 	}).then(res => res.json()).catch(e => console.log(e))
+}
+
+function* isUserAuthOnBM (user, hash, ua) {
+  const form = new FormData();
+  form.append('user', user);
+  form.append('hash', hash);
+  form.append('user_agent', ua);
+
+  const { access_token } = yield getBMAccessTokenCredentialsOnly()
+
+  const resp = yield fetch('http://api.molodost.bz/api/v3/user/hash/', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + access_token
+    },
+    body: form
+  }).then(res => res.json())
+
+  return resp.valid
 }
 
 /**
