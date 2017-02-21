@@ -633,8 +633,8 @@ export default function useGeneralApi(app) {
 		try {
 			this.session.a = null;
 			this.session.name = null;
+			this.session.user = null;
 			this.session.uid = Math.random().toString(36).slice(2);
-			;
 			this.body = JSON.stringify({
 				status: 'ok'
 			});
@@ -1322,6 +1322,21 @@ export default function useGeneralApi(app) {
 		console.log(`-- /users/${userId} -->`, this.session.uid, this.session.user)
 
 		try {
+			if (!this.session.user) {
+				throw new Error('Access denied')
+			}
+
+			const u = yield models.User.findOne({
+				attributes: ['volunteer'],
+				where: {
+					id: this.session.user
+				}
+			})
+
+			if (!u.volunteer) {
+				throw new Error('Access denied')
+			}
+
 			yield models.User.update(payload, {
 				where: {id: userId}
 			})

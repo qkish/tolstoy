@@ -11,6 +11,7 @@ import HorizontalMenu from 'app/components/elements/HorizontalMenu';
 import { APP_NAME, APP_ICON } from 'config/client_config';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import capitalizeFirstLetter from 'capitalize'
+import { UserAuthWrapper } from 'redux-auth-wrapper'
 
 import { TASKS_CEH, TASKS_MZS } from 'config/client_config';
 
@@ -253,6 +254,7 @@ class Header extends React.Component {
 
         let hideOnMobile = current_account_name ? '' : ' Header__mobile-hide';
 
+
        let current_program = this.props.current_program ? this.props.current_program.programId : '';
 
        let Task
@@ -262,8 +264,6 @@ class Header extends React.Component {
        } else if (current_program == '2') {
         Task = '/' + TASKS_MZS
        }
-
-
 
 
         return (
@@ -284,16 +284,10 @@ class Header extends React.Component {
                                 <li className={'Header__toplinks ' + bmTasks + hideOnMobile}>
                                     <Link to={Task}>Задания</Link>
                                 </li>
-                               
                                 <li className={'Header__toplinks ' + bmRating + hideOnMobile}>
                                     <Link to='/rating/all'>Рейтинги</Link>
                                 </li>
-
-
-
-
-
-
+                                <AdminLink />
                             </ul>
                         </div>
                         <div className="shrink">
@@ -306,6 +300,19 @@ class Header extends React.Component {
         );
     }
 }
+
+const VisibleOnlyAdmin = UserAuthWrapper({
+  authSelector: state => state.user,
+  wrapperDisplayName: 'VisibleOnlyAdmin',
+  FailureComponent: null,
+  predicate: user => user.get('isVolunteer')
+})
+
+const AdminLink = VisibleOnlyAdmin(() => (
+  <li className={'Header__toplinks'}>
+    <Link to='/admin'>Админка</Link>
+  </li>
+))
 
 export {Header as _Header_};
 
