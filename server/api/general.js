@@ -392,6 +392,8 @@ export default function useGeneralApi(app) {
 
 				let getBMtoken 
 
+				console.log('Program – Password:', password)
+
 			if (password) {getBMtoken = yield getBMAccessToken(email, password);
 				getBMtoken = getBMtoken.access_token}
 			
