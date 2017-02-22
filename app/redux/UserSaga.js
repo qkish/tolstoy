@@ -324,13 +324,13 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                     // Создать аккаунт на golos.io
                     let newname, account;
                     while (true) {
-                        newname = 'bm-' + username.split('@')[0].replace(/[^0-9A-Za-zА-Яа-яЁё+-_.]/g, '');
+                        newname = 'bm-' + username.split('@')[0].replace(/[^0-9A-Za-z]/g, '');
                         newname = newname.substring(0, 12)
                         //Генерируем имя алгоритмом на сервере
                         account = yield call(getAccount, newname);
                         if(!account) break;
 
-                        newname = 'bm-'+ username.split('@')[0].replace(/[^0-9A-Za-zА-Яа-яЁё+-_.]/g, '').substring(0, 10) + generateGolosLogin(3);
+                        newname = 'bm-'+ username.split('@')[0].replace(/[^0-9A-Za-z]/g, '').substring(0, 10) + generateGolosLogin(3);
                         account = yield call(getAccount, newname);
                         if(!account) break;
                     }
