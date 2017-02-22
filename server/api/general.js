@@ -374,6 +374,7 @@ export default function useGeneralApi(app) {
 
 			getBMProg = yield models.User.findOne({
 				attributes: [
+          'id',
 					'current_program',
 					'volunteer',
 					'ten',
@@ -383,7 +384,6 @@ export default function useGeneralApi(app) {
           'email'
 				],
 				where: whereClause
-
 			})
 			// }
 
@@ -424,14 +424,20 @@ export default function useGeneralApi(app) {
         ifMzs = yield getBMProgramById(87, bmID, getBMtoken)
         console.log('Program – BM Programs: ', ifCeh, ifMzs)
 
-        if (ifCeh.valid) getBMProg.current_program = '1'
-        if (ifMzs.valid) getBMProg.current_program = '2'
+        if (ifCeh.valid) {
+          getBMProg.current_program = '1'
+          yield getBMProg.save()
+        }
+        if (ifMzs.valid) {
+          getBMProg.current_program = '2'
+          yield getBMProg.save()
+        }
       }
 
-			this.body = JSON.stringify({
-				status: 'ok',
-				bmprog: getBMProg
-			});
+      this.body = JSON.stringify({
+        status: 'ok',
+        bmprog: getBMProg
+      });
 
 
 		} catch (error) {
