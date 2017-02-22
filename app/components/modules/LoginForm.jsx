@@ -304,7 +304,7 @@ class LoginForm extends Component {
                     <LoadingIndicator type="circle" inline />
                 </div> */}
                 <div className="LoginForm__password-recovery"><a href="#" onClick={this.handlePassRecovery}>Восстановить пароль</a></div>
-                <div className="LoginForm__label-support">Техническая поддержка <a href="mailto:bitva@molodost.bz">bitva@molodost.bz</a></div>
+                <div className="LoginForm__label-support">Техническая поддержка <a href="mailto:help@molodost.bz">help@molodost.bz</a></div>
             </form>
         )
 
