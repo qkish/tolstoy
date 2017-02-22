@@ -9,6 +9,7 @@ import o2j from 'shared/clash/object2json'
 import _urls from 'shared/clash/images/urls'
 import _btc from 'shared/clash/coins/btc'
 import { injectIntl } from 'react-intl'
+import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 
 @injectIntl
 class Settings extends React.Component {
@@ -254,7 +255,7 @@ class Settings extends React.Component {
                     <label>
                         <span>{translate('business_category')}</span>
 
-                        <select 
+                        <select
                                 onChange={this.handleUserBusinessCategoryChange}
                                 className="Settings__Busineses"
                                 value={state.business_category}>
@@ -291,7 +292,15 @@ class Settings extends React.Component {
 
 
                     <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
-                        <input type="submit" className="button" value={translate('save')} />
+                      {this.state.loading ? (
+                        <button type="submit" className="button" disabled>
+                          <LoadingIndicator type="circle" />
+                        </button>
+                      ) : (
+                        <button type="submit" className="button">
+                          {translate('save')}
+                        </button>
+                      )}
                     </p>
                 </form>
             </div>;
@@ -320,7 +329,15 @@ class Settings extends React.Component {
                     </label>
 
                     <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
-                        <input type="submit" className="button" value={translate('save')} />
+                      {this.state.loading ? (
+                        <button type="submit" className="button" disabled>
+                          <LoadingIndicator type="circle" />
+                        </button>
+                      ) : (
+                        <button type="submit" className="button">
+                          {translate('save')}
+                        </button>
+                      )}
                     </p>
                 </form>
                 {/* end of choose */}
@@ -354,7 +371,15 @@ class Settings extends React.Component {
                         </label>
 
                         <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
-                            <input type="submit" className="button" value={translate('save')} />
+                          {this.state.loading ? (
+                            <button type="submit" className="button" disabled>
+                              <LoadingIndicator type="circle" />
+                            </button>
+                          ) : (
+                            <button type="submit" className="button">
+                              {translate('save')}
+                            </button>
+                          )}
                         </p>
                     </form>
                 </div>;
@@ -387,7 +412,15 @@ class Settings extends React.Component {
                         </label>
 
                         <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
-                            <input type="submit" className="button" value={translate('save')} />
+                          {this.state.loading ? (
+                            <button type="submit" className="button" disabled>
+                              <LoadingIndicator type="circle" />
+                            </button>
+                          ) : (
+                            <button type="submit" className="button">
+                              {translate('save')}
+                            </button>
+                          )}
                         </p>
                     </form>
                 </div>;
@@ -410,7 +443,15 @@ class Settings extends React.Component {
                         </label>
 
                         <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
-                            <input type="submit" className="button" value={translate('save_avatar')} />
+                          {this.state.loading ? (
+                            <button type="submit" className="button" disabled>
+                              <LoadingIndicator type="circle" />
+                            </button>
+                          ) : (
+                            <button type="submit" className="button">
+                              {translate('save')}
+                            </button>
+                          )}
                         </p>
                     </form>
                 </div>;
@@ -434,7 +475,15 @@ class Settings extends React.Component {
                         </label>
 
                         <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
-                            <input type="submit" className="button" value={translate('save_avatar')} />
+                          {this.state.loading ? (
+                            <button type="submit" className="button" disabled>
+                              <LoadingIndicator type="circle" />
+                            </button>
+                          ) : (
+                            <button type="submit" className="button">
+                              {translate('save')}
+                            </button>
+                          )}
                         </p>
                     </form>
                 </div>;
