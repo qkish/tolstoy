@@ -224,7 +224,7 @@ class Settings extends React.Component {
       <div className="alert alert-success">{state.successMessage}</div> : null;
     
     // ------------------------
-    // Tabs -> routes and jsx
+    // Tabs -> routes and jsx--
     // !!! Вынести в компоненты
     // ________________
     // Base fileds tab
@@ -433,41 +433,39 @@ class Settings extends React.Component {
           
           {errorView}
           
-          {state.userImage ? <img src={_urls.proxyImage(state.userImage)}
-                                  alt={translate('user_avatar') + ' ' + props.account.name}/> : null}
+          {state.userImage ? <img src={_urls.proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name}/> : null}
           
           <form onSubmit={this.handleUserFieldsSubmit}>
             
-            <label>
-              {/*<span>{translate('add_image_url')}</span>*/}
-              <input
-                type="hidden" onChange={this.handleUserImageChange}
-                value={state.userImage}
-                disabled={!props.isOwnAccount || state.loading}
-                placeholder={translate('add_image_url')}
-              />
-            </label>
+            {/*<label>*/}
+              {/*/!*<span>{translate('add_image_url')}</span>*!/*/}
+              {/*<input*/}
+                {/*type="url" onChange={this.handleUserImageChange}*/}
+                {/*value={state.userImage}*/}
+                {/*disabled={!props.isOwnAccount || state.loading}*/}
+                {/*placeholder={translate('add_image_url')}*/}
+              {/*/>*/}
+            {/*</label>*/}
             
             <p
-              className="Settings__submit-wrap"
+              className='Settings__submit-wrap'
               style={{marginTop: 16.8}}
             >
               
-              
-              
               <input
-                type="submit"
-                className="button"
+                type='submit'
+                className='button'
                 value={translate('save_avatar')}
                 style={{marginRight: '12px'}}
+                onClick={this.handleUserFieldsSubmit}
               />
+              
               <Upload
                 component='label'
                 accept='image/*'
                 action='/api/v1/upload'
-                name='asdf'
                 data={{type: 'image'}}
-                className="ReplyEditorShort__buttons-add-image"
+                className='ReplyEditorShort__buttons-add-image'
                 onStart={file => {
                   const reader = new FileReader()
                   reader.onloadend = () => {
@@ -496,8 +494,9 @@ class Settings extends React.Component {
                     uploading: false
                   })
                 }}>
+                Загрузить изображение
               </Upload>
-              <span>Загрузить изображение</span>
+              {/*<span>Загрузить изображение</span>*/}
             </p>
             
           </form>
