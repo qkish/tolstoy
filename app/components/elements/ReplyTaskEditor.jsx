@@ -246,7 +246,13 @@ class ReplyTaskEditor extends React.Component {
                 if(program == '2') totalTags.push('bm-mzs17')
             }
 
-            totalTags.push('bm-ceh23')
+            //totalTags.push('bm-ceh23')
+
+            let indexTemp = totalTags.indexOf('bm-tasks');
+            if (indexTemp > -1) {
+                totalTags.splice(indexTemp, 1);
+            }
+
 
             this.setState({tagsInState: totalTags})
 
@@ -852,6 +858,12 @@ export default formId => reduxForm(
             let taskTag = originalPost.tag1;
 
             title = originalPost.title;
+
+
+            let bmTasksTag = taskTag.indexOf('bm-tasks');
+            if (bmTasksTag > -1) {
+                taskTag.splice(bmTasksTag, 1);
+            }
 
 
 
