@@ -111,8 +111,7 @@ class Rating extends Component {
 		
 		
 		let view
-		const {users, myTenCardUsers} = this.state
-		console.log(myTenCardUsers)
+		const {users} = this.state
 		
 		const userList = users ? (
 			<div className="Rating_wrapper">

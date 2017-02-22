@@ -60,7 +60,9 @@ export const CardList = ({data, className}) => {
 class CardMyTen extends Component {
 	constructor(props) {
 		super(props)
-		this.state = {}
+		this.state = {
+			users: []
+		}
 		this.getData = this.getData.bind(this)
 	}
 	
@@ -102,17 +104,21 @@ class CardMyTen extends Component {
 			],
 		}
 		const { props, state }  = this
+		
 		if (props.data) data = props.data
 		if (props.dataTitle) data.title = props.dataTitle
 		if (props.dataList) data.list = props.dataList
 		if (state.users) data.list = state.users
 		
-		return 	(
-			<section className={rootClass}>
-				<CardTitle data={data.title} />
-				<CardList data={data.list} />
-			</section>
-		)
+		if (state.users.length) {
+			return (
+				<section className={rootClass}>
+					<CardTitle data={data.title}/>
+					<CardList data={data.list}/>
+				</section>
+			)
+		}
+		return null
 	}
 }
 
