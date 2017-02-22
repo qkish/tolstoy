@@ -60,7 +60,7 @@ app.use(function *(next) {
 app.use(function *(next) {
     if (this.method === 'GET' && this.url == '/') {
         this.status = 302;
-        this.redirect('/hot');
+        this.redirect('/hot/bm-open');
     } else {
         yield next;
     }
