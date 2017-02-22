@@ -5,6 +5,8 @@ import { startsWith } from 'lodash'
 
 function* redirectWatch () {
     let cp = yield select(state => state.user.get('currentProgram'))
+    console.log('URL BEFORE')
+
     while (!cp) {
         yield take()
         cp = yield select(state => state.user.get('currentProgram'))
@@ -23,6 +25,8 @@ function* redirectWatch () {
     if (startsWith(currentRoute, '/active')) {
       url = '/active'
     }
+
+    console.log('URL ', url, currentRoute)
 
     console.log('CP: ', cp)
     if (!cp) browserHistory.push(`${url}/bm-open`)

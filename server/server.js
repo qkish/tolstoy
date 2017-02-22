@@ -21,6 +21,7 @@ import Grant from 'grant-koa';
 import cache from 'koa-redis-cache';
 import config from '../config';
 import {APP_NAME} from 'config/client_config'
+import { startsWith } from 'lodash'
 
 const grant = new Grant(config.grant);
 // import uploadImage from 'server/upload-image' //medium-editor
@@ -58,7 +59,7 @@ app.use(function *(next) {
 
 // redirect to "hot"
 app.use(function *(next) {
-    if (this.method === 'GET' && this.url == '/') {
+    if (this.method === 'GET' && (this.url == '/' || startsWith(this.url, '/?')))  {
         this.status = 302;
         this.redirect('/hot/bm-open');
     } else {
