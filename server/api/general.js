@@ -26,6 +26,8 @@ import fs from 'fs';
 import {flatten, map} from 'lodash';
 import FormData from 'form-data';
 
+import Cookies from 'js-cookie'
+
 const {signed_transaction} = ops;
 const print = getLogger('API - general').print
 
@@ -402,20 +404,20 @@ export default function useGeneralApi(app) {
       			getBMtoken = yield isUserAuthOnBM(email, hash, user_agent)
       			}
 			
-			//console.log('Program – BM User: ', getBMtoken)
+			console.log('Program – BM User: ', getBMtoken)
 
 			const getBMmeta = yield getBMUserMeta(getBMtoken);
 
 			
 			let bmID = getBMmeta.userId
-			//console.log('Program – BM ID: ', bmID)
+			console.log('Program – BM ID: ', bmID)
 
 			let ifCeh, ifMzs
 
 			ifCeh = yield getBMProgramById(85, bmID, getBMtoken)
 			ifMzs = yield getBMProgramById(87, bmID, getBMtoken)
 
-			//console.log('Program – BM Programs: ', ifCeh, ifMzs)
+			console.log('Program – BM Programs: ', ifCeh, ifMzs)
 
 			if (ifCeh.valid) getBMProg.current_program = '1'
 			if (ifMzs.valid) getBMProg.current_program = '2'
@@ -698,6 +700,10 @@ export default function useGeneralApi(app) {
 			this.session.name = null;
 			this.session.user = null;
 			this.session.uid = Math.random().toString(36).slice(2);
+
+			
+
+
 			this.body = JSON.stringify({
 				status: 'ok'
 			});
@@ -1571,6 +1577,10 @@ function* isUserAuthOnBM (user, hash, ua) {
  
 
   return resp.access_token
+}
+
+function* delete_cookie( name ) {
+  document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
 /**
