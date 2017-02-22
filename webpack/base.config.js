@@ -39,7 +39,8 @@ const plugincfgHardSource = { // https://goo.gl/XLfMMz
   },
 }
 const plugincfgCommonChunk = { // https://goo.gl/GjpAg5
-  names: ['react', 'manifest'],
+  names: ['vendor', 'manifest'],
+  filename: '[name].js',
   minChunks: function (module) {
     return module.context && module.context.indexOf('node_modules') !== -1;
   }
@@ -53,7 +54,7 @@ const plugincfgDll = {
 export default {
 	entry: {
 		app: ['babel-polyfill', './app/Main.js'],
-		react: [
+		vendor: [
 		  'react',
       'react-dom',
       'react-router',
@@ -63,10 +64,10 @@ export default {
 	},
 	output: {
 		path: outputPath,
-		filename: '[hash].[name].js',
-		chunkFilename: '[id].js',
+		filename: '[name].[hash].bundle.js',
+		chunkFilename: '[id].[hash].bundle.js',
 		publicPath: '/assets/',
-    library: '[name]_dll',
+    //library: '[name]_dll',
 	},
 	module: {
 		loaders: [
@@ -107,13 +108,14 @@ export default {
 	},
   cache: true,
 	plugins: [
-    new webpack.optimize.CommonsChunkPlugin(plugincfgCommonChunk),
+    new HappyPack(plugincfgHappyPack),
     new HardSourceWebpackPlugin(plugincfgHardSource),
+    //new webpack.optimize.CommonsChunkPlugin(plugincfgCommonChunk),
     //new webpack.DllPlugin(plugincfgDll),
     function(){this.plugin('done', writeStats)},
 		webpack_isomorphic_tools_plugin,
 		new ExtractTextPlugin('[name].css'),
-    new HappyPack(plugincfgHappyPack),
+    
   
   ],
 	resolve: {
