@@ -178,7 +178,10 @@ class Header extends React.Component {
 
         } else if (route.page === 'UserProfile') {
             user_name = route.params[0].slice(1);
-            page_title = user_name;
+            user_name = ''
+            page_title = 'Профиль' + user_name;
+
+
             // TODO
 
 
@@ -193,6 +196,9 @@ class Header extends React.Component {
             }
             if(route.params[1] === "followed") {
                 page_title = translate('people_followed_by_user_name', {user_name}) + ' ';
+            }
+            if(route.params[1] === "settings") {
+                page_title = translate('settings', {user_name}) + ' ';
             }
             if(route.params[1] === "curation-rewards") {
                 page_title = translate('curation_rewards_by_user_name', {user_name}) + ' ';
@@ -221,7 +227,7 @@ class Header extends React.Component {
 
          let current_program = this.props.current_program ? this.props.current_program : '';
 
-         let rootLink = '/'
+         let rootLink = '/bm-open'
 
        if(current_program == '1') {
         rootLink = '/bm-ceh23' 

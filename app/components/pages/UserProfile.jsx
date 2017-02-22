@@ -366,6 +366,9 @@ export default class UserProfile extends React.Component {
 
         let printLink = null;
         let section_title = fullName ? fullName : account.name + ' / ' + section;
+
+        //name = fullName;
+
         if( section === 'blog' ) {
            section_title = fullName + translate('users_blog', {name});
         } else if( section === 'transfers' ) {
