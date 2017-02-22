@@ -355,8 +355,17 @@ export default function useGeneralApi(app) {
 			// TODO: limit by 1/min/ip
 
 			//const getBMtoken = yield getBMAccessToken(email, password);
-console.log('GET BM SERV: ', email, password)
+
 			let getBMProg = ''
+			let whereClause = ''
+
+			let isEmail = '@'
+			if (email.indexOf(isEmail) > -1) {
+				whereClause = {email: esc(email)}
+			} else whereClause = {name: esc(email)}
+
+			console.log('WhereClause: ', whereClause)
+
 
 			// if (getBMtoken) {
 
@@ -370,20 +379,51 @@ console.log('GET BM SERV: ', email, password)
 					'couch_group'
 
 				],
-				where: {
-					email: esc(email)
-				}
+				where: whereClause
 
 			})
 
 			// }
 
-			if (!getBMProg.current_program) {
+			if (!getBMProg.current_program && email) {
+
+
+				let getBMtoken 
+
+			if (password) {getBMtoken = yield getBMAccessToken(email, password);
+				getBMtoken = getBMtoken.access_token}
+			
+			if (email && !password)  {
+
+				//const user = decodeURIComponent(this.cookies.get('molodost_user'))
+    			const hash = this.cookies.get('molodost_hash')
+    			const user_agent = this.headers['user-agent']
+   	 
+      			getBMtoken = yield isUserAuthOnBM(email, hash, user_agent)
+      			}
+			
+			//console.log('Program – BM User: ', getBMtoken)
+
+			const getBMmeta = yield getBMUserMeta(getBMtoken);
+
+			
+			let bmID = getBMmeta.userId
+			//console.log('Program – BM ID: ', bmID)
+
+			let ifCeh, ifMzs
+
+			ifCeh = yield getBMProgramById(85, bmID, getBMtoken)
+			ifMzs = yield getBMProgramById(87, bmID, getBMtoken)
+
+			//console.log('Program – BM Programs: ', ifCeh, ifMzs)
+
+			if (ifCeh.valid) getBMProg.current_program = '1'
+			if (ifMzs.valid) getBMProg.current_program = '2'
 
 				
 			}
 
-			console.log('A BMProgram = ', getBMProg)
+		
 
 			this.body = JSON.stringify({
 				status: 'ok',
@@ -1423,6 +1463,16 @@ function* getBMAccessTokenCredentialsOnly() {
 
 
 		})
+	}).then(res => res.json())
+}
+
+function* getBMProgramById(entry_set_id, user_id, access_token) {
+	return fetch('http://api.molodost.bz/api/v3/user/entry-set/has-access/?entry_set_id=' + entry_set_id + '&user_id=' + user_id, {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer ' + access_token
+		}
 	}).then(res => res.json())
 }
 

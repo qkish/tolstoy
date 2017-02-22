@@ -83,7 +83,7 @@ class ReplyEditorShort extends React.Component {
         submitting: React.PropTypes.bool.isRequired,
         invalid: React.PropTypes.bool.isRequired,
 
-        current_program: React.PropTypes.object,
+       // current_program: React.PropTypes.string,
 
 
 

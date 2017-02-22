@@ -110,6 +110,8 @@ class Header extends React.Component {
                     topic_original_link = (route.params[1])
 
                     if (route.params[1] === "bm-open") bmOpen = 'active_tab';
+                    if (route.params[1] === "bm-ceh23") bmOpen = 'active_tab';
+                    if (route.params[1] === "bm-mzs17") bmOpen = 'active_tab';
 
 
 
@@ -217,7 +219,18 @@ class Header extends React.Component {
 
         if (process.env.BROWSER && route.page !== 'Post') document.title = page_title + ' — ' + APP_NAME;
 
-        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order + '/bm-open' : '/hot/bm-open';
+         let current_program = this.props.current_program ? this.props.current_program : '';
+
+         let rootLink = '/'
+
+       if(current_program == '1') {
+        rootLink = '/bm-ceh23' 
+       } else if (current_program == '2') {
+        rootLink = '/bm-mzs17'
+       }
+
+
+        const logo_link = route.params && route.params.length > 1 && this.last_sort_order ? '/' + this.last_sort_order + rootLink : '/hot' + rootLink;
         let topic_link = topic ? <Link to={`/${this.last_sort_order || 'hot'}/${topic_original_link}`}>{detransliterate(topic)}</Link> : null;
 
         const sort_orders = [
@@ -266,7 +279,7 @@ class Header extends React.Component {
         let hideOnMobile = current_account_name ? '' : ' Header__mobile-hide';
 
 
-       let current_program = this.props.current_program ? this.props.current_program : '';
+      
        
 
        let Task
@@ -296,7 +309,7 @@ class Header extends React.Component {
                                     </Link>
                                 </li>
                                 <li className={'Header__toplinks ' + bmOpen + hideOnMobile}>
-                                    <Link to='/hot/bm-open'>Отчеты</Link>
+                                    <Link to={'/hot' + rootLink}>Отчеты</Link>
                                 </li>
                                 {TasksTab}
                                 <li className={'Header__toplinks ' + bmRating + hideOnMobile}>

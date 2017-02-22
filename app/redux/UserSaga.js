@@ -210,6 +210,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
       username = usernameFromCookies
     }
 
+    console.log('USERNAME AFTER COOKIE', username, password)
+
     // no saved password
     if (!username && !password) {
         const offchain_account = yield select(state => state.offchain.get('account'))
@@ -235,7 +237,6 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
 
 
-whatBMProgram
     let bmProgram = yield whatBMProgram(username, password)
     console.log('bm program', bmProgram)
 
@@ -353,7 +354,7 @@ whatBMProgram
     }
 
 
-    console.log('Username pAsss: ', username, password)
+ 
     //password = resp.private_key
 
 
@@ -361,7 +362,7 @@ whatBMProgram
 
     const account = yield call(getAccount, username)
 
-     console.log('ACCOUNT: ', account, username)
+  
 
     //if (!account) {
     //   yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
@@ -465,23 +466,29 @@ whatBMProgram
 
     // If user is signing operation by operaion and has no saved login, don't save to RAM
     if(!operationType || saveLogin) {
+      
         // Keep the posting key in RAM but only when not signing an operation.
         // No operation or the user has checked: Keep me logged in...
         yield put(user.actions.setUser({username, private_keys, login_owner_pubkey, vesting_shares: account.get('vesting_shares')}))
     } else {
         yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares')}))
+    
     }
 
 
 
-    if (!autopost && saveLogin)
+    if ((!autopost && saveLogin) || usernameFromCookies) {
         yield put(user.actions.saveLogin());
+      
+    }
 
     //serverApiLogin(username);
     if (afterLoginRedirectToAccount) browserHistory.push('/@' + username);
 }
 
 function* saveLogin_localStorage() {
+
+   
     if (!process.env.BROWSER) {
         console.error('Non-browser environment, skipping localstorage')
         return
@@ -492,6 +499,8 @@ function* saveLogin_localStorage() {
         state.user.getIn(['current', 'private_keys']),
         state.user.getIn(['current', 'login_owner_pubkey']),
     ]))
+
+   
     if (!username) {
         console.error('Not logged in')
         return
@@ -525,6 +534,8 @@ function* saveLogin_localStorage() {
     const memoWif = memoKey && memoKey.toWif()
     const data = new Buffer(`${username}\t${posting_private.toWif()}\t${memoWif || ''}\t${login_owner_pubkey || ''}`).toString('hex')
     // autopost is a auto login for a low security key (like the posting key)
+
+   
     localStorage.setItem('autopost2', data)
 }
 

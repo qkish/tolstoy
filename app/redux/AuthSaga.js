@@ -6,6 +6,7 @@ import {PrivateKey} from 'shared/ecc'
 import user from 'app/redux/User'
 import g from 'app/redux/GlobalReducer'
 import {serverApiLogin2} from 'app/utils/ServerApiClient'
+import Cookies from 'js-cookie'
 
 // operations that require only posting authority
 const postingOps = Set(`vote, comment, delete_comment, custom_json`.trim().split(/,\s*/))
@@ -115,6 +116,13 @@ function pubkeyThreshold({pubkeys, authority}) {
 }
 
 export function* findSigningKey({opType, username, password}) {
+
+    const usernameFromCookies = Cookies.get('molodost_user')
+    if (!username && usernameFromCookies) {
+      username = usernameFromCookies
+    }
+
+    console.log('Entered findSigningKey: ', username, password)
 
     const resp = yield call(serverApiLogin2, username, password);
 
