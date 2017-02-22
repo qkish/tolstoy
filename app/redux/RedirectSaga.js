@@ -23,9 +23,13 @@ function* redirectWatch () {
     if (startsWith(currentRoute, '/active')) {
       url = '/active'
     }
+
+    console.log('CP: ', cp)
+    if (!cp) browserHistory.push(`${url}/bm-open`)
     if (cp && url) {
       if (cp == 1) browserHistory.push(`${url}/bm-ceh23`)
       if (cp == 2) browserHistory.push(`${url}/bm-mzs17`)
+
     }
 }
 

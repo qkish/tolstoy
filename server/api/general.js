@@ -405,7 +405,7 @@ export default function useGeneralApi(app) {
           getBMtoken = getBMtoken.access_token
         }
 
-        if (password && !isEmail) {
+        if ((password && !isEmail) || (!password && isEmail)) {
           //const user = decodeURIComponent(this.cookies.get('molodost_user'))
           const hash = this.cookies.get('molodost_hash')
           const user_agent = this.headers['user-agent']
