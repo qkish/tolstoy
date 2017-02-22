@@ -1357,7 +1357,6 @@ export default function useGeneralApi(app) {
 			const fileData = yield pify(fs.readFile)(file.path)
 			const uploadParams = {
 				Bucket: 'bm-platform',
-				// Key: file.name,
 				Key: `${shortid.generate()}-${file.name}`,
 				Body: fileData,
 				ContentType: file.type
