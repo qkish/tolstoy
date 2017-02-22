@@ -361,9 +361,10 @@ export default function useGeneralApi(app) {
 			let getBMProg = ''
 			let whereClause = ''
 
-			let isEmail = '@'
-			if (email.indexOf(isEmail) > -1) {
+			let isEmail = false
+			if (email.indexOf('@') > -1) {
 				whereClause = {email: esc(email)}
+        isEmail = true
 			} else whereClause = {name: esc(email)}
 
 			console.log('WhereClause: ', whereClause)
@@ -378,54 +379,54 @@ export default function useGeneralApi(app) {
 					'ten',
 					'hundred',
 					'polk',
-					'couch_group'
-
+					'couch_group',
+          'email'
 				],
 				where: whereClause
 
 			})
-
 			// }
 
-			if (!getBMProg.current_program && email) {
+      if (!getBMProg.current_program && email) {
+        let getBMtoken
+        let user_email
 
+        if (email.indexOf('@') === -1) {
+          user_email = getBMProg.email
+        } else {
+          user_email = email
+        }
 
-				let getBMtoken 
+        console.log('user_email', user_email)
+        console.log('password', password)
 
-			if (password) {getBMtoken = yield getBMAccessToken(email, password);
-				getBMtoken = getBMtoken.access_token}
-			
-			if (email && !password)  {
+        if (password && isEmail) {
+          getBMtoken = yield getBMAccessToken(user_email, password);
+          getBMtoken = getBMtoken.access_token
+        }
 
-				//const user = decodeURIComponent(this.cookies.get('molodost_user'))
-    			const hash = this.cookies.get('molodost_hash')
-    			const user_agent = this.headers['user-agent']
-   	 
-      			getBMtoken = yield isUserAuthOnBM(email, hash, user_agent)
-      			}
-			
-			console.log('Program – BM User: ', getBMtoken)
+        if (password && !isEmail) {
+          //const user = decodeURIComponent(this.cookies.get('molodost_user'))
+          const hash = this.cookies.get('molodost_hash')
+          const user_agent = this.headers['user-agent']
+          getBMtoken = yield isUserAuthOnBM(user_email, hash, user_agent)
+          console.log('get bm token', getBMtoken)
+        }
 
-			const getBMmeta = yield getBMUserMeta(getBMtoken);
+        console.log('Program – BM User: ', getBMtoken)
+        const getBMmeta = yield getBMUserMeta(getBMtoken);
 
-			
-			let bmID = getBMmeta.userId
-			console.log('Program – BM ID: ', bmID)
+        let bmID = getBMmeta.userId
+        console.log('Program – BM ID: ', bmID)
 
-			let ifCeh, ifMzs
+        let ifCeh, ifMzs
+        ifCeh = yield getBMProgramById(85, bmID, getBMtoken)
+        ifMzs = yield getBMProgramById(87, bmID, getBMtoken)
+        console.log('Program – BM Programs: ', ifCeh, ifMzs)
 
-			ifCeh = yield getBMProgramById(85, bmID, getBMtoken)
-			ifMzs = yield getBMProgramById(87, bmID, getBMtoken)
-
-			console.log('Program – BM Programs: ', ifCeh, ifMzs)
-
-			if (ifCeh.valid) getBMProg.current_program = '1'
-			if (ifMzs.valid) getBMProg.current_program = '2'
-
-				
-			}
-
-		
+        if (ifCeh.valid) getBMProg.current_program = '1'
+        if (ifMzs.valid) getBMProg.current_program = '2'
+      }
 
 			this.body = JSON.stringify({
 				status: 'ok',
@@ -701,7 +702,7 @@ export default function useGeneralApi(app) {
 			this.session.user = null;
 			this.session.uid = Math.random().toString(36).slice(2);
 
-			
+
 
 
 			this.body = JSON.stringify({
@@ -843,9 +844,9 @@ export default function useGeneralApi(app) {
 			 } */
 
 
-			let getBMtoken 
+			let getBMtoken
 
-			
+
 
 
 			if (account.bmpassword) {getBMtoken = yield getBMAccessToken(account.email, account.bmpassword);
@@ -855,7 +856,7 @@ export default function useGeneralApi(app) {
 				 const user = decodeURIComponent(this.cookies.get('molodost_user'))
     		const hash = this.cookies.get('molodost_hash')
     		const user_agent = this.headers['user-agent']
-   	 
+
       		getBMtoken = yield isUserAuthOnBM(user, hash, user_agent)
       		}
 
@@ -1574,7 +1575,7 @@ function* isUserAuthOnBM (user, hash, ua) {
 		})
   }).then(res => res.json())
 
- 
+
 
   return resp.access_token
 }
