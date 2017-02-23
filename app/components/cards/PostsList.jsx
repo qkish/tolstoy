@@ -293,10 +293,12 @@ export default connect(
             // example of ignored tags
             const ignored_tags = ['bm-tasks']
             const postMetadata = JSON.parse(content.get('json_metadata') || '{}')
-            const post_has_ignored_tags = Boolean(intersection(postMetadata.tags, ignored_tags).length)
+            const postTags = postMetadata.tags || []
+                  postTags.push(content.get('category'))
+            const post_has_ignored_tags = Boolean(intersection(postTags, ignored_tags).length)
 
             const key = ['follow', 'get_following', username, 'result', content.get('author')]
-            const ignore = username ? state.global.getIn(key, List()).contains('ignore') || post_has_ignored_tags : false
+            const ignore = username ? state.global.getIn(key, List()).contains('ignore') || post_has_ignored_tags : post_has_ignored_tags
             const {hide, netVoteSign, authorRepLog10} = content.get('stats').toJS()
             if(!(ignore || hide) || showSpam) // rephide
                 comments.push({item, ignore, netVoteSign, authorRepLog10})

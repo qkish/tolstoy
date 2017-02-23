@@ -9,6 +9,19 @@ import { Link } from 'react-router';
 
 const {oneOfType, string, object} = PropTypes
 
+function moneyPrettify(text) {
+	let moneyInRating
+	if (text) {
+		
+		moneyInRating = String(text);
+		moneyInRating = moneyInRating.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
+		
+		
+	} else moneyInRating = '0'
+	
+	return moneyInRating + ' ₽'
+}
+
 class User extends Component {
 	// you can pass either user object, or username string
 
@@ -41,7 +54,8 @@ class User extends Component {
 
 		const {props, state} = this
 		let {dispatch, ...rest} = props
-        const account = state.account || props.account
+		const account = state.account || props.account
+		const money = state.money || props.money || false
 
         // get account from state if proper user object was not provided
         if (typeof account != 'object') {
@@ -114,6 +128,7 @@ class User extends Component {
 
 
              <div className="PostSummary__niche">{userOccupation}</div>
+							{money ? <div className="PostSummary__niche">{moneyPrettify(money)}</div> : null}
              </div>
 
 
