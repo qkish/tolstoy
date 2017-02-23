@@ -138,7 +138,7 @@ class PostSummary extends React.Component {
             filename = String(filename);
 
             
-            let fileicon
+            let fileicon = 'PostSummary__file-image'
             var fileExt = filename.substring(filename.lastIndexOf(".")+1, filename.length).toLowerCase();
 
             if (fileExt == 'doc' || fileExt == 'docx') { fileicon = 'PostSummary__file-word '}
