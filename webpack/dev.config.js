@@ -28,14 +28,18 @@ export default {
     },
     webpack: {
         ...baseConfig,
-        devtool: 'eval',
+        devtool: 'cheap-module-eval-source-map',
         entry: {
             app: [
                 './app/Main.js',
                 //`webpack-hot-middleware/client?path=//${HOST}:${PORT}/__webpack_hmr`,
             ]
         },
-        output: {...baseConfig.output, publicPath: PUBLIC_PATH},
+        output: {
+	        ...baseConfig.output,
+	        publicPath: PUBLIC_PATH,
+	        devtoolModuleFilenameTemplate: 'webpack:///[absolute-resource-path]',
+        },
         module: {
             ...baseConfig.module,
             loaders: [
