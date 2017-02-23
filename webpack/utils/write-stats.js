@@ -42,7 +42,7 @@ export default function (stats) {
 
     const filename = process.env.NODE_ENV === 'production' ? 'webpack-stats-prod.json' : 'webpack-stats-dev.json'
 		const filepath = path.resolve(__dirname, '../../tmp/')
-		mkdirp(filepath, err => {
+		mkdir(filepath, err => {
 			err
 				? console.error(err)
 				: fs.writeFileSync(path.resolve(filepath, filename), JSON.stringify(content, null, 4))
