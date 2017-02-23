@@ -13,7 +13,14 @@ class Choose extends Component {
 	}
 
 	componentDidMount () {
-		getUsersByCategory('all').then(users => this.setState({ users }))
+		let orderBy
+		if (this.props.params.group === 'hundreds') {
+			orderBy = 'hundred_leader'
+		}
+		if (this.props.params.group === 'tens') {
+			orderBy = 'ten_leader'
+		}
+		getUsersByCategory('all', 0, 50, orderBy).then(users => this.setState({ users }))
 	}
 
 	handleTenLeaderChange ({ user, value }) {
