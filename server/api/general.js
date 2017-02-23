@@ -1,11 +1,10 @@
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
 import fetch from 'node-fetch';
-import models from 'db/models';
+import models, {esc, escAttrs, Sequelize} from 'db/models';
 import findUser from 'db/utils/find_user';
 import config from 'config';
 import recordWebEvent from 'server/record_web_event';
-import {esc, escAttrs} from 'db/models';
 import {
 	emailRegex,
 	getRemoteIp,
@@ -1089,17 +1088,12 @@ export default function useGeneralApi(app) {
 		}
 
 		if (search) {
-			where = {
-				$or: flatten(map(['first_name', 'last_name', 'name'], field => {
-					return map(search.split(' '), q => {
-						return {
-							[field]: {
-								$like: `%${q}%`
-							}
-						}
-					})
-				}))
-			}
+			where = Sequelize.where(
+				Sequelize.fn('concat', Sequelize.col('first_name'), ' ', Sequelize.col('last_name')),
+				{
+					$like: `%${search}%`
+				}
+			)
 			_limit = null
 			_offset = 0
 		}
