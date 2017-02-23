@@ -26,9 +26,7 @@ function* redirectWatch () {
       url = '/active'
     }
 
-    console.log('URL ', url, currentRoute)
-
-    console.log('CP: ', cp)
+   
     if (!cp) browserHistory.push(`${url}/bm-open`)
     if (cp && url) {
       if (cp == 1) browserHistory.push(`${url}/bm-ceh23`)

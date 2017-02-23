@@ -154,7 +154,7 @@ class PostSummary extends React.Component {
 
             exactName = exactName.replace(/[^0-9A-Za-zА-Яа-яЁё _.-]/g, "")
 
-            fileLink = <a href={filename} className={'PostSummary__file ' + fileicon} >{exactName}</a>
+            fileLink = <a href={filename} className={'PostSummary__file ' + fileicon} target="_blank">{exactName}</a>
 
 
 
