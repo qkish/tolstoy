@@ -1043,7 +1043,7 @@ export default function useGeneralApi(app) {
 		let type = null
 		let _offset = Number(offset) || 0
 		let _limit = Number(limit) || 50
-		let _order = this.query.order
+		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
 		if (category) {
 			if (category === 'polki') {
@@ -1110,7 +1110,11 @@ export default function useGeneralApi(app) {
 		category !== 'all'
 			? order = [groupsInclude, 'money', 'DESC']
 			: order = ['money_total', 'DESC']
-		if (_order) order = [_order, 'DESC']
+
+		if (_order) {
+			order = [_order, 'DESC']
+		}
+
 		const users = yield models.User.findAll({
 			attributes: [
 				'id',
