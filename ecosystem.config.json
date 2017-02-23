@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "name": "steemit",
+      "script": "./start.js",
+      "exec_mode": "cluster",
+      "instances": 2,
+      "env": {
+        "NODE_ENV": "development",
+        "PORT": 3000
+      }
+    }
+  ]
+}
