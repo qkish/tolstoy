@@ -248,6 +248,7 @@ opacity: 0.4;
   height: 150px;
   background: #fff;
   padding: 13px 10px 10px 15px;
+  border-radius: 3px 3px 0 0;
 }
  > textarea.collapsed-area {
   resize: none;
@@ -255,7 +256,9 @@ opacity: 0.4;
   background: url('../../assets/icons/write-ico.png') 15px 15px no-repeat #fff;
     background-size: 17px 17px;
     
+    
     padding: 13px 10px 10px 45px;
+    border-radius: 3px 3px 3px 3px;
 }
 
 }
