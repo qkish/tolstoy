@@ -238,10 +238,6 @@ class Admin extends Component {
             )
         }
 
-        if (this.state.isSearch) {
-            view = userList
-        }
-
         const submenu = (
           <div className="Admin__submenu">
             <input

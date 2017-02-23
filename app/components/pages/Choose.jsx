@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getUsersByCategory } from 'app/utils/ServerApiClient'
+import { getUsersByCategory, searchUsers } from 'app/utils/ServerApiClient'
 import UserEdit from 'app/components/elements/UserEdit'
 
 class Choose extends Component {
@@ -24,13 +24,28 @@ class Choose extends Component {
 		this.props.changeHundredLeader(user.id, value)
 	}
 
+	search (text) {
+		searchUsers(text).then(users => this.setState({isSearch: true, users}))
+	}
+
 	render () {
 		let view
+
+		const searchView = (
+			<div className="Admin__submenu">
+				<input
+					type='text'
+					placeholder='Поиск по имени'
+					onKeyPress={e => e.key === 'Enter' ? this.search(e.target.value) : null}
+					className='Rating__search' />
+			</div>
+		)
 
 		if (this.props.params.group === 'hundreds') {
 			view = (
 				<div>
-					Выбери сотников
+					<h3>Выбери сотников</h3>
+					{searchView}
 					<div className="Admin__wrapper">
 						{this.state.users && this.state.users.map(user => (
 							<div className="Rating__row" key={user.id}>
@@ -53,7 +68,8 @@ class Choose extends Component {
 		if (this.props.params.group === 'tens') {
 			view = (
 				<div>
-					Выбери десятников
+					<h3>Выбери десятников</h3>
+					{searchView}
 					<div className="Admin__wrapper">
 						{this.state.users && this.state.users.map(user => (
 							<div className="Rating__row" key={user.id}>
