@@ -1443,6 +1443,89 @@ export default function useGeneralApi(app) {
 			this.status = 500
 		}
 	})
+
+	router.post('/users/set_hundred_leader', koaBody, function*() {
+		if (rateLimitReq(this, this.req)) return
+		const data = this.request.body
+		const {csrf, userId, value} = typeof(data) === 'string' ? JSON.parse(data) : data
+		console.log(`-- /users/set_hundred_leader -->`, this.session.uid, this.session.user)
+
+		try {
+			if (!this.session.user) {
+				throw new Error('Access denied')
+			}
+
+			const u = yield models.User.findOne({
+				attributes: ['id', 'polk_leader'],
+				where: {
+					id: this.session.user
+				}
+			})
+
+			if (!u.polk_leader) {
+				throw new Error('Access denied')
+			}
+
+			yield models.User.update({
+				hundred_leader: value,
+				polk: u.id
+			}, {
+				where: {id: userId}
+			})
+
+			this.body = JSON.stringify({
+				status: 'ok'
+			})
+		} catch (error) {
+			console.error(`Error in /users/set_hundred_leader api call`, this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
+
+	router.post('/users/set_ten_leader', koaBody, function*() {
+		if (rateLimitReq(this, this.req)) return
+		const data = this.request.body
+		const {csrf, userId, value} = typeof(data) === 'string' ? JSON.parse(data) : data
+		console.log(`-- /users/set_ten_leader -->`, this.session.uid, this.session.user)
+
+		try {
+			if (!this.session.user) {
+				throw new Error('Access denied')
+			}
+
+			const u = yield models.User.findOne({
+				attributes: ['id', 'hundred_leader', 'polk'],
+				where: {
+					id: this.session.user
+				}
+			})
+
+			if (!u.hundred_leader) {
+				throw new Error('Access denied')
+			}
+
+			yield models.User.update({
+				ten_leader: value,
+				polk: u.polk,
+				hundred: u.id
+			}, {
+				where: {id: userId}
+			})
+
+			this.body = JSON.stringify({
+				status: 'ok'
+			})
+		} catch (error) {
+			console.error(`Error in /users/set_ten_leader api call`, this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
 }
 
 

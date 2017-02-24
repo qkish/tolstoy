@@ -221,3 +221,21 @@ export function updateUser (userId, payload) {
         body: JSON.stringify({ csrf: $STM_csrf, payload })
     })
 }
+
+export function setTenLeader (userId, value) {
+  if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+  return fetch('/api/v1/users/set_ten_leader', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({ csrf: $STM_csrf, userId, value })
+  })
+}
+
+export function setHundredLeader (userId, value) {
+  if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+  return fetch('/api/v1/users/set_hundred_leader', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({ csrf: $STM_csrf, userId, value })
+  })
+}

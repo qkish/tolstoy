@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getUsersByCategory, searchUsers } from 'app/utils/ServerApiClient'
+import {
+	getUsersByCategory,
+	searchUsers,
+	setHundredLeader,
+	setTenLeader
+} from 'app/utils/ServerApiClient'
 import UserEdit from 'app/components/elements/UserEdit'
 import { UserAuthWrapper } from 'redux-auth-wrapper'
 
@@ -25,11 +30,13 @@ class Choose extends Component {
 	}
 
 	handleTenLeaderChange ({ user, value }) {
-		this.props.changeTenLeader(user.id, value)
+		console.log(`set ${user.id} ten_leader to ${value}`)
+		setTenLeader(user.id, value)
 	}
 
 	handleHundredLeaderChange ({ user, value }) {
-		this.props.changeHundredLeader(user.id, value)
+		console.log(`set ${user.id} hundred_leader to ${value}`)
+		setHundredLeader(user.id, value)
 	}
 
 	search (text) {
@@ -108,23 +115,6 @@ class Choose extends Component {
 	}
 }
 
-const mapDispatchToProps = dispatch => ({
-	changeHundredLeader: (userId, value) => dispatch({
-		type: 'admin/HUNDRED_LEADER_CHANGE',
-		payload: {
-			userId,
-			value
-		}
-	}),
-	changeTenLeader: (userId, value) => dispatch({
-		type: 'admin/TEN_LEADER_CHANGE',
-		payload: {
-			userId,
-			value
-		}
-	})
-})
-
 const UserIsAuthenticated = UserAuthWrapper({
 	authSelector: (state, ownProps) => {
 		if (ownProps.params.group === 'hundreds') {
@@ -144,5 +134,5 @@ const UserIsAuthenticated = UserAuthWrapper({
 
 module.exports = {
 	path: 'choose/:group',
-	component: UserIsAuthenticated(connect(null, mapDispatchToProps)(Choose))
+	component: UserIsAuthenticated(Choose)
 }
