@@ -1,6 +1,6 @@
 import { takeEvery } from 'redux-saga'
 import { call, put, select } from 'redux-saga/effects'
-import { updateUser } from 'app/utils/ServerApiClient'
+import { updateUser, updateUserTen } from 'app/utils/ServerApiClient'
 
 // WTF? WHY IT DOESN`T WORK?
 // export default function* adminSaga () {
@@ -24,11 +24,16 @@ export default [
     hundredLeaderChangeWatch,
     polkLeaderChangeWatch,
     couchChangeWatch,
-    volunteerChangeWatch
+    volunteerChangeWatch,
+    tenUserChangeWatch
 ]
 
 function* tenChangeWatch () {
     yield* takeEvery('admin/TEN_CHANGE', tenChange)
+}
+
+function* tenUserChangeWatch () {
+    yield* takeEvery('admin/TEN_USER_CHANGE', tenUserChange)
 }
 
 function* hundredChangeWatch () {
@@ -68,6 +73,13 @@ function* tenChange (action) {
         ten: action.payload.tenId
     }
     yield updateUser(action.payload.userId, payload)
+}
+
+function* tenUserChange (action) {
+    const payload = {
+        ten: action.payload.tenId
+    }
+    yield updateUserTen(action.payload.userId, payload)
 }
 
 function* hundredChange (action) {

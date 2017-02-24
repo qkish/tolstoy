@@ -26,7 +26,7 @@ class Choose extends Component {
 	}
 
 	componentDidMount () {
-		getUsersByCategory('all', this.getOffset(), this.state.perPage, this.getOrderBy())
+		getUsersByCategory('ten_leaders', this.getOffset(), this.state.perPage, this.getOrderBy())
 			.then(users => this.setState({ users }))
 		getUsersCount('all').then(count => this.setState({count}))
 	}
