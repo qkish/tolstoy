@@ -99,6 +99,7 @@ class PostSummary extends React.Component {
         
 
         let desc = p.desc
+        let desc_complete = p.desc_complete
         if(p.image_link)// image link is already shown in the preview
             desc = desc.replace(p.image_link, '')
         let title_link_url;
@@ -116,8 +117,16 @@ class PostSummary extends React.Component {
            comments_link = p.link + '#comments';
         }
 
-        let content_body = <div className="PostSummary__body entry-content">
-            <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{desc}</a>
+        let content_body = <div
+	        className={[
+	        	'PostSummary__body',
+            'entry-content',
+		        desc_complete === false ? 'PostSummary__body-more' : null].join(' ')}
+	            >
+            <a
+	            href={title_link_url}
+	            onClick={e => navigate(e, onClick, post, title_link_url)}
+            >{desc}</a>
         </div>;
         let content_title = <h1 className="entry-title">
             <a href={title_link_url} onClick={e => navigate(e, onClick, post, title_link_url)}>{title_text}</a>
@@ -130,7 +139,20 @@ class PostSummary extends React.Component {
             money = String(money);
             money = money.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
          }
-
+	
+	    let thumb = null;
+	    if(pictures && p.image_link) {
+		    const prox = $STM_Config.img_proxy_prefix
+		    const size = (thumbSize == 'mobile') ? '640x480' : '556x356'
+		    const url = (prox ? prox + size + '/' : '') + p.image_link
+		    if(thumbSize == 'mobile') {
+			    thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
+		    } else {
+			    thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image"><img src={url} /></a>
+		    }
+	    }
+	    const commentClasses = []
+	    if(gray || ignore) commentClasses.push('downvoted') // rephide
          
         let fileLink
          if (p.json_metadata.fileAttached) {
@@ -161,7 +183,7 @@ class PostSummary extends React.Component {
 
          }
 
-         let firstTag 
+         let firstTag
          if(p.json_metadata && p.json_metadata.tags && p.json_metadata.tags[0]) firstTag = p.json_metadata.tags[0];
 
          let isTask = false
@@ -195,19 +217,7 @@ class PostSummary extends React.Component {
            }
         }
 
-        let thumb = null;
-        if(pictures && p.image_link) {
-          const prox = $STM_Config.img_proxy_prefix
-          const size = (thumbSize == 'mobile') ? '640x480' : '556x356'
-          const url = (prox ? prox + size + '/' : '') + p.image_link
-          if(thumbSize == 'mobile') {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image-mobile"><img src={url} /></a>
-          } else {
-            thumb = <a href={p.link} onClick={e => navigate(e, onClick, post, p.link)} className="PostSummary__image"><img src={url} /></a>
-          }
-        }
-        const commentClasses = []
-        if(gray || ignore) commentClasses.push('downvoted') // rephide
+        
 
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')}
@@ -223,7 +233,7 @@ class PostSummary extends React.Component {
                     <div className="float-right"><Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} flag /></div>
                 </div>
                 {reblogged_by}
-                 {isTask && p.category == 'bm-open' ? 
+                 {isTask && p.category == 'bm-open' ?
                     <div className="PostSummary__header-otvet">
                     <div className="PostSummary__header-otvettitle">Выполнение задания</div>
                         {content_title}
