@@ -264,7 +264,7 @@ class Rating extends Component {
 					}, {
 						active: this.props.params.category === 'couches',
 						link: '/rating/couches',
-						value: 'Тренера'
+						value: 'Тренеры'
 					}]}/>
 					{isAll && submenu}
 					{view}

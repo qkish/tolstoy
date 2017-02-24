@@ -543,7 +543,7 @@ module.exports = {
             },
             requestData: (args) => dispatch({type: 'REQUEST_DATA', payload: args}),
             changeTen: (userId, tenId) => dispatch({
-            type: 'admin/TEN_CHANGE',
+            type: 'admin/TEN_USER_CHANGE',
             payload: {
                 userId,
                 tenId

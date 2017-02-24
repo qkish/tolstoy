@@ -1462,6 +1462,41 @@ export default function useGeneralApi(app) {
 		}
 	})
 
+	router.put('/users/ten_choosing/:id', koaBody, function*() {
+		if (rateLimitReq(this, this.req)) return
+		const data = this.request.body
+		const userId = this.params.id
+		const {csrf, payload} = typeof(data) === 'string' ? JSON.parse(data) : data
+		console.log(`-- /users/ten_choosing:${userId} -->`, this.session.uid, this.session.user)
+
+		try {
+			if (!this.session.user) {
+				throw new Error('Access denied')
+			}
+
+			const u = yield models.User.findOne({
+				attributes: ['hundred', 'polk'],
+				where: {
+					id: payload.ten
+				}
+			})
+
+			yield models.User.update({ten: payload.ten, polk: u.polk, hundred: u.hundred}, {
+				where: {id: userId}
+			})
+			this.body = JSON.stringify({
+				status: 'ok'
+			})
+		} catch (error) {
+			console.error(`Error in /users/ten_choosing:${userId} api call`, this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
+
+
 	router.post('/users/set_hundred_leader', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return
 		const data = this.request.body

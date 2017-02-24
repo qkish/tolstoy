@@ -224,6 +224,15 @@ export function updateUser (userId, payload) {
     })
 }
 
+export function updateUserTen (userId, payload) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/users/ten_choosing/${userId}`, {
+        method: 'PUT',
+        credentials: 'same-origin',
+        body: JSON.stringify({ csrf: $STM_csrf, payload })
+    })
+}
+
 export function setTenLeader (userId, value) {
   if (!process.env.BROWSER || window.$STM_ServerBusy) return;
   return fetch('/api/v1/users/set_ten_leader', {
