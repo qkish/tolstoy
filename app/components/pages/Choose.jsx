@@ -5,7 +5,8 @@ import {
 	searchUsers,
 	setHundredLeader,
 	setTenLeader,
-	getUsersCount
+	getUsersCount,
+	chooseSearch
 } from 'app/utils/ServerApiClient'
 import Pagination from 'react-paginate'
 import UserEdit from 'app/components/elements/UserEdit'
@@ -26,9 +27,9 @@ class Choose extends Component {
 	}
 
 	componentDidMount () {
-		getUsersByCategory('all', this.getOffset(), this.state.perPage, this.getOrderBy())
+		getUsersByCategory(this.getOrderBy(), this.getOffset(), this.state.perPage, this.getOrderBy())
 			.then(users => this.setState({ users }))
-		getUsersCount('all').then(count => this.setState({count}))
+		getUsersCount(this.getOrderBy()).then(count => this.setState({count}))
 	}
 
 	getOffset () {
@@ -46,17 +47,22 @@ class Choose extends Component {
 	}
 
 	handleTenLeaderChange ({ user, value }) {
-		console.log(`set ${user.id} ten_leader to ${value}`)
 		setTenLeader(user.id, value)
 	}
 
 	handleHundredLeaderChange ({ user, value }) {
-		console.log(`set ${user.id} hundred_leader to ${value}`)
 		setHundredLeader(user.id, value)
 	}
 
 	search (text) {
-		searchUsers(text).then(users => this.setState({isSearch: true, users}))
+		let cond
+		if (this.props.params.group === 'hundreds') {
+			cond = 'hundred'
+		}
+		if (this.props.params.group === 'tens') {
+			cond = 'ten'
+		}
+		chooseSearch(text, cond).then(users => this.setState({users, isSearch: true}))
 	}
 
 	render () {
@@ -93,7 +99,7 @@ class Choose extends Component {
 							</div>
 						))}
 						<div className="Admin__pagination">
-							{this.state.count ? (
+							{this.state.count && !this.state.isSearch ? (
 								<Pagination
 									pageCount={Math.ceil(this.state.count / this.state.perPage)}
 									pageRangeDisplayed={3}
@@ -106,7 +112,7 @@ class Choose extends Component {
 										const currentPage = selected + 1
 										const offset = this.state.perPage * selected
 										this.setState({ currentPage })
-										getUsersByCategory('all', offset, this.state.perPage, this.getOrderBy())
+										getUsersByCategory(this.getOrderBy(), offset, this.state.perPage, this.getOrderBy())
 											.then(users => this.setState({users}))
 									}} />
 							) : null}
@@ -136,7 +142,7 @@ class Choose extends Component {
 							</div>
 						))}
 						<div className="Admin__pagination">
-							{this.state.count ? (
+							{this.state.count && !this.state.isSearch ? (
 								<Pagination
 									pageCount={Math.ceil(this.state.count / this.state.perPage)}
 									pageRangeDisplayed={3}
@@ -149,7 +155,7 @@ class Choose extends Component {
 										const currentPage = selected + 1
 										const offset = this.state.perPage * selected
 										this.setState({ currentPage })
-										getUsersByCategory(this.props.params.category, offset, this.state.perPage)
+										getUsersByCategory(this.getOrderBy(), offset, this.state.perPage, this.getOrderBy())
 											.then(users => this.setState({users}))
 									}} />
 							) : null}

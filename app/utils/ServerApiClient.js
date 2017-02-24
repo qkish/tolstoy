@@ -241,3 +241,10 @@ export function setHundredLeader (userId, value) {
       body: JSON.stringify({ csrf: $STM_csrf, userId, value })
   })
 }
+
+export function chooseSearch (query, group) {
+  if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+  return fetch(`/api/v1/users/choose_search?q=${query}&group=${group}`, {
+      credentials: 'same-origin'
+  }).then(res => res.json()).then(({ users }) => users)
+}

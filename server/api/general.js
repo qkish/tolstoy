@@ -1047,8 +1047,6 @@ export default function useGeneralApi(app) {
 		let _limit = Number(limit) || 50
 		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
-		console.log(this.session)
-
 		if (category) {
 			if (category === 'polki') {
 				where = {
@@ -1074,18 +1072,22 @@ export default function useGeneralApi(app) {
 				}
 				type = 'couch'
 			}
-			if (category === 'hundred_leaders') {
+			if (category === 'hundred_leader') {
 				where = {
-					polk: {
-						$not: exclude
-					}
+					$or: [{
+						polk: this.session.user
+					}, {
+						polk: null
+					}]
 				}
 			}
-			if (category === 'ten_leaders') {
+			if (category === 'ten_leader') {
 				where = {
-					hundred: {
-						$not: exclude
-					}
+					$or: [{
+						hundred: this.session.user
+					}, {
+						hundred: null
+					}]
 				}
 			}
 		}
@@ -1484,6 +1486,7 @@ export default function useGeneralApi(app) {
 
 			yield models.User.update({
 				hundred_leader: value,
+				hundred: userId,
 				polk: u.id
 			}, {
 				where: {id: userId}
@@ -1525,6 +1528,7 @@ export default function useGeneralApi(app) {
 
 			yield models.User.update({
 				ten_leader: value,
+				ten: userId,
 				polk: u.polk,
 				hundred: u.id
 			}, {
@@ -1541,6 +1545,54 @@ export default function useGeneralApi(app) {
 			})
 			this.status = 500
 		}
+	})
+
+	router.get('/users/choose_search', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		const {q, group} = this.query
+
+		let g
+		if (group === 'hundred') g = 'polk'
+		if (group === 'ten') g = 'hundred'
+
+		const where = {
+			$and: [
+				Sequelize.where(
+					Sequelize.fn('concat', Sequelize.col('first_name'), ' ', Sequelize.col('last_name')),
+					{
+						$like: `%${q}%`
+					}
+				),
+				{
+					$or: [{
+						[g]: this.session.user
+					}, {
+						[g]: null
+					}]
+				}
+			]
+		}
+
+		const users = yield models.User.findAll({
+			attributes: [
+				'id',
+				'name',
+				'first_name',
+				'last_name',
+				'ten',
+				'hundred',
+				'polk',
+				'ten_leader',
+				'hundred_leader',
+				'polk_leader',
+				'money_total',
+				'approved_money',
+				'volunteer'
+			],
+			where
+		})
+
+		this.body = JSON.stringify({users})
 	})
 }
 
