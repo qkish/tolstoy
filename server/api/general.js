@@ -1503,6 +1503,16 @@ export default function useGeneralApi(app) {
 		const {csrf, userId, value} = typeof(data) === 'string' ? JSON.parse(data) : data
 		console.log(`-- /users/set_hundred_leader -->`, this.session.uid, this.session.user)
 
+		
+		let polk;
+		let hundred;
+
+		if(!value) {
+			
+			polk = null;
+			hundred = null;
+		}
+
 		try {
 			if (!this.session.user) {
 				throw new Error('Access denied')
@@ -1521,8 +1531,8 @@ export default function useGeneralApi(app) {
 
 			yield models.User.update({
 				hundred_leader: value,
-				hundred: userId,
-				polk: u.id
+				hundred: value ? userId : hundred,
+				polk: value ? u.id : polk
 			}, {
 				where: {id: userId}
 			})
@@ -1545,6 +1555,16 @@ export default function useGeneralApi(app) {
 		const {csrf, userId, value} = typeof(data) === 'string' ? JSON.parse(data) : data
 		console.log(`-- /users/set_ten_leader -->`, this.session.uid, this.session.user)
 
+		let ten;
+		let polk;
+		let hundred;
+
+		if(!value) {
+			ten = null;
+			polk = null;
+			hundred = null;
+		}
+
 		try {
 			if (!this.session.user) {
 				throw new Error('Access denied')
@@ -1563,9 +1583,9 @@ export default function useGeneralApi(app) {
 
 			yield models.User.update({
 				ten_leader: value,
-				ten: userId,
-				polk: u.polk,
-				hundred: u.id
+				ten: value ? userId : ten,
+				polk: value ? u.polk : polk,
+				hundred: value ? u.id : hundred
 			}, {
 				where: {id: userId}
 			})
