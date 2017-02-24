@@ -4,29 +4,45 @@ import {
 	getUsersByCategory,
 	searchUsers,
 	setHundredLeader,
-	setTenLeader
+	setTenLeader,
+	getUsersCount
 } from 'app/utils/ServerApiClient'
+import Pagination from 'react-paginate'
 import UserEdit from 'app/components/elements/UserEdit'
 import { UserAuthWrapper } from 'redux-auth-wrapper'
 
 class Choose extends Component {
 	constructor (props) {
 		super(props)
-		this.state = {}
+		this.state = {
+			perPage: 50,
+			currentPage: 1
+		}
 
 		this.handleTenLeaderChange = this.handleTenLeaderChange.bind(this)
 		this.handleHundredLeaderChange = this.handleHundredLeaderChange.bind(this)
+		this.getOrderBy = this.getOrderBy.bind(this)
+		this.getOffset = this.getOffset.bind(this)
 	}
 
 	componentDidMount () {
-		let orderBy
+		getUsersByCategory('all', this.getOffset(), this.state.perPage, this.getOrderBy())
+			.then(users => this.setState({ users }))
+		getUsersCount('all').then(count => this.setState({count}))
+	}
+
+	getOffset () {
+		return this.state.perPage * (this.state.currentPage - 1)
+	}
+
+	getOrderBy () {
 		if (this.props.params.group === 'hundreds') {
-			orderBy = 'hundred_leader'
+			return 'hundred_leader'
 		}
 		if (this.props.params.group === 'tens') {
-			orderBy = 'ten_leader'
+			return 'ten_leader'
 		}
-		getUsersByCategory('all', 0, 50, orderBy).then(users => this.setState({ users }))
+		return null
 	}
 
 	handleTenLeaderChange ({ user, value }) {
@@ -76,6 +92,25 @@ class Choose extends Component {
 								</div>
 							</div>
 						))}
+						<div className="Admin__pagination">
+							{this.state.count ? (
+								<Pagination
+									pageCount={Math.ceil(this.state.count / this.state.perPage)}
+									pageRangeDisplayed={3}
+									marginPagesDisplayed={3}
+									previousLabel='&laquo;'
+									nextLabel='&raquo;'
+									containerClassName='pagination'
+									activeClassName='active'
+									onPageChange={({ selected }) => {
+										const currentPage = selected + 1
+										const offset = this.state.perPage * selected
+										this.setState({ currentPage })
+										getUsersByCategory('all', offset, this.state.perPage, this.getOrderBy())
+											.then(users => this.setState({users}))
+									}} />
+							) : null}
+						</div>
 					</div>
 				</div>
 			)
@@ -100,6 +135,25 @@ class Choose extends Component {
 								</div>
 							</div>
 						))}
+						<div className="Admin__pagination">
+							{this.state.count ? (
+								<Pagination
+									pageCount={Math.ceil(this.state.count / this.state.perPage)}
+									pageRangeDisplayed={3}
+									marginPagesDisplayed={3}
+									previousLabel='&laquo;'
+									nextLabel='&raquo;'
+									containerClassName='pagination'
+									activeClassName='active'
+									onPageChange={({ selected }) => {
+										const currentPage = selected + 1
+										const offset = this.state.perPage * selected
+										this.setState({ currentPage })
+										getUsersByCategory(this.props.params.category, offset, this.state.perPage)
+											.then(users => this.setState({users}))
+									}} />
+							) : null}
+						</div>
 					</div>
 				</div>
 			)
