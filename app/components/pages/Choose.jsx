@@ -1,7 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { getUsersByCategory, searchUsers } from 'app/utils/ServerApiClient'
+import {
+	getUsersByCategory,
+	searchUsers,
+	setHundredLeader,
+	setTenLeader
+} from 'app/utils/ServerApiClient'
 import UserEdit from 'app/components/elements/UserEdit'
+import { UserAuthWrapper } from 'redux-auth-wrapper'
 
 class Choose extends Component {
 	constructor (props) {
@@ -13,15 +19,24 @@ class Choose extends Component {
 	}
 
 	componentDidMount () {
-		getUsersByCategory('all').then(users => this.setState({ users }))
+		let orderBy
+		if (this.props.params.group === 'hundreds') {
+			orderBy = 'hundred_leader'
+		}
+		if (this.props.params.group === 'tens') {
+			orderBy = 'ten_leader'
+		}
+		getUsersByCategory('all', 0, 50, orderBy).then(users => this.setState({ users }))
 	}
 
 	handleTenLeaderChange ({ user, value }) {
-		this.props.changeTenLeader(user.id, value)
+		console.log(`set ${user.id} ten_leader to ${value}`)
+		setTenLeader(user.id, value)
 	}
 
 	handleHundredLeaderChange ({ user, value }) {
-		this.props.changeHundredLeader(user.id, value)
+		console.log(`set ${user.id} hundred_leader to ${value}`)
+		setHundredLeader(user.id, value)
 	}
 
 	search (text) {
@@ -100,24 +115,24 @@ class Choose extends Component {
 	}
 }
 
-const mapDispatchToProps = dispatch => ({
-	changeHundredLeader: (userId, value) => dispatch({
-		type: 'admin/HUNDRED_LEADER_CHANGE',
-		payload: {
-			userId,
-			value
+const UserIsAuthenticated = UserAuthWrapper({
+	authSelector: (state, ownProps) => {
+		if (ownProps.params.group === 'hundreds') {
+			return state.user.get('isPolkLeader') ? { allowed: true } : { allowed: false }
 		}
-	}),
-	changeTenLeader: (userId, value) => dispatch({
-		type: 'admin/TEN_LEADER_CHANGE',
-		payload: {
-			userId,
-			value
+		if (ownProps.params.group === 'tens') {
+			return state.user.get('isHundredLeader') ? { allowed: true } : { allowed: false }
 		}
-	})
+		return { allowed: false }
+	},
+	authenticatingSelector: state => !state.user.get('current'),
+	wrapperDisplayName: 'UserIsAuthenticated',
+	FailureComponent: () => <div>Доступ запрещен</div>,
+	LoadingComponent: () => <div>Загрузка...</div>,
+	predicate: user => user.allowed
 })
 
 module.exports = {
 	path: 'choose/:group',
-	component: connect(null, mapDispatchToProps)(Choose)
+	component: UserIsAuthenticated(Choose)
 }

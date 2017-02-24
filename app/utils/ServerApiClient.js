@@ -108,9 +108,9 @@ export function updateMoney (payload) {
     }).then(res => res.json());
 }
 
-export function getUsersByCategory (category = 'all', offset = 0, limit = 50) {
+export function getUsersByCategory (category = 'all', offset = 0, limit = 50, order) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    return fetch(`/api/v1/users?category=${category}&offset=${offset}&limit=${limit}`)
+    return fetch(`/api/v1/users?category=${category}&offset=${offset}&limit=${limit}&order=${order}`)
         .then(res => res.json())
         .then(({ users }) => users);
 }
@@ -220,4 +220,22 @@ export function updateUser (userId, payload) {
         credentials: 'same-origin',
         body: JSON.stringify({ csrf: $STM_csrf, payload })
     })
+}
+
+export function setTenLeader (userId, value) {
+  if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+  return fetch('/api/v1/users/set_ten_leader', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({ csrf: $STM_csrf, userId, value })
+  })
+}
+
+export function setHundredLeader (userId, value) {
+  if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+  return fetch('/api/v1/users/set_hundred_leader', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({ csrf: $STM_csrf, userId, value })
+  })
 }

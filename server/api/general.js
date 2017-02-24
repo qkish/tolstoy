@@ -378,6 +378,8 @@ export default function useGeneralApi(app) {
 					'ten',
 					'hundred',
 					'polk',
+					'hundred_leader',
+					'polk_leader',
 					'couch_group',
           'email'
 				],
@@ -1043,6 +1045,7 @@ export default function useGeneralApi(app) {
 		let type = null
 		let _offset = Number(offset) || 0
 		let _limit = Number(limit) || 50
+		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
 		if (category) {
 			if (category === 'polki') {
@@ -1109,6 +1112,11 @@ export default function useGeneralApi(app) {
 		category !== 'all'
 			? order = [groupsInclude, 'money', 'DESC']
 			: order = ['money_total', 'DESC']
+
+		if (_order) {
+			order = [_order, 'DESC']
+		}
+
 		const users = yield models.User.findAll({
 			attributes: [
 				'id',
@@ -1429,6 +1437,89 @@ export default function useGeneralApi(app) {
 			})
 		} catch (error) {
 			console.error(`Error in /users/${userId} api call`, this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
+
+	router.post('/users/set_hundred_leader', koaBody, function*() {
+		if (rateLimitReq(this, this.req)) return
+		const data = this.request.body
+		const {csrf, userId, value} = typeof(data) === 'string' ? JSON.parse(data) : data
+		console.log(`-- /users/set_hundred_leader -->`, this.session.uid, this.session.user)
+
+		try {
+			if (!this.session.user) {
+				throw new Error('Access denied')
+			}
+
+			const u = yield models.User.findOne({
+				attributes: ['id', 'polk_leader'],
+				where: {
+					id: this.session.user
+				}
+			})
+
+			if (!u.polk_leader) {
+				throw new Error('Access denied')
+			}
+
+			yield models.User.update({
+				hundred_leader: value,
+				polk: u.id
+			}, {
+				where: {id: userId}
+			})
+
+			this.body = JSON.stringify({
+				status: 'ok'
+			})
+		} catch (error) {
+			console.error(`Error in /users/set_hundred_leader api call`, this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
+
+	router.post('/users/set_ten_leader', koaBody, function*() {
+		if (rateLimitReq(this, this.req)) return
+		const data = this.request.body
+		const {csrf, userId, value} = typeof(data) === 'string' ? JSON.parse(data) : data
+		console.log(`-- /users/set_ten_leader -->`, this.session.uid, this.session.user)
+
+		try {
+			if (!this.session.user) {
+				throw new Error('Access denied')
+			}
+
+			const u = yield models.User.findOne({
+				attributes: ['id', 'hundred_leader', 'polk'],
+				where: {
+					id: this.session.user
+				}
+			})
+
+			if (!u.hundred_leader) {
+				throw new Error('Access denied')
+			}
+
+			yield models.User.update({
+				ten_leader: value,
+				polk: u.polk,
+				hundred: u.id
+			}, {
+				where: {id: userId}
+			})
+
+			this.body = JSON.stringify({
+				status: 'ok'
+			})
+		} catch (error) {
+			console.error(`Error in /users/set_ten_leader api call`, this.session.uid, error.toString())
 			this.body = JSON.stringify({
 				error: error.message
 			})

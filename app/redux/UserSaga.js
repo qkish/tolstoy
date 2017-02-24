@@ -179,7 +179,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     const usernameFromCookies = Cookies.get('molodost_user')
 
-    
+
 
 
 
@@ -242,6 +242,8 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.current_program) yield put(user.actions.setProgram(bmProgram.bmprog.current_program))
     if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.volunteer) yield put(user.actions.setVolunteer(bmProgram.bmprog.volunteer))
+		if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.polk_leader) yield put(user.actions.setPolkLeader(bmProgram.bmprog.polk_leader))
+		if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.hundred_leader) yield put(user.actions.setHundredLeader(bmProgram.bmprog.hundred_leader))
     if (bmProgram && bmProgram.bmprog) yield put(user.actions.setMyHierarchy({ myTen: bmProgram.bmprog.ten, myGroup: bmProgram.bmprog.couch_group, myHundred: bmProgram.bmprog.hundred, myPolk: bmProgram.bmprog.polk }))
 
 
@@ -354,7 +356,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     }
 
 
- 
+
     //password = resp.private_key
 
 
@@ -362,7 +364,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     const account = yield call(getAccount, username)
 
-  
+
 
     //if (!account) {
     //   yield put(user.actions.loginError({ error: translate('username_does_not_exist') }))
@@ -466,20 +468,20 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
     // If user is signing operation by operaion and has no saved login, don't save to RAM
     if(!operationType || saveLogin) {
-      
+
         // Keep the posting key in RAM but only when not signing an operation.
         // No operation or the user has checked: Keep me logged in...
         yield put(user.actions.setUser({username, private_keys, login_owner_pubkey, vesting_shares: account.get('vesting_shares')}))
     } else {
         yield put(user.actions.setUser({username, vesting_shares: account.get('vesting_shares')}))
-    
+
     }
 
 
 
     if ((!autopost && saveLogin) || usernameFromCookies) {
         yield put(user.actions.saveLogin());
-      
+
     }
 
     //serverApiLogin(username);
@@ -488,7 +490,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
 function* saveLogin_localStorage() {
 
-   
+
     if (!process.env.BROWSER) {
         console.error('Non-browser environment, skipping localstorage')
         return
@@ -500,7 +502,7 @@ function* saveLogin_localStorage() {
         state.user.getIn(['current', 'login_owner_pubkey']),
     ]))
 
-   
+
     if (!username) {
         console.error('Not logged in')
         return
@@ -535,7 +537,7 @@ function* saveLogin_localStorage() {
     const data = new Buffer(`${username}\t${posting_private.toWif()}\t${memoWif || ''}\t${login_owner_pubkey || ''}`).toString('hex')
     // autopost is a auto login for a low security key (like the posting key)
 
-   
+
     localStorage.setItem('autopost2', data)
 }
 
