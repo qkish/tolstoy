@@ -194,7 +194,7 @@ margin-bottom: 15px;
   color: #1f1f1f;
   overflow: hidden;
   line-height: 20px;
- 
+  cursor: pointer;
   text-overflow: ellipsis;
   font-weight: 500;
 
@@ -211,6 +211,7 @@ margin-bottom: 15px;
 			width: 24px;
 			height: 24px;
 			display: block;
+			cursor: pointer;
 		}
 		&:hover:after {
 			background-position-y: -24px;
