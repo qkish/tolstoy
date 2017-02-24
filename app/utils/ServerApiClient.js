@@ -110,9 +110,11 @@ export function updateMoney (payload) {
 
 export function getUsersByCategory (category = 'all', offset = 0, limit = 50, order) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    return fetch(`/api/v1/users?category=${category}&offset=${offset}&limit=${limit}&order=${order}`)
-        .then(res => res.json())
-        .then(({ users }) => users);
+    return fetch(`/api/v1/users?category=${category}&offset=${offset}&limit=${limit}&order=${order}`, {
+      credentials: 'same-origin'
+    })
+    .then(res => res.json())
+    .then(({ users }) => users);
 }
 
 export function getUsersCount (category) {

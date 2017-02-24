@@ -1047,6 +1047,8 @@ export default function useGeneralApi(app) {
 		let _limit = Number(limit) || 50
 		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
+		console.log(this.session)
+
 		if (category) {
 			if (category === 'polki') {
 				where = {
@@ -1071,6 +1073,20 @@ export default function useGeneralApi(app) {
 					couch: true,
 				}
 				type = 'couch'
+			}
+			if (category === 'hundred_leaders') {
+				where = {
+					polk: {
+						$not: exclude
+					}
+				}
+			}
+			if (category === 'ten_leaders') {
+				where = {
+					hundred: {
+						$not: exclude
+					}
+				}
 			}
 		}
 
