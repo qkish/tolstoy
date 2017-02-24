@@ -378,6 +378,8 @@ export default function useGeneralApi(app) {
 					'ten',
 					'hundred',
 					'polk',
+					'hundred_leader',
+					'polk_leader',
 					'couch_group',
           'email'
 				],

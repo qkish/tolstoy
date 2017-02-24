@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { getUsersByCategory, searchUsers } from 'app/utils/ServerApiClient'
 import UserEdit from 'app/components/elements/UserEdit'
+import { UserAuthWrapper } from 'redux-auth-wrapper'
 
 class Choose extends Component {
 	constructor (props) {
@@ -124,7 +125,24 @@ const mapDispatchToProps = dispatch => ({
 	})
 })
 
+const UserIsAuthenticated = UserAuthWrapper({
+	authSelector: (state, ownProps) => {
+		if (ownProps.params.group === 'hundreds') {
+			return state.user.get('isPolkLeader') ? { allowed: true } : { allowed: false }
+		}
+		if (ownProps.params.group === 'tens') {
+			return state.user.get('isHundredLeader') ? { allowed: true } : { allowed: false }
+		}
+		return { allowed: false }
+	},
+	authenticatingSelector: state => !state.user.get('current'),
+	wrapperDisplayName: 'UserIsAuthenticated',
+	FailureComponent: () => <div>Доступ запрещен</div>,
+	LoadingComponent: () => <div>Загрузка...</div>,
+	predicate: user => user.allowed
+})
+
 module.exports = {
 	path: 'choose/:group',
-	component: connect(null, mapDispatchToProps)(Choose)
+	component: UserIsAuthenticated(connect(null, mapDispatchToProps)(Choose))
 }
