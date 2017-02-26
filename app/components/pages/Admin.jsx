@@ -149,7 +149,7 @@ class Admin extends Component {
                             <select defaultValue={user.ten} onChange={({ target }) => this.handleTenChange({ user, ten: target.value })}>
                                 <option disabled>Десятка не выбрана</option>
                                 {allTens ? allTens.map(userOption => (
-                                    <option key={userOption.id} value={userOption.id}>
+                                    <option key={'mykey' + userOption.id} value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
                                     </option>
                                 )) : null}
