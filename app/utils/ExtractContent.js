@@ -68,12 +68,12 @@ export default function extractContent(get, content) {
     //     image_link = image_link.replace(links.ipfsPrefix, config.ipfs_prefix)
 
     let desc
-    let desc_complete = true
+    let desc_complete = false
     if(!desc) {
         // Short description.
         // Remove bold and header, etc.
         // Stripping removes links with titles (so we got the links above)..
-        const body2 = remarkableStripper.render(body).trim()
+        const body2 = remarkableStripper.render(body)
         desc = sanitize(body2, {allowedTags: []})// remove all html, leaving text
         desc = htmlDecode(desc)
 
@@ -83,19 +83,18 @@ export default function extractContent(get, content) {
         // Grab only the first line (not working as expected. does rendering/sanitizing strip newlines?)
         desc = desc.trim().split("\n")[0];
 
-        if(desc.length > 500) {
-          desc = desc.substring(0, 400).trim();
+        if(desc.length > 140) {
+          desc = desc.substring(0, 140).trim();
 
           const dotSpace = desc.lastIndexOf('. ')
-          if(dotSpace > 300) {
+          if(dotSpace > 80) {
               desc = desc.substring(0, dotSpace + 1)
           } else {
             // Truncate, remove the last (likely partial) word (along with random punctuation), and add ellipses
-            desc = desc.substring(0, 400).trim().replace(/[,!\?]?\s+[^\s]+$/, "…");
+            desc = desc.substring(0, 120).trim().replace(/[,!\?]?\s+[^\s]+$/, "…");
           }
         }
-        desc_complete = body2.trim() === desc.trim() // is the entire body in desc?
-	      console.log('desc_complete', `"${body2}"`, `"${desc}"`, desc_complete)
+        desc_complete = body2 === desc // is the entire body in desc?
     }
     const pending_payout = get(content, 'pending_payout_value');
     return {

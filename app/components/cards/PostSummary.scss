@@ -203,19 +203,7 @@ margin-bottom: 15px;
     display: inline;
     text-decoration: none;
   }
-	&-more {
-		&:after {
-			content: '';
-			background: url('../../assets/icons/btn_more.png') center top no-repeat;
-			background-size: 24px auto;
-			width: 24px;
-			height: 24px;
-			display: block;
-		}
-		&:hover:after {
-			background-position-y: -24px;
-		}
-	}
+
 }
 
 .PostSummary__footer {
