@@ -117,7 +117,7 @@ class Admin extends Component {
                         <UserEdit account={user.name} />
                         <div className="Admin__choose">
                             <select defaultValue={user.polk} onChange={({ target }) => this.handlePolkChange({user, polk: target.value })}>
-                                <option value='' disabled>Полк не выбран</option>
+                                <option disabled>Полк не выбран</option>
                                 {allPolks ? allPolks.map(userOption => (
                                     <option key={userOption.id} value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
@@ -132,7 +132,7 @@ class Admin extends Component {
 
                         <div className="Admin__choose">
                             <select defaultValue={user.hundred} onChange={({ target }) => this.handleHundredChange({ user, hundred: target.value })}>
-                                <option value='' disabled>Сотня не выбрана</option>
+                                <option disabled>Сотня не выбрана</option>
                                 {allHundreds ? allHundreds.map(userOption => (
                                     <option key={userOption.id} value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
@@ -147,7 +147,7 @@ class Admin extends Component {
 
                         <div className="Admin__choose">
                             <select defaultValue={user.ten} onChange={({ target }) => this.handleTenChange({ user, ten: target.value })}>
-                                <option value='' disabled>Десятка не выбрана</option>
+                                <option disabled>Десятка не выбрана</option>
                                 {allTens ? allTens.map(userOption => (
                                     <option key={userOption.id} value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
@@ -162,7 +162,7 @@ class Admin extends Component {
 
                         <div className="Admin__choose">
                             <select defaultValue={user.couch_group} onChange={({ target }) => this.handleCouchGroupChange({ user, couch_group: target.value })}>
-                                <option value='' disabled>Тренера нет</option>
+                                <option disabled>Тренера нет</option>
                                 {allTrainers? allTrainers.map(userOption => (
                                     <option key={userOption.id} value={userOption.id}>
                                         {`${userOption.first_name} ${userOption.last_name}, ${userOption.name}`}
