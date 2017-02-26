@@ -253,7 +253,7 @@ const UserIsAuthenticated = UserAuthWrapper({
 			return state.user.get('isHundredLeader') ? { allowed: true } : { allowed: false }
 		}
 		if (ownProps.params.group === 'myten') {
-			return { allowed: true } 
+			return { allowed: true }
 		}
 		return { allowed: false }
 	},

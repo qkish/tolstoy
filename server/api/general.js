@@ -1503,12 +1503,12 @@ export default function useGeneralApi(app) {
 		const {csrf, userId, value} = typeof(data) === 'string' ? JSON.parse(data) : data
 		console.log(`-- /users/set_hundred_leader -->`, this.session.uid, this.session.user)
 
-		
+
 		let polk;
 		let hundred;
 
 		if(!value) {
-			
+
 			polk = null;
 			hundred = null;
 		}
@@ -1611,11 +1611,11 @@ export default function useGeneralApi(app) {
 		let ten;
 
 		let myID = this.session.user
-		
+
 
 		if(!value) {
 			ten = null;
-			
+
 		}
 
 		try {
@@ -1676,26 +1676,19 @@ export default function useGeneralApi(app) {
 		}
 
 		if (group === 'all_ten_leaders') {
-
 			where = {
-
 				$and: [
-				Sequelize.where(
-					Sequelize.fn('concat', Sequelize.col('first_name'), ' ', Sequelize.col('last_name')),
+					Sequelize.where(
+						Sequelize.fn('concat', Sequelize.col('first_name'), ' ', Sequelize.col('last_name')),
+						{
+							$like: `%${q}%`
+						}
+					),
 					{
-						$like: `%${q}%`
-					}
-				),
-				{
-					
 						'ten_leader': true
-					
-				}
-			]
-
+					}
+				]
 			}
-
-			
 		}
 
 		const users = yield models.User.findAll({

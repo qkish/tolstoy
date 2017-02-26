@@ -315,12 +315,12 @@ export default class UserProfile extends React.Component {
                           </select>*/}
 
                       <Link to='/choose/myten'><button className="button">Перейти к выбору</button></Link>
-                      </div>: null} 
+                      </div>: null}
 
 
 
 
-                    
+
 
 
                     {isMyAccount ?
