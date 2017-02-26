@@ -251,6 +251,15 @@ export function setHundredLeader (userId, value) {
   })
 }
 
+export function setMyTen (userId, value) {
+  if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+  return fetch('/api/v1/users/set_my_ten', {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({ csrf: $STM_csrf, userId, value })
+  })
+}
+
 export function chooseSearch (query, group) {
   if (!process.env.BROWSER || window.$STM_ServerBusy) return;
   return fetch(`/api/v1/users/choose_search?q=${query}&group=${group}`, {

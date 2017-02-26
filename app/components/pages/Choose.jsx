@@ -5,6 +5,7 @@ import {
 	searchUsers,
 	setHundredLeader,
 	setTenLeader,
+	setMyTen,
 	getUsersCount,
 	chooseSearch
 } from 'app/utils/ServerApiClient'
@@ -22,6 +23,7 @@ class Choose extends Component {
 
 		this.handleTenLeaderChange = this.handleTenLeaderChange.bind(this)
 		this.handleHundredLeaderChange = this.handleHundredLeaderChange.bind(this)
+		this.handleMyTenChange = this.handleMyTenChange.bind(this)
 		this.getOrderBy = this.getOrderBy.bind(this)
 		this.getOffset = this.getOffset.bind(this)
 	}
@@ -43,6 +45,9 @@ class Choose extends Component {
 		if (this.props.params.group === 'tens') {
 			return 'ten_leader'
 		}
+		if (this.props.params.group === 'myten') {
+			return 'ten'
+		}
 		return null
 	}
 
@@ -54,12 +59,19 @@ class Choose extends Component {
 		setHundredLeader(user.id, value)
 	}
 
+	handleMyTenChange ({ user, value }) {
+		setMyTen(user.id, value)
+	}
+
 	search (text) {
 		let cond
 		if (this.props.params.group === 'hundreds') {
 			cond = 'hundred'
 		}
 		if (this.props.params.group === 'tens') {
+			cond = 'ten'
+		}
+		if (this.props.params.group === 'myten') {
 			cond = 'ten'
 		}
 		chooseSearch(text, cond).then(users => this.setState({users, isSearch: true}))
@@ -81,7 +93,7 @@ class Choose extends Component {
 		if (this.props.params.group === 'hundreds') {
 			view = (
 				<div>
-					<h3>Выбери сотников</h3>
+					<h3>Выберите сотников</h3>
 					{searchView}
 					<div className="Admin__wrapper">
 						{this.state.users && this.state.users.map(user => (
@@ -124,7 +136,7 @@ class Choose extends Component {
 		if (this.props.params.group === 'tens') {
 			view = (
 				<div>
-					<h3>Выбери десятников</h3>
+					<h3>Выберите десятников</h3>
 					{searchView}
 					<div className="Admin__wrapper">
 						{this.state.users && this.state.users.map(user => (
@@ -137,6 +149,50 @@ class Choose extends Component {
 											defaultChecked={user.ten_leader}
 											onChange={({ target }) => this.handleTenLeaderChange({ user, value: target.checked })} />
 										Десятник
+									</label>
+								</div>
+							</div>
+						))}
+						<div className="Admin__pagination">
+							{this.state.count && !this.state.isSearch ? (
+								<Pagination
+									pageCount={Math.ceil(this.state.count / this.state.perPage)}
+									pageRangeDisplayed={3}
+									marginPagesDisplayed={3}
+									previousLabel='&laquo;'
+									nextLabel='&raquo;'
+									containerClassName='pagination'
+									activeClassName='active'
+									onPageChange={({ selected }) => {
+										const currentPage = selected + 1
+										const offset = this.state.perPage * selected
+										this.setState({ currentPage })
+										getUsersByCategory(this.getOrderBy(), offset, this.state.perPage, this.getOrderBy())
+											.then(users => this.setState({users}))
+									}} />
+							) : null}
+						</div>
+					</div>
+				</div>
+			)
+		}
+
+		if (this.props.params.group === 'myten') {
+			view = (
+				<div>
+					<h3>Выберите своего десятника</h3>
+					{searchView}
+					<div className="Admin__wrapper">
+						{this.state.users && this.state.users.map(user => (
+							<div className="Rating__row" key={user.id}>
+								<UserEdit account={user.name} />
+								<div className="Admin__choose">
+									<label>
+										<input
+											type="checkbox"
+											defaultChecked={user.hundred_leader}
+											onChange={({ target }) => this.handleMyTenChange({ user, value: target.checked })} />
+										Мой десятник
 									</label>
 								</div>
 							</div>
@@ -182,6 +238,9 @@ const UserIsAuthenticated = UserAuthWrapper({
 		}
 		if (ownProps.params.group === 'tens') {
 			return state.user.get('isHundredLeader') ? { allowed: true } : { allowed: false }
+		}
+		if (ownProps.params.group === 'myten') {
+			return { allowed: true } 
 		}
 		return { allowed: false }
 	},

@@ -84,7 +84,7 @@ export default class UserProfile extends React.Component {
 
     getData (props) {
 
-        getUsersByCategory('tens').then(allTens => this.setState({allTens}))
+        getUsersByCategory('tens', 0, 1000, 'first_name').then(allTens => this.setState({allTens}))
     }
 
     getNameByID = () => {
@@ -217,6 +217,8 @@ export default class UserProfile extends React.Component {
 
         let {allTens} = this.state
 
+        let tempFalse
+
         let userID
         if(this.state.userID && this.state.userID.id) userID = this.state.userID.id
 
@@ -299,7 +301,7 @@ export default class UserProfile extends React.Component {
             if (account.blog) {
                 tab_content = <section>
 
-                  {isMyAccount && !myTen && isPayed && isThereAnyTens ?
+                  {isMyAccount && !myTen && isPayed && isThereAnyTens && tempFalse ?
                       <div className="PostSummary" style={{marginLeft: "10px"}} >
                       <h5>Выберите своего десятника</h5>
                           <select onChange={({ target }) => this.handleTenChange({ id: userID, ten: target.value })}>
