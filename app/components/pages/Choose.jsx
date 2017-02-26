@@ -29,26 +29,13 @@ class Choose extends Component {
 	}
 
 	componentDidMount () {
-		getUsersByCategory(this.getCategoryBy(), this.getOffset(), this.state.perPage, this.getOrderBy())
+		getUsersByCategory(this.getOrderBy(), this.getOffset(), this.state.perPage, this.getOrderBy())
 			.then(users => this.setState({ users }))
-		getUsersCount(this.getCategoryBy()).then(count => this.setState({count}))
+		getUsersCount(this.getOrderBy()).then(count => this.setState({count}))
 	}
 
 	getOffset () {
 		return this.state.perPage * (this.state.currentPage - 1)
-	}
-
-	getCategoryBy () {
-		if (this.props.params.group === 'hundreds') {
-			return 'hundred_leader'
-		}
-		if (this.props.params.group === 'tens') {
-			return 'ten_leader'
-		}
-		if (this.props.params.group === 'myten') {
-			return 'tens'
-		}
-		return null
 	}
 
 	getOrderBy () {
@@ -59,7 +46,7 @@ class Choose extends Component {
 			return 'ten_leader'
 		}
 		if (this.props.params.group === 'myten') {
-			return 'first_name'
+			return 'ten'
 		}
 		return null
 	}
@@ -85,7 +72,7 @@ class Choose extends Component {
 			cond = 'ten'
 		}
 		if (this.props.params.group === 'myten') {
-			cond = 'all_ten_leaders'
+			cond = 'ten'
 		}
 		chooseSearch(text, cond).then(users => this.setState({users, isSearch: true}))
 	}
@@ -137,7 +124,7 @@ class Choose extends Component {
 										const currentPage = selected + 1
 										const offset = this.state.perPage * selected
 										this.setState({ currentPage })
-										getUsersByCategory(this.getCategoryBy(), offset, this.state.perPage, this.getOrderBy())
+										getUsersByCategory(this.getOrderBy(), offset, this.state.perPage, this.getOrderBy())
 											.then(users => this.setState({users}))
 									}} />
 							) : null}
@@ -180,7 +167,7 @@ class Choose extends Component {
 										const currentPage = selected + 1
 										const offset = this.state.perPage * selected
 										this.setState({ currentPage })
-										getUsersByCategory(this.getCategoryBy(), offset, this.state.perPage, this.getOrderBy())
+										getUsersByCategory(this.getOrderBy(), offset, this.state.perPage, this.getOrderBy())
 											.then(users => this.setState({users}))
 									}} />
 							) : null}
@@ -224,7 +211,7 @@ class Choose extends Component {
 										const currentPage = selected + 1
 										const offset = this.state.perPage * selected
 										this.setState({ currentPage })
-										getUsersByCategory(this.getCategoryBy(), offset, this.state.perPage, this.getOrderBy())
+										getUsersByCategory(this.getOrderBy(), offset, this.state.perPage, this.getOrderBy())
 											.then(users => this.setState({users}))
 									}} />
 							) : null}

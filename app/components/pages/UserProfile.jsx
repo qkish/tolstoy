@@ -301,10 +301,10 @@ export default class UserProfile extends React.Component {
             if (account.blog) {
                 tab_content = <section>
 
-                  {isMyAccount && !myTen && isPayed && isThereAnyTens ?
+                  {isMyAccount && !myTen && isPayed && isThereAnyTens && tempFalse ?
                       <div className="PostSummary" style={{marginLeft: "10px"}} >
                       <h5>Выберите своего десятника</h5>
-                         {/* <select onChange={({ target }) => this.handleTenChange({ id: userID, ten: target.value })}>
+                          <select onChange={({ target }) => this.handleTenChange({ id: userID, ten: target.value })}>
 
                           <option>Не выбран десятник</option>
                             {allTens ? allTens.map(userOption => (
@@ -312,15 +312,8 @@ export default class UserProfile extends React.Component {
                                         {`${userOption.first_name} ${userOption.last_name}`}
                                     </option>
                                 )) : null}
-                          </select>*/}
-
-                      <Link to='/choose/myten'><button className="button">Перейти к выбору</button></Link>
-                      </div>: null} 
-
-
-
-
-                    
+                          </select>
+                      </div>: null}
 
 
                     {isMyAccount ?

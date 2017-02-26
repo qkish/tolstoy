@@ -1657,7 +1657,7 @@ export default function useGeneralApi(app) {
 		if (group === 'hundred') g = 'polk'
 		if (group === 'ten') g = 'hundred'
 
-		let where = {
+		const where = {
 			$and: [
 				Sequelize.where(
 					Sequelize.fn('concat', Sequelize.col('first_name'), ' ', Sequelize.col('last_name')),
@@ -1673,29 +1673,6 @@ export default function useGeneralApi(app) {
 					}]
 				}
 			]
-		}
-
-		if (group === 'all_ten_leaders') {
-
-			where = {
-
-				$and: [
-				Sequelize.where(
-					Sequelize.fn('concat', Sequelize.col('first_name'), ' ', Sequelize.col('last_name')),
-					{
-						$like: `%${q}%`
-					}
-				),
-				{
-					
-						'ten_leader': true
-					
-				}
-			]
-
-			}
-
-			
 		}
 
 		const users = yield models.User.findAll({
