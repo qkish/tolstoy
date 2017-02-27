@@ -36,7 +36,8 @@ export default (sequelize, DataTypes) => {
 		couch_group: DataTypes.INTEGER,
 		current_program: DataTypes.STRING,
 		approved_money: DataTypes.INTEGER,
-		volunteer: DataTypes.BOOLEAN
+		volunteer: DataTypes.BOOLEAN,
+		last_day_money: DataTypes.INTEGER
 	}, {
 		tableName: 'users',
 		createdAt: 'created_at',
