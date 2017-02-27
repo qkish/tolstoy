@@ -986,7 +986,7 @@ export default function useGeneralApi(app) {
 			}
 		})
 
-		const last_transaction = user.last_total_transaction
+		const last_transaction = user.last_money_transaction
 
 		if (!last_transaction || isToday(last_transaction)) {
 			if (payload.type === 'submit_story') {
@@ -1005,7 +1005,7 @@ export default function useGeneralApi(app) {
 				})
 			}
 			yield user.update({
-				last_total_transaction: new Date()
+				last_money_transaction: new Date()
 			})
 		} else {
 			const monets = user.posts_monets + user.comments_monets + user.tasks_monets
@@ -1015,7 +1015,7 @@ export default function useGeneralApi(app) {
 				posts_monets: 0,
 				comments_monets: 0,
 				tasks_monets: 0,
-				last_total_transaction: new Date(),
+				last_money_transaction: new Date(),
 				total: total,
 				monets: monets_total,
 				vesting_total: Number(payload.vesting),
@@ -1025,7 +1025,7 @@ export default function useGeneralApi(app) {
 				posts_monets: 0,
 				comments_monets: 0,
 				tasks_monets: 0,
-				last_total_transaction: new Date(),
+				last_money_transaction: new Date(),
 				total: total,
 				monets: monets_total,
 				vesting_total: Number(payload.vesting),
