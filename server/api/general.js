@@ -19,6 +19,7 @@ import {Apis} from 'shared/api_client';
 import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
 import isToday from 'date-fns/is_today';
+import isAfter from 'date-fns/is_after';
 import AWS from 'aws-sdk';
 import pify from 'pify';
 import fs from 'fs';
@@ -987,6 +988,27 @@ export default function useGeneralApi(app) {
 		})
 
 		const last_transaction = user.last_money_transaction
+
+		if (!last_transaction) {
+			yield user.update({
+				money_total: user.last_day_money + Number(payload.money),
+				last_money_transaction: new Date()
+			})
+		}
+
+		if (isToday(last_transaction)) {
+			yield user.update({
+				money_total: user.last_day_money + Number(payload.money)
+			})
+		}
+
+		if (isAfter(new Date(), last_transaction)) {
+			yield user.update({
+				last_day_money: user.money_total,
+				money_total: last_day_money + Number(payload.money),
+				last_money_transaction: new Date()
+			})
+		}
 
 		if (!last_transaction || isToday(last_transaction)) {
 			if (payload.type === 'submit_story') {
