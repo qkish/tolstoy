@@ -1609,12 +1609,16 @@ export default function useGeneralApi(app) {
 		console.log(`-- /users/set_my_ten -->`, this.session.uid, this.session.user)
 
 		let ten;
+		let polk;
+		let hundred;
 
 		let myID = this.session.user
 
 
 		if(!value) {
 			ten = null;
+			polk = null;
+			hundred = null;
 
 		}
 
@@ -1624,15 +1628,17 @@ export default function useGeneralApi(app) {
 			}
 
 			const u = yield models.User.findOne({
-				attributes: ['id'],
+				attributes: ['id', 'hundred', 'polk'],
 				where: {
-					id: myID
+					id: userId
 				}
 			})
 
 			//console.log('USER ID MY TEN:', this.session.user)
 			yield models.User.update({
 				ten: value ? userId : ten,
+				hundred: value ? u.hundred : hundred,
+				polk: value ? u.polk : polk
 			}, {
 				where: {id: myID}
 			})
