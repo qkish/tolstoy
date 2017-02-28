@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-	
+
 	const User = sequelize.define('User', {
 		name: DataTypes.STRING,
 		email: {type: DataTypes.STRING, unique: true},
@@ -22,7 +22,7 @@ export default (sequelize, DataTypes) => {
 		monets: DataTypes.INTEGER,
 		money_total: DataTypes.INTEGER,
 		polk: DataTypes.INTEGER,
-		last_total_transaction: DataTypes.DATEONLY,
+		last_money_transaction: DataTypes.DATEONLY,
 		total: DataTypes.DOUBLE,
 		posts_monets: DataTypes.INTEGER,
 		comments_monets: DataTypes.INTEGER,
@@ -36,7 +36,8 @@ export default (sequelize, DataTypes) => {
 		couch_group: DataTypes.INTEGER,
 		current_program: DataTypes.STRING,
 		approved_money: DataTypes.INTEGER,
-		volunteer: DataTypes.BOOLEAN
+		volunteer: DataTypes.BOOLEAN,
+		last_day_money: DataTypes.INTEGER
 	}, {
 		tableName: 'users',
 		createdAt: 'created_at',
@@ -61,7 +62,7 @@ export default (sequelize, DataTypes) => {
 					polk: polkLeader,
 					couch_group: couchGroup,
 				} = values
-				
+
 				const leadersType = ['ten', 'hundred', 'polk', 'couch']
 				const leadersId = [tenLeader, hundredLeader, polkLeader, couchGroup]
 				const leaders = leadersId
@@ -71,7 +72,7 @@ export default (sequelize, DataTypes) => {
 				if (userMoney) {
 					// TODO Оптимизировать до двух запросов к базе (findAll => bulkUpdate/Create)
 					leaders.forEach( leader => {
-						
+
 						leader.id = Number(leader.id)
 						Group.findOne({
 							attributes: ['id', 'user_id', 'type'],
@@ -92,9 +93,9 @@ export default (sequelize, DataTypes) => {
 									where: {
 										id: id
 									}
-								}) 
+								})
 
-								return 0 } 
+								return 0 }
 								console.log('HOOK TRY NOT ENTEDED IF')
 								throw new Error
 
@@ -112,6 +113,6 @@ export default (sequelize, DataTypes) => {
 			},
 		}
 	})
-	
+
 	return User
 }
