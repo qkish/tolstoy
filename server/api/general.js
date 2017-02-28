@@ -1114,7 +1114,7 @@ export default function useGeneralApi(app) {
 		}
 
 		if (polk) {
-			where = {polk}
+			where = {hundred_leader:true, polk}
 		}
 
 		if (couch_group) {
