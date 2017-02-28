@@ -49,7 +49,7 @@ export const CardList = ({data, className}) => {
 		<ul
 			className={className}
 		>
-			{data.map(i => <CardListOfUsers data={i}/>)}
+			{data.map(i => <CardListOfUsers data={i} key={i.id}/>)}
 		</ul>
 	)
 }
