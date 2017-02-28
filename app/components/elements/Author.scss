@@ -5,10 +5,18 @@
 	border-radius: 25px;
 	background: $bg-gray;
 	margin-right: 10px;
+	.Card & {
+		width: 36px;
+		height: 36px;
+	}
 }
 
 .Author__avatar_wrapper img {
 	max-width: 50px;
+	.Card & {
+		width: 36px;
+		height: 36px;
+	}
 }
 
 .Author__name {

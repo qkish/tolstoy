@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import Products from 'app/components/elements/Products'
+import CardMyTen from 'app/components/elements/CardMyTen'
 import Beta from 'app/components/elements/Beta'
 import Userpic from 'app/components/elements/Userpic'
 import HorizontalMenu from 'app/components/elements/HorizontalMenu'
@@ -273,6 +274,7 @@ class Rating extends Component {
 					className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
 					<Beta />
 					<Products />
+					<CardMyTen />
 				</div>
 			</div>
 		)

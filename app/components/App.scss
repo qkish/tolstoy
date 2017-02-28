@@ -31,7 +31,7 @@
 }
 
 .rc-upload input[style] {
-  display: block !important; 
+  display: block !important;
 }
 
 .rc-upload input {
@@ -168,4 +168,8 @@ z-index: 101 !important
     width: 100%;
   }
 
+}
+.ulReset {
+	list-style-type: none;
+	margin-left: 0;
 }
