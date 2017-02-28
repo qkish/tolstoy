@@ -266,3 +266,15 @@ export function chooseSearch (query, group) {
       credentials: 'same-origin'
   }).then(res => res.json()).then(({ users }) => users)
 }
+
+export function updateProgram (value) {
+  if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+  return fetch(`/api/v1/user/update_program`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        csrf: $STM_csrf,
+        current_program: value
+      })
+  })
+}

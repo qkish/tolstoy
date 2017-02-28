@@ -45,6 +45,7 @@ export default createModule({
 
             return state
         } }, */},
+        { action: 'UPDATE_PROGRAM', reducer: state => state },
         { action: 'SET_PROGRAM', reducer: (state, {payload}) => state.set('currentProgram', payload) },
         { action: 'SET_VOLUNTEER', reducer: (state, {payload}) => state.set('isVolunteer', payload) },
         { action: 'SET_POLK_LEADER', reducer: (state, {payload}) => state.set('isPolkLeader', payload) },

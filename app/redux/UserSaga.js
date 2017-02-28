@@ -13,7 +13,8 @@ import {
     serverApiGetAccountPrivateKey,
     serverApiLogin2,
     checkUser,
-    updateMoney
+    updateMoney,
+    updateProgram
 } from 'app/utils/ServerApiClient'
 import {loadFollows} from 'app/redux/FollowSaga'
 import {translate} from 'app/Translator'
@@ -30,6 +31,7 @@ export const userWatches = [
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
     signUpWatch,
+    updateProgramWatch
 ]
 
 const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
@@ -60,6 +62,13 @@ function* updateMoneyWatch() {
     yield* takeLatest('user/UPDATE_MONEY', function* ({payload}) {
         yield call(updateMoney, payload)
     })
+}
+
+function* updateProgramWatch() {
+  yield* takeLatest('user/UPDATE_PROGRAM', function* ({payload}) {
+    yield call(updateProgram, payload)
+    window.location.reload()
+  })
 }
 
 export function* watchRemoveHighSecurityKeys() {

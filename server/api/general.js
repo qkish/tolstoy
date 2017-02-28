@@ -1718,6 +1718,30 @@ export default function useGeneralApi(app) {
 
 		this.body = JSON.stringify({users})
 	})
+
+	router.post('/user/update_program', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		const params = this.request.body
+		const {csrf, current_program} = typeof(params) === 'string' ? JSON.parse(params) : params
+		//if (!checkCSRF(this, csrf)) return;
+
+    try {
+      const user = yield models.User.findOne({
+        attributes: ['id','current_program'],
+        where: {
+          id: this.session.user
+        }
+      })
+      user.current_program = current_program
+      yield user.save()
+    } catch (error) {
+			console.error('Error in /user/update_program api call', this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
 }
 
 
