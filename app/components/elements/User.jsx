@@ -99,7 +99,7 @@ class User extends Component {
             <div className="Author__avatar_wrapper">
             <div className="User">
                     {process.env.BROWSER ?
-                        url ? <a href={linkFromProps || '/@' + username.name}> <img src={_urls.proxyImage(url || '')}  onError={this.onError} /></a> : <a href={'/@' + username.name}><div className="User__defaultAva"></div></a> :
+                        url ? <Link to={linkFromProps || '/@' + username.name}> <img src={_urls.proxyImage(url || '')}  onError={this.onError} /></Link> : <Link href={'/@' + username.name}><div className="User__defaultAva"></div></Link> :
                         <LoadingIndicator type="circle" inline />}
 				</div></div>
 

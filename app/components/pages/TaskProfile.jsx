@@ -35,6 +35,7 @@ import ViewUserTarget from 'app/components/modules/user/views/ViewUserTarget';
 import ViewUserMore from 'app/components/modules/user/views/ViewUserMore';
 // elements
 import Avatar from 'app/components/elements/Avatar';
+import CardMyTen from 'app/components/elements/CardMyTen'
 
 const formId = 'submitStory';
 const SubmitReplyEditor = ReplyEditorShort(formId);
@@ -336,7 +337,8 @@ export default class TaskProfile extends React.Component {
                  <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
 
                     <Beta />
-                    <Products />
+                   {/* <Products /> */}
+                    <CardMyTen/>
 
                 </div>
 

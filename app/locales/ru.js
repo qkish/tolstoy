@@ -277,7 +277,7 @@ const ru = {
 	unknown_account: 'Неизвестный аккаунт',
 	user_hasnt_made_any_posts_yet: "Похоже что {fullName} еще не написал(а) постов!",
 	user_hasnt_started_bloggin_yet: "Похоже что {fullName} еще не завёл(а) блог!",
-	user_hasnt_followed_anything_yet: "Похоже что {fullName} еще никого ни на кого не подписан(а)!",
+	user_hasnt_followed_anything_yet: "Похоже что пользователь еще никого ни на кого не подписан(а)!",
 	user_hasnt_had_any_replies_yet: "{fullName} еще не получил(а) ответов",
 	users_blog: "блог {name}",
 	users_posts: "посты {name}",
@@ -481,7 +481,7 @@ const ru = {
 	register_with_facebook: 'Регистрация с Facebook',
 	or_click_the_button_below_to_register_with_facebook: 'Или нажмите кнопку, чтобы зарегистрироваться с Facebook',
 	trending_24_hour: 'лучшее', // до первых выплат изменено с "популярного"
-	home: 'Лента',
+	home: 'Мои подписки',
 	'24_hour': '24 часа',
 	'30_day': '30 дней',
 	flag: "Голосовать против",

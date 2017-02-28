@@ -228,6 +228,12 @@ margin-bottom: 15px;
     position: relative;
     top: -1px;
   }
+
+  .Card & {
+     margin-top: 2px;
+     margin-left: 46px;
+ 
+   }
 }
 
 .PostSummary__footer .Voting__upvote_ico {
@@ -261,6 +267,7 @@ color: #7d7d7d;
   font-size: 12px;
   line-height: 15px;
   margin-top: 4px;
+  
 }
 
 .PostSummary__time_author_category_small a {

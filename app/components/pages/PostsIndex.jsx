@@ -18,6 +18,7 @@ import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import Products from 'app/components/elements/Products';
 import Beta from 'app/components/elements/Beta';
 import Apis from 'shared/api_client/ApiInstances'
+import CardMyTen from 'app/components/elements/CardMyTen'
 
 
 function sortOrderToLink(so, topic, account) {
@@ -104,7 +105,7 @@ class PostsIndex extends React.Component {
             order = 'by_feed';
             topics_order = 'trending';
             posts = this.props.global.getIn(['accounts', account_name, 'feed']);
-            emptyText = translate('user_hasnt_followed_anything_yet', {name: account_name});
+            emptyText = translate('user_hasnt_followed_anything_yet');
         } else {
             posts = this.getPosts(order, category);
         }
@@ -237,7 +238,7 @@ class PostsIndex extends React.Component {
             // ['promoted', translate('promoted')],
             ['active', translate('active')]
         ];
-        if (current_account_name) sort_orders.unshift(['home', translate('home')]);
+       // if (current_account_name) sort_orders.push(['home', translate('home')]);
         const sort_order_menu = sort_orders.filter(so => so[0] !== sort_order).map(so => ({link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: capitalizeFirstLetter(so[1])}));
         // there were a problem when in root route ('/') when header menu didn't
         // had any active links. Thats why selected_sort_order falls down to 'trending' if undefined
@@ -251,13 +252,15 @@ class PostsIndex extends React.Component {
             ['active', translate('active')],
             // ['tasks', translate('tasks')]
         ];
-        /* if (current_account_name) sort_orders_horizontal.unshift(['home', translate('home')]); */
+        
+        //if (current_account_name) sort_orders_horizontal.push(['home', translate('home')]); 
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
                 sort_order = route.params && route.params[0] !== 'home' ? route.params[0] : null;
                 let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
                 return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
             });
+        
 
         // Скрыть форму добавления поста
         // для неавторизованных пользователей
@@ -289,7 +292,8 @@ class PostsIndex extends React.Component {
                 <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
 
                     <Beta />
-                    <Products />
+                   {/* <Products /> */}
+                     <CardMyTen/>
 
                 </div>
             </div>

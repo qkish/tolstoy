@@ -1,0 +1,107 @@
+$sRoot: Card;
+$cHover: #196aff;
+$cText: #0f0f0f;
+
+.#{$sRoot} {
+	display: flex;
+	flex-flow: column nowrap;
+	width: 300px;
+	background: #fff;
+	border: 1px solid #e1e3e4;
+	border-radius: 3px;
+	padding: 15px 20px 10px 20px;
+	margin-top: 15px;
+	color: #0c0c0c;
+	
+	
+
+	&__item {
+		display: flex;
+		flex-flow: row nowrap;
+		padding-top: 15px;
+		
+		.PostSummary__niche {
+			margin-left: 46px;
+			margin-top: -2px;
+		}
+	}
+
+	&__schedule-list {
+		margin: 0 0 0 0;
+		padding: 0 0 15px 0;
+	}
+
+	&__schedule-title a {
+		font: 10px/20px 'museo_sans_cyrl', Arial, sans-serif;
+		font-weight: 700;
+		text-transform: uppercase;
+		color: #9f9f9f;
+		letter-spacing: 3px;
+		text-decoration: none;
+
+		&:hover,
+		&:focus {
+			color: $cHover;
+			text-decoration: none;
+		}
+	}
+	&__link,
+	&__link:hover,
+	&__link:focus {
+		//padding: 15px 0 15px 0;
+		text-decoration: none;
+		display: block;
+	}
+	&__date {
+		float: left;
+		width: 40px;
+		color: $cHover;
+		text-decoration: none;
+		font: 10px/20px 'museo_sans_cyrl', Arial, sans-serif;
+		font-weight: 700;
+
+		&:hover,
+		&:focus{
+			text-decoration: none;
+		}
+
+		&-day {
+			font-size: 27px;
+		}
+		&-month {
+			font-size: 10px;
+			letter-spacing: 3px;
+			text-transform: uppercase;
+		}
+	}
+
+	&__title {
+		font-size: 13px;
+		color: $cText;
+		font-weight: 700;
+		line-height: 15px;
+		.#{$sRoot}__link:hover & {
+			color: $cHover;
+		}
+	}
+
+	&__description {
+		color: #969696;
+		font-size: 11px;
+		#{$sRoot}__link:hover & {
+			color: $cHover;
+		}
+	}
+
+	&__text {
+		margin-left: 50px;
+		color: $cText;
+		text-decoration: none;
+	}
+
+	&:hover,
+	&:focus {
+		color: $cHover;
+		text-decoration: none;
+	}
+}

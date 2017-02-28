@@ -46,9 +46,10 @@
 	letter-spacing: 0;
 }
 .Admin__wrapper .Rating__row {
-	overflow: hidden;
+	height: 80px;
     display: block;
     padding: 10px 10px 10px 10px;
+    overflow: visible;
 
 }
 

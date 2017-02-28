@@ -130,6 +130,7 @@ class Admin extends Component {
                               }))}
                               placeholder='Полк не выбран'
                               noResultsText='Нет полков'
+                              clearable={false}
                               onChange={selected => {
                                 const data = users.splice(0)
                                 find(data, {id: user.id}).polk = selected ? selected.value : null
@@ -154,6 +155,7 @@ class Admin extends Component {
                             }))}
                             placeholder='Сотня не выбрана'
                             noResultsText='Нет сотен'
+                            clearable={false}
                             onChange={selected => {
                               const data = users.splice(0)
                               find(data, {id: user.id}).hundred = selected ? selected.value : null
@@ -178,6 +180,7 @@ class Admin extends Component {
                             }))}
                             placeholder='Десятка не выбрана'
                             noResultsText='Нет десяток'
+                            clearable={false}
                             onChange={selected => {
                               const data = users.splice(0)
                               find(data, {id: user.id}).ten = selected ? selected.value : null
@@ -202,6 +205,7 @@ class Admin extends Component {
                             }))}
                             placeholder='Тренерская группа не выбрана'
                             noResultsText='Нет тренерских групп'
+                            clearable={false}
                             onChange={selected => {
                               const data = users.splice(0)
                               find(data, {id: user.id}).couch_group = selected ? selected.value : null
