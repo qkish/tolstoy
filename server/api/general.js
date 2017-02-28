@@ -1032,12 +1032,12 @@ export default function useGeneralApi(app) {
 			}
 		}
 
-		if (isAfter((new Date()).setHours(0, 0, 0, 0), last_transaction)) {
+		if (last_transaction && isAfter((new Date()).setHours(0, 0, 0, 0), last_transaction)) {
 			console.log('now', (new Date()).setHours(0, 0, 0, 0), 'last', last_transaction)
 			console.log('is now after last', isAfter((new Date()).setHours(0, 0, 0, 0), last_transaction))
 			yield user.update({
 				last_day_money: user.money_total,
-				money_total: user.last_day_money + Number(payload.money),
+				money_total: user.money_total + Number(payload.money),
 				last_money_transaction: new Date(),
 				posts_monets: 0,
 				comments_monets: 0,
