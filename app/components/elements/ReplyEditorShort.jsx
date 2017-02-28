@@ -597,10 +597,10 @@ class ReplyEditorShort extends React.Component {
                         </div>
 
 
-                            {hasCategory && <span>
+                           {/*} {hasCategory && <span>
                                 <CategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
 
-                            </span>}
+                            </span>} */}
 
                         <div className={vframe_section_shrink_class}>
                             {postError && <div className="error">{translateError(postError)}</div>}

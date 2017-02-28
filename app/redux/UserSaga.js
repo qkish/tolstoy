@@ -332,7 +332,7 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
                         account = yield call(getAccount, newname);
                         if(!account) break;
 
-                        newname = 'bm-'+ username.split('@')[0].replace(/[^0-9A-Za-z]/g, '').substring(0, 12) + generateGolosLogin(2);
+                        newname = 'bm-'+ username.split('@')[0].replace(/[^0-9A-Za-z]/g, '').substring(0, 8) + generateGolosLogin(2);
                         account = yield call(getAccount, newname);
                         if(!account) break;
                     }
