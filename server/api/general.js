@@ -1110,7 +1110,7 @@ export default function useGeneralApi(app) {
 		}
 
 		if (hundred) {
-			where = {hundred}
+			where = {ten_leader: true, hundred}
 		}
 
 		if (polk) {
