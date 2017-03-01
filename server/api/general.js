@@ -994,23 +994,6 @@ export default function useGeneralApi(app) {
 				money_total: user.last_day_money + Number(payload.money),
 				last_money_transaction: new Date()
 			})
-		}
-
-		if (isToday(last_transaction)) {
-			yield user.update({
-				money_total: user.last_day_money + Number(payload.money)
-			})
-		}
-
-		if (isAfter(new Date(), last_transaction)) {
-			yield user.update({
-				last_day_money: user.money_total,
-				money_total: last_day_money + Number(payload.money),
-				last_money_transaction: new Date()
-			})
-		}
-
-		if (!last_transaction || isToday(last_transaction)) {
 			if (payload.type === 'submit_story') {
 				yield user.update({
 					posts_monets: 1
@@ -1026,32 +1009,40 @@ export default function useGeneralApi(app) {
 					tasks_monets: 2
 				})
 			}
+		}
+
+		if (isToday(last_transaction)) {
 			yield user.update({
-				last_money_transaction: new Date()
+				money_total: user.last_day_money + Number(payload.money)
 			})
-		} else {
-			const monets = user.posts_monets + user.comments_monets + user.tasks_monets
-			const monets_total = user.monets + monets
-			const total = Number(payload.vesting) * 0.51 + monets * 0.25 + Number(payload.money) * 0.00024
-			console.log({
+			if (payload.type === 'submit_story') {
+				yield user.update({
+					posts_monets: 1
+				})
+			}
+			if (payload.type === 'submit_comment') {
+				yield user.update({
+					comments_monets: 1
+				})
+			}
+			if (payload.type === 'reply_to_task') {
+				yield user.update({
+					tasks_monets: 2
+				})
+			}
+		}
+
+		if (isAfter((new Date()).setHours(0, 0, 0, 0), last_transaction)) {
+			console.log('now', (new Date()).setHours(0, 0, 0, 0), 'last', last_transaction)
+			console.log('is now after last', isAfter((new Date()).setHours(0, 0, 0, 0), last_transaction))
+			yield user.update({
+				last_day_money: user.money_total,
+				money_total: user.last_day_money + Number(payload.money),
+				last_money_transaction: new Date(),
 				posts_monets: 0,
 				comments_monets: 0,
 				tasks_monets: 0,
-				last_money_transaction: new Date(),
-				total: total,
-				monets: monets_total,
-				vesting_total: Number(payload.vesting),
-				money_total: user.money_total + Number(payload.money)
-			})
-			yield user.update({
-				posts_monets: 0,
-				comments_monets: 0,
-				tasks_monets: 0,
-				last_money_transaction: new Date(),
-				total: total,
-				monets: monets_total,
-				vesting_total: Number(payload.vesting),
-				money_total: user.money_total + Number(payload.money)
+				monets: user.monets + user.posts_monets + user.comments_monets + user.tasks_monets
 			})
 		}
 
