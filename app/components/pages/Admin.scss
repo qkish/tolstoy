@@ -8,6 +8,10 @@
     width: 100%;
 }
 
+.Admin__wrapper .PostSummary__niche {
+	max-height: 27px;
+}
+
 .Admin__wrapper .Rating__row:nth-child(2n) {
 	background: #f7f8f9;
 }
