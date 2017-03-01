@@ -124,19 +124,19 @@ class Admin extends Component {
                             <Select
                               name='select-polk'
                               value={user.polk}
-                              options={allPolks && allPolks.map(p => ({
+                              options={allPolks && [{ value: null, label: 'Полк не выбран' }, ...allPolks.map(p => ({
                                 value: p.id,
                                 label: `${p.first_name} ${p.last_name}`
-                              }))}
+                              }))]}
                               placeholder='Полк не выбран'
                               noResultsText='Нет полков'
-                              onChange={selected => {
+                              onChange={({ value }) => {
                                 const data = users.splice(0)
-                                find(data, {id: user.id}).polk = selected ? selected.value : null
+                                find(data, {id: user.id}).polk = value || null
                                 this.setState({
                                   users: data
                                 })
-                                this.handlePolkChange({user, polk: selected ? selected.value : undefined })
+                                this.handlePolkChange({user, polk: value || undefined })
                               }} />
                              <label>
                                  <input type="checkbox" defaultChecked={user.polk_leader} onChange={({ target }) => this.handlePolkLeaderChange({ user, value: target.checked })} />
@@ -148,19 +148,19 @@ class Admin extends Component {
                           <Select
                             name='select-hundred'
                             value={user.hundred}
-                            options={allHundreds && allHundreds.map(h => ({
+                            options={allHundreds && [{ value: null, label: 'Сотня не выбрана' },...allHundreds.map(h => ({
                               value: h.id,
                               label: `${h.first_name} ${h.last_name}`
-                            }))}
+                            }))]}
                             placeholder='Сотня не выбрана'
                             noResultsText='Нет сотен'
-                            onChange={selected => {
+                            onChange={({ value }) => {
                               const data = users.splice(0)
-                              find(data, {id: user.id}).hundred = selected ? selected.value : null
+                              find(data, {id: user.id}).hundred = value || null
                               this.setState({
                                 users: data
                               })
-                              this.handleHundredChange({user, hundred: selected ? selected.value : undefined })
+                              this.handleHundredChange({user, hundred: value || undefined })
                             }} />
                             <label>
                                 <input type="checkbox" defaultChecked={user.hundred_leader} onChange={({ target }) => this.handleHundredLeaderChange({ user, value: target.checked })} />
@@ -172,19 +172,19 @@ class Admin extends Component {
                           <Select
                             name='select-ten'
                             value={user.ten}
-                            options={allTens && allTens.map(t => ({
+                            options={allTens && [{ value: null, label: 'Десятка не выбрана' },...allTens.map(t => ({
                               value: t.id,
                               label: `${t.first_name} ${t.last_name}`
-                            }))}
+                            }))]}
                             placeholder='Десятка не выбрана'
                             noResultsText='Нет десяток'
-                            onChange={selected => {
+                            onChange={({ value }) => {
                               const data = users.splice(0)
-                              find(data, {id: user.id}).ten = selected ? selected.value : null
+                              find(data, {id: user.id}).ten = value || null
                               this.setState({
                                 users: data
                               })
-                              this.handleTenChange({user, ten: selected ? selected.value : undefined })
+                              this.handleTenChange({user, ten: value || undefined })
                             }} />
                             <label>
                                 <input type="checkbox" defaultChecked={user.ten_leader} onChange={({ target }) => this.handleTenLeaderChange({ user, value: target.checked })} />
@@ -196,19 +196,19 @@ class Admin extends Component {
                           <Select
                             name='select-couch-group'
                             value={user.couch_group}
-                            options={allTrainers && allTrainers.map(c => ({
+                            options={allTrainers && [{ value: null, label: 'Тренерская группа не выбрана' }, ...allTrainers.map(c => ({
                               value: c.id,
                               label: `${c.first_name} ${c.last_name}`
-                            }))}
+                            }))]}
                             placeholder='Тренерская группа не выбрана'
                             noResultsText='Нет тренерских групп'
-                            onChange={selected => {
+                            onChange={({ value }) => {
                               const data = users.splice(0)
-                              find(data, {id: user.id}).couch_group = selected ? selected.value : null
+                              find(data, {id: user.id}).couch_group = value || null
                               this.setState({
                                 users: data
                               })
-                              this.handleCouchGroupChange({user, couch_group: selected ? selected.value : undefined })
+                              this.handleCouchGroupChange({user, couch_group: value || undefined })
                             }} />
                             <label>
                                 <input type="checkbox" defaultChecked={user.couch} onChange={({ target }) => this.handleCouchChange({ user, value: target.checked })} />
