@@ -57,10 +57,10 @@ class Admin extends Component {
     getData (props) {
         getUsersByCategory(props.params.category, this.getOffset(), this.state.perPage).then(users => this.setState({users}))
         getUsersCount(props.params.category).then(count => this.setState({count}))
-        getUsersByCategory('tens').then(allTens => this.setState({allTens}))
-        getUsersByCategory('hundreds').then(allHundreds => this.setState({allHundreds}))
+        getUsersByCategory('tens', 0, 1000).then(allTens => this.setState({allTens}))
+        getUsersByCategory('hundreds', 0, 1000).then(allHundreds => this.setState({allHundreds}))
         getUsersByCategory('polki').then(allPolks => this.setState({allPolks}))
-        getUsersByCategory('couches').then(allTrainers => this.setState({allTrainers}))
+        getUsersByCategory('couches', 0, 500).then(allTrainers => this.setState({allTrainers}))
     }
 
     handleTenChange ({ user, ten }) {

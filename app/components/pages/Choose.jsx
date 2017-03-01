@@ -104,7 +104,8 @@ class Choose extends Component {
 		)
 
 		if (this.props.params.group === 'hundreds') {
-			view = (
+			view = (<div>Выбор сотников окончен!</div>)
+			{/* view = (
 				<div>
 					<h3>Выберите сотников</h3>
 					{searchView}
@@ -145,9 +146,12 @@ class Choose extends Component {
 					</div>
 				</div>
 			)
+		} */}
 		}
+
 		if (this.props.params.group === 'tens') {
-			view = (
+			view = (<div>Выбор десятников окончен!</div>)
+			{/* view = (
 				<div>
 					<h3>Выберите десятников</h3>
 					{searchView}
@@ -188,6 +192,7 @@ class Choose extends Component {
 					</div>
 				</div>
 			)
+		} */}
 		}
 
 		if (this.props.params.group === 'myten') {
