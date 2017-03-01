@@ -223,8 +223,14 @@ export default class UserProfile extends React.Component {
         if(this.state.userID && this.state.userID.id) userID = this.state.userID.id
 
         let isPayed = false
+        let defaultCover = 'UserProfile__cover'
         if (this.props.current_program) {
-          if (this.props.current_program == '1' || this.props.current_program == '2') {isPayed = true}
+          if (this.props.current_program == '1') {isPayed = true}
+          if (this.props.current_program == '2') {
+            defaultCover = 'UserProfile__cover-mzs'
+          } else {
+            defaultCover = 'UserProfile__cover-ceh'
+          }
         }
 
         let isThereAnyTens = allTens ? allTens.length : ''
@@ -454,7 +460,7 @@ export default class UserProfile extends React.Component {
         return (
             <div className="UserProfile">
             <div className="row">
-                <div className="UserProfile__cover col-sm-12"
+                <div className={defaultCover + ' col-sm-12'}
                      style={backgroundUrl}>
                 <Avatar account={account} />
                     <div className="UserProfile__buttons-block">

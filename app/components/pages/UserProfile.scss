@@ -318,8 +318,30 @@ box-shadow: inset 0px 1px 0px 0px rgba(0,0,0,0.14);
   background-size: cover;
   border-radius: 0 0 3px 3px;
   margin: 0 5px 30px 5px;
-  background-image: url('../../assets/images/defaultcover.jpg');
+  background-image: url('../../assets/images/defaultcover-all.jpg');
 
+}
+.UserProfile__cover-mzs {
+  width: 875px;
+  height: 198px;
+  background-color: #7a7a7a;
+  background-position: top left;
+  background-repeat: repeat;
+  background-size: cover;
+  border-radius: 0 0 3px 3px;
+  margin: 0 5px 30px 5px;
+  background-image: url('../../assets/images/defaultcover-mzs.jpg');
+}
+.UserProfile__cover-ceh {
+  width: 875px;
+  height: 198px;
+  background-color: #7a7a7a;
+  background-position: top left;
+  background-repeat: repeat;
+  background-size: cover;
+  border-radius: 0 0 3px 3px;
+  margin: 0 5px 30px 5px;
+  background-image: url('../../assets/images/defaultcover.jpg');
 }
 
 .UserProfile__buttons-block {
