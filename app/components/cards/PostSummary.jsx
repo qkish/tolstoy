@@ -25,6 +25,7 @@ import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import store from 'store';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY } from 'config/client_config';
+import { UserAuthWrapper } from 'redux-auth-wrapper';
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     const author = <strong>{post.author}</strong>;
@@ -98,6 +99,16 @@ class PostSummary extends React.Component {
         body: JSON.stringify({
           url,
           status: 2
+        })
+      })
+    }
+
+    getReplyStatus (post) {
+      const url = `${post.author}/${post.permlink}`
+      fetch('/api/v1/reply/status', {
+        method: 'POST',
+        body: JSON.stringify({
+          url
         })
       })
     }
@@ -231,6 +242,25 @@ class PostSummary extends React.Component {
         const commentClasses = []
         if(gray || ignore) commentClasses.push('downvoted') // rephide
 
+
+        const VisibleOnlyVolunteer = UserAuthWrapper({
+          authSelector: state => state.user,
+          wrapperDisplayName: 'VisibleOnlyVolunteer',
+          FailureComponent: null,
+          predicate: user => user.get('isVolunteer')
+        })
+
+        const ApproveAndRejectButtons = VisibleOnlyVolunteer(({approve, reject}) => (
+          <div style={{ display: 'flex' }}>
+            <div>
+              <button className='button' onClick={approve}>Одобрить</button>
+            </div>
+            <div>
+              <button className='button' onClick={reject}>Отклонить</button>
+            </div>
+          </div>
+        ))
+
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')}
                      itemScope itemType ="http://schema.org/blogPost">
@@ -268,16 +298,9 @@ class PostSummary extends React.Component {
                     <Voting pending_payout={pending_payout} total_payout={total_payout} cashout_time={cashout_time} post={post} showList={false} />
                     {moneyToday}
                 </div>
-                {isTask && (
-                  <div style={{ display: 'flex' }}>
-                    <div>
-                      <button className='button' onClick={() => this.approveReply(p)}>Одобрить</button>
-                    </div>
-                    <div>
-                      <button className='button' onClick={() => this.rejectReply(p)}>Отклонить</button>
-                    </div>
-                  </div>
-                )}
+                <ApproveAndRejectButtons
+                  approve={() => this.approveReply(p)}
+                  reject={() => this.rejectReply(p)} />
             </article>
         )
     }
