@@ -79,8 +79,9 @@ class Admin extends Component {
         this.props.changeCouchGroup(user.id, Number(couchGroup))
     }
 
-    handleTenLeaderChange ({ user, value }) {
+    handleTenLeaderChange ({ user, value, ten }) {
         this.props.changeTenLeader(user.id, value)
+        if(value) this.props.changeTen(user.id, Number(ten)) 
     }
 
     handleHundredLeaderChange ({ user, value }) {
@@ -192,7 +193,7 @@ class Admin extends Component {
                               this.handleTenChange({user, ten: value || undefined })
                             }} />
                             <label>
-                                <input type="checkbox" defaultChecked={user.ten_leader} onChange={({ target }) => this.handleTenLeaderChange({ user, value: target.checked })} />
+                                <input type="checkbox" defaultChecked={user.ten_leader} onChange={({ target }) => this.handleTenLeaderChange({ user, value: target.checked, ten: user.id || undefined })} />
                                 Десятник
                             </label>
                         </div>
