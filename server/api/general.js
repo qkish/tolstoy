@@ -1798,6 +1798,18 @@ export default function useGeneralApi(app) {
     const {csrf, url, status} = typeof(params) === 'string' ? JSON.parse(params) : params
     //if (!checkCSRF(this, csrf)) return;
 		try {
+			if (!this.session.user) throw new Error('access denied')
+
+			const u = yield models.User.findOne({
+				where: {
+					id: this.session.user
+				}
+			})
+
+			if (!u.volunteer) {
+				throw new Error('access denied')
+			}
+
 			const reply = yield models.TaskReply.findOne({
         attributes: ['id', 'status'],
 				where: {
