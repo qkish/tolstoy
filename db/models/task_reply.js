@@ -9,14 +9,11 @@ module.exports = function (sequelize, DataTypes) {
       references: {
           model: 'users',
           key: 'id'
-      },
-      field: 'volunteer_id'
+      }
     }
   }, {
     tableName: 'task_replies',
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
-    timestamps: true,
+    timestamps: false,
     underscored: true,
     classMethods: {
       associate: function (models) {

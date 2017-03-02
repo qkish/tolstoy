@@ -80,6 +80,28 @@ class PostSummary extends React.Component {
                props.total_payout !== this.props.total_payout;
     }
 
+    approveReply (post) {
+      const url = `${post.author}/${post.permlink}`
+      fetch('/api/v1/reply/update', {
+        method: 'PUT',
+        body: JSON.stringify({
+          url,
+          status: 1
+        })
+      })
+    }
+
+    rejectReply (post) {
+      const url = `${post.author}/${post.permlink}`
+      fetch('/api/v1/reply/update', {
+        method: 'PUT',
+        body: JSON.stringify({
+          url,
+          status: 2
+        })
+      })
+    }
+
     render() {
         const {currentCategory, thumbSize, ignore, onClick} = this.props;
         const {post, content, pending_payout, total_payout, cashout_time, jsonMetadata, accounts} = this.props;
@@ -96,7 +118,7 @@ class PostSummary extends React.Component {
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
 
-        
+
 
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
@@ -131,13 +153,13 @@ class PostSummary extends React.Component {
             money = money.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
          }
 
-         
+
         let fileLink
          if (p.json_metadata.fileAttached) {
             let filename = p.json_metadata.fileAttached;
             filename = String(filename);
 
-            
+
             let fileicon = 'PostSummary__file-image'
             var fileExt = filename.substring(filename.lastIndexOf(".")+1, filename.length).toLowerCase();
 
@@ -147,7 +169,7 @@ class PostSummary extends React.Component {
             if (fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif' || fileExt == 'psd') { fileicon = 'PostSummary__file-image'}
 
 
-            
+
             let exactName = filename.split('\\').pop().split('/').pop();
 
             exactName = decodeURI(exactName)
@@ -161,13 +183,13 @@ class PostSummary extends React.Component {
 
          }
 
-         let firstTag 
+         let firstTag
          if(p.json_metadata && p.json_metadata.tags && p.json_metadata.tags[0]) firstTag = p.json_metadata.tags[0];
 
          let isTask = false
 
          if (firstTag) {isTask = firstTag.substring(0,7) == 'bm-task' ? true : false }
-        
+
 
         let moneyCurrency = store.get('fetchedCurrency') || DEFAULT_CURRENCY
 
@@ -223,7 +245,7 @@ class PostSummary extends React.Component {
                     <div className="float-right"><Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} flag /></div>
                 </div>
                 {reblogged_by}
-                 {isTask && p.category == 'bm-open' ? 
+                 {isTask && p.category == 'bm-open' ?
                     <div className="PostSummary__header-otvet">
                     <div className="PostSummary__header-otvettitle">Выполнение задания</div>
                         {content_title}
@@ -246,6 +268,16 @@ class PostSummary extends React.Component {
                     <Voting pending_payout={pending_payout} total_payout={total_payout} cashout_time={cashout_time} post={post} showList={false} />
                     {moneyToday}
                 </div>
+                {isTask && (
+                  <div style={{ display: 'flex' }}>
+                    <div>
+                      <button className='button' onClick={() => this.approveReply(p)}>Одобрить</button>
+                    </div>
+                    <div>
+                      <button className='button' onClick={() => this.rejectReply(p)}>Отклонить</button>
+                    </div>
+                  </div>
+                )}
             </article>
         )
     }
