@@ -90,15 +90,6 @@ class PostsIndex extends React.Component {
         this.setState({showSpam: !this.state.showSpam})
     }
 
-    getTaskReplies = () => {
-      fetch('/api/v1/task_replies')
-        .then(res => res.json())
-        .then(replies => replies.postsUrls.map(u => u.url))
-        .then(urls => this.setState({
-          taskReplyUrlList: urls
-        }))
-    }
-
     render() {
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
         let topics_order = order;
@@ -271,12 +262,6 @@ class PostsIndex extends React.Component {
             <SubmitReplyEditor successCallback={() => {  }} type="submit_story" />
         </div>;
 
-        // if (this.props.routeParams.order === 'check-task-reply') {
-        // console.log('STATE POTS: ', this.state.taskReplyUrlList)
-          // posts = List(this.state.taskReplyUrlList) || []
-          // console.log('urls', posts)
-        // }
-
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
                 <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
@@ -284,8 +269,6 @@ class PostsIndex extends React.Component {
                     {formFront}
 
                     {!bmTasks && <HorizontalMenu items={sort_order_menu_horizontal} />}
-
-                    <Link to='/check-task-reply'>На проверку</Link>
 
                     {!bmTasks && <PostsList ref="list"
                         posts={posts ? posts.toArray() : []}
