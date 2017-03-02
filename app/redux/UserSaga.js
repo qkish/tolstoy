@@ -217,9 +217,10 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
 
 
         const offchainEmail = yield select(state => state.offchain.getIn(['user', 'email']))
+        const offchainUser = yield select(state => state.offchain.getIn(['user', 'name']))
 
         console.log('OFFCHAIN USER EMAIL: ', offchainEmail)
-        if (offchainEmail != usernameFromCookies) {
+        if ((offchainEmail != usernameFromCookies) || (offchainUser != username)) {
             serverApiLogout()
             username = usernameFromCookies
             password = ''
