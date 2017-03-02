@@ -704,7 +704,7 @@ export default function useGeneralApi(app) {
 		//if (!checkCSRF(this, csrf)) return;
 		console.log('-- /logout_account -->', this.session.uid);
 		try {
-			
+
 			//const user = decodeURIComponent(this.cookies.get('molodost_user'))
     		//const hash = this.cookies.get('molodost_hash')
     		//const user_agent = this.headers['user-agent']
@@ -712,7 +712,7 @@ export default function useGeneralApi(app) {
       		//let bmToken = yield isUserAuthOnBM(user, hash, user_agent)
       		//console.log('REVOKING TOKEN GET: ', bmToken)
 
-			//let revokeToken 
+			//let revokeToken
 			//if(bmToken) revokeToken = yield revokeBMAccessToken(bmToken)
 			//console.log('REVOKED: ', revokeToken)
 
@@ -1792,12 +1792,13 @@ export default function useGeneralApi(app) {
 		}
 	})
 
-	router.put('/reply/update', koaBody, function* () {
+	router.post('/reply/update', koaBody, function* () {
     if (rateLimitReq(this, this.req)) return
     const params = this.request.body
-    const {csrf, url, status} = typeof(params) === 'string' ? JSON.parse(params) : params
+    const {csrf, payload} = typeof(params) === 'string' ? JSON.parse(params) : params
     //if (!checkCSRF(this, csrf)) return;
 		try {
+      console.log('PAY LOAD', payload)
 			if (!this.session.user) throw new Error('access denied')
 
 			const u = yield models.User.findOne({
@@ -1811,14 +1812,23 @@ export default function useGeneralApi(app) {
 			}
 
 			const reply = yield models.TaskReply.findOne({
-        attributes: ['id', 'status'],
+        attributes: ['id'],
 				where: {
-					url
+					url: payload.url
 				}
 			})
 
-      reply.status = status
-      yield reply.save()
+      if (reply) {
+        yield reply.update({
+          ...payload,
+          volunteer: this.session.user
+        })
+      } else {
+        yield models.TaskReply.create({
+          ...payload,
+          volunteer: this.session.user
+        })
+      }
 
 			this.body = JSON.stringify({
 				ok: true

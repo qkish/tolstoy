@@ -3,28 +3,17 @@ module.exports = function (sequelize, DataTypes) {
     url: DataTypes.STRING,
     username: DataTypes.STRING,
     status: DataTypes.INTEGER,
+    volunteer: DataTypes.INTEGER,
     program: DataTypes.STRING,
-    volunteer: {
-      type: DataTypes.INTEGER,
-      references: {
-          model: 'users',
-          key: 'id'
-      }
-    }
+    money: DataTypes.INTEGER,
+    tags: DataTypes.STRING,
+    created: DataTypes.DATE,
+    permlink: DataTypes.STRING,
+    category: DataTypes.STRING
   }, {
     tableName: 'task_replies',
     timestamps: false,
-    underscored: true,
-    classMethods: {
-      associate: function (models) {
-        TaskReply.belongsTo(models.User, {
-          onDelete: "CASCADE",
-          foreignKey: {
-            allowNull: false
-          }
-        });
-      }
-    }
+    underscored: true
   });
   return TaskReply;
 };

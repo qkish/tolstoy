@@ -83,22 +83,50 @@ class PostSummary extends React.Component {
 
     approveReply (post) {
       const url = `${post.author}/${post.permlink}`
+      const status = 1
+      const username = post.author
+      const money = post.json_metadata.daySumm
+      const tags = post.json_metadata.tags.join(',')
+      const created = new Date(post.created)
+      const permlink = post.permlink
+      const category = post.category
+      const program = post.json_metadata.tags[0] === 'bm-ceh23' ? '1' : '2'
+
+      const payload = {
+        url, status, money, tags, username,
+        created, permlink, category, program
+      }
+
       fetch('/api/v1/reply/update', {
-        method: 'PUT',
+        method: 'POST',
+        credentials: 'same-origin',
         body: JSON.stringify({
-          url,
-          status: 1
+          payload
         })
       })
     }
 
     rejectReply (post) {
       const url = `${post.author}/${post.permlink}`
+      const status = 2
+      const username = post.author
+      const money = post.json_metadata.daySumm
+      const tags = post.json_metadata.tags.join(',')
+      const created = new Date(post.created)
+      const permlink = post.permlink
+      const category = post.category
+      const program = post.json_metadata.tags[0] === 'bm-ceh23' ? '1' : '2'
+
+      const payload = {
+        url, status, money, tags, username,
+        created, permlink, category, program
+      }
+
       fetch('/api/v1/reply/update', {
-        method: 'PUT',
+        method: 'POST',
+        credentials: 'same-origin',
         body: JSON.stringify({
-          url,
-          status: 2
+          payload
         })
       })
     }
