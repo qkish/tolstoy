@@ -26,9 +26,45 @@ $cText: #0f0f0f;
 		}
 	}
 
+	&__ul-tasks {
+		//list-style: none;
+		margin-top:10px;
+		padding-left: 15px;
+		
+		font: 14px/20px 'museo_sans_cyrl', Arial, sans-serif;
+    		color: #196aff;
+    		margin: 0;
+    
+	}
+	&__ul-tasks li {
+		color: #0c0c0c;
+	}
+	
+	&__ul-tasks li a {
+		font: 14px/20px 'museo_sans_cyrl', Arial, sans-serif;
+    		color: #196aff;
+    		padding: 5px 0;
+    		display: block;
+	}
+
+
+	&__minus-margin {
+		margin-top:0;
+		margin-bottom: 15px;
+	}
+
 	&__schedule-list {
 		margin: 0 0 0 0;
 		padding: 0 0 15px 0;
+	}
+
+	&__schedule-title {
+		font: 10px/20px 'museo_sans_cyrl', Arial, sans-serif;
+		font-weight: 700;
+		text-transform: uppercase;
+		color: #9f9f9f;
+		letter-spacing: 3px;
+		text-decoration: none;
 	}
 
 	&__schedule-title a {

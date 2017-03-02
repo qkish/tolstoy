@@ -19,6 +19,8 @@ import Products from 'app/components/elements/Products';
 import Beta from 'app/components/elements/Beta';
 import Apis from 'shared/api_client/ApiInstances'
 import CardMyTen from 'app/components/elements/CardMyTen'
+import TaskCheckLinks from 'app/components/elements/TaskCheckLinks'
+
 
 
 function sortOrderToLink(so, topic, account) {
@@ -269,6 +271,9 @@ class PostsIndex extends React.Component {
             <SubmitReplyEditor successCallback={() => {  }} type="submit_story" />
         </div>;
 
+        let isCheckLinks = false
+        if (this.props.is_volunteer) {isCheckLinks = true}
+
 
 
 
@@ -291,9 +296,11 @@ class PostsIndex extends React.Component {
                 </div>
                 <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
 
+                    
+                    {isCheckLinks ?  <TaskCheckLinks /> : ''}
                     <Beta />
                    {/* <Products /> */}
-                     <CardMyTen/>
+                     <CardMyTen/> 
 
                 </div>
             </div>
@@ -309,12 +316,15 @@ module.exports = {
             const current_user = state.user.get('current');
             const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
 
+            const is_volunteer = state.user.get('isVolunteer');
+
             return {
                 discussions: state.global.get('discussion_idx'),
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 global: state.global,
-                current_account_name
+                current_account_name,
+                is_volunteer
             };
         },
         (dispatch) => {
