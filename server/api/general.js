@@ -1770,6 +1770,24 @@ export default function useGeneralApi(app) {
 			this.status = 500
 		}
 	})
+
+	router.get('/task_replies', koaBody, function* () {
+		try {
+			const postsUrls = yield models.TaskReply.findAll({
+				attributes: ['url']
+			})
+
+			this.body = JSON.stringify({
+				postsUrls
+			})
+		} catch (error) {
+			console.error('Error in /task_replies api call', this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
 }
 
 
