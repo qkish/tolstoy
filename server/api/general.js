@@ -1774,7 +1774,10 @@ export default function useGeneralApi(app) {
 	router.get('/task_replies', koaBody, function* () {
 		try {
 			const postsUrls = yield models.TaskReply.findAll({
-				attributes: ['url']
+				attributes: ['url'],
+				where: {
+					status: 0
+				}
 			})
 
 			this.body = JSON.stringify({
