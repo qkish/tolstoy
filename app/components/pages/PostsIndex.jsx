@@ -2,6 +2,7 @@
 import React, {PropTypes} from 'react';
 import {connect} from 'react-redux';
 import { Link } from 'react-router';
+import { List } from 'immutable';
 import Topics from './Topics';
 import constants from 'app/redux/constants';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -30,7 +31,7 @@ function sortOrderToLink(so, topic, account) {
     return `/${so}`;
 }
 
- 
+
 const formId = 'submitStory'
 const SubmitReplyEditor = ReplyEditorShort(formId)
 
@@ -60,7 +61,10 @@ class PostsIndex extends React.Component {
         if (window.innerHeight && window.innerHeight > 3000 && prevProps.discussions !== this.props.discussions) {
             this.refs.list.fetchIfNeeded();
         }
+    }
 
+    componentDidMount() {
+      this.getTaskReplies()
     }
 
     getPosts(order, category) {
@@ -81,11 +85,19 @@ class PostsIndex extends React.Component {
         const [author, permlink] = last_post.split('/');
         this.props.requestData({author, permlink, order, category, accountname});
     }
+
     onShowSpam = () => {
         this.setState({showSpam: !this.state.showSpam})
     }
 
-   
+    getTaskReplies = () => {
+      fetch('/api/v1/task_replies')
+        .then(res => res.json())
+        .then(replies => replies.postsUrls.map(u => u.url))
+        .then(urls => this.setState({
+          taskReplyUrlList: urls
+        }))
+    }
 
     render() {
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
@@ -129,9 +141,6 @@ class PostsIndex extends React.Component {
         let bmOpen = '';
         let bmTasks = '';
 
-
-        
-
         if (route.page === 'PostsIndex') {
 
             if (route.params[0] === "tasks") bmTasks = 'active_tab';
@@ -146,13 +155,7 @@ class PostsIndex extends React.Component {
                 if (route.params.length > 1) {
 
                     if (route.params[1] === "bm-open") bmOpen = 'active_tab';
-
-                    
-                  
-
                     if (route.params[1] === "bm-tasks") bmTasks = 'active_tab';
-
-
 
                     topic = detransliterate(route.params[1]);
                     topic_original_link = (route.params[1])
@@ -252,15 +255,14 @@ class PostsIndex extends React.Component {
             ['active', translate('active')],
             // ['tasks', translate('tasks')]
         ];
-        
-        //if (current_account_name) sort_orders_horizontal.push(['home', translate('home')]); 
+
+        //if (current_account_name) sort_orders_horizontal.push(['home', translate('home')]);
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
                 sort_order = route.params && route.params[0] !== 'home' ? route.params[0] : null;
                 let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
                 if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
                 return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
             });
-        
 
         // Скрыть форму добавления поста
         // для неавторизованных пользователей
@@ -269,8 +271,11 @@ class PostsIndex extends React.Component {
             <SubmitReplyEditor successCallback={() => {  }} type="submit_story" />
         </div>;
 
-
-
+        // if (this.props.routeParams.order === 'check-task-reply') {
+        // console.log('STATE POTS: ', this.state.taskReplyUrlList)
+          // posts = List(this.state.taskReplyUrlList) || []
+          // console.log('urls', posts)
+        // }
 
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
@@ -279,6 +284,8 @@ class PostsIndex extends React.Component {
                     {formFront}
 
                     {!bmTasks && <HorizontalMenu items={sort_order_menu_horizontal} />}
+
+                    <Link to='/check-task-reply'>На проверку</Link>
 
                     {!bmTasks && <PostsList ref="list"
                         posts={posts ? posts.toArray() : []}
