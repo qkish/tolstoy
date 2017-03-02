@@ -212,12 +212,26 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
         }
     }
 
-
     console.log('USERNAME AFTER BUFFER', username, password)
+    if (username && usernameFromCookies) {
 
-    if (!username && usernameFromCookies) {
-      username = usernameFromCookies
+
+        const offchainEmail = yield select(state => state.offchain.getIn(['user', 'email']))
+
+        console.log('OFFCHAIN USER EMAIL: ', offchainEmail)
+        if (offchainEmail != usernameFromCookies) {
+            serverApiLogout()
+            username = usernameFromCookies
+            password = ''
+            console.log('LOGGED OUT')
+        }
+
+
+    } else if(!username && usernameFromCookies) {
+        username = usernameFromCookies
     }
+
+
 
     console.log('USERNAME AFTER COOKIE', username, password)
 
@@ -554,7 +568,15 @@ function* logout() {
     yield put(user.actions.saveLoginConfirm(false)) // Just incase it is still showing
     if (process.env.BROWSER)
         localStorage.removeItem('autopost2')
+  
+
+    //Cookies.remove('molodost_user', { domain: '.molodost.bz' });
+    //Cookies.remove('molodost_hash', { domain: '.molodost.bz' });
+
+    
+
     serverApiLogout();
+
 }
 
 function* loginError({payload: {/*error*/}}) {

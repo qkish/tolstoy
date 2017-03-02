@@ -704,10 +704,25 @@ export default function useGeneralApi(app) {
 		//if (!checkCSRF(this, csrf)) return;
 		console.log('-- /logout_account -->', this.session.uid);
 		try {
+			
+			//const user = decodeURIComponent(this.cookies.get('molodost_user'))
+    		//const hash = this.cookies.get('molodost_hash')
+    		//const user_agent = this.headers['user-agent']
+
+      		//let bmToken = yield isUserAuthOnBM(user, hash, user_agent)
+      		//console.log('REVOKING TOKEN GET: ', bmToken)
+
+			//let revokeToken 
+			//if(bmToken) revokeToken = yield revokeBMAccessToken(bmToken)
+			//console.log('REVOKED: ', revokeToken)
+
 			this.session.a = null;
 			this.session.name = null;
 			this.session.user = null;
 			this.session.uid = Math.random().toString(36).slice(2);
+
+
+
 
 
 
@@ -1770,6 +1785,21 @@ function* getBMAccessToken(username, password) {
 			grant_type: 'password',
 			username: username,
 			password: password
+
+		})
+	}).then(res => res.json())
+}
+
+function* revokeBMAccessToken(token) {
+	return fetch('http://api.molodost.bz/oauth/revoke/', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({
+			client_id: config.bmapi.client_id,
+			token: token,
+			token_type_hint: 'access_token'
 
 		})
 	}).then(res => res.json())
