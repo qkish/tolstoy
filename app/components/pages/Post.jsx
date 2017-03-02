@@ -130,6 +130,11 @@ class Post extends React.Component {
 
         let sort_menu = [];
 
+
+        let currentTaskCat = dis.get('category')
+        let isTaskCat
+        if (currentTaskCat == 'bm-tasks') {isTaskCat = true}
+
         const selflink = `/${dis.get('category')}/@${post}`;
         for( let o = 0; o < sort_orders.length; ++o ){
             sort_menu.push({
@@ -145,7 +150,7 @@ class Post extends React.Component {
             </center>
 
         let commentsHere
-        if (positiveComments.length) {
+        if (positiveComments.length && !isTaskCat) {
         commentsHere = <div id="comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
