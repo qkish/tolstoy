@@ -1792,13 +1792,38 @@ export default function useGeneralApi(app) {
 		}
 	})
 
+	router.post('/reply/status', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		const params = this.request.body
+		const {csrf, url} = typeof(params) === 'string' ? JSON.parse(params) : params
+		//if (!checkCSRF(this, csrf)) return;
+    console.log('UUUU', url)
+		try {
+			const reply = yield models.TaskReply.findOne({
+        attributes: ['id', 'status'],
+				where: {
+					url
+				}
+			})
+
+			this.body = JSON.stringify({
+				status: reply ? reply.status : null
+			})
+		} catch (error) {
+			console.error('Error in /reply/status api call', this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
+
 	router.post('/reply/update', koaBody, function* () {
     if (rateLimitReq(this, this.req)) return
     const params = this.request.body
     const {csrf, payload} = typeof(params) === 'string' ? JSON.parse(params) : params
     //if (!checkCSRF(this, csrf)) return;
 		try {
-      console.log('PAY LOAD', payload)
 			if (!this.session.user) throw new Error('access denied')
 
 			const u = yield models.User.findOne({

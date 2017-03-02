@@ -75,10 +75,18 @@ class PostSummary extends React.Component {
         jsonMetadata: React.PropTypes.object,
     };
 
-    shouldComponentUpdate(props) {
+    constructor (props) {
+      super(props)
+      this.state = {
+        status: null
+      }
+    }
+
+    shouldComponentUpdate(props, state) {
         return props.thumbSize !== this.props.thumbSize ||
                props.pending_payout !== this.props.pending_payout ||
-               props.total_payout !== this.props.total_payout;
+               props.total_payout !== this.props.total_payout ||
+               state.status !== this.state.status;
     }
 
     approveReply (post) {
@@ -131,14 +139,23 @@ class PostSummary extends React.Component {
       })
     }
 
-    getReplyStatus (post) {
-      const url = `${post.author}/${post.permlink}`
-      fetch('/api/v1/reply/status', {
+    getReplyStatus (url) {
+      return fetch('/api/v1/reply/status', {
         method: 'POST',
         body: JSON.stringify({
           url
         })
       })
+    }
+
+    componentDidMount () {
+      this.getReplyStatus(this.props.post)
+        .then(res => res.json())
+        .then(({status}) => {
+          this.setState({
+            status
+          })
+        })
     }
 
     render() {
@@ -292,6 +309,7 @@ class PostSummary extends React.Component {
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')}
                      itemScope itemType ="http://schema.org/blogPost">
+                     <div>{this.state.status && this.state.status === 1 ? <span style={{ color: 'green', fontWeight: 'bold' }}>ПРОВЕРЕНО</span> : null}</div>
                 <div className="PostSummary__author_with_userpic">
                     <span className="PostSummary__time_author_category">
                         {author_category}
