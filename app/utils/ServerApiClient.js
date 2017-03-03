@@ -281,7 +281,7 @@ export function updateProgram (value) {
 
 export function updateTaskReply ({ url, status }) {
   if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-  return fetch(`/api/v1/reply/update`, {
+  return fetch(`/api/v1/reply/update_status`, {
       method: 'POST',
       credentials: 'same-origin',
       body: JSON.stringify({

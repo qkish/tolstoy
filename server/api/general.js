@@ -1872,6 +1872,47 @@ export default function useGeneralApi(app) {
 			this.status = 500
 		}
 	})
+
+  router.post('/reply/update_status', koaBody, function* () {
+    if (rateLimitReq(this, this.req)) return
+    const params = this.request.body
+    const {csrf, payload} = typeof(params) === 'string' ? JSON.parse(params) : params
+    //if (!checkCSRF(this, csrf)) return;
+    try {
+      const u = yield models.User.findOne({
+        where: {
+          id: this.session.user
+        }
+      })
+
+      const reply = yield models.TaskReply.findOne({
+        attributes: ['id'],
+        where: {
+          url: payload.url
+        }
+      })
+
+      if (reply) {
+        yield reply.update({
+          ...payload
+        })
+      } else {
+        yield models.TaskReply.create({
+          ...payload
+        })
+      }
+
+      this.body = JSON.stringify({
+        ok: true
+      })
+    } catch (error) {
+      console.error('Error in /reply/update_status api call', this.session.uid, error.toString())
+      this.body = JSON.stringify({
+        error: error.message
+      })
+      this.status = 500
+    }
+  })
 }
 
 
