@@ -98,7 +98,7 @@ class PostSummary extends React.Component {
       const created = new Date(post.created)
       const permlink = post.permlink
       const category = post.category
-      const program = post.json_metadata.tags[0] === 'bm-ceh23' ? '1' : '2'
+      const program = post.json_metadata.tags.indexOf('bm-ceh23') !== 1 ? '1' : '2'
 
       const payload = {
         url, status, money, tags, username,
@@ -125,7 +125,7 @@ class PostSummary extends React.Component {
       const created = new Date(post.created)
       const permlink = post.permlink
       const category = post.category
-      const program = post.json_metadata.tags[0] === 'bm-ceh23' ? '1' : '2'
+      const program = post.json_metadata.tags.indexOf('bm-ceh23') !== 1 ? '1' : '2'
 
       const payload = {
         url, status, money, tags, username,
