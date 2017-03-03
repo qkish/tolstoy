@@ -366,9 +366,9 @@ class PostSummary extends React.Component {
                     {moneyToday}
                 </div>
 
-                <ApproveAndRejectButtons
+               {isTask && <ApproveAndRejectButtons
                   approve={() => this.approveReply(p)}
-                  reject={() => this.rejectReply(p)} />
+                  reject={() => this.rejectReply(p)} /> }
                 
             </article>
         )
