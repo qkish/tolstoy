@@ -14,7 +14,8 @@ import {
     serverApiLogin2,
     checkUser,
     updateMoney,
-    updateProgram
+    updateProgram,
+    updateTaskReply
 } from 'app/utils/ServerApiClient'
 import {loadFollows} from 'app/redux/FollowSaga'
 import {translate} from 'app/Translator'
@@ -31,7 +32,8 @@ export const userWatches = [
     loginErrorWatch,
     lookupPreviousOwnerAuthorityWatch,
     signUpWatch,
-    updateProgramWatch
+    updateProgramWatch,
+    updateTaskReplyWatch
 ]
 
 const highSecurityPages = Array(/\/market/, /\/@.+\/(transfers|permissions|password)/, /\/~witnesses/)
@@ -68,6 +70,12 @@ function* updateProgramWatch() {
   yield* takeLatest('user/UPDATE_PROGRAM', function* ({payload}) {
     yield call(updateProgram, payload)
     window.location.reload()
+  })
+}
+
+function* updateTaskReplyWatch () {
+  yield* takeLatest('user/UPDATE_TASK_REPLY', function* ({payload}) {
+    yield call(updateTaskReply, payload)
   })
 }
 
@@ -568,12 +576,12 @@ function* logout() {
     yield put(user.actions.saveLoginConfirm(false)) // Just incase it is still showing
     if (process.env.BROWSER)
         localStorage.removeItem('autopost2')
-  
+
 
     //Cookies.remove('molodost_user', { domain: '.molodost.bz' });
     //Cookies.remove('molodost_hash', { domain: '.molodost.bz' });
 
-    
+
 
     serverApiLogout();
 

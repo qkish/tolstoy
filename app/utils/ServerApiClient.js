@@ -278,3 +278,17 @@ export function updateProgram (value) {
       })
   })
 }
+
+export function updateTaskReply ({ url, status }) {
+  if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+  return fetch(`/api/v1/reply/update`, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        csrf: $STM_csrf,
+        payload: {
+          url, status
+        }
+      })
+  })
+}

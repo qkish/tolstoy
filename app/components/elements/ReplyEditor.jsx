@@ -18,7 +18,7 @@ import Remarkable from 'remarkable'
 import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 import {vestingSteem} from 'app/utils/StateFunctions';
-import {updateMoney} from 'app/redux/UserActions';
+import {updateMoney, updateTaskReply} from 'app/redux/UserActions';
 import Upload from '@sadorlovsky/rc-upload'
 import UploadImagePreview from 'app/components/elements/UploadImagePreview'
 import Reveal from 'react-foundation-components/lib/global/reveal';
@@ -378,7 +378,7 @@ class ReplyEditor extends React.Component {
     handleOnBlur = event => {
         let bodynow = this.props.fields.body? this.props.fields.body.value : ''
         let titlenow = this.props.fields.title ? this.props.fields.title.value : ''
-      
+
         let moneynow = this.props.fields.money ? this.props.fields.money.value : ''
         let uploadClicked = this.state.uploadBtnsClicked ? this.state.uploadBtnsClicked : ''
 
@@ -575,7 +575,7 @@ class ReplyEditor extends React.Component {
         let youtubeModal = <Reveal show={show_youtube_bool}>{show_youtube_insert}</Reveal>
 
 
-  
+
 
         return (
             <div className="ReplyEditor row">
@@ -841,6 +841,12 @@ export default formId => reduxForm(
                 dispatch(updateMoney({username, vesting, money, type}))
             }
 
+            if (type === 'edit') {
+              dispatch(updateTaskReply({
+                url: `${author}/${permlink}`,
+                status: 0
+              }))
+            }
 
             let placedFile = originalPost.filemeta;
 
@@ -918,7 +924,7 @@ export default formId => reduxForm(
 
 
 
-            
+
 
 
 
@@ -966,6 +972,3 @@ export default formId => reduxForm(
         },
     })
 )(ReplyEditor)
-
-
-
