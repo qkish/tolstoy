@@ -459,5 +459,12 @@ width: 50px;
   
 }
 
+.PostSummary__task-approved, .PostSummary__task-declined, .PostSummary__task-checking {
+  letter-spacing: 1px;
+  padding: 5px 3px;
+  width: 30px;
+  text-overflow: ellipsis;
+}
+
 
 }
