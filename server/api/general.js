@@ -1771,17 +1771,24 @@ export default function useGeneralApi(app) {
 		}
 	})
 
-	router.get('/task_replies', koaBody, function* () {
+	router.get('/last_checked_reply', koaBody, function* () {
 		try {
-			const postsUrls = yield models.TaskReply.findAll({
-				attributes: ['url'],
+			const permlink = yield models.TaskReply.findOne({
+				attributes: ['permlink'],
 				where: {
-					status: 0
-				}
+					$or: [{
+						status: 1
+					}, {
+						status: 2
+					}]
+				},
+				order: [
+					['created', 'DESC']
+				]
 			})
 
 			this.body = JSON.stringify({
-				postsUrls
+				permlink
 			})
 		} catch (error) {
 			console.error('Error in /task_replies api call', this.session.uid, error.toString())
