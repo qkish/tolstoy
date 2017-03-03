@@ -59,6 +59,14 @@ class PostsIndex extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'PostsIndex')
     }
 
+    componentDidMount () {
+      fetch('/api/v1/last_checked_reply')
+        .then(res => res.json())
+        .then(({ permlink }) => this.setState({
+          lastReply: permlink
+        }))
+    }
+
     componentDidUpdate(prevProps) {
         if (window.innerHeight && window.innerHeight > 3000 && prevProps.discussions !== this.props.discussions) {
             this.refs.list.fetchIfNeeded();
