@@ -321,7 +321,7 @@ class Header extends React.Component {
                                 <li className={'Header__toplinks ' + bmRating + hideOnMobile}>
                                     <Link to='/rating/all'>Рейтинги</Link>
                                 </li>
-                                <AdminLink className={'Header__toplinks ' + bmAdmin + hideOnMobile} />
+                               {/* <AdminLink className={'Header__toplinks ' + bmAdmin + hideOnMobile} /> */}
                             </ul>
                         </div>
                         <div className="shrink">
