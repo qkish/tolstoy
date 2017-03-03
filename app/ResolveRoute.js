@@ -7,6 +7,9 @@ export default function resolveRoute(path)
     if (path === '/tasks') {
         return {page: 'PostsIndex', params: ['tasks']};
     }
+    if (path === '/check-task-reply') {
+      return {page: 'PostsIndex', params: ['check_task_reply']};
+    }
     if (path === '/about.html') {
         return {page: 'About'};
     }

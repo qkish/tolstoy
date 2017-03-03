@@ -704,7 +704,7 @@ export default function useGeneralApi(app) {
 		//if (!checkCSRF(this, csrf)) return;
 		console.log('-- /logout_account -->', this.session.uid);
 		try {
-			
+
 			//const user = decodeURIComponent(this.cookies.get('molodost_user'))
     		//const hash = this.cookies.get('molodost_hash')
     		//const user_agent = this.headers['user-agent']
@@ -712,7 +712,7 @@ export default function useGeneralApi(app) {
       		//let bmToken = yield isUserAuthOnBM(user, hash, user_agent)
       		//console.log('REVOKING TOKEN GET: ', bmToken)
 
-			//let revokeToken 
+			//let revokeToken
 			//if(bmToken) revokeToken = yield revokeBMAccessToken(bmToken)
 			//console.log('REVOKED: ', revokeToken)
 
@@ -1764,6 +1764,102 @@ export default function useGeneralApi(app) {
       yield user.save()
     } catch (error) {
 			console.error('Error in /user/update_program api call', this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
+
+	router.get('/task_replies', koaBody, function* () {
+		try {
+			const postsUrls = yield models.TaskReply.findAll({
+				attributes: ['url'],
+				where: {
+					status: 0
+				}
+			})
+
+			this.body = JSON.stringify({
+				postsUrls
+			})
+		} catch (error) {
+			console.error('Error in /task_replies api call', this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
+
+	router.post('/reply/status', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		const params = this.request.body
+		const {csrf, url} = typeof(params) === 'string' ? JSON.parse(params) : params
+		//if (!checkCSRF(this, csrf)) return;
+    console.log('UUUU', url)
+		try {
+			const reply = yield models.TaskReply.findOne({
+        attributes: ['id', 'status'],
+				where: {
+					url
+				}
+			})
+
+			this.body = JSON.stringify({
+				status: reply ? reply.status : null
+			})
+		} catch (error) {
+			console.error('Error in /reply/status api call', this.session.uid, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
+
+	router.post('/reply/update', koaBody, function* () {
+    if (rateLimitReq(this, this.req)) return
+    const params = this.request.body
+    const {csrf, payload} = typeof(params) === 'string' ? JSON.parse(params) : params
+    //if (!checkCSRF(this, csrf)) return;
+		try {
+			if (!this.session.user) throw new Error('access denied')
+
+			const u = yield models.User.findOne({
+				where: {
+					id: this.session.user
+				}
+			})
+
+			if (!u.volunteer) {
+				throw new Error('access denied')
+			}
+
+			const reply = yield models.TaskReply.findOne({
+        attributes: ['id'],
+				where: {
+					url: payload.url
+				}
+			})
+
+      if (reply) {
+        yield reply.update({
+          ...payload,
+          volunteer: this.session.user
+        })
+      } else {
+        yield models.TaskReply.create({
+          ...payload,
+          volunteer: this.session.user
+        })
+      }
+
+			this.body = JSON.stringify({
+				ok: true
+			})
+		} catch (error) {
+			console.error('Error in /reply/update api call', this.session.uid, error.toString())
 			this.body = JSON.stringify({
 				error: error.message
 			})

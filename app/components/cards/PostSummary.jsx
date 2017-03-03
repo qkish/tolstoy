@@ -25,6 +25,7 @@ import { translate } from 'app/Translator';
 import { detransliterate } from 'app/utils/ParsersAndFormatters';
 import store from 'store';
 import { FRACTION_DIGITS, DEFAULT_CURRENCY } from 'config/client_config';
+import { UserAuthWrapper } from 'redux-auth-wrapper';
 
 function TimeAuthorCategory({post, links, authorRepLog10, gray}) {
     const author = <strong>{post.author}</strong>;
@@ -74,10 +75,87 @@ class PostSummary extends React.Component {
         jsonMetadata: React.PropTypes.object,
     };
 
-    shouldComponentUpdate(props) {
+    constructor (props) {
+      super(props)
+      this.state = {
+        status: null
+      }
+    }
+
+    shouldComponentUpdate(props, state) {
         return props.thumbSize !== this.props.thumbSize ||
                props.pending_payout !== this.props.pending_payout ||
-               props.total_payout !== this.props.total_payout;
+               props.total_payout !== this.props.total_payout ||
+               state.status !== this.state.status;
+    }
+
+    approveReply (post) {
+      const url = `${post.author}/${post.permlink}`
+      const status = 1
+      const username = post.author
+      const money = post.json_metadata.daySumm
+      const tags = post.json_metadata.tags.join(',')
+      const created = new Date(post.created)
+      const permlink = post.permlink
+      const category = post.category
+      const program = post.json_metadata.tags[0] === 'bm-ceh23' ? '1' : '2'
+
+      const payload = {
+        url, status, money, tags, username,
+        created, permlink, category, program
+      }
+
+      fetch('/api/v1/reply/update', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          payload
+        })
+      })
+    }
+
+    rejectReply (post) {
+      const url = `${post.author}/${post.permlink}`
+      const status = 2
+      const username = post.author
+      const money = post.json_metadata.daySumm
+      const tags = post.json_metadata.tags.join(',')
+      const created = new Date(post.created)
+      const permlink = post.permlink
+      const category = post.category
+      const program = post.json_metadata.tags[0] === 'bm-ceh23' ? '1' : '2'
+
+      const payload = {
+        url, status, money, tags, username,
+        created, permlink, category, program
+      }
+
+      fetch('/api/v1/reply/update', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          payload
+        })
+      })
+    }
+
+    getReplyStatus (url) {
+      return fetch('/api/v1/reply/status', {
+        method: 'POST',
+        body: JSON.stringify({
+          url
+        })
+      })
+    }
+
+    componentDidMount () {
+      this.getReplyStatus(this.props.post)
+        .then(res => res.json())
+        .then(({status}) => {
+          this.setState({
+            status
+          })
+        })
     }
 
     render() {
@@ -96,7 +174,7 @@ class PostSummary extends React.Component {
         const {gray, pictures, authorRepLog10, hasFlag} = content.get('stats', Map()).toJS()
         const p = extractContent(immutableAccessor, content);
 
-        
+
 
         let desc = p.desc
         if(p.image_link)// image link is already shown in the preview
@@ -131,13 +209,13 @@ class PostSummary extends React.Component {
             money = money.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
          }
 
-         
+
         let fileLink
          if (p.json_metadata.fileAttached) {
             let filename = p.json_metadata.fileAttached;
             filename = String(filename);
 
-            
+
             let fileicon = 'PostSummary__file-image'
             var fileExt = filename.substring(filename.lastIndexOf(".")+1, filename.length).toLowerCase();
 
@@ -147,7 +225,7 @@ class PostSummary extends React.Component {
             if (fileExt == 'png' || fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'gif' || fileExt == 'psd') { fileicon = 'PostSummary__file-image'}
 
 
-            
+
             let exactName = filename.split('\\').pop().split('/').pop();
 
             exactName = decodeURI(exactName)
@@ -161,13 +239,13 @@ class PostSummary extends React.Component {
 
          }
 
-         let firstTag 
+         let firstTag
          if(p.json_metadata && p.json_metadata.tags && p.json_metadata.tags[0]) firstTag = p.json_metadata.tags[0];
 
          let isTask = false
 
          if (firstTag) {isTask = firstTag.substring(0,7) == 'bm-task' ? true : false }
-        
+
 
         let moneyCurrency = store.get('fetchedCurrency') || DEFAULT_CURRENCY
 
@@ -209,9 +287,29 @@ class PostSummary extends React.Component {
         const commentClasses = []
         if(gray || ignore) commentClasses.push('downvoted') // rephide
 
+
+        const VisibleOnlyVolunteer = UserAuthWrapper({
+          authSelector: state => state.user,
+          wrapperDisplayName: 'VisibleOnlyVolunteer',
+          FailureComponent: null,
+          predicate: user => user.get('isVolunteer')
+        })
+
+        const ApproveAndRejectButtons = VisibleOnlyVolunteer(({approve, reject}) => (
+          <div style={{ display: 'flex' }}>
+            <div>
+              <button className='button' onClick={approve}>Одобрить</button>
+            </div>
+            <div>
+              <button className='button' onClick={reject}>Отклонить</button>
+            </div>
+          </div>
+        ))
+
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')}
                      itemScope itemType ="http://schema.org/blogPost">
+                     <div>{this.state.status && this.state.status === 1 ? <span style={{ color: 'green', fontWeight: 'bold' }}>ПРОВЕРЕНО</span> : null}</div>
                 <div className="PostSummary__author_with_userpic">
                     <span className="PostSummary__time_author_category">
                         {author_category}
@@ -223,7 +321,7 @@ class PostSummary extends React.Component {
                     <div className="float-right"><Voting pending_payout={pending_payout} total_payout={total_payout} showList={false} cashout_time={cashout_time} post={post} flag /></div>
                 </div>
                 {reblogged_by}
-                 {isTask && p.category == 'bm-open' ? 
+                 {isTask && p.category == 'bm-open' ?
                     <div className="PostSummary__header-otvet">
                     <div className="PostSummary__header-otvettitle">Выполнение задания</div>
                         {content_title}
@@ -246,6 +344,9 @@ class PostSummary extends React.Component {
                     <Voting pending_payout={pending_payout} total_payout={total_payout} cashout_time={cashout_time} post={post} showList={false} />
                     {moneyToday}
                 </div>
+                <ApproveAndRejectButtons
+                  approve={() => this.approveReply(p)}
+                  reject={() => this.rejectReply(p)} />
             </article>
         )
     }
