@@ -30,6 +30,100 @@ ul.PostsList__summaries {
   width: 518px;
 }
 
+.PostSummary__task-status {
+  float: right;
+}
+
+.PostSummary__checking-buttons {
+  display: block;
+
+  
+  margin: 35px -20px 0px;
+  padding: 10px 10px 0 10px;
+  border-top: 1px solid #efeff0;
+
+}
+.PostSummary__task-checking {
+  padding: 4px 7px;
+  
+  color: #898d9b;
+  font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  background: #edeeee;
+
+  border-radius: 3px;
+  
+}
+.PostSummary__checking-buttons-approve {
+  float: left;
+}
+.PostSummary__checking-buttons-approve button {
+ background:#e1f1b0;
+ color: #7d8a4e;
+   margin: 0 !important;
+ }
+.PostSummary__checking-buttons-approve button:hover {
+ background: #d3e293;
+ color: #7d8a4e;
+ 
+}
+.PostSummary__checking-buttons-decline {
+  float: right;
+ 
+}
+.PostSummary__checking-buttons-decline button{
+  float: right;
+  background:#ed8c72;
+  color: #b50a06;
+    margin: 0 !important;
+}
+.PostSummary__checking-buttons-decline button:hover {
+ background: #dd6e58;
+ color: #b50a06;
+}
+
+.PostSummary__checking-buttons-decline .buttonGray {
+  background: #e4e6f2;
+  color: #898d9b; 
+}
+
+.PostSummary__checking-buttons-approve .buttonGray {
+  background: #e4e6f2;
+  color: #898d9b; 
+}
+.PostSummary__task-approved {
+  padding: 4px 7px;
+  
+  color: #7d8a4e;
+  font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  background: #e1f1b0;
+
+  border-radius: 3px;
+  
+}
+
+.PostSummary__task-declined {
+  padding: 4px 7px;
+  
+  color: #b50a06;
+  font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 500;
+  background: #ed8c72;
+
+  border-radius: 3px;
+  
+}
+
 
 
 .PostSummary__author_with_userpic {

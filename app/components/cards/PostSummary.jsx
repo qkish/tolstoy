@@ -112,6 +112,8 @@ class PostSummary extends React.Component {
           payload
         })
       })
+
+      this.setState({status:1})
     }
 
     rejectReply (post) {
@@ -137,6 +139,8 @@ class PostSummary extends React.Component {
           payload
         })
       })
+
+      this.setState({status:2})
     }
 
     getReplyStatus (url) {
@@ -296,25 +300,42 @@ class PostSummary extends React.Component {
         })
 
         const ApproveAndRejectButtons = VisibleOnlyVolunteer(({approve, reject}) => (
-          <div style={{ display: 'flex' }}>
-            <div>
-              <button className='button' onClick={approve}>Одобрить</button>
+          <div className="PostSummary__checking-buttons">
+            <div className="PostSummary__checking-buttons-approve">
+              <button className={'button ' + buttonPushed} onClick={approve}>Одобрить</button>
             </div>
-            <div>
-              <button className='button' onClick={reject}>Отклонить</button>
+            <div className="PostSummary__checking-buttons-decline">
+              <button className={'button '  + buttonPushed} onClick={reject}>Отклонить</button>
             </div>
           </div>
         ))
 
+        let buttonPushed = ''
+    
+
+        if(this.state.status == 1 || this.state.status == 2) {buttonPushed='buttonGray';}
+        
+
         return (
             <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')}
                      itemScope itemType ="http://schema.org/blogPost">
-                     <div>{this.state.status && this.state.status === 1 ? <span style={{ color: 'green', fontWeight: 'bold' }}>ПРОВЕРЕНО</span> : null}</div>
+                     
+               
                 <div className="PostSummary__author_with_userpic">
                     <span className="PostSummary__time_author_category">
                         {author_category}
                         {!archived && <Reblog author={p.author} permlink={p.permlink} />}
                     </span>
+                     {isTask && p.category == 'bm-open' ?
+                     <div className="PostSummary__task-status">
+                     {!this.state.status ? <span className="PostSummary__task-checking">НА ПРОВЕРКЕ</span> : null}
+                     {this.state.status && this.state.status === 1 ? <span className="PostSummary__task-approved">ПРОВЕРЕНО</span> : null}
+                     {this.state.status && this.state.status === 2 ? <span className="PostSummary__task-declined">ОТКЛОНЕНО</span> : null}
+
+
+                     </div> : ''
+
+                 }
                 </div>
 
                 <div className={hasFlag ? '' : 'PostSummary__collapse'}>
@@ -344,9 +365,11 @@ class PostSummary extends React.Component {
                     <Voting pending_payout={pending_payout} total_payout={total_payout} cashout_time={cashout_time} post={post} showList={false} />
                     {moneyToday}
                 </div>
+
                 <ApproveAndRejectButtons
                   approve={() => this.approveReply(p)}
                   reject={() => this.rejectReply(p)} />
+                
             </article>
         )
     }
