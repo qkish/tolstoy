@@ -311,13 +311,19 @@ class PostSummary extends React.Component {
         ))
 
         let buttonPushed = ''
-    
-
         if(this.state.status == 1 || this.state.status == 2) {buttonPushed='buttonGray';}
+
+        let postHidden, isInTasks
+
+
+        if (currentCategory && currentCategory.substring(0,7) == 'bm-task') {isInTasks = true}
+        if((this.state.status == 1 || this.state.status == 2) && isInTasks && this.props.isVolunteerFromState) {postHidden = 'PostSummary__hidden'}
+
+
         
 
         return (
-            <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ')}
+            <article className={'PostSummary hentry' + (thumb ? ' with-image ' : ' ') + commentClasses.join(' ') + ' ' + postHidden}
                      itemScope itemType ="http://schema.org/blogPost">
                      
                
@@ -381,13 +387,15 @@ export default connect(
         const content = state.global.get('content').get(post);
         const accounts = state.global.get('accounts');
 
+        const isVolunteerFromState = state.user.get('isVolunteer')
+
         let pending_payout = 0;
         let total_payout = 0;
         if (content) {
             pending_payout = content.get('pending_payout_value');
             total_payout = content.get('total_payout_value');
         }
-        return {post, content, pending_payout, total_payout, accounts};
+        return {post, content, pending_payout, total_payout, accounts, isVolunteerFromState};
     },
 
     (dispatch) => ({
