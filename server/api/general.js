@@ -1797,7 +1797,6 @@ export default function useGeneralApi(app) {
 		const params = this.request.body
 		const {csrf, url} = typeof(params) === 'string' ? JSON.parse(params) : params
 		//if (!checkCSRF(this, csrf)) return;
-    console.log('UUUU', url)
 		try {
 			const reply = yield models.TaskReply.findOne({
         attributes: ['id', 'status'],
