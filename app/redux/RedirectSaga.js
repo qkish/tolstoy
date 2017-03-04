@@ -26,6 +26,9 @@ function* redirectWatch () {
     if (startsWith(currentRoute, '/active')) {
       url = '/active'
     }
+    if (startsWith(currentRoute, '/trendng30')) {
+      url = '/trendng30'
+    }
 
    
     if (!cp) browserHistory.push(`${url}/bm-open`)
