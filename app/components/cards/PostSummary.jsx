@@ -334,8 +334,8 @@ class PostSummary extends React.Component {
                     </span>
                      {isTask && p.category == 'bm-open' ?
                      <div className="PostSummary__task-status">
-                    {/* {!this.state.status ? <span className="PostSummary__task-checking">НА ПРОВЕРКЕ</span> : null} */}
-                    {!this.state.status ? <span className="PostSummary__task-approved">ПРОВЕРЕНО</span> : null}
+                    {!this.state.status ? <span className="PostSummary__task-checking">НА ПРОВЕРКЕ</span> : null}
+                    {/* {!this.state.status ? <span className="PostSummary__task-approved">ПРОВЕРЕНО</span> : null} */}
                      {this.state.status && this.state.status === 1 ? <span className="PostSummary__task-approved">ПРОВЕРЕНО</span> : null}
                      {this.state.status && this.state.status === 2 ? <span className="PostSummary__task-declined">ОТКЛОНЕНО</span> : null}
 
