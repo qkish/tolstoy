@@ -311,7 +311,7 @@ class Rating extends Component {
 				<div
 					className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
 					<Beta />
-					<Products />
+					{/* <Products /> */}
 				</div>
 			</div>
 		)
