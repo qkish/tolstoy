@@ -242,7 +242,7 @@ class Voting extends React.Component {
         let voteUpClick = this.voteUp;
 
         let dropdown = null;
-        if (myVote <= 0 && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
+        {/* if (myVote <= 0 && vesting_shares > VOTE_WEIGHT_DROPDOWN_THRESHOLD) {
             voteUpClick = this.toggleWeightUp;
             dropdown = <FoundationDropdown show={showWeight}>
                 <div className="Voting__adjust_weight">
@@ -252,7 +252,7 @@ class Voting extends React.Component {
                     <CloseButton className="Voting__adjust_weight_close" onClick={() => this.setState({showWeight: false})} />
                 </div>
             </FoundationDropdown>;
-        }
+        } */}
 
         return (
             <span className="Voting">
@@ -266,7 +266,7 @@ class Voting extends React.Component {
                                   : <a href="#" onClick={voteUpClick} title={translate(myVote > 0 ? 'remove_vote' : 'upvote')}>{up}</a>}
                                   {dropdown}
                               </span>
-                              {payoutEl}
+                             {/* {payoutEl} */}
                             </span>
                            : <LoadingIndicator type="circle" inline />
                        }

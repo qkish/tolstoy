@@ -1068,35 +1068,59 @@ export default function useGeneralApi(app) {
 
 	router.get('/users', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
-		const {category, ten, hundred, polk, couch_group, search, offset, limit} = this.query
+		const {category, ten, hundred, polk, couch_group, search, offset, limit, program} = this.query
 		let where = {}
 		let type = null
 		let _offset = Number(offset) || 0
 		let _limit = Number(limit) || 50
 		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
+		
+
+
+
 		if (category) {
 			if (category === 'polki') {
 				where = {
-					polk_leader: true,
+				$and: [{
+							polk_leader: true,
+						},
+						{
+							current_program: program
+						}]
 				}
 				type = 'polk'
 			}
 			if (category === 'hundreds') {
 				where = {
+					$and: [{
 					hundred_leader: true,
+				},
+				{
+					current_program: program
+				}]
 				}
 				type = 'hundred'
 			}
 			if (category === 'tens') {
 				where = {
+					$and: [{
 					ten_leader: true,
+				},
+				{
+					current_program: program
+				}]
 				}
 				type = 'ten'
 			}
 			if (category === 'couches') {
 				where = {
+					$and: [{
 					couch: true,
+				},
+				{
+					current_program: program
+				}]
 				}
 				type = 'couch'
 			}
@@ -1116,6 +1140,12 @@ export default function useGeneralApi(app) {
 					}, {
 						hundred: null
 					}]
+				}
+			}
+
+			if (category === 'all' && program) {
+				where = {
+					current_program: program
 				}
 			}
 		}
@@ -1158,6 +1188,8 @@ export default function useGeneralApi(app) {
 		category !== 'all'
 			? order = [groupsInclude, 'money', 'DESC']
 			: order = ['money_total', 'DESC']
+
+
 
 		if (_order) {
 			order = [_order, 'DESC']

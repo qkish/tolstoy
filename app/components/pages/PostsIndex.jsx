@@ -271,6 +271,9 @@ class PostsIndex extends React.Component {
         let isCheckLinks = false
         if (this.props.is_volunteer) {isCheckLinks = true}
 
+
+
+
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
                 <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
@@ -308,9 +311,12 @@ module.exports = {
         (state) => {
             // console.log('state.global', state.global)
             const current_user = state.user.get('current');
+            const current_program = state.user.get('currentProgram');
             const current_account_name = current_user ? current_user.get('username') : state.offchain.get('account');
 
             const is_volunteer = state.user.get('isVolunteer');
+
+
 
             return {
                 discussions: state.global.get('discussion_idx'),
@@ -318,7 +324,8 @@ module.exports = {
                 loading: state.app.get('loading'),
                 global: state.global,
                 current_account_name,
-                is_volunteer
+                is_volunteer,
+                current_program
             };
         },
         (dispatch) => {

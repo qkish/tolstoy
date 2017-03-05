@@ -64,6 +64,15 @@
    float: left;
    display: block;
 }
+.Voting__points-total a{
+  color: #9da5ab;
+}
+
+.Voting__points-total a:hover{
+  color: #9da5ab;
+  text-decoration: none;
+}
+
 
 .Voting__button--upvoted .Voting__upvote_ico{
 background-position: 0 -110px;
@@ -186,7 +195,7 @@ background-position: 0 -110px;
 
 .Voting__inner {
 
-  padding-right: 5px;
+ 
 
   position: relative;
   .cancel {

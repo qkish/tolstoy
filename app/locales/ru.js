@@ -59,7 +59,8 @@ const ru = {
 	terms_and_conditions: 'Условия и Соглашения',
 	// this is from top-right dropdown menu
 	hot: 'Актуальное',
-	trending: 'Лучшее', // до первых выплат изменено с "популярного"
+	trending: 'Лучшее', 
+	trending30: 'Топ за месяц',// до первых выплат изменено с "популярного"
 	payout_time: 'время выплаты',
 	active: 'Обсуждаемое',
 	responses: 'ответы',
@@ -594,7 +595,7 @@ const ru = {
 	author_rewards_by_user_name: 'Авторские награды {user_name}',
 	replies_by_user_name: 'Ответы {user_name}',
 	comments_by_user_name: 'Комментарии {user_name}',
-	like: 'Монет',
+	like: 'Нравится',
 
 
 

@@ -80,7 +80,9 @@ class Rating extends Component {
 			}
 			return
 		}
-		getUsersByCategory(props.params.category).then(users => this.setState({users}))
+
+		let currentProgram = this.props.current_program ? this.props.current_program : null
+		getUsersByCategory(props.params.category,0,50,'undefined',currentProgram).then(users => this.setState({users}))
 	}
 	
 	componentDidMount() {
@@ -320,7 +322,8 @@ const mapStateToProps = state => {
 	return {
 		users: state.rating.ratingUsers,
 		currentUserName: state.user.getIn(['current', 'username']),
-		gprops: state.global.get('props')
+		gprops: state.global.get('props'),
+		current_program: state.user.get('currentProgram')
 	}
 }
 

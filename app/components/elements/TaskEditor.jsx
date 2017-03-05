@@ -579,11 +579,13 @@ class TaskEditor extends React.Component {
                         </div>
 
 
+                         <input type="text" {...cleanReduxInput(category)} ref="categoryRef"  />
+
                            
-                            {hasCategory && <span>
+                           {/*  {hasCategory && <span>
                                 <TaskCategorySelector {...category} disabled={loading} isEdit={isEdit} tabIndex={3} />
                                 <div className="error">{category.touched && category.error && category.error}&nbsp;</div>
-                            </span>}
+                            </span>} */}
                        
 
                         <div className={vframe_section_shrink_class}>

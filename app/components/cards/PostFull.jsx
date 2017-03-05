@@ -23,6 +23,7 @@ import {List} from 'immutable'
 import {repLog10, parsePayoutAmount} from 'app/utils/ParsersAndFormatters';
 import { translate } from 'app/Translator';
 import { APP_NAME, APP_NAME_LATIN, APP_URL } from 'config/client_config';
+import VotesAndComments from 'app/components/elements/VotesAndComments';
 
 const SubmitStory = ReplyTaskEditor('replyTask')
 
@@ -334,7 +335,7 @@ class PostFull extends React.Component {
                 <div className="PostFull__footer align-middle">
                     <div className="PostFull_Footer-leftblock">
 
-                        <Voting post={post} />
+                        <Voting post={post} /> <VotesAndComments post={post} />
                     </div>
                     <div className="PostFull_Footer-rightblock">
                             {!archived && <Reblog author={author} permlink={permlink} />}

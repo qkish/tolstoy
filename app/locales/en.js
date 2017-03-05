@@ -58,6 +58,7 @@ const en = 	{
 	// this is from top-right dropdown menu
 	hot: 'hot',
 	trending: 'trending',
+	trending30: 'Top for month',
 	payout_time: 'payout time',
 	active: 'active',
 	responses: 'responses',
@@ -577,7 +578,7 @@ const en = 	{
   author_rewards_by_user_name: 'Author rewards by {user_name}',
   replies_by_user_name: 'Replies by {user_name}',
   comments_by_user_name: 'Comments by {user_name}',
-  like: 'Coins',
+  like: 'Likes',
   money_for_day: 'Income today',
   money_for_task: 'Income for task',
 

@@ -67,7 +67,7 @@ class ViewUserSubscribers extends Component {
            
             <span id="follow" onClick={this.setCurrentTab} className="UserProfile__subtitle UserProfile__followedlink">
                 <Link to={`/@${account.name}/followed/`} >
-                  {translate('follow')}&nbsp;{followingCount}</Link>
+                  Подписки&nbsp;{followingCount}</Link>
             </span>
             {currentTabContent}
         </div>

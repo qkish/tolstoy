@@ -162,7 +162,7 @@ margin-bottom: 15px;
   color: #9da5ab;
   font-weight: 500;
   font-size: 12px;
-  margin-top: 3px;
+  margin-top: 5px;
   float: right;
 }
 
@@ -422,6 +422,10 @@ width: 50px;
     a {
         display: block;
     }
+  }
+
+  .PostSummary__showMoneyTitle {
+    display: none;
   }
   .PostSummary.with-image .PostSummary__reblogged_by,
   .PostSummary.with-image .PostSummary__content {

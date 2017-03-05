@@ -14,14 +14,21 @@
 }
 
 .VotesAndComments__comments {
-  padding-left: 1rem;
+  padding-left: 21px;
+  background: url('../../assets/icons/comment-ico.png') left top no-repeat;
+  background-size: 17px 17px;
+  height: 17px;
+  margin-left: 15px;
+}
+
+.no-comments {
+  display: none;
 }
 
 /* Small only */
 @media screen and (max-width: 39.9375em) {
   .VotesAndComments {
-    display: block;
-    width: auto;
-    float: right;
+
+
   }
 }

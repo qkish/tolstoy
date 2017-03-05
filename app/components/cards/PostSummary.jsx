@@ -253,7 +253,7 @@ class PostSummary extends React.Component {
 
         let moneyCurrency = store.get('fetchedCurrency') || DEFAULT_CURRENCY
 
-        let moneyToday = <div className="PostSummary__summToday">{translate('earned_in_post')} {money} {moneyCurrency}</div>
+        let moneyToday = <div className="PostSummary__summToday"><span className="PostSummary__showMoneyTitle">{translate('earned_in_post')}</span> {money} {moneyCurrency}</div>
 
         // author and category
         let author_category = <div className="vcard">
@@ -370,6 +370,8 @@ class PostSummary extends React.Component {
                 {thumb}
                 <div className="PostSummary__footer">
                     <Voting pending_payout={pending_payout} total_payout={total_payout} cashout_time={cashout_time} post={post} showList={false} />
+                    
+                    <VotesAndComments post={post} commentsLink={comments_link} />
                     {moneyToday}
                 </div>
 

@@ -10,6 +10,9 @@ import _urls from 'shared/clash/images/urls'
 import _btc from 'shared/clash/coins/btc'
 import { injectIntl } from 'react-intl'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
+import Upload from '@sadorlovsky/rc-upload'
+import UploadImagePreview from 'app/components/elements/UploadImagePreview'
+import {deleteFromS3} from 'app/utils/ServerApiClient';
 
 @injectIntl
 class Settings extends React.Component {
@@ -145,6 +148,10 @@ class Settings extends React.Component {
 
         //const isMyAccount = username === account.name
 
+        let newImage = (this.state.uploadedImage && this.state.uploadedImage.url) ? this.state.uploadedImage.url : ''
+
+        let newBackImage = (this.state.uploadedBackImage && this.state.uploadedBackImage.url) ? this.state.uploadedBackImage.url : ''
+
         // Base
         metaData.first_name = this.state.first_name;
         metaData.last_name = this.state.last_name;
@@ -171,8 +178,8 @@ class Settings extends React.Component {
         // More
         metaData.i_can = this.state.i_can;
         metaData.looking_for = this.state.looking_for;
-        metaData.background_image = this.state.background_image;
-        metaData.user_image = this.state.userImage;
+        metaData.background_image = newBackImage ? newBackImage : this.state.background_image;
+        metaData.user_image = newImage ? newImage : this.state.userImage;
 
         metaData = JSON.stringify(metaData);
 
@@ -427,20 +434,192 @@ class Settings extends React.Component {
         }
 
         // ___________________
-        // Avatar fields tab
-        if (currentTab == 'avatar') {
+    // Avatar fields tab
+    if (currentTab == 'avatar') {
+      currentFieldsBlock =
+        <div className="Settings__FieldsTabs__tab">
+          
+          {errorView}
+          
+          {state.userImage ? <img src={_urls.proxyImage(state.userImage)}
+                                  alt={translate('user_avatar') + ' ' + props.account.name}/> : null}
+
+                                  {this.state.showPreview ? (
+                            <UploadImagePreview
+                                uploading={this.state.uploading}
+                                posting={this.state.posting}
+                                src={this.state.UploadImagePreviewPath}
+                                isThisFile={this.state.isFile}
+                                youtube={this.state.youtubeLink}
+                                remove={() => {
+                                    this.setState({
+                                        showPreview: false,
+                                        uploadBtnsClicked: false,
+                                        uploadedImage: null,
+                                        fileState: null
+                                    });
+                                    deleteFromS3(this.state.uploadedImage.key)
+                                }} />
+                        ) : null}
+          
+          <form onSubmit={this.handleUserFieldsSubmit}>
+            
+           {/* } <label>
+              {/*<span>{translate('add_image_url')}</span>
+              <input
+                type="hidden" onChange={this.handleUserImageChange}
+                value={state.userImage}
+                disabled={!props.isOwnAccount || state.loading}
+                placeholder={translate('add_image_url')}
+              />
+            </label>  */}
+
+
+             
+
+            
+            <p
+              className="Settings__submit-wrap"
+              style={{marginTop: 16.8}}
+            >
+              
+              
+              
+              {this.state.loading ? (
+                            <button type="submit" className="button" disabled>
+                              <LoadingIndicator type="circle" />
+                            </button>
+                          ) : (
+                             <input
+                type='submit'
+                className='button'
+                value={translate('save_avatar')}
+                style={{marginRight: '12px'}}
+                onClick={this.handleUserFieldsSubmit}
+              />
+                          )}
+
+             
+
+
+                <Upload
+                                        component='label'
+                                        accept='image/*'
+                                        action='/api/v1/upload'
+                                        data={{ type: 'image' }}
+                                        className="Settings__newavatar button"
+                                        onStart={file => {
+                                            const reader = new FileReader()
+                                            reader.onloadend = () => {
+                                                this.setState({
+                                                    UploadImagePreviewPath: reader.result,
+                                                    uploading: true,
+                                                    showPreview: true,
+                                                    isFile: false,
+                                                })
+                                            }
+                                            reader.readAsDataURL(file)
+                                        }}
+                                        onError={err => {
+                                            console.error('ERR', err)
+                                            this.setState({
+                                                uploading: false
+                                            })
+                                        }}
+                                        onSuccess={file => {
+                                            this.setState({
+                                                uploadedImage: {
+                                                  url: file.url,
+                                                  key: file.key
+                                                },
+                                                uploading: false,
+                                                userImage: ''
+                                            })
+                                        }}>Загрузить аватар
+                                           {/*  <a href="#" className="ReplyEditorShort__buttons-add-image"></a> */}
+                                    </Upload>
+
+            </p>
+            
+          </form>
+        </div>;
+    }
+    
+
+        // _____________________
+        // Background fields tab
+        if (currentTab == 'background') {
             currentFieldsBlock =
                 <div className="Settings__FieldsTabs__tab">
 
                     {errorView}
 
-                    {state.userImage ? <img src={_urls.proxyImage(state.userImage)} alt={translate('user_avatar') + ' ' + props.account.name} /> : null}
+                    {state.background_image ? <img src={_urls.proxyImage(state.background_image)} alt={translate('user_avatar') + ' ' + props.account.name} /> : null}
+
+                    {this.state.showBackPreview ? (
+                            <UploadImagePreview
+                                uploading={this.state.uploading}
+                                posting={this.state.posting}
+                                src={this.state.UploadBackImagePreviewPath}
+                                isThisFile={this.state.isFile}
+                                youtube={this.state.youtubeLink}
+                                remove={() => {
+                                    this.setState({
+                                        showPreview: false,
+                                        uploadBtnsClicked: false,
+                                        uploadedBackImage: null,
+                                        fileState: null
+                                    });
+                                    deleteFromS3(this.state.uploadedImage.key)
+                                }} />
+                        ) : null}
 
                     <form onSubmit={this.handleUserFieldsSubmit}>
-                        <label>
-                            <span>{translate('add_image_url')}</span>
-                            <input type="url" onChange={this.handleUserImageChange} value={state.userImage} disabled={!props.isOwnAccount || state.loading} placeholder={translate('add_image_url')} />
-                        </label>
+
+                      <p
+              className="Settings__submit-wrap"
+              style={{marginTop: 16.8}}
+            >
+                       
+
+                           <Upload
+                                        component='label'
+                                        accept='image/*'
+                                        action='/api/v1/upload'
+                                        data={{ type: 'image' }}
+                                        className="Settings__newavatar button"
+                                        onStart={file => {
+                                            const reader = new FileReader()
+                                            reader.onloadend = () => {
+                                                this.setState({
+                                                    UploadBackImagePreviewPath: reader.result,
+                                                    uploading: true,
+                                                    showBackPreview: true,
+                                                    isFile: false,
+                                                })
+                                            }
+                                            reader.readAsDataURL(file)
+                                        }}
+                                        onError={err => {
+                                            console.error('ERR', err)
+                                            this.setState({
+                                                uploading: false
+                                            })
+                                        }}
+                                        onSuccess={file => {
+                                            this.setState({
+                                                uploadedBackImage: {
+                                                  url: file.url,
+                                                  key: file.key
+                                                },
+                                                uploading: false,
+                                                background_image: ''
+                                            })
+                                        }}>Загрузить фоновое изображение
+                                           {/*  <a href="#" className="ReplyEditorShort__buttons-add-image"></a> */}
+                                    </Upload>
+
+
 
                         <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
                           {this.state.loading ? (
@@ -453,37 +632,7 @@ class Settings extends React.Component {
                             </button>
                           )}
                         </p>
-                    </form>
-                </div>;
-        }
 
-        // _____________________
-        // Background fields tab
-        if (currentTab == 'background') {
-            currentFieldsBlock =
-                <div className="Settings__FieldsTabs__tab">
-
-                    {errorView}
-
-                    {state.background_image ? <img src={_urls.proxyImage(state.background_image)} alt={translate('user_avatar') + ' ' + props.account.name} /> : null}
-
-                    <form onSubmit={this.handleUserFieldsSubmit}>
-
-                        <label>
-                        <span>{translate('add_background_image_url')}</span>
-                            <input type="url" onChange={this.handleBackgroundImageChange} value={state.background_image} disabled={!props.isOwnAccount || state.loading} placeholder={translate('add_background_image_url')} />
-                        </label>
-
-                        <p className="Settings__submit-wrap" style={{marginTop: 16.8}}>
-                          {this.state.loading ? (
-                            <button type="submit" className="button" disabled>
-                              <LoadingIndicator type="circle" />
-                            </button>
-                          ) : (
-                            <button type="submit" className="button">
-                              {translate('save')}
-                            </button>
-                          )}
                         </p>
                     </form>
                 </div>;

@@ -4,7 +4,15 @@
   max-width: 50rem;
   border-bottom: 1px solid $light-gray;
   background: #fff;
+  
+  .Voting__upvote_ico {
+    margin-top: 0;
  
+  }
+
+  .Voting .DropdownMenu {
+    margin-top: 3px;
+  }
 
   .TimeAgo {
     color: $dark-gray;
@@ -219,7 +227,10 @@
 
 /* Small only */
 @media screen and (max-width: 39.9375em) {
-
+  
+  .PostFull .Voting__points-total {
+    margin-right: 15px;
+  }
 
   .PostFull__footer {
     display: block;
