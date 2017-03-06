@@ -92,7 +92,7 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
 
             if (thisUser) {
 
-              console.log('This User', thisUser)
+           
 
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({
