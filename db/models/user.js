@@ -52,67 +52,6 @@ export default (sequelize, DataTypes) => {
 				User.hasMany(models.Account);
 				User.hasMany(models.Group);
 			}
-		},
-		hooks: {
-			beforeUpdate: ({dataValues: values = {}}, options) => {
-				const {models: { Group }} = sequelize
-				const {
-					id: userId,
-					money_total: moneyTotal,
-					ten: tenLeader,
-					hundred: hundredLeader,
-					polk: polkLeader,
-					couch_group: couchGroup,
-				} = values
-
-				const leadersType = ['ten', 'hundred', 'polk', 'couch']
-				const leadersId = [tenLeader, hundredLeader, polkLeader, couchGroup]
-				const leaders = leadersId
-					.map((i, idx) => ({type: leadersType[idx], id: i}) )
-					.filter(i => i.id)
-				const userMoney = Number(moneyTotal)
-				if (userMoney) {
-					// TODO Оптимизировать до двух запросов к базе (findAll => bulkUpdate/Create)
-					leaders.forEach( leader => {
-
-						leader.id = Number(leader.id)
-						Group.findOne({
-							attributes: ['id', 'user_id', 'type'],
-							where: {
-								user_id: leader.id,
-								type: leader.type
-							}
-						}).then( group => {
-							try {
-
-								if (group) {
-
-
-								const {dataValues: {id, money}} = group
-								Group.update({
-									money: userMoney + (Number(money) ? Number(money) : 0)
-								}, {
-									where: {
-										id: id
-									}
-								})
-
-								return 0 }
-								console.log('HOOK TRY NOT ENTEDED IF')
-								throw new Error
-
-							} catch (e) {
-									console.log('HOOK CATCH', leader.id, leader.type, userMoney)
-								Group.create({
-									user_id: leader.id,
-									type: leader.type,
-									money: userMoney
-								})
-							}
-						})
-					})
-				}
-			},
 		}
 	})
 
