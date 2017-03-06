@@ -34,11 +34,15 @@ function moneyPrettify(text) {
 }
 
 const userGroupGetMoney = (user) => {
+
+	console.log('USER : ', user)
 	let money
 	try {
 		money = user.Groups[0].money
+		console.log('USER GOT MUNEY: ', money)
 	} catch (e) {
 		money = 0
+		console.log('USER NUT GOT', e)
 	}
 	return moneyPrettify(money /* + user.money_total */)
 }
@@ -158,6 +162,7 @@ class Rating extends Component {
 							      link={`/rating/hundred/${user.id}`}
 							      name={`Сотня ${user.first_name} ${user.last_name}`}/>
 							<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
+
 						</div>
 					))}
 				</div>

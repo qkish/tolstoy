@@ -32,6 +32,12 @@ class App extends React.Component {
         if (process.env.BROWSER) localStorage.removeItem('autopost') // July 14 '16 compromise, renamed to autopost2
         this.props.loginUser();
         // SEGMENT.COM ANALYTICS INITIALIZATION
+
+        let thisUser = this.props.current_user ? this.props.current_user.toArray()[0] : ''
+
+        
+
+
     	if (process.env.BROWSER) {
             !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
             analytics.load(SEGMENT_ANALYTICS_KEY);
@@ -65,6 +71,7 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
 
 
 
+
             window.fbAsyncInit = function() {
               FB.init({
                 appId      : '1064201830355991',
@@ -80,6 +87,32 @@ var s = document.createElement('script'); s.type = 'text/javascript'; s.async = 
                js.src = "//connect.facebook.net/en_US/sdk.js";
                fjs.parentNode.insertBefore(js, fjs);
              }(document, 'script', 'facebook-jssdk'));
+
+
+
+            if (thisUser) {
+
+              console.log('This User', thisUser)
+
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({
+                  'logged': 'yes',
+                  'userid': {thisUser}
+              })
+             
+             
+
+            } else {
+
+                 
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({
+                  'logged': 'no',
+                  
+              })
+
+            }
+
 
 
            
@@ -145,7 +178,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             depositSteem, signup_bonus} = this.props;
         const lp = false; //location.pathname === '/';
 
-        
+
+
 
 
         const params_keys = Object.keys(params);
@@ -345,7 +379,8 @@ export default connect(
             new_visitor: !state.user.get('current') &&
                 !state.offchain.get('user') &&
                 !state.offchain.get('account') &&
-                state.offchain.get('new_visit')
+                state.offchain.get('new_visit'),
+            current_user: state.offchain.get('user')
         };
     },
     dispatch => ({
