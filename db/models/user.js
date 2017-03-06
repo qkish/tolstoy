@@ -37,7 +37,9 @@ export default (sequelize, DataTypes) => {
 		current_program: DataTypes.STRING,
 		approved_money: DataTypes.INTEGER,
 		volunteer: DataTypes.BOOLEAN,
-		last_day_money: DataTypes.INTEGER
+		last_day_money: DataTypes.INTEGER,
+		target_point_a: DataTypes.STRING,
+		target_point_b: DataTypes.STRING
 	}, {
 		tableName: 'users',
 		createdAt: 'created_at',
