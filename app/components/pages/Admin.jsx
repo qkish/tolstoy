@@ -55,12 +55,15 @@ class Admin extends Component {
     }
 
     getData (props) {
-        getUsersByCategory(props.params.category, this.getOffset(), this.state.perPage).then(users => this.setState({users}))
+
+        let currentProgram = this.props.current_program ? this.props.current_program : null
+
+        getUsersByCategory(props.params.category, this.getOffset(), this.state.perPage, 'undefined', currentProgram).then(users => this.setState({users}))
         getUsersCount(props.params.category).then(count => this.setState({count}))
-        getUsersByCategory('tens', 0, 1000).then(allTens => this.setState({allTens}))
-        getUsersByCategory('hundreds', 0, 1000).then(allHundreds => this.setState({allHundreds}))
-        getUsersByCategory('polki').then(allPolks => this.setState({allPolks}))
-        getUsersByCategory('couches', 0, 500).then(allTrainers => this.setState({allTrainers}))
+        getUsersByCategory('tens', 0, 1000, 'undefined', currentProgram).then(allTens => this.setState({allTens}))
+        getUsersByCategory('hundreds', 0, 1000, 'undefined', currentProgram).then(allHundreds => this.setState({allHundreds}))
+        getUsersByCategory('polki',0, 100, 'undefined', currentProgram).then(allPolks => this.setState({allPolks}))
+        getUsersByCategory('couches', 0, 500, 'undefined', currentProgram).then(allTrainers => this.setState({allTrainers}))
     }
 
     handleTenChange ({ user, ten }) {
@@ -115,6 +118,10 @@ class Admin extends Component {
     render () {
         let view
         const { users, allTens, allPolks, allHundreds, allTrainers, count } = this.state
+
+        let current_program = this.props.current_program ? this.props.current_program : null
+
+
 
         const userList = users ? (
             <div className="Admin__wrapper">
@@ -238,7 +245,7 @@ class Admin extends Component {
                                 const currentPage = selected + 1
                                 const offset = this.state.perPage * selected
                                 this.setState({ currentPage })
-                                getUsersByCategory(this.props.params.category, offset, this.state.perPage).then(users => this.setState({users}))
+                                getUsersByCategory(this.props.params.category, offset, this.state.perPage, 'undefined', current_program).then(users => this.setState({users}))
                             }} />
                     ) : null}
                 </div>
@@ -276,7 +283,7 @@ class Admin extends Component {
                                     const currentPage = selected + 1
                                     const offset = this.state.perPage * selected
                                     this.setState({ currentPage })
-                                    getUsersByCategory(this.props.params.category, offset, this.state.perPage).then(users => this.setState({users}))
+                                    getUsersByCategory(this.props.params.category, offset, this.state.perPage, 'undefined', current_program).then(users => this.setState({users}))
                                 }} />
                         ) : null}
                     </div>
@@ -393,7 +400,14 @@ const UserIsAuthenticated = UserAuthWrapper({
     predicate: user => user.get('isVolunteer')
 })
 
+const mapStateToProps = state => {
+
+    return {
+        current_program: state.user.get('currentProgram')
+    }
+}
+
 module.exports = {
     path: 'admin(/:category(/:id))',
-    component: UserIsAuthenticated(connect(null, mapDispatchToProps)(Admin))
+    component: UserIsAuthenticated(connect(mapStateToProps, mapDispatchToProps)(Admin))
 }
