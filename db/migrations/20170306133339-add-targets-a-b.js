@@ -6,7 +6,7 @@ module.exports = {
       'users',
       'target_point_a',
       {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         defaultValue: null
       }
     )
@@ -14,7 +14,7 @@ module.exports = {
       'users',
       'target_point_b',
       {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         defaultValue: null
       }
     )
