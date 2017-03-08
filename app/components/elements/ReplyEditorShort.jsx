@@ -18,7 +18,6 @@ import Remarkable from 'remarkable'
 import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 import {vestingSteem} from 'app/utils/StateFunctions';
-import {updateMoney} from 'app/redux/UserActions';
 import Upload from '@sadorlovsky/rc-upload'
 import UploadImagePreview from 'app/components/elements/UploadImagePreview'
 import Reveal from 'react-foundation-components/lib/global/reveal';
@@ -455,26 +454,26 @@ class ReplyEditorShort extends React.Component {
 
          if(this.props.current_program && this.state.tagsInState == '') {
 
-            
-            
+
+
 
             program = this.props.current_program
             //console.log('CUR PROG ', program)
 
-            
+
                 if(program == '1') totalTags.push('bm-ceh23')
                 if(program == '2') totalTags.push('bm-mzs17')
-            
+
 
             //totalTags.push('bm-ceh23')
             this.handleAddTag(totalTags)
-            
+
 
             console.log('TAGS: ', totalTags)
             console.log('PROGRAM: ', this.props.current_program)
 
          }
-    
+
 
 
 
@@ -822,11 +821,6 @@ export default formId => reduxForm(
             const gprops = state.global.getIn(['props']).toJS();
             const account = state.global.getIn(['accounts', username]);
             const vesting = vestingSteem(account.toJS(), gprops).toFixed(2)
-
-            if (type === 'submit_story' || type === 'submit_comment') {
-                dispatch(updateMoney({username, vesting, money, type}))
-            }
-
 
             let placedFile = originalPost.filemeta;
 

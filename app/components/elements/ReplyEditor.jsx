@@ -18,7 +18,7 @@ import Remarkable from 'remarkable'
 import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 import {vestingSteem} from 'app/utils/StateFunctions';
-import {updateMoney, updateTaskReply} from 'app/redux/UserActions';
+import {updateTaskReply} from 'app/redux/UserActions';
 import Upload from '@sadorlovsky/rc-upload'
 import UploadImagePreview from 'app/components/elements/UploadImagePreview'
 import Reveal from 'react-foundation-components/lib/global/reveal';
@@ -836,10 +836,6 @@ export default formId => reduxForm(
             const gprops = state.global.getIn(['props']).toJS();
             const account = state.global.getIn(['accounts', username]);
             const vesting = vestingSteem(account.toJS(), gprops).toFixed(2)
-
-            if (type === 'submit_story' || type === 'submit_comment') {
-                dispatch(updateMoney({username, vesting, money, type}))
-            }
 
             if (type === 'edit') {
               dispatch(updateTaskReply({
