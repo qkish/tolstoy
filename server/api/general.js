@@ -1152,18 +1152,22 @@ export default function useGeneralApi(app) {
 
 		if (ten) {
 			where = {ten}
+			
 		}
 
 		if (hundred) {
 			where = {ten_leader: true, hundred}
+			type = 'ten'
 		}
 
 		if (polk) {
 			where = {hundred_leader:true, polk}
+			type = 'hundred'
 		}
 
 		if (couch_group) {
 			where = {couch_group}
+		
 		}
 
 		if (search) {
