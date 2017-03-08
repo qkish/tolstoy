@@ -289,6 +289,7 @@ export default class UserProfile extends React.Component {
                   {isMyAccount ?
                       <div className="SubmitPost" style={{marginLeft: "10px"}}>
                           <SubmitReplyEditor
+                              successCallback={() => { window.location.reload() }}
                               type="submit_story" />
                       </div>: null}
                   <PostsList
@@ -331,7 +332,7 @@ export default class UserProfile extends React.Component {
 
                     {isMyAccount ?
                         <div className="SubmitPost" style={{marginLeft: "10px"}}>
-                            <SubmitReplyEditor type="submit_story" />
+                            <SubmitReplyEditor successCallback={() => { window.location.reload() }} type="submit_story" />
                         </div>: null}
                     <PostsList
                         emptyText={translate('user_hasnt_started_bloggin_yet', {fullName})}
