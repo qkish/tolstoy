@@ -1,5 +1,5 @@
 export default (sequelize, DataTypes) => {
-	
+
 	const Group = sequelize.define('Group', {
 		UserId: {
 			type: DataTypes.INTEGER,
@@ -11,7 +11,8 @@ export default (sequelize, DataTypes) => {
 		},
 		type: DataTypes.ENUM(['polk', 'hundred', 'ten', 'couch']),
 		money: DataTypes.INTEGER,
-		vesting: DataTypes.INTEGER
+		vesting: DataTypes.INTEGER,
+		monets: DataTypes.INTEGER
 	}, {
 		// TODO: Move createdAt, updatedAt, timestamps, underscored to global Sequelize define
 		tableName: 'groups',
@@ -30,6 +31,6 @@ export default (sequelize, DataTypes) => {
 			}
 		}
 	})
-	
+
 	return Group
 }

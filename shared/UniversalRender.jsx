@@ -168,7 +168,7 @@ async function universalRender({ location, initial_state, offchain }) {
     } catch (e) {
         const msg = (e.toString && e.toString()) || e.message || e;
         const stack_trace = e.stack || '[no stack]';
-        console.error('State/store error: ', msg, stack_trace);
+        console.error('State/store error: ', JSON.stringify(msg), stack_trace);
         return {
             title: 'Server error (500) - ' + APP_NAME,
             statusCode: 500,

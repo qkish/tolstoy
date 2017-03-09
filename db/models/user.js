@@ -22,8 +22,6 @@ export default (sequelize, DataTypes) => {
 		monets: DataTypes.INTEGER,
 		money_total: DataTypes.INTEGER,
 		polk: DataTypes.INTEGER,
-		last_money_transaction: DataTypes.DATEONLY,
-		total: DataTypes.DOUBLE,
 		posts_monets: DataTypes.INTEGER,
 		comments_monets: DataTypes.INTEGER,
 		tasks_monets: DataTypes.INTEGER,
@@ -37,9 +35,10 @@ export default (sequelize, DataTypes) => {
 		current_program: DataTypes.STRING,
 		approved_money: DataTypes.INTEGER,
 		volunteer: DataTypes.BOOLEAN,
-		last_day_money: DataTypes.INTEGER,
 		target_point_a: DataTypes.STRING,
-		target_point_b: DataTypes.STRING
+		target_point_b: DataTypes.STRING,
+		posts_money: DataTypes.INTEGER,
+		tasks_money: DataTypes.INTEGER
 	}, {
 		tableName: 'users',
 		createdAt: 'created_at',

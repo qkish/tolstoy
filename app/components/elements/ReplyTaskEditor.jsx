@@ -18,7 +18,6 @@ import Remarkable from 'remarkable'
 import { translate } from 'app/Translator';
 import { detransliterate, translateError } from 'app/utils/ParsersAndFormatters';
 import {vestingSteem} from 'app/utils/StateFunctions';
-import {updateMoney} from 'app/redux/UserActions'
 import Upload from '@sadorlovsky/rc-upload'
 import UploadImagePreview from 'app/components/elements/UploadImagePreview'
 
@@ -487,7 +486,7 @@ class ReplyTaskEditor extends React.Component {
 
         }
 
-       
+
 
         const {onCancel, autoVoteOnChange} = this
         const {title, category, body, money, autoVote} = this.props.fields
@@ -590,7 +589,7 @@ class ReplyTaskEditor extends React.Component {
                             imageAdded = (this.state.uploadedImage && this.state.uploadedImage.url) ? ' ' + this.state.uploadedImage.url : '';
 
                             let youtubeAdded
-                           
+
                             youtubeAdded = this.state.youtubeLink ? ' ' + this.state.youtubeLink : '';
 
                             console.log('YOutube: ', youtubeAdded)
@@ -835,11 +834,6 @@ export default formId => reduxForm(
             const gprops = state.global.getIn(['props']).toJS();
             const account = state.global.getIn(['accounts', username]);
             const vesting = vestingSteem(account.toJS(), gprops).toFixed(2)
-
-            if (type === 'submit_story' || type === 'submit_comment') {
-                dispatch(updateMoney({username, vesting, money, type: 'reply_to_task'}))
-            }
-
 
             // Parse categories:
             // if category string starts with russian symbol, add 'ru-' prefix to it

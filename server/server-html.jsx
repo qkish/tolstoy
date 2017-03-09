@@ -75,12 +75,12 @@ export default function ServerHTML({ body, assets, locale, title, meta }) {
         </head>
         <body>
 
-           
+
                 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MZD2PT"
                     height="0" width="0" style={{display:"none", visibility:"hidden"}}></iframe></noscript>
-               
 
-        
+
+
         <div id="content" dangerouslySetInnerHTML={ { __html: body } }></div>
         {assets.script.map((href, idx) => <script key={ idx } src={ href + '?v=1.89'}></script>) }
         {config.js_plugins_path && <script src={config.js_plugins_path}></script>}
