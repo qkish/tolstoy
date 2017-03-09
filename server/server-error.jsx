@@ -7,7 +7,7 @@ class ServerError extends Component {
         return (
             <div className="float-center" style={{width: '640px', textAlign: 'center'}}>
 
-            <div  style={{width: '400px', textAlign: 'center', padding:'30px'}}>Сеть блокчейн в данный момент недоступна. Причины устраняются. Домашние задания можно будет загрузить завтра!</div>
+            <div  style={{width: '400px', textAlign: 'center', padding:'30px', margin:'0 auto'}}>Сеть блокчейн в данный момент недоступна. Причины устраняются. Домашние задания можно будет загрузить завтр до 14:00!</div>
                 <a href="/"><SvgImage name="500" width="640px" height="480px" /></a>
 
             </div>
