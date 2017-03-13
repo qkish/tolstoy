@@ -1075,7 +1075,7 @@ export default function useGeneralApi(app) {
 		let _limit = Number(limit) || 50
 		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
-		
+
 
 
 
@@ -1152,7 +1152,7 @@ export default function useGeneralApi(app) {
 
 		if (ten) {
 			where = {ten}
-			
+
 		}
 
 		if (hundred) {
@@ -1167,7 +1167,7 @@ export default function useGeneralApi(app) {
 
 		if (couch_group) {
 			where = {couch_group}
-		
+
 		}
 
 		if (search) {
@@ -2107,6 +2107,255 @@ export default function useGeneralApi(app) {
       })
       this.status = 500
     }
+  })
+
+  router.get('/game', koaBody, function* () {
+    if (rateLimitReq(this, this.req)) return
+
+    try {
+      if (!this.session.user) {
+        throw new Error('Access denied')
+      }
+
+      const game = yield models.Game.findOne({
+        attributes: ['body'],
+        where: {
+          user_id: this.session.user
+        }
+      })
+
+      if (game) {
+        this.body = JSON.stringify({
+          content: game.body
+        })
+      } else {
+        this.body = JSON.stringify({
+          content: null
+        })
+      }
+
+    } catch (error) {
+      console.error('Error in GET /game api call', this.session.user, error.toString())
+      this.body = JSON.stringify({
+        error: error.message
+      })
+      this.status = 500
+    }
+  })
+
+  router.post('/game', koaBody, function* () {
+    if (rateLimitReq(this, this.req)) return
+    const params = this.request.body
+    const {csrf, body} = typeof(params) === 'string' ? JSON.parse(params) : params
+    // if (!checkCSRF(this, csrf)) return;
+
+    try {
+      if (!this.session.user) {
+        throw new Error('Access denied')
+      }
+
+      const game = yield models.Game.findOne({
+        where: {
+          user_id: this.session.user
+        }
+      })
+
+      if (game) {
+        game.body = body
+        game.save()
+      } else {
+        yield models.Game.create({
+          user_id: this.session.user,
+          body
+        })
+      }
+
+      this.status = 200
+
+    } catch (error) {
+      console.error('Error in POST /game api call', this.session.user, error.toString())
+      this.body = JSON.stringify({
+        error: error.message
+      })
+      this.status = 500
+    }
+  })
+
+	router.get('/game/byuser/:id', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		// if (!checkCSRF(this, csrf)) return;
+
+
+    const user = yield models.User.findOne({
+      attributes: ['name'],
+      where: {
+        id: this.params.id
+      },
+      include: [{
+        model: models.Game
+      }]
+    })
+
+    const posts = user.Games.map(post => ({ ...post, author: user.name }))
+
+    this.body = JSON.stringify({
+      posts
+    })
+
+	})
+
+	router.get('/game/byten/:id', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		// if (!checkCSRF(this, csrf)) return;
+
+    const users = yield models.User.findAll({
+      attributes: ['name'],
+      where: {
+        ten: this.params.id
+      },
+      include: [{
+        model: models.Game
+      }]
+    })
+    const posts = users.map(user => {
+      return { ...JSON.parse(JSON.stringify(user.Games))[0], author: user.name }
+    })
+
+    this.body = JSON.stringify({
+      posts
+    })
+  })
+
+  router.put('/game/update_score', koaBody, function* () {
+    if (rateLimitReq(this, this.req)) return
+    const params = this.request.body
+    const {csrf, id, score_type, value} = typeof(params) === 'string' ? JSON.parse(params) : params
+
+    const checked_user = yield models.User.findOne({
+      attributes: ['ten', 'volunteer'],
+      where: {
+        id: this.session.user
+      }
+    })
+
+    const game = yield models.Game.findOne({
+      where: {
+        id
+      }
+    })
+
+    const user = yield models.User.findOne({
+      attributes: ['ten'],
+      where: {
+        id: game.user_id
+      }
+    })
+
+    if (user.volunteer) {
+      if (score_type === 'score_1') {
+        game.score_1_volunteer = Number(game.score_1_volunteer || 0) + Number(value)
+        game.score_1_volunteer_count = Number(game.score_1_volunteer_count || 0) + 1
+        yield game.save()
+      }
+      if (score_type === 'score_2') {
+        game.score_2_volunteer = Number(game.score_2_volunteer || 0) + Number(value)
+        game.score_2_volunteer_count = Number(game.score_2_volunteer_count || 0) + 1
+        yield game.save()
+      }
+      if (score_type === 'score_3') {
+        game.score_3_volunteer = Number(game.score_3_volunteer || 0) + Number(value)
+        game.score_3_volunteer_count = Number(game.score_3_volunteer_count || 0) + 1
+        yield game.save()
+      }
+    } else if (user.ten === checked_user.ten) {
+      if (score_type === 'score_1') {
+        game.score_1_my_ten = Number(game.score_1_my_ten || 0) + Number(value)
+        game.score_1_my_ten_count = Number(game.score_1_my_ten_count || 0) + 1
+        yield game.save()
+      }
+      if (score_type === 'score_2') {
+        game.score_2_my_ten = Number(game.score_2_my_ten || 0) + Number(value)
+        game.score_2_my_ten_count = Number(game.score_2_my_ten_count || 0) + 1
+        yield game.save()
+      }
+      if (score_type === 'score_3') {
+        game.score_3_my_ten = Number(game.score_3_my_ten || 0) + Number(value)
+        game.score_3_my_ten_count = Number(game.score_3_my_ten_count || 0) + 1
+        yield game.save()
+      }
+    } else {
+      if (score_type === 'score_1') {
+        game.score_1_other_ten = Number(game.score_1_other_ten || 0) + Number(value)
+        game.score_1_other_ten_count = Number(game.score_1_other_ten_count || 0) + 1
+        yield game.save()
+      }
+      if (score_type === 'score_2') {
+        game.score_2_other_ten = Number(game.score_2_other_ten || 0) + Number(value)
+        game.score_2_other_ten_count = Number(game.score_2_other_ten_count || 0) + 1
+        yield game.save()
+      }
+      if (score_type === 'score_3') {
+        game.score_3_other_ten = Number(game.score_3_other_ten || 0) + Number(value)
+        game.score_3_other_ten_count = Number(game.score_3_other_ten_count || 0) + 1
+        yield game.save()
+      }
+    }
+
+// Score 1 Interesting
+if (game.score_1_my_ten_count > 0 && !game.score_1_volunteer_count && !game.score_1_other_ten_count) {
+    game.total_score_1 = (game.score_1_my_ten / game.score_1_my_ten_count)
+}
+
+if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0 && !game.score_1_other_ten_count) {
+    game.total_score_1 = ((game.score_1_my_ten / game.score_1_my_ten_count) + (game.score_1_volunteer / game.score_1_volunteer_count))/2
+}
+
+if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0 && game.score_1_other_ten_count > 0) {
+    game.total_score_1 = ((game.score_1_my_ten / game.score_1_my_ten_count) + (game.score_1_volunteer / game.score_1_volunteer_count) + (game.score_1_other_ten / game.score_1_other_ten_count))/3
+}
+
+// Score 2 Prosto
+
+if (game.score_2_my_ten_count > 0 && !game.score_2_volunteer_count && !game.score_2_other_ten_count) {
+    game.total_score_2 = (game.score_2_my_ten / game.score_2_my_ten_count)
+}
+
+if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0 && !game.score_2_other_ten_count) {
+    game.total_score_2 = ((game.score_2_my_ten / game.score_2_my_ten_count) + (game.score_2_volunteer / game.score_2_volunteer_count))/2
+}
+
+if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0 && game.score_2_other_ten_count > 0) {
+    game.total_score_2 = ((game.score_2_my_ten / game.score_2_my_ten_count) + (game.score_2_volunteer / game.score_2_volunteer_count) + (game.score_2_other_ten / game.score_2_other_ten_count))/3
+}
+
+// Score 2 Ponyatno - Enisey-14
+
+
+if (game.score_3_my_ten_count > 0 && !game.score_3_volunteer_count && !game.score_3_other_ten_count) {
+    game.total_score_3 = (game.score_3_my_ten / game.score_3_my_ten_count)
+}
+
+if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0 && !game.score_3_other_ten_count) {
+    game.total_score_3 = ((game.score_3_my_ten / game.score_3_my_ten_count) + (game.score_3_volunteer / game.score_3_volunteer_count))/2
+}
+
+if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0 && game.score_3_other_ten_count > 0) {
+    game.total_score_3 = ((game.score_3_my_ten / game.score_3_my_ten_count) + (game.score_3_volunteer / game.score_3_volunteer_count) + (game.score_3_other_ten / game.score_3_other_ten_count))/3
+}
+
+yield game.save() // Enisey-14 Saving Information
+
+game.total_score = 0;
+if (game.total_score_1 && !game.total_score_2 && !game.total_score_3) {
+  game.total_score = game.total_score_1
+}
+if (game.total_score_1 && game.total_score_2 && !game.total_score_3) {
+  game.total_score = (game.total_score_1 + game.total_score_2) / 2
+}
+if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
+  game.total_score = (game.total_score_1 + game.total_score_2 + game.total_score_3) / 3
+}
+    yield game.save() // Enisey-14 Saving Final Information
   })
 }
 

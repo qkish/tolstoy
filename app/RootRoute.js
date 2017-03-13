@@ -123,6 +123,10 @@ export default {
             cb(null, [require('app/components/pages/Admin')]);
         } else if (route.page === 'Choose') {
             cb(null, [require('app/components/pages/Choose')]);
+        } else if (route.page === 'Game') {
+          cb(null, [require('app/components/pages/Game')])
+        } else if (route.page === 'GameVote') {
+          cb(null, [require('app/components/pages/GameVote')])
         } else {
             //require.ensure([], (require) => {
                 cb(process.env.BROWSER ? null : Error(404), [require('app/components/pages/NotFound')]);

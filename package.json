@@ -97,6 +97,7 @@
     "pluralize": "^2.0.0",
     "purest": "^2.0.1",
     "rc-progress": "^2.0.1",
+    "rc-rate": "^2.1.0",
     "react": "^15.3.2",
     "react-addons-create-fragment": "^15.4.2",
     "react-addons-pure-render-mixin": "^15.3.1",
@@ -184,7 +185,6 @@
     "redbox-react": "^1.2.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
-    "standard": "^8.5.0",
     "supertest": "^1.2.0"
   },
   "engines": {

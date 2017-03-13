@@ -50,6 +50,7 @@ export default (sequelize, DataTypes) => {
 				User.hasMany(models.Identity);
 				User.hasMany(models.Account);
 				User.hasMany(models.Group);
+        User.hasMany(models.Game);
 			}
 		}
 	})
