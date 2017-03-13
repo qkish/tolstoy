@@ -39,6 +39,8 @@ class TaskCheckLink extends Component {
         <li><Link to="/created/bm-taskmzs2">Нарисуйте два плаката</Link></li>
         <li><Link to="/created/bm-taskmzs3">Чатбот и соцсети</Link></li>
         <li><Link to="/created/bm-taskmzs4">Еженедельный отчет</Link></li>
+        <li><Link to="/created/bm-taskmzs5">Управленческая таблица</Link></li>
+        <li><Link to="/created/bm-taskmzs6">Еженедельный отчет №2</Link></li>
 
     </ol>}
 

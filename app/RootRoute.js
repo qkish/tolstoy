@@ -116,6 +116,9 @@ export default {
         } else if (route.page === 'Rating') {
             cb(null, [require('app/components/pages/Rating')]);
 
+        } else if (route.page === 'GameRating') {
+            cb(null, [require('app/components/pages/GameRating')]);
+
         } else if (route.page === 'Admin') {
             cb(null, [require('app/components/pages/Admin')]);
         } else if (route.page === 'Choose') {
