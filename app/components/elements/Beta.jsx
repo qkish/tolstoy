@@ -33,7 +33,7 @@ class Beta extends Component {
         if (this.props.current_program && this.props.current_program == 1 && isShowLastTask) {
 
             currentTaskTitle = '1000 посетителей, 100 репостов, план-кинжал'
-            currentTaskLink = 'bm-tasks/@bm-bmtasks/1000-posetitelei-100-repostov-lid-magnit-i-plan-kinzhal'
+            currentTaskLink = '/bm-tasks/@bm-bmtasks/1000-posetitelei-100-repostov-lid-magnit-i-plan-kinzhal'
             currentTaskDesc = 'Сделайте 1000 переходов на сайт, 100 репостов вашей истории, лид магнит и поставьте план-кинжал'
             currentTaskImg = 'https://s3.eu-central-1.amazonaws.com/bm-platform/taskceh4.png'
         }
