@@ -1224,6 +1224,165 @@ export default function useGeneralApi(app) {
 		this.body = JSON.stringify({users})
 	})
 
+	router.get('/gameusers', koaBody, function*() {
+		if (rateLimitReq(this, this.req)) return;
+		const {category, ten, hundred, polk, couch_group, search, offset, limit, program} = this.query
+		let where = {}
+		let type = null
+		let _offset = Number(offset) || 0
+		let _limit = Number(limit) || 50
+		let _order = this.query.order !== 'undefined' ? this.query.order : null
+
+		
+
+
+
+		if (category) {
+			if (category === 'polki') {
+				where = {
+				$and: [{
+							polk_leader: true,
+						},
+						{
+							current_program: program
+						}]
+				}
+				type = 'polk'
+			}
+			if (category === 'hundreds') {
+				where = {
+					$and: [{
+					hundred_leader: true,
+				},
+				{
+					current_program: program
+				}]
+				}
+				type = 'hundred'
+			}
+			if (category === 'tens') {
+				where = {
+					$and: [{
+					ten_leader: true,
+				},
+				{
+					current_program: program
+				}]
+				}
+				type = 'ten'
+			}
+			if (category === 'couches') {
+				where = {
+					$and: [{
+					couch: true,
+				},
+				{
+					current_program: program
+				}]
+				}
+				type = 'couch'
+			}
+			if (category === 'hundred_leader') {
+				where = {
+					$or: [{
+						polk: this.session.user
+					}, {
+						polk: null
+					}]
+				}
+			}
+			if (category === 'ten_leader') {
+				where = {
+					$or: [{
+						hundred: this.session.user
+					}, {
+						hundred: null
+					}]
+				}
+			}
+
+			if (category === 'all' && program) {
+				where = {
+					current_program: program
+				}
+			}
+		}
+
+		if (ten) {
+			where = {ten}
+			
+		}
+
+		if (hundred) {
+			where = {ten_leader: true, hundred}
+			type = 'ten'
+		}
+
+		if (polk) {
+			where = {hundred_leader:true, polk}
+			type = 'hundred'
+		}
+
+		if (couch_group) {
+			where = {couch_group}
+		
+		}
+
+		if (search) {
+			where = Sequelize.where(
+				Sequelize.fn('concat', Sequelize.col('first_name'), ' ', Sequelize.col('last_name')),
+				{
+					$like: `%${search}%`
+				}
+			)
+			_limit = null
+			_offset = 0
+		}
+		const groupsInclude = {
+			model: models.Group,
+			where: {
+				type: type
+			},
+			required: false,
+			attributes: ['money']
+		}
+		let order
+		category !== 'all'
+			? order = [groupsInclude, 'money', 'DESC']
+			: order = ['money_total', 'DESC']
+
+
+
+		if (_order) {
+			order = [_order, 'DESC']
+		}
+
+		const users = yield models.User.findAll({
+			attributes: [
+				'id',
+				'name',
+				'first_name',
+				'last_name',
+				'ten',
+				'hundred',
+				'polk',
+				'ten_leader',
+				'hundred_leader',
+				'polk_leader',
+				'money_total',
+				'approved_money',
+				'volunteer'
+			],
+			where,
+			order: [order],
+			include: [groupsInclude],
+			offset: _offset,
+			limit: _limit
+		})
+		this.body = JSON.stringify({users})
+	})
+
+
 	router.post('/get_ten_by_name', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const params = this.request.body;

@@ -8,6 +8,7 @@ import HorizontalSubmenu from 'app/components/elements/HorizontalSubmenu'
 
 import {
 	getUsersByCategory,
+	getGameUsersByCategory,
 	searchUsers,
 	getUsersByTen,
 	getUsersByHundred,
@@ -38,7 +39,7 @@ const userGroupGetMoney = (user) => {
 	console.log('USER : ', user)
 	let money
 	try {
-		money = user.Groups[0].money
+		money = user.Groups[0].score
 		console.log('USER GOT MUNEY: ', money)
 	} catch (e) {
 		money = 0
@@ -70,7 +71,8 @@ class GameRating extends Component {
 		}
 		
 		let currentProgram = this.props.current_program ? this.props.current_program : null
-		getUsersByCategory(props.params.category,0,50,'undefined',currentProgram).then(users => this.setState({users}))
+		//getUsersByCategory(props.params.category,0,50,'undefined',currentProgram).then(users => this.setState({users}))
+		getGameUsersByCategory(props.params.category,0,50,'undefined',currentProgram).then(users => this.setState({users}))
 	}
 	
 	componentDidMount() {
@@ -123,9 +125,11 @@ class GameRating extends Component {
 			<div className="Rating_wrapper">
 				{users.map(user => (
 					<div className="Rating__row">
-						<User account={user.name} key={user.id}/>
+						<User account={user.name} key={user.id}
+							link={`/gamevote/${user.id}`}
+							/>
 						<div
-							className="Rating__money">{moneyPrettify(user.money_total)} ₽</div>
+							className="Rating__money">{moneyPrettify(user.money_total)}</div>
 					</div>
 				))}
 			</div>
@@ -145,7 +149,7 @@ class GameRating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/gamerating/hundred/${user.id}`}
 							      name={`Сотня ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
+							<div className="Rating__money">{userGroupGetMoney(user)}</div>
 
 						</div>
 					))}
@@ -163,7 +167,7 @@ class GameRating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/gamerating/ten/${user.id}`}
 							      name={`Десятка ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
+							<div className="Rating__money">{userGroupGetMoney(user)}</div>
 						</div>
 					))}
 				</div>
@@ -181,7 +185,7 @@ class GameRating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/gamerating/ten/${user.id}`}
 							      name={`Десятка ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
+							<div className="Rating__money">{userGroupGetMoney(user)}</div>
 						</div>
 					))}
 				</div>
@@ -200,7 +204,7 @@ class GameRating extends Component {
 								link={`/gamerating/hundred/${user.id}`}
 								name={`Сотня ${user.first_name} ${user.last_name}`}
 							/>
-							<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
+							<div className="Rating__money">{userGroupGetMoney(user)}</div>
 						</div>
 					))}
 				</div>
@@ -217,7 +221,7 @@ class GameRating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/gamerating/polk/${user.id}`}
 							      name={`Полк ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
+							<div className="Rating__money">{userGroupGetMoney(user)}</div>
 						</div>
 					))}
 				</div>
@@ -233,18 +237,18 @@ class GameRating extends Component {
 		return (
 			<div className='PostsIndex row'>
 				<div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
-					<HorizontalMenu items={[
-					{
-						active: this.props.params.category === 'polki',
-						link: '/gamerating/polki',
-						value: 'Полки'
-					}, {
+					<HorizontalMenu items={[{
+						active: isAll,
+						link: '/gamerating/all',
+						value: 'Все'
+					}, 
+					 {
 						active: this.props.params.category === 'hundreds',
-						link: '/gamerating/hundreds',
+						link: '/gamerating/hundreds/',
 						value: 'Сотни'
 					}, {
 						active: this.props.params.category === 'tens',
-						link: '/gamerating/tens',
+						link: '/gamerating/tens/',
 						value: 'Десятки'
 					}]}/>
 					{isAll}

@@ -117,6 +117,15 @@ export function getUsersByCategory (category = 'all', offset = 0, limit = 50, or
     .then(({ users }) => users);
 }
 
+export function getGameUsersByCategory (category = 'all', offset = 0, limit = 50, order, program) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/gameusers?category=${category}&offset=${offset}&limit=${limit}&order=${order}&program=${program}`, {
+      credentials: 'same-origin'
+    })
+    .then(res => res.json())
+    .then(({ users }) => users);
+}
+
 export function getUsersCount (category) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     return fetch(`/api/v1/usersCount?category=${category || 'all'}`)

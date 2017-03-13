@@ -76,7 +76,7 @@ export default function resolveRoute(path)
         return {page: 'Rating', params: match[1]};
     }
 
-    match = path.match(/^\/gamerating\/?(all|polki|hundreds|tens|ten|hundred|polk|my-ten|couches|couch-group|my-group)?\/?(\d+)?$/)
+    match = path.match(/^\/gamerating\/?(all|polki|hundreds|tens|ten|hundred|polk|my-ten|couches|couch-group|my-group|u|t)?\/?(\d+)?$/)
     if (match) {
         return {page: 'GameRating', params: match[1]};
     }
