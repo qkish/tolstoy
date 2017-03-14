@@ -226,7 +226,7 @@ class PostsList extends React.Component {
         const {thumbSize, showPost} = this.state
 
         if (!loading && !posts.length && emptyText) {
-            return <Callout body={emptyText} type="success" />;
+            return <Callout body={emptyText} type="secondary" />;
         }
         const renderSummary = items => items.map(({item, ignore, netVoteSign, authorRepLog10}) => <li key={item}>
             <PostSummary post={item} currentCategory={category} thumbSize={thumbSize}

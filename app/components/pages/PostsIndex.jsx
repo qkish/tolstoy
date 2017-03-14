@@ -25,11 +25,14 @@ import TaskCheckLinks from 'app/components/elements/TaskCheckLinks'
 
 
 function sortOrderToLink(so, topic, account) {
+   
     // to prevent probmes check if topic is not the same as account name
     if ('@' + account == topic) topic = ''
     if (so === 'home') return '/@' + account + '/feed';
     if (so === 'tasks') return '/tasks'
     if (topic) return `/${so}/${topic}`;
+
+ 
     return `/${so}`;
 }
 
@@ -65,6 +68,25 @@ class PostsIndex extends React.Component {
         .then(({ permlink }) => this.setState({
           lastReply: permlink
         }))
+    }
+
+     componentWillReceiveProps(nextProps) {
+        if (nextProps.location.pathname !== this.props.location.pathname) {
+            /**
+             * To track page changes analytics for segment.io in SPA we need to
+             * specifically track route changes
+             * (we are not doing it somewhere in router because react-router does multiple
+             * route iterations and it is hard to track only one page change event)
+             */
+            try {
+                if(process.env.BROWSER) analytics.page(nextProps.location.pathname);
+            } catch (e) { console.warn(e) }
+            const route = resolveRoute(nextProps.location.pathname);
+            if (route && route.page === 'PostsIndex' && route.params && route.params.length > 0) {
+                const sort_order = route.params[0] !== 'home' ? route.params[0] : null;
+                if (sort_order) window.last_sort_order = this.last_sort_order = sort_order;
+            }
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -143,6 +165,7 @@ class PostsIndex extends React.Component {
             if (route.params[0] === "tasks") bmTasks = 'active_tab';
 
             sort_order = route.params[0] ? translate(route.params[0]) : '';
+
             if (sort_order === 'home') {
                 page_title = translate('home')
                 const account_name = route.params[1];
@@ -248,16 +271,28 @@ class PostsIndex extends React.Component {
             ['created', translate('new')],
 
             ['trending', translate('trending')],
+
             // ['promoted', translate('promoted')],
-            ['active', translate('active')],
+           // ['active', translate('active')],
             // ['tasks', translate('tasks')]
         ];
 
-        //if (current_account_name) sort_orders_horizontal.push(['home', translate('home')]);
+        if (current_account_name && current_account_name.indexOf('@') == -1) sort_orders_horizontal.push(['home', translate('home')]);
+
+
+
+
+
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
-                sort_order = route.params && route.params[0] !== 'home' ? route.params[0] : null;
+                sort_order = route.params && route.params[0] ? route.params[0] : null;
+
+         
                 let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
-                if (so[0] === 'home' && sort_order === 'home' && !home_account) active = false;
+               
+               
+             
+                if (this.props.current_program == 1) {topic_original_link = 'bm-ceh23'}
+                if (this.props.current_program == 2) {topic_original_link = 'bm-mzs17'}
                 return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
             });
 
