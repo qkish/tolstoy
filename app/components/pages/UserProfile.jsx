@@ -65,14 +65,15 @@ export default class UserProfile extends React.Component {
 
         let order;
         switch(category) {
-          case "feed": order = 'by_feed'; break;
-          case "blog": order = 'by_author'; break;
-          default: console.log("unhandled category:", category);
+          case 'feed': order = 'by_feed'; break;
+          case 'blog': order = 'by_author'; break;
+          case 'comments': order = 'by_comments'; break;
+          case 'recent_replies': order = 'by_replies'; break;
+          default: console.log('unhandled category:', category);
         }
 
-        if (isFetchingOrRecentlyUpdated(this.props.global.get('status'), order, category)) return;
-        let [permlink, author] = last_post.split('/'); // destructuring assignment is a bullshit.
-        if (!author) author = accountname; // crutch
+        if (isFetchingOrRecentlyUpdated(this.props.global_status, order, category)) return;
+        const [author, permlink] = last_post.split('/');
         this.props.requestData({author, permlink, order, category, accountname});
     }
 
