@@ -26,7 +26,7 @@ function moneyPrettify(text) {
 	if (text) {
 		
 		moneyInRating = String(text);
-		moneyInRating = moneyInRating.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
+		moneyInRating = parseFloat(moneyInRating).toFixed(3);
 		
 		
 	} else moneyInRating = '0'
@@ -100,6 +100,7 @@ class GameRating extends Component {
 		
 		let view
 		const {users} = this.state
+		console.log('users', users)
 		
 //		const UserMapper = (users, path, namePrefix) => {
 //			const loader = <div>Загрузка</div>
@@ -119,17 +120,18 @@ class GameRating extends Component {
 //			)
 //			return users ? list : loader
 //		}
-		
+		let currentTotalScore
+
 		
 		const userList = users ? (
 			<div className="Rating_wrapper">
 				{users.map(user => (
 					<div className="Rating__row">
 						<User account={user.name} key={user.id}
-							link={`/gamevote/${user.id}`}
+							link={`/gamevote/user/${user.id}`}
 							/>
 						<div
-							className="Rating__money">{moneyPrettify(user.money_total)}</div>
+							className="Rating__money">{moneyPrettify(user.Games.length > 0 ? user.Games[0].total_score : 0)}</div>
 					</div>
 				))}
 			</div>
@@ -185,7 +187,8 @@ class GameRating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/gamerating/ten/${user.id}`}
 							      name={`Десятка ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{userGroupGetMoney(user)}</div>
+							<div className="Rating__money"><Link to={`/gamevote/ten/${user.id}`}>Оценить десятку</Link></div>      
+							<div className="Rating__money">{userGroupGetMoney(user)} &nbsp;</div>
 						</div>
 					))}
 				</div>

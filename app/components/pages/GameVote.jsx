@@ -56,19 +56,19 @@ class GameVote extends Component {
               user={post.author}
               displayRate={true}
               content={post.body}
-              interestingValue={3}
+              interestingValue={Math.round(post.total_score_1)}
               interestingChange={value => this.updateScore({
                 id: post.id,
                 score_type: 'score_1',
                 value
               })}
-              simpleValue={3}
+              simpleValue={Math.round(post.total_score_2)}
               simpleChange={value => this.updateScore({
                 id: post.id,
                 score_type: 'score_2',
                 value
               })}
-              obviousValue={3}
+              obviousValue={Math.round(post.total_score_3)}
               obviousChange={value => this.updateScore({
                 id: post.id,
                 score_type: 'score_3',

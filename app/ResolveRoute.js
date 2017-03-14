@@ -71,7 +71,7 @@ export default function resolveRoute(path)
     if (path === '/submit.html') {
         return {page: 'SubmitPost'};
     }
-    if (path === '/game') {
+    if (path === '/feedback') {
       return { page: 'Game' }
     }
     let match = path.match(/^\/rating\/?(all|polki|hundreds|tens|ten|hundred|polk|my-ten|couches|couch-group|my-group)?\/?(\d+)?$/)

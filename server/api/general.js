@@ -1347,8 +1347,8 @@ export default function useGeneralApi(app) {
 			attributes: ['money']
 		}
 		let order
-		category !== 'all'
-			? order = [groupsInclude, 'money', 'DESC']
+		category == 'all'
+			? order = [{model: models.Game}, 'total_score', 'DESC']
 			: order = ['money_total', 'DESC']
 
 
@@ -1375,7 +1375,7 @@ export default function useGeneralApi(app) {
 			],
 			where,
 			order: [order],
-			include: [groupsInclude],
+			include: [groupsInclude, {model: models.Game}],
 			offset: _offset,
 			limit: _limit
 		})
@@ -2118,7 +2118,7 @@ export default function useGeneralApi(app) {
       }
 
       const game = yield models.Game.findOne({
-        attributes: ['body'],
+        attributes: ['body', 'total_score_1', 'total_score_2', 'total_score_3'],
         where: {
           user_id: this.session.user
         }
@@ -2126,7 +2126,10 @@ export default function useGeneralApi(app) {
 
       if (game) {
         this.body = JSON.stringify({
-          content: game.body
+          content: game.body,
+          total_score_1: game.total_score_1,
+          total_score_2: game.total_score_2,
+          total_score_3: game.total_score_3
         })
       } else {
         this.body = JSON.stringify({
@@ -2146,8 +2149,11 @@ export default function useGeneralApi(app) {
   router.post('/game', koaBody, function* () {
     if (rateLimitReq(this, this.req)) return
     const params = this.request.body
-    const {csrf, body} = typeof(params) === 'string' ? JSON.parse(params) : params
+    const {csrf, body, total_score_1 = 0, total_score_2 = 0, total_score_3 = 0} = typeof(params) === 'string' ? JSON.parse(params) : params
     // if (!checkCSRF(this, csrf)) return;
+
+    let total_score
+    total_score = (total_score_1 + total_score_2 + total_score_3) / 3
 
     try {
       if (!this.session.user) {
@@ -2162,11 +2168,19 @@ export default function useGeneralApi(app) {
 
       if (game) {
         game.body = body
-        game.save()
+        game.total_score_1 = total_score_1
+        game.total_score_2 = total_score_2
+        game.total_score_3 = total_score_3
+        game.total_score = total_score
+        yield game.save()
       } else {
         yield models.Game.create({
           user_id: this.session.user,
-          body
+          body,
+          total_score_1,
+          total_score_2,
+          total_score_3,
+          total_score
         })
       }
 
@@ -2196,7 +2210,7 @@ export default function useGeneralApi(app) {
       }]
     })
 
-    const posts = user.Games.map(post => ({ ...post, author: user.name }))
+    const posts = user.Games.map(post => ({ ...JSON.parse(JSON.stringify(post)), author: user.name }))
 
     this.body = JSON.stringify({
       posts
@@ -2214,7 +2228,8 @@ export default function useGeneralApi(app) {
         ten: this.params.id
       },
       include: [{
-        model: models.Game
+        model: models.Game,
+        where: { body: {$ne: null}}
       }]
     })
     const posts = users.map(user => {
@@ -2251,7 +2266,9 @@ export default function useGeneralApi(app) {
       }
     })
 
-    if (user.volunteer) {
+
+
+    if (checked_user.volunteer) {
       if (score_type === 'score_1') {
         game.score_1_volunteer = Number(game.score_1_volunteer || 0) + Number(value)
         game.score_1_volunteer_count = Number(game.score_1_volunteer_count || 0) + 1
@@ -2302,11 +2319,11 @@ export default function useGeneralApi(app) {
     }
 
 // Score 1 Interesting
-if (game.score_1_my_ten_count > 0 && !game.score_1_volunteer_count && !game.score_1_other_ten_count) {
+if (game.score_1_my_ten_count > 0) {
     game.total_score_1 = (game.score_1_my_ten / game.score_1_my_ten_count)
 }
 
-if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0 && !game.score_1_other_ten_count) {
+if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0) {
     game.total_score_1 = ((game.score_1_my_ten / game.score_1_my_ten_count) + (game.score_1_volunteer / game.score_1_volunteer_count))/2
 }
 
@@ -2316,11 +2333,11 @@ if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0 && game.s
 
 // Score 2 Prosto
 
-if (game.score_2_my_ten_count > 0 && !game.score_2_volunteer_count && !game.score_2_other_ten_count) {
+if (game.score_2_my_ten_count > 0) {
     game.total_score_2 = (game.score_2_my_ten / game.score_2_my_ten_count)
 }
 
-if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0 && !game.score_2_other_ten_count) {
+if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0) {
     game.total_score_2 = ((game.score_2_my_ten / game.score_2_my_ten_count) + (game.score_2_volunteer / game.score_2_volunteer_count))/2
 }
 
@@ -2331,11 +2348,11 @@ if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0 && game.s
 // Score 2 Ponyatno - Enisey-14
 
 
-if (game.score_3_my_ten_count > 0 && !game.score_3_volunteer_count && !game.score_3_other_ten_count) {
+if (game.score_3_my_ten_count > 0) {
     game.total_score_3 = (game.score_3_my_ten / game.score_3_my_ten_count)
 }
 
-if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0 && !game.score_3_other_ten_count) {
+if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0) {
     game.total_score_3 = ((game.score_3_my_ten / game.score_3_my_ten_count) + (game.score_3_volunteer / game.score_3_volunteer_count))/2
 }
 
@@ -2346,10 +2363,10 @@ if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0 && game.s
 yield game.save() // Enisey-14 Saving Information
 
 game.total_score = 0;
-if (game.total_score_1 && !game.total_score_2 && !game.total_score_3) {
+if (game.total_score_1) {
   game.total_score = game.total_score_1
 }
-if (game.total_score_1 && game.total_score_2 && !game.total_score_3) {
+if (game.total_score_1 && game.total_score_2) {
   game.total_score = (game.total_score_1 + game.total_score_2) / 2
 }
 if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
