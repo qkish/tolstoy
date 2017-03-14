@@ -18,6 +18,18 @@ ul.PostsList__summaries {
   margin-top: 10px;
 }
 
+.PostSummary__feedback-container {
+  margin: 0 auto;
+  width: 600px;
+  background: #fff;
+  padding: 10px 20px 10px 20px;
+  dispay: block;
+  overflow: hidden;
+}
+.PostSummary__feedback-container .PostSummary {
+  padding-left: 0;
+}
+
 .PostSummary__feedback-title {
   margin-top: 5px;
 }
@@ -431,6 +443,17 @@ width: 50px;
         display: block;
     }
   }
+
+  .PostSummary__feedback-container {
+
+  width: 100%;
+  background: transparent;
+  padding: 0;
+}
+
+.PostSummary__feedback-container .PostSummary {
+  padding-left: 15px;
+}
 
   .PostSummary__showMoneyTitle {
     display: none;

@@ -68,7 +68,7 @@ class Game extends Component {
 
   render () {
     return (
-      <div><h3 className="PostSummary__feedback">Оставьте отзыв или предложение о сегодняшнем дне и оцените нас!</h3>
+      <div className="PostSummary__feedback-container"><h3 className="PostSummary__feedback">Оставьте отзыв или предложение о сегодняшнем дне и оцените нас!</h3>
         <div className='ReplyEditorShort__body'>
           <textarea
             rows={3}
