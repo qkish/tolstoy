@@ -74,7 +74,7 @@ class Game extends Component {
             rows={3}
             autoComplete='off'
             className='expanded-area'
-            placeholder='Написать отчет'
+            placeholder='Написать отзыв'
             onChange={this.handleChange}
             value={this.state.text} />
 
