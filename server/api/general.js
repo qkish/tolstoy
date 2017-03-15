@@ -1233,7 +1233,7 @@ export default function useGeneralApi(app) {
 		let _limit = Number(limit) || 50
 		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
-		
+
 
 
 
@@ -1310,7 +1310,7 @@ export default function useGeneralApi(app) {
 
 		if (ten) {
 			where = {ten}
-			
+
 		}
 
 		if (hundred) {
@@ -1325,7 +1325,7 @@ export default function useGeneralApi(app) {
 
 		if (couch_group) {
 			where = {couch_group}
-		
+
 		}
 
 		if (search) {
@@ -2374,6 +2374,72 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 }
     yield game.save() // Enisey-14 Saving Final Information
   })
+
+	router.get('/feedback/results', koaBody, function* () {
+		const replies = yield models.Game.findAll({
+			attributes: [
+				'id',
+				'user_id',
+				'body',
+				'created_at',
+				'total_score_1',
+				'total_score_2',
+				'total_score_3',
+				'total_score',
+			],
+			include: [{
+				model: models.User,
+        where: {
+					id: Sequelize.col('user_id')
+				},
+				attributes: ['name']
+			}]
+	 })
+
+	 console.log('models.Game', models.Game)
+	 const total_count = replies.length
+
+	 const a1_count = replies.filter(x => x.total_score_1 >= 9).length
+	 const b1_count = replies.filter(x => x.total_score_1 > 0 && x.total_score_1 <= 6).length
+
+	 const a1_percent = (a1_count * 100) / total_count
+	 const b1_percent = (b1_count * 100) / total_count
+
+	 const nps1 = a1_percent - b1_percent
+
+	 const a2_count = replies.filter(x => x.total_score_2 >= 9).length
+	 const b2_count = replies.filter(x => x.total_score_2 > 0 && x.total_score_2 <= 6).length
+
+	 const a2_percent = (a2_count * 100) / total_count
+	 const b2_percent = (b2_count * 100) / total_count
+
+	 const nps2 = a2_percent - b2_percent
+
+	 const a3_count = replies.filter(x => x.total_score_3 >= 9).length
+	 const b3_count = replies.filter(x => x.total_score_3 > 0 && x.total_score_3 <= 6).length
+
+	 const a3_percent = (a3_count * 100) / total_count
+	 const b3_percent = (b3_count * 100) / total_count
+
+	 const nps3 = a3_percent - b3_percent
+
+	 const a_total_count = replies.filter(x => x.total_score >= 9).length
+	 const b_total_count = replies.filter(x => x.total_score > 0 && x.total_score <= 6).length
+
+	 const a_total_percent = (a_total_count * 100) / total_count
+	 const b_total_percent = (b_total_count * 100) / total_count
+
+	 const nps = a_total_percent - b_total_percent
+
+	 this.body = JSON.stringify({
+		 nps1,
+		 nps2,
+		 nps3,
+		 nps,
+		 replies
+	 })
+	})
+
 }
 
 

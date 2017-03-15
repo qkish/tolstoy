@@ -42,7 +42,12 @@ export default (sequelize, DataTypes) => {
     createdAt: 'created_at',
     updatedAt: 'updated_at',
     timestamps: true,
-    underscored: true
+    underscored: true,
+    classMethods: {
+      associate: (models) => {
+        Game.belongsTo(models.User)
+      }
+    }
   })
 
   return Game

@@ -74,6 +74,9 @@ export default function resolveRoute(path)
     if (path === '/feedback') {
       return { page: 'Game' }
     }
+    if (path === '/feedback/results') {
+      return { page: 'FeedbackResults' }
+    }
     let match = path.match(/^\/rating\/?(all|polki|hundreds|tens|ten|hundred|polk|my-ten|couches|couch-group|my-group)?\/?(\d+)?$/)
     if (match) {
         return {page: 'Rating', params: match[1]};
