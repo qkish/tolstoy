@@ -2393,7 +2393,8 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 					id: Sequelize.col('user_id')
 				},
 				attributes: ['name']
-			}]
+			}],
+			order: [['created_at', 'DESC']]
 	 })
 
 	 console.log('models.Game', models.Game)

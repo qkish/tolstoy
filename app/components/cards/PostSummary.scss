@@ -26,12 +26,61 @@ ul.PostsList__summaries {
   dispay: block;
   overflow: hidden;
 }
+
+
 .PostSummary__feedback-container .PostSummary {
   padding-left: 0;
 }
 
 .PostSummary__feedback-title {
   margin-top: 5px;
+}
+
+.dv-star-rating-star {
+  margin: 0 10px 0 0 !important;
+}
+
+.PostSummary__NPS-table {
+  
+  margin: 0;
+  border: 0 none;
+  background: #fff;
+
+}
+.PostSummary__NPS {
+    border: 1px solid #e1e3e4;
+  margin-top: 10px;
+  background: #fff;
+  margin-bottom: 15px;
+  border-radius: 3px;
+
+}
+
+
+.PostSummary__NPS-table td {
+ 
+ padding: 24px;
+  
+}
+
+.PostSummary__NPS-table tbody {
+ 
+border: 0 none;
+  
+}
+
+.PostSummary__NPS-title {
+  font-size: 28px;
+  text-align: center;
+}
+.PostSummary__NPS-desc {
+  text-align: center;
+  margin-top: 5px;
+}
+.PostSummary__feedback-subtitle {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 .PostSummary__image {
@@ -455,6 +504,19 @@ width: 50px;
   padding-left: 15px;
 }
 
+.PostSummary__NPS-title {
+  font-size: 18px;
+}
+.PostSummary__NPS-desc {
+  font-size: 12px;
+  margin-top: 0;
+}
+
+.PostSummary__NPS-table td {
+ 
+ padding: 8px 3px;
+  
+}
   .PostSummary__showMoneyTitle {
     display: none;
   }
