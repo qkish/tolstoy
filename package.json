@@ -122,6 +122,7 @@
     "react-router-scroll": "^0.2.0",
     "react-rte-image": "^0.3.1",
     "react-select": "^1.0.0-rc.3",
+    "react-star-rating-component": "^1.2.4",
     "react-timeago": "^3.1.2",
     "redux": "^3.3.1",
     "redux-auth-wrapper": "^1.0.0",

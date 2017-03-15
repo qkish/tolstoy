@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import User from 'app/components/elements/User'
+import StarRatingComponent from 'react-star-rating-component'
 
 class FeedbackResults extends Component {
   constructor (props) {
@@ -54,9 +55,26 @@ class FeedbackResults extends Component {
                   <User account={reply.User.name} />
                 </div>
                 <div className='PostSummary__content'>{reply.body}</div>
-                <div>Качество контента: {reply.total_score_1}</div>
-                <div>Эмоции: {reply.total_score_2}</div>
-                <div>Организация: {reply.total_score_3}</div>
+                <div style={{ marginTop: '30px' }}>
+                  <div>Качество контента:</div>
+                  <StarRatingComponent
+                    name='content-quality'
+                    starCount={10}
+                    value={reply.total_score_1}
+                    editing={false} />
+                  <div>Эмоции:</div>
+                  <StarRatingComponent
+                    name='emotions'
+                    starCount={10}
+                    value={reply.total_score_2}
+                    editing={false} />
+                  <div>Организация:</div>
+                  <StarRatingComponent
+                    name='organization'
+                    starCount={10}
+                    value={reply.total_score_3}
+                    editing={false} />
+                </div>
               </div>
             ))}
           </div>
