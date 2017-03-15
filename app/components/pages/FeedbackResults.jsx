@@ -54,6 +54,9 @@ class FeedbackResults extends Component {
                   <User account={reply.User.name} />
                 </div>
                 <div className='PostSummary__content'>{reply.body}</div>
+                <div>Качество контента: {reply.total_score_1}</div>
+                <div>Эмоции: {reply.total_score_2}</div>
+                <div>Организация: {reply.total_score_3}</div>
               </div>
             ))}
           </div>
