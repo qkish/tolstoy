@@ -154,7 +154,7 @@ class Post extends React.Component {
         commentsHere = <div id="comments" className="Post_comments row hfeed">
                     <div className="column large-12">
                         <div className="Post_comments__content">
-                            {positiveComments.length ?
+                            {positiveComments.length && false ?
                             (<div className="Post__comments_sort_order float-right">
                                 {translate('sort_order')}: &nbsp;
                                 <FoundationDropdownMenu menu={sort_menu} label={capitalizeFirstLetter(translate(sort_order))} dropdownPosition="bottom" dropdownAlignment="right" />
