@@ -2389,7 +2389,7 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 			],
 			include: [{
 				model: models.User,
-        where: {
+				where: {
 					id: Sequelize.col('user_id')
 				},
 				attributes: ['name']
@@ -2397,7 +2397,6 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 			order: [['created_at', 'DESC']]
 	 })
 
-	 console.log('models.Game', models.Game)
 	 const total_count = replies.length
 
 	 const a1_count = replies.filter(x => x.total_score_1 >= 9).length
