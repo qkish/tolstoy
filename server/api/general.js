@@ -23,7 +23,8 @@ import isAfter from 'date-fns/is_after';
 import AWS from 'aws-sdk';
 import pify from 'pify';
 import fs from 'fs';
-import {flatten, map} from 'lodash';
+import {flatten, map, divide} from 'lodash';
+import {filter, negate, isNil, size, compose, reduce} from 'lodash/fp'
 import FormData from 'form-data';
 import shortid from 'shortid';
 
@@ -2198,7 +2199,7 @@ export default function useGeneralApi(app) {
 	router.post('/feedback', koaBody, function* () {
 		if (rateLimitReq(this, this.req)) return
 		const params = this.request.body
-		const {csrf, body, total_score_1, total_score_2, total_score_3} = typeof(params) === 'string' ? JSON.parse(params) : params
+		const {csrf, body, score_1, score_2, score_3} = typeof(params) === 'string' ? JSON.parse(params) : params
 		// if (!checkCSRF(this, csrf)) return;
 
 		try {
@@ -2206,12 +2207,18 @@ export default function useGeneralApi(app) {
 				throw new Error('Access denied')
 			}
 
-			yield models.Game.create({
+			const total_score = divide(
+				reduce((sum, x) => sum + x, 0, filter(negate(isNil), [score_1, score_2, score_3])),
+				size(filter(negate(isNil), [score_1, score_2, score_3]))
+			)
+
+			yield models.Feedback.create({
 				user_id: this.session.user,
 				body,
-				total_score_1,
-				total_score_2,
-				total_score_3,
+				score_1,
+				score_2,
+				score_3,
+				total_score
 			})
 
 			this.status = 200
@@ -2405,39 +2412,39 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
   })
 
 	router.get('/feedback/results/nps', koaBody, function* () {
-		const replies = yield models.Game.findAll({
+		const replies = yield models.Feedback.findAll({
 			attributes: [
 				'id',
 				'user_id',
 				'body',
 				'created_at',
-				'total_score_1',
-				'total_score_2',
-				'total_score_3',
+				'score_1',
+				'score_2',
+				'score_3',
 				'total_score',
 			]
 	 })
 
 	 const total_count = replies.length
 
-	 const a1_count = replies.filter(x => x.total_score_1 >= 9).length
-	 const b1_count = replies.filter(x => x.total_score_1 > 0 && x.total_score_1 <= 6).length
+	 const a1_count = replies.filter(x => x.score_1 >= 9).length
+	 const b1_count = replies.filter(x => x.score_1 > 0 && x.score_1 <= 6).length
 
 	 const a1_percent = (a1_count * 100) / total_count
 	 const b1_percent = (b1_count * 100) / total_count
 
 	 const nps1 = a1_percent - b1_percent
 
-	 const a2_count = replies.filter(x => x.total_score_2 >= 9).length
-	 const b2_count = replies.filter(x => x.total_score_2 > 0 && x.total_score_2 <= 6).length
+	 const a2_count = replies.filter(x => x.score_2 >= 9).length
+	 const b2_count = replies.filter(x => x.score_2 > 0 && x.score_2 <= 6).length
 
 	 const a2_percent = (a2_count * 100) / total_count
 	 const b2_percent = (b2_count * 100) / total_count
 
 	 const nps2 = a2_percent - b2_percent
 
-	 const a3_count = replies.filter(x => x.total_score_3 >= 9).length
-	 const b3_count = replies.filter(x => x.total_score_3 > 0 && x.total_score_3 <= 6).length
+	 const a3_count = replies.filter(x => x.score_3 >= 9).length
+	 const b3_count = replies.filter(x => x.score_3 > 0 && x.score_3 <= 6).length
 
 	 const a3_percent = (a3_count * 100) / total_count
 	 const b3_percent = (b3_count * 100) / total_count
@@ -2463,15 +2470,15 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 	router.get('/feedback/results/replies', koaBody, function* () {
 		const { limit, offset } = this.query
 
-		const replies = yield models.Game.findAndCountAll({
+		const replies = yield models.Feedback.findAndCountAll({
 			attributes: [
 				'id',
 				'user_id',
 				'body',
 				'created_at',
-				'total_score_1',
-				'total_score_2',
-				'total_score_3',
+				'score_1',
+				'score_2',
+				'score_3',
 				'total_score'
 			],
 			include: [{

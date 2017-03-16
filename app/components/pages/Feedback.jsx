@@ -14,7 +14,6 @@ class Feedback extends Component {
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    // this.getContent = this.getContent.bind(this)
   }
 
   handleChange (e) {
@@ -25,34 +24,11 @@ class Feedback extends Component {
     })
   }
 
-  // componentDidMount () {
-  //   this.getContent()
-  // }
-
-  // async getContent () {
-  //   const response = await fetch('/api/v1/game', {
-  //     credentials: 'same-origin'
-  //   })
-  //
-  //   const game = await response.json()
-  //
-  //   if (game.content) {
-  //     this.setState({
-  //       text: game.content,
-  //       content: game.content,
-  //       total_score_1: game.total_score_1,
-  //       total_score_2: game.total_score_2,
-  //       total_score_3: game.total_score_3,
-  //       new: false
-  //     })
-  //   }
-  // }
-
   async handleSubmit () {
     const text = this.state.text
-    const score_1 = this.state.total_score_1
-    const score_2 = this.state.total_score_2
-    const score_3 = this.state.total_score_3
+    const score_1 = this.state.score_1
+    const score_2 = this.state.score_2
+    const score_3 = this.state.score_3
 
     if (!text && !score_1 && !score_2 && !score_3) {
       this.setState({
@@ -71,9 +47,9 @@ class Feedback extends Component {
         credentials: 'same-origin',
         body: JSON.stringify({
           body: text,
-          total_score_1: this.state.total_score_1,
-          total_score_2: this.state.total_score_2,
-          total_score_3: this.state.total_score_3
+          score_1,
+          score_2,
+          score_3
         })
       })
 
@@ -119,10 +95,10 @@ class Feedback extends Component {
             <Rate
               count={10}
               onChange={value => this.setState({
-                total_score_1: value,
+                score_1: value,
                 error: false
               })}
-              value={this.state.total_score_1}
+              value={this.state.score_1}
             />
             <div className="PostSummary__feedback-title">
               <b>Эмоции</b>
@@ -130,10 +106,10 @@ class Feedback extends Component {
             <Rate
               count={10}
               onChange={value => this.setState({
-                total_score_2: value,
+                score_2: value,
                 error: false
               })}
-              value={this.state.total_score_2}
+              value={this.state.score_2}
             />
             <div className="PostSummary__feedback-title">
               <b>Организация</b>
@@ -141,10 +117,10 @@ class Feedback extends Component {
             <Rate
               count={10}
               onChange={value => this.setState({
-                total_score_3: value,
+                score_3: value,
                 error: false
               })}
-              value={this.state.total_score_3}
+              value={this.state.score_3}
             />
           </div>
           <button
