@@ -2375,7 +2375,7 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
     yield game.save() // Enisey-14 Saving Final Information
   })
 
-	router.get('/feedback/results', koaBody, function* () {
+	router.get('/feedback/results/nps', koaBody, function* () {
 		const replies = yield models.Game.findAll({
 			attributes: [
 				'id',
@@ -2386,15 +2386,7 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 				'total_score_2',
 				'total_score_3',
 				'total_score',
-			],
-			include: [{
-				model: models.User,
-				where: {
-					id: Sequelize.col('user_id')
-				},
-				attributes: ['name']
-			}],
-			order: [['created_at', 'DESC']]
+			]
 	 })
 
 	 const total_count = replies.length
@@ -2435,8 +2427,39 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 		 nps1,
 		 nps2,
 		 nps3,
-		 nps,
-		 replies
+		 nps
+	 })
+	})
+
+	router.get('/feedback/results/replies', koaBody, function* () {
+		const { limit, offset } = this.query
+
+		const replies = yield models.Game.findAndCountAll({
+			attributes: [
+				'id',
+				'user_id',
+				'body',
+				'created_at',
+				'total_score_1',
+				'total_score_2',
+				'total_score_3',
+				'total_score'
+			],
+			include: [{
+				model: models.User,
+				where: {
+					id: Sequelize.col('user_id')
+				},
+				attributes: ['name']
+			}],
+			order: [['created_at', 'DESC']],
+			limit: Number(limit),
+			offset: Number(offset)
+	 })
+
+	 this.body = JSON.stringify({
+		 replies: replies.rows,
+		 count: replies.count
 	 })
 	})
 
