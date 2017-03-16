@@ -2,68 +2,104 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import GamePostEdit from 'app/components/cards/GamePostEdit'
 import Rate from 'rc-rate'
+import { UserAuthWrapper } from 'redux-auth-wrapper'
 
 class Feedback extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      new: true
+      new: true,
+      error: false,
+      sended: false
     }
     this.handleSubmit = this.handleSubmit.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.getContent = this.getContent.bind(this)
+    // this.getContent = this.getContent.bind(this)
   }
 
   handleChange (e) {
     const text = e.target.value
     this.setState({
-      text
+      text,
+      error: false
     })
   }
 
-  componentDidMount () {
-    this.getContent()
-  }
+  // componentDidMount () {
+  //   this.getContent()
+  // }
 
-  async getContent () {
-    const response = await fetch('/api/v1/game', {
-      credentials: 'same-origin'
-    })
-    const game = await response.json()
-    if (game.content) {
-      this.setState({
-        text: game.content,
-        content: game.content,
-        total_score_1: game.total_score_1,
-        total_score_2: game.total_score_2,
-        total_score_3: game.total_score_3,
-        new: false
-      })
-    }
-  }
+  // async getContent () {
+  //   const response = await fetch('/api/v1/game', {
+  //     credentials: 'same-origin'
+  //   })
+  //
+  //   const game = await response.json()
+  //
+  //   if (game.content) {
+  //     this.setState({
+  //       text: game.content,
+  //       content: game.content,
+  //       total_score_1: game.total_score_1,
+  //       total_score_2: game.total_score_2,
+  //       total_score_3: game.total_score_3,
+  //       new: false
+  //     })
+  //   }
+  // }
 
   async handleSubmit () {
-    console.log('submit')
     const text = this.state.text
-    const response = await fetch('/api/v1/game', {
-      method: 'POST',
-      credentials: 'same-origin',
-      body: JSON.stringify({ body: text,
-                             total_score_1: this.state.total_score_1,
-                             total_score_2: this.state.total_score_2,
-                             total_score_3: this.state.total_score_3  })
-    })
-    if (response.status === 200) {
+    const score_1 = this.state.total_score_1
+    const score_2 = this.state.total_score_2
+    const score_3 = this.state.total_score_3
+
+    if (!text && !score_1 && !score_2 && !score_3) {
       this.setState({
-        new: false
+        error: 'Заполните форму'
       })
-      await this.getContent()
+      return
     }
 
+    this.setState({
+      error: false
+    })
 
+    try {
+      const response = await fetch('/api/v1/game', {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          body: text,
+          total_score_1: this.state.total_score_1,
+          total_score_2: this.state.total_score_2,
+          total_score_3: this.state.total_score_3
+        })
+      })
+
+      if (response.status !== 200) {
+        throw new Error(response.statusText)
+      }
+
+      this.setState({
+        new: false,
+        sended: true
+      })
+    } catch (error) {
+      this.setState({
+        error: error.message
+      })
+    }
   }
 
   render () {
+    if (this.state.sended) {
+      return (
+        <div>
+          <h3 className="PostSummary__feedback">Спасибо, ваш отзыв принят!</h3>
+        </div>
+      )
+    }
     return (
       <div className="PostSummary__feedback-container">
         <h3 className="PostSummary__feedback">Оставьте отзыв или предложение о сегодняшнем дне и оцените нас!</h3>
@@ -82,7 +118,10 @@ class Feedback extends Component {
             </div>
             <Rate
               count={10}
-              onChange={value => this.setState({ total_score_1: value })}
+              onChange={value => this.setState({
+                total_score_1: value,
+                error: false
+              })}
               value={this.state.total_score_1}
             />
             <div className="PostSummary__feedback-title">
@@ -90,7 +129,10 @@ class Feedback extends Component {
             </div>
             <Rate
               count={10}
-              onChange={value => this.setState({ total_score_2: value })}
+              onChange={value => this.setState({
+                total_score_2: value,
+                error: false
+              })}
               value={this.state.total_score_2}
             />
             <div className="PostSummary__feedback-title">
@@ -98,23 +140,34 @@ class Feedback extends Component {
             </div>
             <Rate
               count={10}
-              onChange={value => this.setState({ total_score_3: value })}
+              onChange={value => this.setState({
+                total_score_3: value,
+                error: false
+              })}
               value={this.state.total_score_3}
             />
           </div>
           <button
              className='button ReplyEditorShort__buttons-submit'
-             onClick={this.handleSubmit}
-             disabled={!this.state.text}>
+             onClick={this.handleSubmit}>
             {this.state.new ? 'Отправить отзыв' : 'Сохранено!'}
           </button>
+          <div style={{ color: '#d9534f' }}>{this.state.error}</div>
         </div>
       </div>
     )
   }
 }
 
+const UserIsAuthenticated = UserAuthWrapper({
+  authSelector: state => state.user.get('current'),
+  authenticatingSelector: state => state.user.get('logining'),
+  wrapperDisplayName: 'UserIsAuthenticated',
+  FailureComponent: () => <div>Доступ запрещен</div>,
+  LoadingComponent: () => <div>Загрузка...</div>
+})
+
 module.exports = {
   path: 'feedback',
-  component: Feedback
+  component: UserIsAuthenticated(Feedback)
 }
