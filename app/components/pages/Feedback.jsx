@@ -65,7 +65,8 @@ class Feedback extends Component {
 
   render () {
     return (
-      <div className="PostSummary__feedback-container"><h3 className="PostSummary__feedback">Оставьте отзыв или предложение о сегодняшнем дне и оцените нас!</h3>
+      <div className="PostSummary__feedback-container">
+        <h3 className="PostSummary__feedback">Оставьте отзыв или предложение о сегодняшнем дне и оцените нас!</h3>
         <div className='ReplyEditorShort__body'>
           <textarea
             rows={3}
@@ -73,42 +74,41 @@ class Feedback extends Component {
             className='expanded-area'
             placeholder='Написать отзыв'
             onChange={this.handleChange}
-            value={this.state.text} />
-
-
-            <div className="PostSummary">
-            <div className="PostSummary__feedback-title"><b>Качество контента</b></div>
+            value={this.state.text}
+          />
+          <div className="PostSummary">
+            <div className="PostSummary__feedback-title">
+              <b>Качество контента</b>
+            </div>
             <Rate
-            count={10}
-            onChange={value => this.setState({ total_score_1: value })}
-            value={this.state.total_score_1}
-             />
-
-
-            <div className="PostSummary__feedback-title"><b>Эмоции</b></div>
-            <Rate
-            count={10}
-            onChange={value => this.setState({ total_score_2: value })}
-            value={this.state.total_score_2}
+              count={10}
+              onChange={value => this.setState({ total_score_1: value })}
+              value={this.state.total_score_1}
             />
-
-            <div className="PostSummary__feedback-title"><b>Организация</b></div>
+            <div className="PostSummary__feedback-title">
+              <b>Эмоции</b>
+            </div>
             <Rate
-            count={10}
-            onChange={value => this.setState({ total_score_3: value })}
-            value={this.state.total_score_3}
-             />
-
-             </div>
-
+              count={10}
+              onChange={value => this.setState({ total_score_2: value })}
+              value={this.state.total_score_2}
+            />
+            <div className="PostSummary__feedback-title">
+              <b>Организация</b>
+            </div>
+            <Rate
+              count={10}
+              onChange={value => this.setState({ total_score_3: value })}
+              value={this.state.total_score_3}
+            />
+          </div>
           <button
-            className='button ReplyEditorShort__buttons-submit'
-            onClick={this.handleSubmit}
-            disabled={!this.state.text}>
+             className='button ReplyEditorShort__buttons-submit'
+             onClick={this.handleSubmit}
+             disabled={!this.state.text}>
             {this.state.new ? 'Отправить отзыв' : 'Сохранено!'}
           </button>
         </div>
-
       </div>
     )
   }
