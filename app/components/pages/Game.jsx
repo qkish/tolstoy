@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import GamePostEdit from 'app/components/cards/GamePostEdit'
-
 import Rate from 'rc-rate'
-//import 'rc-rate/assets/index.css'
-
 
 class Game extends Component {
   constructor (props) {
@@ -37,24 +34,17 @@ class Game extends Component {
       this.setState({
         text: game.content,
         content: game.content,
-        total_score_1: game.total_score_1,
-        total_score_2: game.total_score_2,
-        total_score_3: game.total_score_3,
         new: false
       })
     }
   }
 
   async handleSubmit () {
-    console.log('submit')
     const text = this.state.text
     const response = await fetch('/api/v1/game', {
       method: 'POST',
       credentials: 'same-origin',
-      body: JSON.stringify({ body: text, 
-                             total_score_1: this.state.total_score_1, 
-                             total_score_2: this.state.total_score_2,
-                             total_score_3: this.state.total_score_3  })
+      body: JSON.stringify({ body: text })
     })
     if (response.status === 200) {
       this.setState({
@@ -70,6 +60,7 @@ class Game extends Component {
     return (
       <div className="PostSummary__feedback-container">
 
+
     
       <ul className="nav nav-tabs PostSummary__game-tabs">
         <li className="active"><a href="#">Ответ</a></li>
@@ -82,6 +73,7 @@ class Game extends Component {
 
 
       <h3 className="PostSummary__feedback">Ответ на задание:</h3>
+
         <div className='ReplyEditorShort__body'>
           <textarea
             rows={3}
@@ -91,8 +83,8 @@ class Game extends Component {
             onChange={this.handleChange}
             value={this.state.text} />
 
-
             <div className="PostSummary">
+
             <div className="PostSummary__feedback-title"><b>Интересно</b></div>
            
             <div className="PostSummary__feedback-title"><b>Просто</b></div>
@@ -109,14 +101,13 @@ class Game extends Component {
           </button>
         </div>
        
+
       </div>
     )
   }
 }
 
 module.exports = {
-  path: 'feedback',
-  component: connect(state => ({
-    user: state.user.getIn(['current', 'username'])
-  }))(Game)
+  path: 'game',
+  component: Game
 }
