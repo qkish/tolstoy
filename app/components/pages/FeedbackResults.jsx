@@ -80,21 +80,21 @@ class FeedbackResults extends Component {
                   <StarRatingComponent
                     name='content-quality'
                     starCount={10}
-                    value={reply.total_score_1}
+                    value={reply.score_1}
                     editing={false}
                     emptyStarColor='#e3e1d6' />
                   <div className="PostSummary__feedback-subtitle">Эмоции:</div>
                   <StarRatingComponent
                     name='emotions'
                     starCount={10}
-                    value={reply.total_score_2}
+                    value={reply.score_2}
                     editing={false}
                     emptyStarColor='#e3e1d6' />
                   <div className="PostSummary__feedback-subtitle">Организация:</div>
                   <StarRatingComponent
                     name='organization'
                     starCount={10}
-                    value={reply.total_score_3}
+                    value={reply.score_3}
                     editing={false}
                     emptyStarColor='#e3e1d6' />
                 </div>

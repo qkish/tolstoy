@@ -71,8 +71,11 @@ export default function resolveRoute(path)
     if (path === '/submit.html') {
         return {page: 'SubmitPost'};
     }
-    if (path === '/feedback') {
+    if (path === '/game') {
       return { page: 'Game' }
+    }
+    if (path === '/feedback') {
+      return { page: 'Feedback' }
     }
     if (path === '/feedback/results') {
       return { page: 'FeedbackResults' }
