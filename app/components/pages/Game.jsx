@@ -59,6 +59,21 @@ class Game extends Component {
   render () {
     return (
       <div className="PostSummary__feedback-container">
+
+
+    
+      <ul className="nav nav-tabs PostSummary__game-tabs">
+        <li className="active"><a href="#">Ответ</a></li>
+        <li><a href="#">Моя 10</a></li>
+        <li><a href="#">Волонтер</a></li>
+        <li><a href="#">Другая 10</a></li>
+      </ul>
+
+
+
+
+      <h3 className="PostSummary__feedback">Ответ на задание:</h3>
+
         <div className='ReplyEditorShort__body'>
           <textarea
             rows={3}
@@ -69,39 +84,24 @@ class Game extends Component {
             value={this.state.text} />
 
             <div className="PostSummary">
-              <div className="PostSummary__feedback-title">
-                <b>Качество контента</b>
-              </div>
-              <Rate
-                count={10}
-                onChange={value => this.setState({ total_score_1: value })}
-                value={this.state.total_score_1}
-              />
-              <div className="PostSummary__feedback-title">
-                <b>Эмоции</b>
-              </div>
-              <Rate
-                count={10}
-                onChange={value => this.setState({ total_score_2: value })}
-                value={this.state.total_score_2}
-              />
-              <div className="PostSummary__feedback-title">
-                <b>Организация</b>
-              </div>
-              <Rate
-                count={10}
-                onChange={value => this.setState({ total_score_3: value })}
-                value={this.state.total_score_3}
-              />
+
+            <div className="PostSummary__feedback-title"><b>Интересно</b></div>
+           
+            <div className="PostSummary__feedback-title"><b>Просто</b></div>
+            
+            <div className="PostSummary__feedback-title"><b>Понятно</b></div>
+          
             </div>
 
-            <button
-              className='button ReplyEditorShort__buttons-submit'
-              onClick={this.handleSubmit}
-              disabled={!this.state.text}>
-              {this.state.new ? 'Отправить отзыв' : 'Сохранено!'}
-            </button>
-          </div>
+          <button
+            className='button ReplyEditorShort__buttons-submit'
+            onClick={this.handleSubmit}
+            disabled={!this.state.text}>
+            {this.state.new ? 'Отправить ответ' : 'Сохранено!'}
+          </button>
+        </div>
+       
+
       </div>
     )
   }
