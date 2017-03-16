@@ -2195,6 +2195,35 @@ export default function useGeneralApi(app) {
     }
   })
 
+	router.post('/feedback', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		const params = this.request.body
+		const {csrf, body, total_score_1, total_score_2, total_score_3} = typeof(params) === 'string' ? JSON.parse(params) : params
+		// if (!checkCSRF(this, csrf)) return;
+
+		try {
+			if (!this.session.user) {
+				throw new Error('Access denied')
+			}
+
+			yield models.Game.create({
+				user_id: this.session.user,
+				body,
+				total_score_1,
+				total_score_2,
+				total_score_3,
+			})
+
+			this.status = 200
+		} catch (error) {
+			console.error('Error in POST /feedback api call', this.session.user, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
+	})
+
 	router.get('/game/byuser/:id', koaBody, function* () {
 		if (rateLimitReq(this, this.req)) return
 		// if (!checkCSRF(this, csrf)) return;

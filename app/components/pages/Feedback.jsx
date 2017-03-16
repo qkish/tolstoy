@@ -66,7 +66,7 @@ class Feedback extends Component {
     })
 
     try {
-      const response = await fetch('/api/v1/game', {
+      const response = await fetch('/api/v1/feedback', {
         method: 'POST',
         credentials: 'same-origin',
         body: JSON.stringify({
