@@ -2207,10 +2207,14 @@ export default function useGeneralApi(app) {
 				throw new Error('Access denied')
 			}
 
-			const total_score = divide(
+			let total_score = divide(
 				reduce((sum, x) => sum + x, 0, filter(negate(isNil), [score_1, score_2, score_3])),
 				size(filter(negate(isNil), [score_1, score_2, score_3]))
 			)
+
+			if (!score_1 && !score_2 && !score_3)  {total_score = null}
+
+			console.log('Total Score:', total_score)
 
 			yield models.Feedback.create({
 				user_id: this.session.user,
