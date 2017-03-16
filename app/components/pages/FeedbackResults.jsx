@@ -112,7 +112,7 @@ class FeedbackResults extends Component {
                   onPageChange={({ selected }) => {
                       const currentPage = selected + 1
                       const offset = this.state.perPage * selected
-                      this.getReplies(this.state.perPage, offset)
+                      this.getReplies(this.state.perPage, offset).then(() => window.scrollTo(0, 0))
                   }} />
             </div>
           </div>
