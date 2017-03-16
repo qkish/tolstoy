@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import GamePost from 'app/components/cards/GamePost'
+import { connect } from 'react-redux'
 
 class GameVote extends Component {
   constructor (props) {
@@ -50,6 +51,12 @@ class GameVote extends Component {
       console.log(this.state.posts)
       return (
         <div>
+          <ul className="nav nav-tabs PostSummary__game-tabs">
+            <li className="active"><a href="#">Ответ</a></li>
+            <li><a href="#">Моя 10</a></li>
+            <li><a href="#">Волонтер</a></li>
+            <li><a href="#">Другая 10</a></li>
+          </ul>
           {this.state.posts.map(post => (
             <GamePost
               key={post.id}
@@ -83,8 +90,12 @@ class GameVote extends Component {
   }
 }
 
+const mapStateToProps = state => ({
+  myTen: state.user.getIn(['myHierarchy', 'myTen'])
+})
+
 module.exports = {
   path: 'gamevote',
   path: 'gamevote(/:category(/:id))',
-  component: GameVote
+  component: connect()(GameVote)
 }
