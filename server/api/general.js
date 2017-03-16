@@ -2412,6 +2412,7 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
   })
 
 	router.get('/feedback/results/nps', koaBody, function* () {
+		const { event } = this.query
 		const replies = yield models.Feedback.findAll({
 			attributes: [
 				'id',
@@ -2422,7 +2423,15 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 				'score_2',
 				'score_3',
 				'total_score',
-			]
+			],
+			include: [{
+				model: models.User,
+				where: {
+					id: Sequelize.col('user_id'),
+					current_program: event
+				},
+				attributes: ['current_program']
+			}],
 	 })
 
 	 const total_count = replies.length
@@ -2468,7 +2477,7 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 	})
 
 	router.get('/feedback/results/replies', koaBody, function* () {
-		const { limit, offset } = this.query
+		const { limit, offset, event } = this.query
 
 		const replies = yield models.Feedback.findAndCountAll({
 			attributes: [
@@ -2484,7 +2493,8 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 			include: [{
 				model: models.User,
 				where: {
-					id: Sequelize.col('user_id')
+					id: Sequelize.col('user_id'),
+					current_program: event
 				},
 				attributes: ['name']
 			}],

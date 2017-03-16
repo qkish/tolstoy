@@ -7,11 +7,13 @@ class FeedbackResults extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      perPage: 10
+      perPage: 10,
+      event: '1'
     }
 
     this.getNPS = this.getNPS.bind(this)
     this.getReplies = this.getReplies.bind(this)
+    this.toggleEvent = this.toggleEvent.bind(this)
   }
 
   componentDidMount () {
@@ -19,16 +21,24 @@ class FeedbackResults extends Component {
     this.getReplies()
   }
 
-  async getNPS () {
-    const response = await fetch(`/api/v1/feedback/results/nps`)
+  toggleEvent (event) {
+    this.setState({
+      event
+    })
+    this.getNPS(event)
+    this.getReplies(event)
+  }
+
+  async getNPS (event = this.state.event) {
+    const response = await fetch(`/api/v1/feedback/results/nps?event=${event}`)
     const nps = await response.json()
     this.setState({
       nps
     })
   }
 
-  async getReplies (limit = this.state.perPage, offset = 0) {
-    const response = await fetch(`/api/v1/feedback/results/replies?limit=${limit}&offset=${offset}`)
+  async getReplies (event = this.state.event, limit = this.state.perPage, offset = 0) {
+    const response = await fetch(`/api/v1/feedback/results/replies?limit=${limit}&offset=${offset}&event=${event}`)
     const { replies, count } = await response.json()
     this.setState({
       replies,
@@ -39,6 +49,14 @@ class FeedbackResults extends Component {
   render () {
     return (
       <div>
+        <ul className='nav nav-tabs'>
+          <li className={this.state.event === '1' ? 'active' : ''}>
+            <a onClick={() => this.toggleEvent('1')}>ЦЕХ</a>
+          </li>
+          <li className={this.state.event === '2' ? 'active' : ''}>
+            <a onClick={() => this.toggleEvent('2')}>МЗС</a>
+          </li>
+        </ul>
         {this.state.nps ? (
           <div className="PostSummary__NPS">
             <table className="PostSummary__NPS-table">
@@ -112,7 +130,7 @@ class FeedbackResults extends Component {
                   onPageChange={({ selected }) => {
                       const currentPage = selected + 1
                       const offset = this.state.perPage * selected
-                      this.getReplies(this.state.perPage, offset).then(() => window.scrollTo(0, 0))
+                      this.getReplies(this.state.event, this.state.perPage, offset).then(() => window.scrollTo(0, 0))
                   }} />
             </div>
           </div>
