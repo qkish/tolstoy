@@ -100,7 +100,7 @@ class FeedbackResults extends Component {
                 </div>
               </div>
             ))}
-            <div className="Admin__pagination">
+            <div className="Admin__pagination FeedbackResults_pagination">
               <Pagination
                   pageCount={Math.ceil((this.state.repliesCount || 0) / this.state.perPage)}
                   pageRangeDisplayed={3}
@@ -117,7 +117,7 @@ class FeedbackResults extends Component {
             </div>
           </div>
         ) : (
-          <div>Загрузка...</div>
+          <div></div>
         )}
       </div>
     )

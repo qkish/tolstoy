@@ -30,3 +30,30 @@ input[type=submit].disabled, input[type=submit].disabled:focus {
 button, .button {
   text-transform: uppercase;
 }
+
+
+.previous, .next, .pagination .disabled {
+  padding: 0 10px 0 0;
+}
+
+.break {
+  padding: 5px;
+}
+.pagination li {
+  margin-right: 5px;
+}
+
+
+
+@media screen and (max-width: 39.9375em) {
+.pagination {
+  width: 100%;
+}
+.pagination>li>a, .pagination>li>span {
+  padding: 18px 27px;
+}
+.next {
+  float: right;
+}
+
+}
