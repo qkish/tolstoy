@@ -20,11 +20,14 @@ ul.PostsList__summaries {
 
 .PostSummary__feedback-container {
   margin: 0 auto;
-  width: 600px;
+  width: 560px;
   background: #fff;
   padding: 10px 20px 10px 20px;
   dispay: block;
   overflow: hidden;
+  
+  border: 1px solid #e1e3e4;
+  border-radius: 0 0 3px 3px;
 }
 
 
@@ -500,8 +503,12 @@ width: 50px;
   .PostSummary__feedback-container {
 
   width: 100%;
-  background: transparent;
-  padding: 0;
+  background: #fff;
+  padding: 20px;
+  
+    border: 1px solid #e1e3e4;
+  border-radius: 0 0 3px 3px;
+  
 }
 
 .PostSummary__feedback-container .PostSummary {
@@ -589,7 +596,7 @@ width: 50px;
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 18px;
+  font-size: 17px !important;
   display: inline-block;
   vertical-align: middle;
   font-weight: normal;

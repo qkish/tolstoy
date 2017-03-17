@@ -14,19 +14,22 @@ class GamePost extends Component {
           <User account={this.props.user} />
         </div>
         <div className='PostSummary__content'>{content}</div>
-        {this.props.displayRate && (<div>
+        {this.props.displayRate && (<div style={{ marginTop: '20px' }}>
+          <div className="PostSummary__feedback-subtitle">Интересно:</div>
           <Rate
             count={10}
             onChange={this.props.interestingChange}
-            defaultValue={this.props.interestingValue} /> Интересно
+            defaultValue={this.props.interestingValue} /> 
+          <div className="PostSummary__feedback-subtitle">Просто:</div>
           <Rate
             count={10}
             onChange={this.props.simpleChange}
-            defaultValue={this.props.simpleValue} /> Просто
+            defaultValue={this.props.simpleValue} />
+          <div className="PostSummary__feedback-subtitle">Понятно:</div>
           <Rate
             count={10}
             onChange={this.props.obviousChange}
-            defaultValue={this.props.obviousValue} /> Понятно
+            defaultValue={this.props.obviousValue} />
         </div>)}
       </div>
     )

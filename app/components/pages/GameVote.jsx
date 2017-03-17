@@ -86,20 +86,16 @@ class GameVote extends Component {
     if(this.props.params.category === 'ten' && this.props.params.id != myTen) {isOnOtherTen = true}
 
       return (
-        <div>
-          <ul className="nav nav-tabs PostSummary__game-tabs">
-            <li className={isOnEdit && 'active'}>
-              <Link to='/gamevote'>Ответ</Link>
-            </li>
-            <li className={isOnMyTen && 'active'}>
-              <Link to={'/gamevote/ten/' + myTen}>Моя 10</Link>
-            </li>
-            <li className={isOnVolunteer && 'active'}>
-              <Link to={'/gamevote/ten/' + myTen}>Волонтер</Link>
-            </li>
+
+        <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
+          <ul className="HorizontalMenu menu">
+            <li className={isOnEdit && 'active'}><Link to='/gamevote'>Ответ</Link></li>
+            <li className={isOnMyTen && 'active'}><Link to={'/gamevote/ten/' + myTen}>Моя десятка</Link></li>
+            {/* <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li> */}
             <li className={isOnOtherTen && 'active'}>
-              {this.state.otherTenId ? <Link to={`/gamevote/ten/${this.state.otherTenId}`}>Другая 10</Link> : <LoadingIndicator type='circle' />}
+              {this.state.otherTenId ? <Link to={`/gamevote/ten/${this.state.otherTenId}`}>Другая десятка</Link> : <LoadingIndicator type='circle' />}
             </li>
+
           </ul>
           {isOnEdit && <Game.component />}
           {!isOnEdit && this.state.posts && this.state.posts.map(post => (
