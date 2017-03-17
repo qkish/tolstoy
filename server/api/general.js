@@ -2152,7 +2152,7 @@ export default function useGeneralApi(app) {
   router.post('/game', koaBody, function* () {
     if (rateLimitReq(this, this.req)) return
     const params = this.request.body
-    const {csrf, body, total_score_1 = 0, total_score_2 = 0, total_score_3 = 0} = typeof(params) === 'string' ? JSON.parse(params) : params
+    const {csrf, body, total_score_1, total_score_2, total_score_3} = typeof(params) === 'string' ? JSON.parse(params) : params
     // if (!checkCSRF(this, csrf)) return;
 
     let total_score
@@ -2171,10 +2171,18 @@ export default function useGeneralApi(app) {
 
       if (game) {
         game.body = body
-        game.total_score_1 = total_score_1
-        game.total_score_2 = total_score_2
-        game.total_score_3 = total_score_3
-        game.total_score = total_score
+				if (total_score_1) {
+					game.total_score_1 = total_score_1
+				}
+				if (total_score_2) {
+					game.total_score_2 = total_score_2
+				}
+				if (total_score_3) {
+					game.total_score_3 = total_score_3
+				}
+				if (total_score) {
+					game.total_score = total_score
+				}
         yield game.save()
       } else {
         yield models.Game.create({
