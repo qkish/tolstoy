@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import Game from 'app/components/pages/Game'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
-
+import { UserAuthWrapper } from 'redux-auth-wrapper'
 
 class GameVote extends Component {
   constructor (props) {
@@ -134,11 +134,17 @@ const mapStateToProps = state => {
   return {
     myHierarchy: state.user.get('myHierarchy')
   }
-
 }
 
+const UserIsAuthenticated = UserAuthWrapper({
+  authSelector: state => state.user.get('current'),
+  authenticatingSelector: state => state.user.get('logining'),
+  wrapperDisplayName: 'UserIsAuthenticated',
+  FailureComponent: () => <div>Вы не аутентифицированы. Войдите в аккаунт.</div>,
+  LoadingComponent: () => <div>Загрузка...</div>
+})
+
 module.exports = {
-  path: 'gamevote',
   path: 'gamevote(/:category(/:id))',
-  component: connect(mapStateToProps)(GameVote)
+  component: UserIsAuthenticated(connect(mapStateToProps)(GameVote))
 }
