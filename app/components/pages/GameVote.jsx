@@ -76,12 +76,12 @@ class GameVote extends Component {
   
     
       return (
-        <div>
-          <ul className="nav nav-tabs PostSummary__game-tabs">
+        <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
+          <ul className="HorizontalMenu menu">
             <li className={isOnEdit && 'active'}><Link to='/gamevote'>Ответ</Link></li>
-            <li className={isOnMyTen && 'active'}><Link to={'/gamevote/ten/' + myTen}>Моя 10</Link></li>
-            <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li>
-            <li className={isOnOtherTen && 'active'}><Link to={'/gamevote/ten/4800'}>Другая 10</Link></li>
+            <li className={isOnMyTen && 'active'}><Link to={'/gamevote/ten/' + myTen}>Моя десятка</Link></li>
+            {/* <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li> */}
+            <li className={isOnOtherTen && 'active'}><Link to={'/gamevote/ten/4800'}>Другая десятка</Link></li>
           </ul>
           {isOnEdit && <Game.component />}
           {!isOnEdit && this.state.posts && this.state.posts.map(post => (
