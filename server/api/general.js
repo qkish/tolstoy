@@ -2516,6 +2516,40 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 	 })
 	})
 
+	router.get('/game/get_next_ten', koaBody, function* () {
+		const { ten } = yield models.User.findOne({
+			attributes: ['ten'],
+			where: {
+				id: this.session.user
+			}
+		})
+
+		const nextId = yield models.User.min('id', {
+			where: {
+				id: {
+					$gt: 10566
+				},
+				ten_leader: true
+			}
+		})
+
+		const firstTen = yield models.User.findOne({
+			attributes: ['ten'],
+			where: {
+				ten_leader: true
+			}
+		})
+
+		const nextTen = nextId || firstTen.ten
+
+		console.log('current ten id: ', ten)
+		console.log('next ten id: ', nextTen)
+
+		this.body = JSON.stringify({
+			tenId: nextTen
+		})
+	})
+
 }
 
 

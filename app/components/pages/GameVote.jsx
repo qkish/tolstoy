@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import GamePost from 'app/components/cards/GamePost'
 import { connect } from 'react-redux'
-import { Link } from 'react-router';
+import { Link } from 'react-router'
 import Game from 'app/components/pages/Game'
+import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 
 class GameVote extends Component {
   constructor (props) {
@@ -11,10 +12,12 @@ class GameVote extends Component {
 
     this.getData = this.getData.bind(this)
     this.updateScore = this.updateScore.bind(this)
+    this.getOtherTenId = this.getOtherTenId.bind(this)
   }
 
   componentDidMount () {
     this.getData(this.props.params.category, this.props.params.id)
+    this.getOtherTenId()
   }
 
   async updateScore ({ id, score_type, value }) {
@@ -56,9 +59,19 @@ class GameVote extends Component {
     }
   }
 
+  async getOtherTenId () {
+    const response = await fetch(`/api/v1/game/get_next_ten`, {
+      credentials: 'same-origin'
+    })
+    const { tenId } = await response.json()
+    this.setState({
+      otherTenId: tenId
+    })
+  }
+
   render () {
 
-    
+
     let myTen = ''
     let isOnEdit, isOnMyTen, isOnVolunteer, isOnOtherTen
 
@@ -72,16 +85,21 @@ class GameVote extends Component {
     if(this.props.params.category === 'ten' && this.props.params.id == myTen) {isOnMyTen = true}
     if(this.props.params.category === 'ten' && this.props.params.id != myTen) {isOnOtherTen = true}
 
-
-  
-    
       return (
         <div>
           <ul className="nav nav-tabs PostSummary__game-tabs">
-            <li className={isOnEdit && 'active'}><Link to='/gamevote'>Ответ</Link></li>
-            <li className={isOnMyTen && 'active'}><Link to={'/gamevote/ten/' + myTen}>Моя 10</Link></li>
-            <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li>
-            <li className={isOnOtherTen && 'active'}><Link to={'/gamevote/ten/4800'}>Другая 10</Link></li>
+            <li className={isOnEdit && 'active'}>
+              <Link to='/gamevote'>Ответ</Link>
+            </li>
+            <li className={isOnMyTen && 'active'}>
+              <Link to={'/gamevote/ten/' + myTen}>Моя 10</Link>
+            </li>
+            <li className={isOnVolunteer && 'active'}>
+              <Link to={'/gamevote/ten/' + myTen}>Волонтер</Link>
+            </li>
+            <li className={isOnOtherTen && 'active'}>
+              {this.state.otherTenId ? <Link to={`/gamevote/ten/${this.state.otherTenId}`}>Другая 10</Link> : <LoadingIndicator type='circle' />}
+            </li>
           </ul>
           {isOnEdit && <Game.component />}
           {!isOnEdit && this.state.posts && this.state.posts.map(post => (
@@ -111,7 +129,7 @@ class GameVote extends Component {
           ))}
         </div>
       )
-   
+
   }
 }
 
