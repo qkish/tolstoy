@@ -12,7 +12,8 @@ export default (sequelize, DataTypes) => {
 		type: DataTypes.ENUM(['polk', 'hundred', 'ten', 'couch']),
 		money: DataTypes.INTEGER,
 		vesting: DataTypes.INTEGER,
-		monets: DataTypes.INTEGER
+		monets: DataTypes.INTEGER,
+		total_score: DataTypes.DOUBLE
 	}, {
 		// TODO: Move createdAt, updatedAt, timestamps, underscored to global Sequelize define
 		tableName: 'groups',
