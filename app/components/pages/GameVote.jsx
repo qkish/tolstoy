@@ -102,9 +102,9 @@ class GameVote extends Component {
             <GamePost
               save={({ score_1, score_2, score_3 }) => this.updateScore({
                 id: post.id,
-                score_1: score_1 || Math.round(post.total_score_1),
-                score_2: score_2 || Math.round(post.total_score_2),
-                score_3: score_3 || Math.round(post.total_score_3)
+                score_1: score_1 || 0,
+                score_2: score_2 || 0,
+                score_3: score_3 || 0
               })}
               key={post.id}
               user={post.author}
