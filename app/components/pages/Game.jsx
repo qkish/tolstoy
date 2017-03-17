@@ -101,7 +101,7 @@ class Game extends Component {
             onChange={this.handleChange}
             value={this.state.text} />
 
-          
+
 
           <div style={{ marginTop: '20px', height: '50px' }}>
             <button
@@ -117,7 +117,7 @@ class Game extends Component {
           {!this.state.new && (
             <div className="PostSummary__feedback-wrap">
               <div className="PostSummary__feedback-title">
-                <b>Просто {this.state.total_score_1.toFixed(2)}</b>
+                <b>Просто {this.state.total_score_1 && this.state.total_score_1.toFixed(2)}</b>
               </div>
               <StarRatingComponent
                 name='interesting'
@@ -126,7 +126,7 @@ class Game extends Component {
                 value={this.state.total_score_1}
                 emptyStarColor='#e3e1d6' />
               <div className="PostSummary__feedback-title">
-                <b>Понятно {this.state.total_score_2.toFixed(2)}</b>
+                <b>Понятно {this.state.total_score_2 && this.state.total_score_2.toFixed(2)}</b>
               </div>
               <StarRatingComponent
                 name='simple'
@@ -135,7 +135,7 @@ class Game extends Component {
                 value={this.state.total_score_2}
                 emptyStarColor='#e3e1d6' />
               <div className="PostSummary__feedback-title">
-                <b>Аккуратно {this.state.total_score_3.toFixed(2)}</b>
+                <b>Аккуратно {this.state.total_score_3 && this.state.total_score_3.toFixed(2)}</b>
               </div>
               <StarRatingComponent
                 name='obvious'
