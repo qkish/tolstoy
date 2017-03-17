@@ -2265,11 +2265,12 @@ export default function useGeneralApi(app) {
     const users = yield models.User.findAll({
       attributes: ['name'],
       where: {
-        ten: this.params.id
+        ten: this.params.id,
+        id: {$ne: this.session.user}
       },
       include: [{
         model: models.Game,
-        where: { body: {$ne: null}}
+        where: { body: {$ne: null} }
       }]
     })
     const posts = users.map(user => {

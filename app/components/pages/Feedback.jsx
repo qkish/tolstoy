@@ -32,7 +32,7 @@ class Feedback extends Component {
 
     if (!text && !score_1 && !score_2 && !score_3) {
       this.setState({
-        error: 'Заполните форму'
+        error: 'Заполните отзыв или оценки'
       })
       return
     }
@@ -139,7 +139,7 @@ const UserIsAuthenticated = UserAuthWrapper({
   authSelector: state => state.user.get('current'),
   authenticatingSelector: state => state.user.get('logining'),
   wrapperDisplayName: 'UserIsAuthenticated',
-  FailureComponent: () => <div>Доступ запрещен</div>,
+  FailureComponent: () => <div>Вы не аутентифицированы. Войдите в аккаунт.</div>,
   LoadingComponent: () => <div>Загрузка...</div>
 })
 

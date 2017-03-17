@@ -88,7 +88,7 @@ export default function resolveRoute(path)
     if (match) {
         return {page: 'GameRating', params: match[1]};
     }
-    match = path.match(/^\/gamevote\/(ten|user)\/(\d+)$/)
+    match = path.match(/^\/gamevote\/?(ten|user)?\/?(\d+)?$/)
     if (match) {
       return { page: 'GameVote', params: match }
     }

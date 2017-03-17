@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import GamePost from 'app/components/cards/GamePost'
 import { connect } from 'react-redux'
+import { Link } from 'react-router';
+import Game from 'app/components/pages/Game'
 
 class GameVote extends Component {
   constructor (props) {
@@ -12,7 +14,7 @@ class GameVote extends Component {
   }
 
   componentDidMount () {
-    this.getData()
+    this.getData(this.props.params.category, this.props.params.id)
   }
 
   async updateScore ({ id, score_type, value }) {
@@ -28,17 +30,25 @@ class GameVote extends Component {
     })
   }
 
-  async getData () {
-    if (this.props.params.category === 'user') {
-      const response = await fetch(`/api/v1/game/byuser/${this.props.params.id}`)
+  componentWillReceiveProps (nextProps) {
+    this.getData(nextProps.params.category, nextProps.params.id)
+  }
+
+  async getData (category, id) {
+    if (category === 'user') {
+      const response = await fetch(`/api/v1/game/byuser/${id}`, {
+        credentials: 'same-origin'
+      })
       const { posts } = await response.json()
       this.setState({
         posts
       })
     }
 
-    if (this.props.params.category === 'ten') {
-      const response = await fetch(`/api/v1/game/byten/${this.props.params.id}`)
+    if (category === 'ten') {
+      const response = await fetch(`/api/v1/game/byten/${id}`, {
+        credentials: 'same-origin'
+      })
       const { posts } = await response.json()
       this.setState({
         posts
@@ -47,17 +57,34 @@ class GameVote extends Component {
   }
 
   render () {
-    if (this.state.posts) {
-      console.log(this.state.posts)
+
+    
+    let myTen = ''
+    let isOnEdit, isOnMyTen, isOnVolunteer, isOnOtherTen
+
+    console.log('HIM ', this.props.params.category)
+
+
+    if(this.props.myHierarchy && this.props.myHierarchy.myTen) {myTen = this.props.myHierarchy.myTen}
+
+
+    if(!this.props.params.category) {isOnEdit = true}
+    if(this.props.params.category === 'ten' && this.props.params.id == myTen) {isOnMyTen = true}
+    if(this.props.params.category === 'ten' && this.props.params.id != myTen) {isOnOtherTen = true}
+
+
+  
+    
       return (
         <div>
           <ul className="nav nav-tabs PostSummary__game-tabs">
-            <li className="active"><a href="#">Ответ</a></li>
-            <li><a href="#">Моя 10</a></li>
-            <li><a href="#">Волонтер</a></li>
-            <li><a href="#">Другая 10</a></li>
+            <li className={isOnEdit && 'active'}><Link to='/gamevote'>Ответ</Link></li>
+            <li className={isOnMyTen && 'active'}><Link to={'/gamevote/ten/' + myTen}>Моя 10</Link></li>
+            <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li>
+            <li className={isOnOtherTen && 'active'}><Link to={'/gamevote/ten/4800'}>Другая 10</Link></li>
           </ul>
-          {this.state.posts.map(post => (
+          {isOnEdit && <Game.component />}
+          {!isOnEdit && this.state.posts && this.state.posts.map(post => (
             <GamePost
               key={post.id}
               user={post.author}
@@ -84,18 +111,19 @@ class GameVote extends Component {
           ))}
         </div>
       )
-    } else {
-      return (<div></div>)
-    }
+   
   }
 }
 
-const mapStateToProps = state => ({
-  myTen: state.user.getIn(['myHierarchy', 'myTen'])
-})
+const mapStateToProps = state => {
+  return {
+    myHierarchy: state.user.get('myHierarchy')
+  }
+
+}
 
 module.exports = {
   path: 'gamevote',
   path: 'gamevote(/:category(/:id))',
-  component: connect()(GameVote)
+  component: connect(mapStateToProps)(GameVote)
 }
