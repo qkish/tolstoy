@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import GamePostEdit from 'app/components/cards/GamePostEdit'
 import StarRatingComponent from 'react-star-rating-component'
+import QRCode from 'qrcode.react'
 
 class Game extends Component {
   constructor (props) {
@@ -142,6 +143,7 @@ class Game extends Component {
           </div>
 
         </div>
+        <QRCode value={'http://platform.molodost.bz/gamevote/user/' + this.props.myId} />
       </div>
     )
   }
