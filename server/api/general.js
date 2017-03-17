@@ -2291,6 +2291,36 @@ export default function useGeneralApi(app) {
     })
   })
 
+
+	router.get('/game/randomten/', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		// if (!checkCSRF(this, csrf)) return;
+
+    const users = yield models.User.findAll({
+      attributes: ['name'],
+    
+      include: [{
+        model: models.Game,
+     
+        where: { score_1_other_ten_count:  
+        			 { $lt : 3 } 
+    		   }
+      }],
+      limit: 10,
+      order: [
+    		Sequelize.fn( 'RAND' )
+  			]
+    })
+    const posts = users.map(user => {
+      return { ...JSON.parse(JSON.stringify(user.Games))[0], author: user.name }
+    })
+
+    this.body = JSON.stringify({
+      posts
+    })
+  })
+
+
   router.put('/game/update_score', koaBody, function* () {
     if (rateLimitReq(this, this.req)) return
     const params = this.request.body
@@ -2511,7 +2541,7 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 	 })
 	})
 
-	router.get('/game/get_next_ten', koaBody, function* () {
+	router.get('/game/get_next_ten_old', koaBody, function* () {
 		const { ten } = yield models.User.findOne({
 			attributes: ['ten'],
 			where: {
@@ -2544,6 +2574,35 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 			tenId: nextTen
 		})
 	})
+
+
+	router.get('/game/get_next_ten', koaBody, function* () {
+		const res = yield models.Game.findOne({
+			attributes: [],
+			
+     		 include: [{
+       		 model: models.User,
+     		attributes: ['ten'],
+        			
+    	
+     		 }],
+     		where: { score_1_other_ten_count:  null },
+      		
+      		order: [
+    		Sequelize.fn( 'RAND' )
+  			]
+		})
+
+	
+
+		//console.log('RESULT', JSON.stringify(res))
+
+		this.body = JSON.stringify({
+			tenId: res ? res.User.ten : null
+		})
+	})
+
+
 
 }
 
