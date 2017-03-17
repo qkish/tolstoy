@@ -61,13 +61,19 @@ class GameVote extends Component {
   }
 
   async getOtherTenId () {
-    const response = await fetch(`/api/v1/game/get_next_ten`, {
+    try {
+      const response = await fetch(`/api/v1/game/get_next_ten`, {
       credentials: 'same-origin'
     })
     const { tenId } = await response.json()
     this.setState({
       otherTenId: tenId
     })
+  } catch(error) {
+      this.setState({
+        noReplies: true
+      })
+  }
   }
 
   render () {
@@ -77,7 +83,15 @@ class GameVote extends Component {
     let myID = ''
     let isOnEdit, isOnMyTen, isOnVolunteer, isOnOtherTen
 
-    console.log('HIM ', this.props.params.category)
+    let otherTenTab
+
+    if(!this.state.noReplies) {
+
+    
+    otherTenTab = this.state.otherTenId ? <Link to={`/gamevote/ten/${this.state.otherTenId}`}>Другая десятка</Link> : <div className="PostsIndex__tab-otherten"><LoadingIndicator type='circle' /></div> 
+            
+
+    }
 
 
     if(this.props.myHierarchy && this.props.myHierarchy.myTen) {myTen = this.props.myHierarchy.myTen}
@@ -96,7 +110,7 @@ class GameVote extends Component {
             <li className={isOnMyTen && 'active'}><Link to={'/gamevote/ten/' + myTen}>Моя десятка</Link></li>
             {/* <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li> */}
             <li className={isOnOtherTen && 'active'}>
-              {this.state.otherTenId ? <Link to={`/gamevote/ten/${this.state.otherTenId}`}>Другая десятка</Link> : <div className="PostsIndex__tab-otherten"><LoadingIndicator type='circle' /></div>}
+             {otherTenTab}
             </li>
 
           </ul>
