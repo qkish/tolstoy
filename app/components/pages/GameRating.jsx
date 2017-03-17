@@ -72,7 +72,7 @@ class GameRating extends Component {
 		
 		let currentProgram = this.props.current_program ? this.props.current_program : null
 		//getUsersByCategory(props.params.category,0,50,'undefined',currentProgram).then(users => this.setState({users}))
-		getGameUsersByCategory(props.params.category,0,50,'undefined',currentProgram).then(users => this.setState({users}))
+		getGameUsersByCategory(props.params.category,0,100,'undefined',currentProgram).then(users => this.setState({users}))
 	}
 	
 	componentDidMount() {

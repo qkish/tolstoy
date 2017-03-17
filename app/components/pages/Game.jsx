@@ -61,16 +61,6 @@ class Game extends Component {
       <div className="PostSummary__feedback-container">
 
 
-    
-      <ul className="nav nav-tabs PostSummary__game-tabs">
-        <li className="active"><a href="#">Ответ</a></li>
-        <li><a href="#">Моя 10</a></li>
-        <li><a href="#">Волонтер</a></li>
-        <li><a href="#">Другая 10</a></li>
-      </ul>
-
-
-
 
       <h3 className="PostSummary__feedback">Ответ на задание:</h3>
 
