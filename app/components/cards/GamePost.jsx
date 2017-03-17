@@ -40,7 +40,11 @@ class GamePost extends Component {
           <Rate
             count={10}
             onChange={value => this.setState({ score_3: value })} />
-          <button onClick={this.handleSave}>Сохранить</button>
+          <button
+            className='button ReplyEditorShort__buttons-submit'
+            onClick={this.handleSave}>
+            Сохранить
+          </button>
         </div>)}
       </div>
     )
