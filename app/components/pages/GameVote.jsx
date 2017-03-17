@@ -21,15 +21,15 @@ class GameVote extends Component {
     this.getOtherTenId()
   }
 
-  async updateScore ({ id, score_type, value }) {
-    console.log('update score for', id, score_type, value)
+  async updateScore ({ id, score_1, score_2, score_3 }) {
     await fetch(`/api/v1/game/update_score`, {
       method: 'PUT',
       credentials: 'same-origin',
       body: JSON.stringify({
         id,
-        score_type,
-        value
+        score_1,
+        score_2,
+        score_3
       })
     })
   }
@@ -83,6 +83,7 @@ class GameVote extends Component {
     let myID = ''
     let isOnEdit, isOnMyTen, isOnVolunteer, isOnOtherTen
 
+
     let otherTenTab
 
     if(!this.state.noReplies) {
@@ -117,28 +118,17 @@ class GameVote extends Component {
           {isOnEdit && <Game.component myId={myID} />}
           {!isOnEdit && this.state.posts && this.state.posts.map(post => (
             <GamePost
+              save={({ score_1, score_2, score_3 }) => this.updateScore({
+                id: post.id,
+                score_1: score_1 || Math.round(post.total_score_1),
+                score_2: score_2 || Math.round(post.total_score_2),
+                score_3: score_3 || Math.round(post.total_score_3)
+              })}
               key={post.id}
               user={post.author}
               displayRate={true}
               content={post.body}
-              interestingValue={Math.round(post.total_score_1)}
-              interestingChange={value => this.updateScore({
-                id: post.id,
-                score_type: 'score_1',
-                value
-              })}
-              simpleValue={Math.round(post.total_score_2)}
-              simpleChange={value => this.updateScore({
-                id: post.id,
-                score_type: 'score_2',
-                value
-              })}
-              obviousValue={Math.round(post.total_score_3)}
-              obviousChange={value => this.updateScore({
-                id: post.id,
-                score_type: 'score_3',
-                value
-              })} />
+            />
           ))}
         </div>
       )
