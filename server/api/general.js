@@ -2155,8 +2155,7 @@ export default function useGeneralApi(app) {
     const {csrf, body, total_score_1, total_score_2, total_score_3} = typeof(params) === 'string' ? JSON.parse(params) : params
     // if (!checkCSRF(this, csrf)) return;
 
-    let total_score
-    total_score = (total_score_1 + total_score_2 + total_score_3) / 3
+    const total_score = (total_score_1 + total_score_2 + total_score_3) / 3
 
     try {
       if (!this.session.user) {
@@ -2191,7 +2190,7 @@ export default function useGeneralApi(app) {
           total_score_1,
           total_score_2,
           total_score_3,
-          total_score
+          total_score: total_score || null
         })
       }
 
