@@ -89,21 +89,35 @@ class Game extends Component {
   render () {
     return (
       <div className="PostSummary__feedback-container">
-        <h3 className="PostSummary__feedback">Ответ на задание:</h3>
+        <h3>Ответ на задание</h3>
+        <div className="PostSummary__feedback-subtext">Вы можете обновлять ответ в любой момент!</div>
 
         <div className='ReplyEditorShort__body'>
           <textarea
             rows={3}
             autoComplete='off'
             className='expanded-area'
-            placeholder='Написать отзыв'
+            placeholder='Напишите ответ'
             onChange={this.handleChange}
             value={this.state.text} />
 
+          
+
+          <div style={{ marginTop: '20px', height: '50px' }}>
+            <button
+              className='button ReplyEditorShort__buttons-submit'
+              onClick={this.handleSubmit}>
+              {this.state.new ? 'Отправить ответ' : 'Обновить'}
+            </button>
+            <div style={{ color: '#d9534f' }}>{this.state.error}</div>
+            <div style={{ color: '#5cb85c' }}>{this.state.message}</div>
+          </div>
+
+
           {!this.state.new && (
-            <div className="PostSummary">
+            <div className="PostSummary__feedback-wrap">
               <div className="PostSummary__feedback-title">
-                <b>Интересно</b>
+                <b>Просто {this.state.total_score_1.toFixed(2)}</b>
               </div>
               <StarRatingComponent
                 name='interesting'
@@ -112,7 +126,7 @@ class Game extends Component {
                 value={this.state.total_score_1}
                 emptyStarColor='#e3e1d6' />
               <div className="PostSummary__feedback-title">
-                <b>Просто</b>
+                <b>Понятно {this.state.total_score_2.toFixed(2)}</b>
               </div>
               <StarRatingComponent
                 name='simple'
@@ -121,7 +135,7 @@ class Game extends Component {
                 value={this.state.total_score_2}
                 emptyStarColor='#e3e1d6' />
               <div className="PostSummary__feedback-title">
-                <b>Понятно</b>
+                <b>Аккуратно {this.state.total_score_3.toFixed(2)}</b>
               </div>
               <StarRatingComponent
                 name='obvious'
@@ -132,15 +146,6 @@ class Game extends Component {
             </div>
           )}
 
-          <div style={{ marginTop: '20px' }}>
-            <button
-              className='button ReplyEditorShort__buttons-submit'
-              onClick={this.handleSubmit}>
-              {this.state.new ? 'Отправить ответ' : 'Обновить'}
-            </button>
-            <div style={{ color: '#d9534f' }}>{this.state.error}</div>
-            <div style={{ color: '#5cb85c' }}>{this.state.message}</div>
-          </div>
 
         </div>
         <QRCode value={'http://platform.molodost.bz/gamevote/user/' + this.props.myId} />

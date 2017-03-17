@@ -18,8 +18,15 @@ ul.PostsList__summaries {
   margin-top: 10px;
 }
 
+.PostSummary__feedback-wrap {
+  display: block;
+  width: 100%;
+  margin-top: 25px;
+  margin-bottom: 20px;
+}
+
 .PostSummary__feedback-container {
-  margin: 0 auto;
+
   width: 560px;
   background: #fff;
   padding: 10px 20px 10px 20px;
@@ -508,11 +515,15 @@ width: 50px;
 
   width: 100%;
   background: #fff;
-  padding: 20px;
+  padding: 10px;
   
     border: 1px solid #e1e3e4;
   border-radius: 0 0 3px 3px;
   
+}
+
+.PostSummary__feedback-subtext {
+  margin-bottom: 10px;
 }
 
 .PostSummary__feedback-container .PostSummary {

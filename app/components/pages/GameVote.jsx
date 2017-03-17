@@ -74,12 +74,14 @@ class GameVote extends Component {
 
 
     let myTen = ''
+    let myID = ''
     let isOnEdit, isOnMyTen, isOnVolunteer, isOnOtherTen
 
     console.log('HIM ', this.props.params.category)
 
 
     if(this.props.myHierarchy && this.props.myHierarchy.myTen) {myTen = this.props.myHierarchy.myTen}
+      if(this.props.myID) {myID = this.props.myID}
 
 
     if(!this.props.params.category) {isOnEdit = true}
@@ -98,7 +100,7 @@ class GameVote extends Component {
             </li>
 
           </ul>
-          {isOnEdit && <Game.component myId={myTen} />}
+          {isOnEdit && <Game.component myId={myID} />}
           {!isOnEdit && this.state.posts && this.state.posts.map(post => (
             <GamePost
               key={post.id}
@@ -132,7 +134,8 @@ class GameVote extends Component {
 
 const mapStateToProps = state => {
   return {
-    myHierarchy: state.user.get('myHierarchy')
+    myHierarchy: state.user.get('myHierarchy'),
+    myID: state.user.get('myID')
   }
 }
 
