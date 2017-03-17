@@ -2577,7 +2577,7 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 
 
 	router.get('/game/get_next_ten', koaBody, function* () {
-		const res = yield models.Game.findOne({
+		let res = yield models.Game.findOne({
 			attributes: [],
 			
      		 include: [{
@@ -2593,6 +2593,31 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
   			]
 		})
 
+
+		if (!res) {
+			res = yield models.Game.findOne({
+			attributes: [],
+			
+     		 include: [{
+       		 model: models.User,
+     		attributes: ['ten'],
+        			
+    	
+     		 }],
+     		
+      		
+      		order: [
+    		Sequelize.fn( 'RAND' )
+  			]
+		})
+
+		if (!res) {
+			throw new Error("There's no repies yet"); 
+		}
+
+
+
+		}
 	
 
 		//console.log('RESULT', JSON.stringify(res))
