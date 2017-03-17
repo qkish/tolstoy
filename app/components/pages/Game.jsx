@@ -49,13 +49,15 @@ class Game extends Component {
 
     if (!text) {
       this.setState({
-        error: 'Заполните ответ на задание'
+        error: 'Заполните ответ на задание',
+        message: ''
       })
       return
     }
 
     this.setState({
-      error: false
+      error: false,
+      message: ''
     })
 
     try {
@@ -77,7 +79,8 @@ class Game extends Component {
       await this.getContent()
     } catch (error) {
       this.setState({
-        error: error.message
+        error: error.message,
+        message: ''
       })
     }
   }
