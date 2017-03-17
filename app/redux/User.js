@@ -48,6 +48,7 @@ export default createModule({
         { action: 'UPDATE_PROGRAM', reducer: state => state },
         { action: 'SET_PROGRAM', reducer: (state, {payload}) => state.set('currentProgram', payload) },
         { action: 'SET_VOLUNTEER', reducer: (state, {payload}) => state.set('isVolunteer', payload) },
+        { action: 'SET_MY_ID', reducer: (state, {payload}) => state.set('myID', payload) },
         { action: 'SET_POLK_LEADER', reducer: (state, {payload}) => state.set('isPolkLeader', payload) },
         { action: 'SET_HUNDRED_LEADER', reducer: (state, {payload}) => state.set('isHundredLeader', payload) },
         { action: 'SET_MY_HIERARCHY', reducer: (state, {payload}) => state.set('myHierarchy', payload) },
