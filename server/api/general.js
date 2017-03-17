@@ -1234,10 +1234,6 @@ export default function useGeneralApi(app) {
 		let _limit = Number(limit) || 50
 		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
-
-
-
-
 		if (category) {
 			if (category === 'polki') {
 				where = {
@@ -1345,12 +1341,12 @@ export default function useGeneralApi(app) {
 				type: type
 			},
 			required: false,
-			attributes: ['money']
+			attributes: ['money', 'total_score']
 		}
 		let order
 		category == 'all'
 			? order = [{model: models.Game}, 'total_score', 'DESC']
-			: order = ['money_total', 'DESC']
+			: order = [{model: models.Group}, 'total_score', 'DESC']
 
 
 
@@ -1372,7 +1368,8 @@ export default function useGeneralApi(app) {
 				'polk_leader',
 				'money_total',
 				'approved_money',
-				'volunteer'
+				'volunteer',
+				'current_program'
 			],
 			where,
 			order: [order],
@@ -1380,6 +1377,11 @@ export default function useGeneralApi(app) {
 			offset: _offset,
 			limit: _limit
 		})
+
+		console.log('===============================')
+		users.map(user => console.log(JSON.stringify(user)))
+		console.log('===============================')
+
 		this.body = JSON.stringify({users})
 	})
 

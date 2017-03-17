@@ -24,28 +24,18 @@ import {Link} from 'react-router'
 function moneyPrettify(text) {
 	let moneyInRating
 	if (text) {
-		
+
 		moneyInRating = String(text);
 		moneyInRating = parseFloat(moneyInRating).toFixed(3);
-		
-		
+
+
 	} else moneyInRating = '0'
-	
+
 	return moneyInRating
 }
 
-const userGroupGetMoney = (user) => {
-
-	console.log('USER : ', user)
-	let money
-	try {
-		money = user.Groups[0].score
-		console.log('USER GOT MUNEY: ', money)
-	} catch (e) {
-		money = 0
-		console.log('USER NUT GOT', e)
-	}
-	return moneyPrettify(money /* + user.money_total */)
+const userGroupGetScore = user => {
+	return user.Groups[0] && user.Groups[0].total_score || 0
 }
 
 class GameRating extends Component {
@@ -55,7 +45,7 @@ class GameRating extends Component {
 		this.search = this.search.bind(this)
 		this.getData = this.getData.bind(this)
 	}
-	
+
 	getData(props) {
 		if (props.params.category === 'ten') {
 			getUsersByTen(props.params.id).then(users => this.setState({users}))
@@ -69,39 +59,37 @@ class GameRating extends Component {
 			getUsersByPolk(props.params.id).then(users => this.setState({users}))
 			return
 		}
-		
+
 		let currentProgram = this.props.current_program ? this.props.current_program : null
-		//getUsersByCategory(props.params.category,0,50,'undefined',currentProgram).then(users => this.setState({users}))
-		getGameUsersByCategory(props.params.category,0,100,'undefined',currentProgram).then(users => this.setState({users}))
+		getGameUsersByCategory(props.params.category, 0, 50, 'undefined', currentProgram)
+			.then(users => this.setState({users}))
 	}
-	
+
 	componentDidMount() {
 		this.getData(this.props)
 	}
-	
+
 	componentWillReceiveProps(nextProps) {
 		this.getData(nextProps)
 	}
-	
+
 	search(text) {
 		searchUsers(text).then(users => this.setState({isSearch: true, users}))
 	}
-	
+
 	render() {
 		let isAll = false
 		if (this.props.params.category == 'all' ||
 			this.props.params.category == 'my-ten' ||
 			this.props.params.category == 'my-group'
-		
+
 		) {
 			isAll = true
 		}
-		
-		
+
+
 		let view
 		const {users} = this.state
-		console.log('users', users)
-		
 //		const UserMapper = (users, path, namePrefix) => {
 //			const loader = <div>Загрузка</div>
 //			const list = (
@@ -122,7 +110,7 @@ class GameRating extends Component {
 //		}
 		let currentTotalScore
 
-		
+
 		const userList = users ? (
 			<div className="Rating_wrapper">
 				{users.map(user => (
@@ -151,7 +139,7 @@ class GameRating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/gamerating/hundred/${user.id}`}
 							      name={`Сотня ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{userGroupGetMoney(user)}</div>
+							<div className="Rating__money">{userGroupGetScore(user)}</div>
 
 						</div>
 					))}
@@ -169,7 +157,7 @@ class GameRating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/gamerating/ten/${user.id}`}
 							      name={`Десятка ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{userGroupGetMoney(user)}</div>
+							<div className="Rating__money">{userGroupGetScore(user)}</div>
 						</div>
 					))}
 				</div>
@@ -178,7 +166,7 @@ class GameRating extends Component {
 			)
 		}
 
-		
+
 		if (this.props.params.category === 'tens') {
 			view = users ? (
 				<div className="Rating_wrapper">
@@ -187,8 +175,8 @@ class GameRating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/gamerating/ten/${user.id}`}
 							      name={`Десятка ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money"><Link to={`/gamevote/ten/${user.id}`}>Оценить десятку</Link></div>      
-							<div className="Rating__money">{userGroupGetMoney(user)} &nbsp;</div>
+							<div className="Rating__money"><Link to={`/gamevote/ten/${user.id}`}>Оценить десятку</Link></div>
+							<div className="Rating__money">{userGroupGetScore(user)} &nbsp;</div>
 						</div>
 					))}
 				</div>
@@ -196,7 +184,7 @@ class GameRating extends Component {
 				<div>Загрузка</div>
 			)
 		}
-		
+
 		if (this.props.params.category === 'hundreds') {
 			view = users ? (
 				<div className="Rating_wrapper">
@@ -207,7 +195,7 @@ class GameRating extends Component {
 								link={`/gamerating/hundred/${user.id}`}
 								name={`Сотня ${user.first_name} ${user.last_name}`}
 							/>
-							<div className="Rating__money">{userGroupGetMoney(user)}</div>
+							<div className="Rating__money">{userGroupGetScore(user)}</div>
 						</div>
 					))}
 				</div>
@@ -215,7 +203,7 @@ class GameRating extends Component {
 				<div>Загрузка</div>
 			)
 		}
-		
+
 		if (this.props.params.category === 'polki') {
 			view = users ? (
 				<div className="Rating_wrapper">
@@ -224,7 +212,7 @@ class GameRating extends Component {
 							<User account={user.name} key={user.id}
 							      link={`/gamerating/polk/${user.id}`}
 							      name={`Полк ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{userGroupGetMoney(user)}</div>
+							<div className="Rating__money">{userGroupGetScore(user)}</div>
 						</div>
 					))}
 				</div>
@@ -232,11 +220,11 @@ class GameRating extends Component {
 				<div>Загрузка</div>
 			)
 		}
-		
-		
-		
-		
-		
+
+
+
+
+
 		return (
 			<div className='PostsIndex row'>
 				<div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
@@ -244,7 +232,7 @@ class GameRating extends Component {
 						active: isAll,
 						link: '/gamerating/all',
 						value: 'Все'
-					}, 
+					},
 					 {
 						active: this.props.params.category === 'hundreds',
 						link: '/gamerating/hundreds/',
