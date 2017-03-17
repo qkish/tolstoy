@@ -5,6 +5,7 @@ import { Link } from 'react-router'
 import Game from 'app/components/pages/Game'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 
+
 class GameVote extends Component {
   constructor (props) {
     super(props)
@@ -93,11 +94,11 @@ class GameVote extends Component {
             <li className={isOnMyTen && 'active'}><Link to={'/gamevote/ten/' + myTen}>Моя десятка</Link></li>
             {/* <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li> */}
             <li className={isOnOtherTen && 'active'}>
-              {this.state.otherTenId ? <Link to={`/gamevote/ten/${this.state.otherTenId}`}>Другая десятка</Link> : <LoadingIndicator type='circle' />}
+              {this.state.otherTenId ? <Link to={`/gamevote/ten/${this.state.otherTenId}`}>Другая десятка</Link> : <div className="PostsIndex__tab-otherten"><LoadingIndicator type='circle' /></div>}
             </li>
 
           </ul>
-          {isOnEdit && <Game.component />}
+          {isOnEdit && <Game.component myId={myTen} />}
           {!isOnEdit && this.state.posts && this.state.posts.map(post => (
             <GamePost
               key={post.id}

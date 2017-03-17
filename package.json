@@ -96,6 +96,7 @@
     "pify": "^2.3.0",
     "pluralize": "^2.0.0",
     "purest": "^2.0.1",
+    "qrcode.react": "^0.6.1",
     "rc-progress": "^2.0.1",
     "rc-rate": "^2.1.0",
     "react": "^15.3.2",
