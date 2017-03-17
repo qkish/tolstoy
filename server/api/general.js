@@ -2527,7 +2527,7 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 		const nextId = yield models.User.min('id', {
 			where: {
 				id: {
-					$gt: 10566
+					$gt: this.session.user
 				},
 				ten_leader: true
 			}
