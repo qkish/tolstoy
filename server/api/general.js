@@ -2294,7 +2294,7 @@ export default function useGeneralApi(app) {
   router.put('/game/update_score', koaBody, function* () {
     if (rateLimitReq(this, this.req)) return
     const params = this.request.body
-    const {csrf, id, score_type, value} = typeof(params) === 'string' ? JSON.parse(params) : params
+    const {csrf, id, score_1, score_2, score_3} = typeof(params) === 'string' ? JSON.parse(params) : params
 
     const checked_user = yield models.User.findOne({
       attributes: ['ten', 'volunteer'],
@@ -2316,101 +2316,89 @@ export default function useGeneralApi(app) {
       }
     })
 
+    // if (checked_user.volunteer) {
+    //   if (score_type === 'score_1') {
+    //     game.score_1_volunteer = Number(game.score_1_volunteer || 0) + Number(value)
+    //     game.score_1_volunteer_count = Number(game.score_1_volunteer_count || 0) + 1
+    //     yield game.save()
+    //   }
+    //   if (score_type === 'score_2') {
+    //     game.score_2_volunteer = Number(game.score_2_volunteer || 0) + Number(value)
+    //     game.score_2_volunteer_count = Number(game.score_2_volunteer_count || 0) + 1
+    //     yield game.save()
+    //   }
+    //   if (score_type === 'score_3') {
+    //     game.score_3_volunteer = Number(game.score_3_volunteer || 0) + Number(value)
+    //     game.score_3_volunteer_count = Number(game.score_3_volunteer_count || 0) + 1
+    //     yield game.save()
+    //   }
+    // } else
+    if (user.ten === checked_user.ten) {
+      game.score_1_my_ten = Number(game.score_1_my_ten || 0) + Number(score_1)
+      game.score_1_my_ten_count = Number(game.score_1_my_ten_count || 0) + 1
 
+      game.score_2_my_ten = Number(game.score_2_my_ten || 0) + Number(score_2)
+      game.score_2_my_ten_count = Number(game.score_2_my_ten_count || 0) + 1
 
-    if (checked_user.volunteer) {
-      if (score_type === 'score_1') {
-        game.score_1_volunteer = Number(game.score_1_volunteer || 0) + Number(value)
-        game.score_1_volunteer_count = Number(game.score_1_volunteer_count || 0) + 1
-        yield game.save()
-      }
-      if (score_type === 'score_2') {
-        game.score_2_volunteer = Number(game.score_2_volunteer || 0) + Number(value)
-        game.score_2_volunteer_count = Number(game.score_2_volunteer_count || 0) + 1
-        yield game.save()
-      }
-      if (score_type === 'score_3') {
-        game.score_3_volunteer = Number(game.score_3_volunteer || 0) + Number(value)
-        game.score_3_volunteer_count = Number(game.score_3_volunteer_count || 0) + 1
-        yield game.save()
-      }
-    } else if (user.ten === checked_user.ten) {
-      if (score_type === 'score_1') {
-        game.score_1_my_ten = Number(game.score_1_my_ten || 0) + Number(value)
-        game.score_1_my_ten_count = Number(game.score_1_my_ten_count || 0) + 1
-        yield game.save()
-      }
-      if (score_type === 'score_2') {
-        game.score_2_my_ten = Number(game.score_2_my_ten || 0) + Number(value)
-        game.score_2_my_ten_count = Number(game.score_2_my_ten_count || 0) + 1
-        yield game.save()
-      }
-      if (score_type === 'score_3') {
-        game.score_3_my_ten = Number(game.score_3_my_ten || 0) + Number(value)
-        game.score_3_my_ten_count = Number(game.score_3_my_ten_count || 0) + 1
-        yield game.save()
-      }
+      game.score_3_my_ten = Number(game.score_3_my_ten || 0) + Number(score_3)
+      game.score_3_my_ten_count = Number(game.score_3_my_ten_count || 0) + 1
+
+      yield game.save()
     } else {
-      if (score_type === 'score_1') {
-        game.score_1_other_ten = Number(game.score_1_other_ten || 0) + Number(value)
-        game.score_1_other_ten_count = Number(game.score_1_other_ten_count || 0) + 1
-        yield game.save()
-      }
-      if (score_type === 'score_2') {
-        game.score_2_other_ten = Number(game.score_2_other_ten || 0) + Number(value)
-        game.score_2_other_ten_count = Number(game.score_2_other_ten_count || 0) + 1
-        yield game.save()
-      }
-      if (score_type === 'score_3') {
-        game.score_3_other_ten = Number(game.score_3_other_ten || 0) + Number(value)
-        game.score_3_other_ten_count = Number(game.score_3_other_ten_count || 0) + 1
-        yield game.save()
-      }
+      game.score_1_other_ten = Number(game.score_1_other_ten || 0) + Number(score_1)
+      game.score_1_other_ten_count = Number(game.score_1_other_ten_count || 0) + 1
+
+      game.score_2_other_ten = Number(game.score_2_other_ten || 0) + Number(score_2)
+      game.score_2_other_ten_count = Number(game.score_2_other_ten_count || 0) + 1
+
+      game.score_3_other_ten = Number(game.score_3_other_ten || 0) + Number(score_3)
+      game.score_3_other_ten_count = Number(game.score_3_other_ten_count || 0) + 1
+
+      yield game.save()
     }
 
-// Score 1 Interesting
-if (game.score_1_my_ten_count > 0) {
-    game.total_score_1 = (game.score_1_my_ten / game.score_1_my_ten_count)
-}
+    // Score 1 Interesting
+    if (game.score_1_my_ten_count > 0) {
+      game.total_score_1 = (game.score_1_my_ten / game.score_1_my_ten_count)
+    }
 
-if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0) {
-    game.total_score_1 = ((game.score_1_my_ten / game.score_1_my_ten_count) + (game.score_1_volunteer / game.score_1_volunteer_count))/2
-}
+    if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0) {
+      game.total_score_1 = ((game.score_1_my_ten / game.score_1_my_ten_count) + (game.score_1_volunteer / game.score_1_volunteer_count))/2
+    }
 
-if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0 && game.score_1_other_ten_count > 0) {
-    game.total_score_1 = ((game.score_1_my_ten / game.score_1_my_ten_count) + (game.score_1_volunteer / game.score_1_volunteer_count) + (game.score_1_other_ten / game.score_1_other_ten_count))/3
-}
+    if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0 && game.score_1_other_ten_count > 0) {
+      game.total_score_1 = ((game.score_1_my_ten / game.score_1_my_ten_count) + (game.score_1_volunteer / game.score_1_volunteer_count) + (game.score_1_other_ten / game.score_1_other_ten_count))/3
+    }
 
-// Score 2 Prosto
+    // Score 2 Prosto
 
-if (game.score_2_my_ten_count > 0) {
-    game.total_score_2 = (game.score_2_my_ten / game.score_2_my_ten_count)
-}
+    if (game.score_2_my_ten_count > 0) {
+      game.total_score_2 = (game.score_2_my_ten / game.score_2_my_ten_count)
+    }
 
-if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0) {
-    game.total_score_2 = ((game.score_2_my_ten / game.score_2_my_ten_count) + (game.score_2_volunteer / game.score_2_volunteer_count))/2
-}
+    if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0) {
+      game.total_score_2 = ((game.score_2_my_ten / game.score_2_my_ten_count) + (game.score_2_volunteer / game.score_2_volunteer_count))/2
+    }
 
-if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0 && game.score_2_other_ten_count > 0) {
-    game.total_score_2 = ((game.score_2_my_ten / game.score_2_my_ten_count) + (game.score_2_volunteer / game.score_2_volunteer_count) + (game.score_2_other_ten / game.score_2_other_ten_count))/3
-}
+    if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0 && game.score_2_other_ten_count > 0) {
+      game.total_score_2 = ((game.score_2_my_ten / game.score_2_my_ten_count) + (game.score_2_volunteer / game.score_2_volunteer_count) + (game.score_2_other_ten / game.score_2_other_ten_count))/3
+    }
 
-// Score 2 Ponyatno - Enisey-14
+    // Score 2 Ponyatno - Enisey-14
 
+    if (game.score_3_my_ten_count > 0) {
+      game.total_score_3 = (game.score_3_my_ten / game.score_3_my_ten_count)
+    }
 
-if (game.score_3_my_ten_count > 0) {
-    game.total_score_3 = (game.score_3_my_ten / game.score_3_my_ten_count)
-}
+    if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0) {
+      game.total_score_3 = ((game.score_3_my_ten / game.score_3_my_ten_count) + (game.score_3_volunteer / game.score_3_volunteer_count))/2
+    }
 
-if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0) {
-    game.total_score_3 = ((game.score_3_my_ten / game.score_3_my_ten_count) + (game.score_3_volunteer / game.score_3_volunteer_count))/2
-}
+    if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0 && game.score_3_other_ten_count > 0) {
+      game.total_score_3 = ((game.score_3_my_ten / game.score_3_my_ten_count) + (game.score_3_volunteer / game.score_3_volunteer_count) + (game.score_3_other_ten / game.score_3_other_ten_count))/3
+    }
 
-if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0 && game.score_3_other_ten_count > 0) {
-    game.total_score_3 = ((game.score_3_my_ten / game.score_3_my_ten_count) + (game.score_3_volunteer / game.score_3_volunteer_count) + (game.score_3_other_ten / game.score_3_other_ten_count))/3
-}
-
-yield game.save() // Enisey-14 Saving Information
+    yield game.save() // Enisey-14 Saving Information
 
 game.total_score = 0;
 if (game.total_score_1) {

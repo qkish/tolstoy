@@ -1,9 +1,22 @@
 import React, { Component } from 'react'
 import User from 'app/components/elements/User'
 import Rate from 'rc-rate'
-import 'rc-rate/assets/index.css'
 
 class GamePost extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {}
+    this.handleSave = this.handleSave.bind(this)
+  }
+
+  handleSave () {
+    this.props.save({
+      score_1: this.state.score_1,
+      score_2: this.state.score_2,
+      score_3: this.state.score_3
+    })
+  }
+
   render () {
     const content = this.props.content && this.props.content.split('\n').map(x => (
       <span>{x}<br /></span>
@@ -18,18 +31,16 @@ class GamePost extends Component {
           <div className="PostSummary__feedback-subtitle">Интересно:</div>
           <Rate
             count={10}
-            onChange={this.props.interestingChange}
-            defaultValue={this.props.interestingValue} /> 
+            onChange={value => this.setState({ score_1: value })} />
           <div className="PostSummary__feedback-subtitle">Просто:</div>
           <Rate
             count={10}
-            onChange={this.props.simpleChange}
-            defaultValue={this.props.simpleValue} />
+            onChange={value => this.setState({ score_2: value })} />
           <div className="PostSummary__feedback-subtitle">Понятно:</div>
           <Rate
             count={10}
-            onChange={this.props.obviousChange}
-            defaultValue={this.props.obviousValue} />
+            onChange={value => this.setState({ score_3: value })} />
+          <button onClick={this.handleSave}>Сохранить</button>
         </div>)}
       </div>
     )
