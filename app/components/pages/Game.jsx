@@ -148,7 +148,7 @@ class Game extends Component {
 
 
         </div>
-        <QRCode value={'http://platform.molodost.bz/gamevote/user/' + this.props.myId} />
+        <div className="PostSummary__feedback-qr"><QRCode value={'http://platform.molodost.bz/gamevote/user/' + this.props.myId} /></div>
         <div className="PostSummary__feedback-mylink">Ваша ссылка: <b>http://platform.molodost.bz/gamevote/user/{this.props.myId}</b></div>
       </div>
     )

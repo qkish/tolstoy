@@ -155,6 +155,31 @@ export function getUsersByPolk (polkId) {
         .then(({ users }) => users);
 }
 
+
+
+export function getGameUsersByTen (tenId) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/gameusers?ten=${tenId}`)
+        .then(res => res.json())
+        .then(({ users }) => users);
+}
+
+export function getGameUsersByHundred (hundredId) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/gameusers?hundred=${hundredId}`)
+        .then(res => res.json())
+        .then(({ users }) => users);
+}
+
+export function getGameUsersByPolk (polkId) {
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
+    return fetch(`/api/v1/gameusers?polk=${polkId}`)
+        .then(res => res.json())
+        .then(({ users }) => users);
+}
+
+
+
 export function getUsersByCouchGroup (couchGroupId) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
     return fetch(`/api/v1/users?couch_group=${couchGroupId}`)
