@@ -32,15 +32,15 @@ class GamePost extends Component {
         <div className='PostSummary__content'>{content}</div>
         {this.props.displayRate && (
           <div style={{ marginTop: '20px' }}>
-            <div className="PostSummary__feedback-subtitle">Интересно:</div>
-            <Rate
-              count={10}
-              onChange={value => this.setState({ score_1: value })} />
             <div className="PostSummary__feedback-subtitle">Просто:</div>
             <Rate
               count={10}
-              onChange={value => this.setState({ score_2: value })} />
+              onChange={value => this.setState({ score_1: value })} />
             <div className="PostSummary__feedback-subtitle">Понятно:</div>
+            <Rate
+              count={10}
+              onChange={value => this.setState({ score_2: value })} />
+            <div className="PostSummary__feedback-subtitle">Аккуратно:</div>
             <Rate
               count={10}
               onChange={value => this.setState({ score_3: value })} />

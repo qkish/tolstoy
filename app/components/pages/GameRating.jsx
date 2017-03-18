@@ -26,7 +26,7 @@ function moneyPrettify(text) {
 	if (text) {
 
 		moneyInRating = String(text);
-		moneyInRating = parseFloat(moneyInRating).toFixed(3);
+		moneyInRating = parseFloat(moneyInRating).toFixed(2);
 
 
 	} else moneyInRating = '0'
@@ -35,7 +35,7 @@ function moneyPrettify(text) {
 }
 
 const userGroupGetScore = user => {
-	return user.Groups[0] && user.Groups[0].total_score || 0
+	return user.User.Groups[0] && user.User.Groups[0].total_score.toFixed(2) || 0
 }
 
 class GameRating extends Component {
@@ -61,6 +61,8 @@ class GameRating extends Component {
 		}
 
 		let currentProgram = this.props.current_program ? this.props.current_program : null
+
+		console.log(' HERE CAT SUSHI: ', props.params.category)
 		getGameUsersByCategory(props.params.category, 0, 50, 'undefined', currentProgram)
 			.then(users => this.setState({users}))
 	}
@@ -115,11 +117,11 @@ class GameRating extends Component {
 			<div className="Rating_wrapper">
 				{users.map(user => (
 					<div className="Rating__row">
-						<User account={user.name} key={user.id}
-							link={`/gamevote/user/${user.id}`}
+						<User account={user.User.name} key={user.User.id}
+							link={`/gamevote/user/${user.User.id}`}
 							/>
 						<div
-							className="Rating__money">{moneyPrettify(user.Games.length > 0 ? user.Games[0].total_score : 0)}</div>
+							className="Rating__money">{moneyPrettify(user.total_score > 0 ? user.total_score : 0)}</div>
 					</div>
 				))}
 			</div>
@@ -136,9 +138,9 @@ class GameRating extends Component {
 				<div className="Rating_wrapper">
 					{users.map(user => (
 						<div className="Rating__row">
-							<User account={user.name} key={user.id}
-							      link={`/gamerating/hundred/${user.id}`}
-							      name={`Сотня ${user.first_name} ${user.last_name}`}/>
+							<User account={user.User.name} key={user.User.id}
+							     // link={`/gamerating/hundred/${user.User.id}`}
+							      name={`Сотня ${user.User.first_name} ${user.User.last_name}`}/>
 							<div className="Rating__money">{userGroupGetScore(user)}</div>
 
 						</div>
@@ -154,9 +156,9 @@ class GameRating extends Component {
 				<div className="Rating_wrapper">
 					{users.map(user => (
 						<div className="Rating__row">
-							<User account={user.name} key={user.id}
-							      link={`/gamerating/ten/${user.id}`}
-							      name={`Десятка ${user.first_name} ${user.last_name}`}/>
+							<User account={user.User.name} key={user.User.id}
+							     // link={`/gamerating/ten/${user.User.id}`}
+							      name={`Десятка ${user.User.first_name} ${user.User.last_name}`}/>
 							<div className="Rating__money">{userGroupGetScore(user)}</div>
 						</div>
 					))}
@@ -172,10 +174,10 @@ class GameRating extends Component {
 				<div className="Rating_wrapper">
 					{users.map(user => (
 						<div className="Rating__row">
-							<User account={user.name} key={user.id}
-							      link={`/gamerating/ten/${user.id}`}
-							      name={`Десятка ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money"><Link to={`/gamevote/ten/${user.id}`}>Оценить десятку</Link></div>
+							<User account={user.User.name} key={user.User.id}
+							    //  link={`/gamerating/ten/${user.User.id}`}
+							      name={`Десятка ${user.User.first_name} ${user.User.last_name}`}/>
+							{/* <div className="Rating__money"><Link to={`/gamevote/ten/${user.User.id}`}>Оценить десятку</Link></div> */}
 							<div className="Rating__money">{userGroupGetScore(user)} &nbsp;</div>
 						</div>
 					))}
@@ -191,9 +193,9 @@ class GameRating extends Component {
 					{users.map(user => (
 						<div className="Rating__row">
 							<User
-								account={user.name} key={user.id}
-								link={`/gamerating/hundred/${user.id}`}
-								name={`Сотня ${user.first_name} ${user.last_name}`}
+								account={user.User.name} key={user.User.id}
+								//link={`/gamerating/hundred/${user.User.id}`}
+								name={`Сотня ${user.User.first_name} ${user.User.last_name}`}
 							/>
 							<div className="Rating__money">{userGroupGetScore(user)}</div>
 						</div>
@@ -209,9 +211,9 @@ class GameRating extends Component {
 				<div className="Rating_wrapper">
 					{users.map(user => (
 						<div className="Rating__row">
-							<User account={user.name} key={user.id}
-							      link={`/gamerating/polk/${user.id}`}
-							      name={`Полк ${user.first_name} ${user.last_name}`}/>
+							<User account={user.User.name} key={user.User.id}
+							   //   link={`/gamerating/polk/${user.User.id}`}
+							      name={`Полк ${user.User.first_name} ${user.User.last_name}`}/>
 							<div className="Rating__money">{userGroupGetScore(user)}</div>
 						</div>
 					))}
@@ -232,6 +234,11 @@ class GameRating extends Component {
 						active: isAll,
 						link: '/gamerating/all',
 						value: 'Все'
+					},
+					{
+						active: this.props.params.category === 'polki',
+						link: '/gamerating/polki/',
+						value: 'Полки'
 					},
 					 {
 						active: this.props.params.category === 'hundreds',

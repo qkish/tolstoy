@@ -1344,18 +1344,22 @@ export default function useGeneralApi(app) {
 			attributes: ['money', 'total_score']
 		}
 		let order
-		category == 'all'
-			? order = [{model: models.Game}, 'total_score', 'DESC']
-			: order = [{model: models.Group}, 'total_score', 'DESC']
-
-
+		
 
 		if (_order) {
 			order = [_order, 'DESC']
 		}
 
-		const users = yield models.User.findAll({
-			attributes: [
+		let users
+
+		if (category == 'all') {
+
+			users = yield models.Game.findAll({
+			
+			attributes: ['total_score'],
+			
+			include: [{model: models.User, 
+				attributes: [
 				'id',
 				'name',
 				'first_name',
@@ -1371,12 +1375,55 @@ export default function useGeneralApi(app) {
 				'volunteer',
 				'current_program'
 			],
-			where,
-			order: [order],
-			include: [groupsInclude, {model: models.Game}],
-			offset: _offset,
-			limit: _limit
+			include: [groupsInclude],
+			where
+
+			}],
+			// order: [order],
+			// offset: _offset,
+			// limit: _limit
+			limit: 50,
+			order: [['total_score', 'DESC']],
+			
 		})
+		} else {
+
+			users = yield models.Group.findAll({
+			
+			attributes: ['total_score'],
+			
+			include: [{model: models.User, 
+				attributes: [
+				'id',
+				'name',
+				'first_name',
+				'last_name',
+				'ten',
+				'hundred',
+				'polk',
+				'ten_leader',
+				'hundred_leader',
+				'polk_leader',
+				'money_total',
+				'approved_money',
+				'volunteer',
+				'current_program'
+			],
+			include: [groupsInclude],
+			where 
+			}],
+			where: {total_score: { $ne: null } },
+			// order: [order],
+			// offset: _offset,
+			// limit: _limit
+			limit: 50,
+			order: [['total_score', 'DESC']]
+			
+		})
+
+
+
+		}
 
 		console.log('===============================')
 		users.map(user => console.log(JSON.stringify(user)))
@@ -2392,12 +2439,12 @@ export default function useGeneralApi(app) {
       game.total_score_1 = (game.score_1_my_ten / game.score_1_my_ten_count)
     }
 
-    if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0) {
-      game.total_score_1 = ((game.score_1_my_ten / game.score_1_my_ten_count) + (game.score_1_volunteer / game.score_1_volunteer_count))/2
+     if (game.score_1_other_ten_count > 0) {
+      game.total_score_1 = (game.score_1_other_ten / game.score_1_other_ten_count)
     }
 
-    if (game.score_1_my_ten_count > 0  && game.score_1_volunteer_count > 0 && game.score_1_other_ten_count > 0) {
-      game.total_score_1 = ((game.score_1_my_ten / game.score_1_my_ten_count) + (game.score_1_volunteer / game.score_1_volunteer_count) + (game.score_1_other_ten / game.score_1_other_ten_count))/3
+    if (game.score_1_my_ten_count > 0 && game.score_1_other_ten_count > 0) {
+      game.total_score_1 = ((game.score_1_my_ten / game.score_1_my_ten_count) + (game.score_1_other_ten / game.score_1_other_ten_count))/2
     }
 
     // Score 2 Prosto
@@ -2406,26 +2453,26 @@ export default function useGeneralApi(app) {
       game.total_score_2 = (game.score_2_my_ten / game.score_2_my_ten_count)
     }
 
-    if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0) {
-      game.total_score_2 = ((game.score_2_my_ten / game.score_2_my_ten_count) + (game.score_2_volunteer / game.score_2_volunteer_count))/2
+     if (game.score_2_other_ten_count > 0) {
+      game.total_score_2 = (game.score_2_other_ten / game.score_2_other_ten_count)
     }
 
-    if (game.score_2_my_ten_count > 0  && game.score_2_volunteer_count > 0 && game.score_2_other_ten_count > 0) {
-      game.total_score_2 = ((game.score_2_my_ten / game.score_2_my_ten_count) + (game.score_2_volunteer / game.score_2_volunteer_count) + (game.score_2_other_ten / game.score_2_other_ten_count))/3
+    if (game.score_2_my_ten_count > 0 && game.score_2_other_ten_count > 0) {
+      game.total_score_2 = ((game.score_2_my_ten / game.score_2_my_ten_count) + (game.score_2_other_ten / game.score_2_other_ten_count))/2
     }
 
-    // Score 2 Ponyatno - Enisey-14
+    // Score 3 Ponyatno - Enisey-14
 
-    if (game.score_3_my_ten_count > 0) {
+  if (game.score_3_my_ten_count > 0) {
       game.total_score_3 = (game.score_3_my_ten / game.score_3_my_ten_count)
     }
 
-    if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0) {
-      game.total_score_3 = ((game.score_3_my_ten / game.score_3_my_ten_count) + (game.score_3_volunteer / game.score_3_volunteer_count))/2
+     if (game.score_3_other_ten_count > 0) {
+      game.total_score_3 = (game.score_3_other_ten / game.score_3_other_ten_count)
     }
 
-    if (game.score_3_my_ten_count > 0  && game.score_3_volunteer_count > 0 && game.score_3_other_ten_count > 0) {
-      game.total_score_3 = ((game.score_3_my_ten / game.score_3_my_ten_count) + (game.score_3_volunteer / game.score_3_volunteer_count) + (game.score_3_other_ten / game.score_3_other_ten_count))/3
+    if (game.score_3_my_ten_count > 0 && game.score_3_other_ten_count > 0) {
+      game.total_score_3 = ((game.score_3_my_ten / game.score_3_my_ten_count) + (game.score_3_other_ten / game.score_3_other_ten_count))/2
     }
 
     yield game.save() // Enisey-14 Saving Information
