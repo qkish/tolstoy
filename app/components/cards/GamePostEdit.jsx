@@ -15,17 +15,17 @@ class GamePostEdit extends Component {
         </div>
         <div className='PostSummary__content'>{content}</div>
         {this.props.displayRate && (<div>
-           <div>Интересно</div>
+           <div>Понятно</div>
           <Rate
             count={10}
             onHoverChange = {() => null}
             value={this.props.interestingValue} />
-          <div>Просто</div>
+          <div>Интересно</div>
           <Rate
             count={10}
             onHoverChange = {() => null}
             value={this.props.simpleValue} /> 
-          <div>Понятно</div>
+          <div>Аккуратно</div>
           <Rate
             count={10}
             onHoverChange = {() => null}
