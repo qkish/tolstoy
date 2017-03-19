@@ -36,12 +36,12 @@ class TaskCheckLink extends Component {
 
     if (this.props.current_program == '2') {tasksToCheck = <ol className="Card__ul-tasks">
 
-        <li><Link to="/created/bm-taskmzs1">Заполнить A/B</Link></li>
-        <li><Link to="/created/bm-taskmzs2">Нарисуйте два плаката</Link></li>
-        <li><Link to="/created/bm-taskmzs3">Чатбот и соцсети</Link></li>
-        <li><Link to="/created/bm-taskmzs4">Еженедельный отчет</Link></li>
-        <li><Link to="/created/bm-taskmzs5">Управленческая таблица</Link></li>
-        <li><Link to="/created/bm-taskmzs6">Еженедельный отчет №2</Link></li>
+        <li><Link to="/created/bm-taskmzs7">Упаковать первый экран</Link></li>
+        <li><Link to="/created/bm-taskmzs8">Сделать 2000 переходов</Link></li>
+        <li><Link to="/created/bm-taskmzs9">Проработать смыслы</Link></li>
+        <li><Link to="/created/bm-taskmzs10">Создать лид-магнит</Link></li>
+        <li><Link to="/created/bm-taskmzs11">УЕженедельный отчет в деньгах</Link></li>
+        
 
     </ol>}
 
