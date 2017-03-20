@@ -1,7 +1,7 @@
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
 import fetch from 'node-fetch';
-import models, {esc, escAttrs, Sequelize} from 'db/models';
+import models, {esc, escAttrs, Sequelize, sequelize} from 'db/models';
 import findUser from 'db/utils/find_user';
 import config from 'config';
 import recordWebEvent from 'server/record_web_event';
@@ -1228,208 +1228,282 @@ export default function useGeneralApi(app) {
 	router.get('/gameusers', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
 		const {category, ten, hundred, polk, couch_group, search, offset, limit, program} = this.query
-		let where = {}
-		let type = null
-		let _offset = Number(offset) || 0
-		let _limit = Number(limit) || 50
-		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
-		if (category) {
-			if (category === 'polki') {
-				where = {
-				$and: [{
-							polk_leader: true,
-						},
-						{
-							current_program: program
-						}]
-				}
-				type = 'polk'
-			}
-			if (category === 'hundreds') {
-				where = {
-					$and: [{
-					hundred_leader: true,
-				},
-				{
-					current_program: program
-				}]
-				}
-				type = 'hundred'
-			}
-			if (category === 'tens') {
-				where = {
-					$and: [{
-					ten_leader: true,
-				},
-				{
-					current_program: program
-				}]
-				}
-				type = 'ten'
-			}
-			if (category === 'couches') {
-				where = {
-					$and: [{
-					couch: true,
-				},
-				{
-					current_program: program
-				}]
-				}
-				type = 'couch'
-			}
-			if (category === 'hundred_leader') {
-				where = {
-					$or: [{
-						polk: this.session.user
-					}, {
-						polk: null
-					}]
-				}
-			}
-			if (category === 'ten_leader') {
-				where = {
-					$or: [{
-						hundred: this.session.user
-					}, {
-						hundred: null
-					}]
-				}
-			}
-
-			if (category === 'all' && program) {
-				where = {
-					current_program: program
-				}
-			}
+		let result
+		if (category === 'all') {
+			result = yield sequelize.query(`
+				SELECT
+					users.id,
+					users.name,
+					AVG(score_1) AS total_score_1,
+					AVG(score_2) AS total_score_2,
+					AVG(score_3) AS total_score_3,
+					AVG(score_1 + score_2 + score_3) / 3 AS total_score
+				FROM users
+				LEFT JOIN game ON game.user_id = users.id
+				LEFT JOIN game_scores ON game_scores.game_id = game.id
+				GROUP BY users.id
+				ORDER BY total_score DESC
+				LIMIT 50
+			`, { model: models.User })
+		} else if (category === 'polki') {
+			result = yield sequelize.query(`
+				SELECT
+					users.polk AS id,
+					(SELECT u2.name FROM users u2 WHERE u2.id = users.polk AND u2.polk_leader = 1) AS name,
+					(SELECT u2.first_name FROM users u2 WHERE u2.id = users.polk AND u2.polk_leader = 1) AS first_name,
+					(SELECT u2.last_name FROM users u2 WHERE u2.id = users.polk AND u2.polk_leader = 1) AS last_name,
+					AVG(score_1) AS total_score_1,
+					AVG(score_2) AS total_score_2,
+					AVG(score_3) AS total_score_3,
+					AVG(score_1 + score_2 + score_3) / 3 AS total_score
+				FROM users
+				LEFT JOIN game ON game.user_id = users.id
+				LEFT JOIN game_scores ON game_scores.game_id = game.id
+				WHERE users.polk IS NOT NULL
+				GROUP BY users.polk
+				ORDER BY total_score DESC
+				LIMIT 50
+			`, { model: models.User })
+		} else if (category === 'hundreds') {
+			result = yield sequelize.query(`
+				SELECT
+					users.hundred AS id,
+					(SELECT u2.name FROM users u2 WHERE u2.id = users.hundred AND u2.hundred_leader = 1) AS name,
+					(SELECT u2.first_name FROM users u2 WHERE u2.id = users.hundred AND u2.hundred_leader = 1) AS first_name,
+					(SELECT u2.last_name FROM users u2 WHERE u2.id = users.hundred AND u2.hundred_leader = 1) AS last_name,
+					AVG(score_1) AS total_score_1,
+					AVG(score_2) AS total_score_2,
+					AVG(score_3) AS total_score_3,
+					AVG(score_1 + score_2 + score_3) / 3 AS total_score
+				FROM users
+				LEFT JOIN game ON game.user_id = users.id
+				LEFT JOIN game_scores ON game_scores.game_id = game.id
+				WHERE users.hundred IS NOT NULL
+				GROUP BY users.hundred
+				ORDER BY total_score DESC
+				LIMIT 50
+			`, { model: models.User })
+		} else if (category === 'tens') {
+			result = yield sequelize.query(`
+				SELECT
+					users.ten AS id,
+					(SELECT u2.name FROM users u2 WHERE u2.id = users.ten AND u2.ten_leader = 1) AS name,
+					(SELECT u2.first_name FROM users u2 WHERE u2.id = users.ten AND u2.ten_leader = 1) AS first_name,
+					(SELECT u2.last_name FROM users u2 WHERE u2.id = users.ten AND u2.ten_leader = 1) AS last_name,
+					AVG(score_1) AS total_score_1,
+					AVG(score_2) AS total_score_2,
+					AVG(score_3) AS total_score_3,
+					AVG(score_1 + score_2 + score_3) / 3 AS total_score
+				FROM users
+				LEFT JOIN game ON game.user_id = users.id
+				LEFT JOIN game_scores ON game_scores.game_id = game.id
+				WHERE users.ten IS NOT NULL
+				GROUP BY users.ten
+				ORDER BY total_score DESC
+				LIMIT 50
+			`, { model: models.User })
 		}
 
-		if (ten) {
-			where = {ten}
-
-		}
-
-		if (hundred) {
-			where = {ten_leader: true, hundred}
-			type = 'ten'
-		}
-
-		if (polk) {
-			where = {hundred_leader:true, polk}
-			type = 'hundred'
-		}
-
-		if (couch_group) {
-			where = {couch_group}
-
-		}
-
-		if (search) {
-			where = Sequelize.where(
-				Sequelize.fn('concat', Sequelize.col('first_name'), ' ', Sequelize.col('last_name')),
-				{
-					$like: `%${search}%`
-				}
-			)
-			_limit = null
-			_offset = 0
-		}
-		const groupsInclude = {
-			model: models.Group,
-			where: {
-				type: type
-			},
-			required: false,
-			attributes: ['money', 'total_score']
-		}
-		let order
-
-
-		if (_order) {
-			order = [_order, 'DESC']
-		}
-
-		let users
-
-		if (category == 'all') {
-
-			users = yield models.Game.findAll({
-
-			attributes: ['total_score'],
-
-			include: [{model: models.User,
-				attributes: [
-				'id',
-				'name',
-				'first_name',
-				'last_name',
-				'ten',
-				'hundred',
-				'polk',
-				'ten_leader',
-				'hundred_leader',
-				'polk_leader',
-				'money_total',
-				'approved_money',
-				'volunteer',
-				'current_program'
-			],
-			include: [groupsInclude],
-			where
-
-			}],
-			// order: [order],
-			// offset: _offset,
-			// limit: _limit
-			limit: 50,
-			order: [['total_score', 'DESC']],
-
-		})
-		} else {
-
-			users = yield models.Group.findAll({
-
-			attributes: ['total_score'],
-
-			include: [{model: models.User,
-				attributes: [
-				'id',
-				'name',
-				'first_name',
-				'last_name',
-				'ten',
-				'hundred',
-				'polk',
-				'ten_leader',
-				'hundred_leader',
-				'polk_leader',
-				'money_total',
-				'approved_money',
-				'volunteer',
-				'current_program'
-			],
-			include: [groupsInclude],
-			where
-			}],
-			where: {total_score: { $ne: null } },
-			// order: [order],
-			// offset: _offset,
-			// limit: _limit
-			limit: 50,
-			order: [['total_score', 'DESC']]
-
-		})
-
-
-
-		}
-
-		console.log('===============================')
-		users.map(user => console.log(JSON.stringify(user)))
-		console.log('===============================')
-
-		this.body = JSON.stringify({users})
+		const users = result ? result.filter(u => u.nam) : []
+		this.body = JSON.stringify({ users })
+		// let where = {}
+		// let type = null
+		// let _offset = Number(offset) || 0
+		// let _limit = Number(limit) || 50
+		// let _order = this.query.order !== 'undefined' ? this.query.order : null
+		//
+		// if (category) {
+		// 	if (category === 'polki') {
+		// 		where = {
+		// 		$and: [{
+		// 					polk_leader: true,
+		// 				},
+		// 				{
+		// 					current_program: program
+		// 				}]
+		// 		}
+		// 		type = 'polk'
+		// 	}
+		// 	if (category === 'hundreds') {
+		// 		where = {
+		// 			$and: [{
+		// 			hundred_leader: true,
+		// 		},
+		// 		{
+		// 			current_program: program
+		// 		}]
+		// 		}
+		// 		type = 'hundred'
+		// 	}
+		// 	if (category === 'tens') {
+		// 		where = {
+		// 			$and: [{
+		// 			ten_leader: true,
+		// 		},
+		// 		{
+		// 			current_program: program
+		// 		}]
+		// 		}
+		// 		type = 'ten'
+		// 	}
+		// 	if (category === 'couches') {
+		// 		where = {
+		// 			$and: [{
+		// 			couch: true,
+		// 		},
+		// 		{
+		// 			current_program: program
+		// 		}]
+		// 		}
+		// 		type = 'couch'
+		// 	}
+		// 	if (category === 'hundred_leader') {
+		// 		where = {
+		// 			$or: [{
+		// 				polk: this.session.user
+		// 			}, {
+		// 				polk: null
+		// 			}]
+		// 		}
+		// 	}
+		// 	if (category === 'ten_leader') {
+		// 		where = {
+		// 			$or: [{
+		// 				hundred: this.session.user
+		// 			}, {
+		// 				hundred: null
+		// 			}]
+		// 		}
+		// 	}
+		//
+		// 	if (category === 'all' && program) {
+		// 		where = {
+		// 			current_program: program
+		// 		}
+		// 	}
+		// }
+		//
+		// if (ten) {
+		// 	where = {ten}
+		//
+		// }
+		//
+		// if (hundred) {
+		// 	where = {ten_leader: true, hundred}
+		// 	type = 'ten'
+		// }
+		//
+		// if (polk) {
+		// 	where = {hundred_leader:true, polk}
+		// 	type = 'hundred'
+		// }
+		//
+		// if (couch_group) {
+		// 	where = {couch_group}
+		//
+		// }
+		//
+		// if (search) {
+		// 	where = Sequelize.where(
+		// 		Sequelize.fn('concat', Sequelize.col('first_name'), ' ', Sequelize.col('last_name')),
+		// 		{
+		// 			$like: `%${search}%`
+		// 		}
+		// 	)
+		// 	_limit = null
+		// 	_offset = 0
+		// }
+		// const groupsInclude = {
+		// 	model: models.Group,
+		// 	where: {
+		// 		type: type
+		// 	},
+		// 	required: false,
+		// 	attributes: ['money', 'total_score']
+		// }
+		// let order
+		//
+		//
+		// if (_order) {
+		// 	order = [_order, 'DESC']
+		// }
+		//
+		// let users
+		//
+		// if (category == 'all') {
+		//
+		// 	users = yield models.Game.findAll({
+		//
+		// 	attributes: ['total_score'],
+		//
+		// 	include: [{model: models.User,
+		// 		attributes: [
+		// 		'id',
+		// 		'name',
+		// 		'first_name',
+		// 		'last_name',
+		// 		'ten',
+		// 		'hundred',
+		// 		'polk',
+		// 		'ten_leader',
+		// 		'hundred_leader',
+		// 		'polk_leader',
+		// 		'money_total',
+		// 		'approved_money',
+		// 		'volunteer',
+		// 		'current_program'
+		// 	],
+		// 	include: [groupsInclude],
+		// 	where
+		//
+		// 	}],
+		// 	// order: [order],
+		// 	// offset: _offset,
+		// 	// limit: _limit
+		// 	limit: 50,
+		// 	order: [['total_score', 'DESC']],
+		//
+		// })
+		// } else {
+		//
+		// 	users = yield models.Group.findAll({
+		//
+		// 	attributes: ['total_score'],
+		//
+		// 	include: [{model: models.User,
+		// 		attributes: [
+		// 		'id',
+		// 		'name',
+		// 		'first_name',
+		// 		'last_name',
+		// 		'ten',
+		// 		'hundred',
+		// 		'polk',
+		// 		'ten_leader',
+		// 		'hundred_leader',
+		// 		'polk_leader',
+		// 		'money_total',
+		// 		'approved_money',
+		// 		'volunteer',
+		// 		'current_program'
+		// 	],
+		// 	include: [groupsInclude],
+		// 	where
+		// 	}],
+		// 	where: {total_score: { $ne: null } },
+		// 	// order: [order],
+		// 	// offset: _offset,
+		// 	// limit: _limit
+		// 	limit: 50,
+		// 	order: [['total_score', 'DESC']]
+		//
+		// })
+		//
+		//
+		//
+		// }
+		// this.body = JSON.stringify({users})
 	})
 
 
@@ -2167,10 +2241,13 @@ export default function useGeneralApi(app) {
         throw new Error('Access denied')
       }
 
+      const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
+      const taskId = JSON.parse(JSON.stringify(task))[0].value
       const game = yield models.Game.findOne({
         attributes: ['id', 'body'],
         where: {
-          user_id: this.session.user
+          user_id: this.session.user,
+          task: taskId
         },
 				include: [{
 					model: models.GameScore,
@@ -2236,9 +2313,12 @@ export default function useGeneralApi(app) {
         throw new Error('Access denied')
       }
 
+      const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
+      const taskId = JSON.parse(JSON.stringify(task))[0].value
       const game = yield models.Game.findOne({
         where: {
-          user_id: this.session.user
+          user_id: this.session.user,
+          task: Number(task) || null
         }
       })
 
@@ -2264,7 +2344,8 @@ export default function useGeneralApi(app) {
           total_score_1,
           total_score_2,
           total_score_3,
-          total_score: total_score || null
+          total_score: total_score || null,
+          task: taskId
         })
       }
 
@@ -2322,6 +2403,8 @@ export default function useGeneralApi(app) {
 		if (rateLimitReq(this, this.req)) return
 		// if (!checkCSRF(this, csrf)) return;
 
+		const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
+		const taskId = JSON.parse(JSON.stringify(task))[0].value
 
     const user = yield models.User.findOne({
       attributes: ['name'],
@@ -2329,7 +2412,10 @@ export default function useGeneralApi(app) {
         id: this.params.id
       },
       include: [{
-        model: models.Game
+        model: models.Game,
+				where: {
+					task: taskId
+				}
       }]
     })
 
@@ -2345,6 +2431,9 @@ export default function useGeneralApi(app) {
 		if (rateLimitReq(this, this.req)) return
 		// if (!checkCSRF(this, csrf)) return;
 
+		const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
+		const taskId = JSON.parse(JSON.stringify(task))[0].value
+
     const users = yield models.User.findAll({
       attributes: ['name'],
       where: {
@@ -2353,7 +2442,7 @@ export default function useGeneralApi(app) {
       },
       include: [{
         model: models.Game,
-        where: { body: {$ne: null} }
+        where: { body: {$ne: null}, task: taskId }
       }]
     })
     const posts = users.map(user => {
