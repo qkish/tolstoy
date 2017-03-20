@@ -1249,7 +1249,7 @@ export default function useGeneralApi(app) {
 		} else if (category === 'polki') {
 			result = yield sequelize.query(`
 				SELECT
-					users.polk,
+					users.polk AS id,
 					(SELECT u2.name FROM users u2 WHERE u2.id = users.polk AND u2.polk_leader = 1) AS name,
 					(SELECT u2.first_name FROM users u2 WHERE u2.id = users.polk AND u2.polk_leader = 1) AS first_name,
 					(SELECT u2.last_name FROM users u2 WHERE u2.id = users.polk AND u2.polk_leader = 1) AS last_name,
@@ -1268,7 +1268,7 @@ export default function useGeneralApi(app) {
 		} else if (category === 'hundreds') {
 			result = yield sequelize.query(`
 				SELECT
-					users.hundred,
+					users.hundred AS id,
 					(SELECT u2.name FROM users u2 WHERE u2.id = users.hundred AND u2.hundred_leader = 1) AS name,
 					(SELECT u2.first_name FROM users u2 WHERE u2.id = users.hundred AND u2.hundred_leader = 1) AS first_name,
 					(SELECT u2.last_name FROM users u2 WHERE u2.id = users.hundred AND u2.hundred_leader = 1) AS last_name,
@@ -1287,7 +1287,7 @@ export default function useGeneralApi(app) {
 		} else if (category === 'tens') {
 			result = yield sequelize.query(`
 				SELECT
-					users.ten,
+					users.ten AS id,
 					(SELECT u2.name FROM users u2 WHERE u2.id = users.ten AND u2.ten_leader = 1) AS name,
 					(SELECT u2.first_name FROM users u2 WHERE u2.id = users.ten AND u2.ten_leader = 1) AS first_name,
 					(SELECT u2.last_name FROM users u2 WHERE u2.id = users.ten AND u2.ten_leader = 1) AS last_name,
@@ -1305,7 +1305,8 @@ export default function useGeneralApi(app) {
 			`, { model: models.User })
 		}
 
-		this.body = JSON.stringify({ users: result })
+		const users = result ? result.filter(u => u.nam) : []
+		this.body = JSON.stringify({ users })
 		// let where = {}
 		// let type = null
 		// let _offset = Number(offset) || 0

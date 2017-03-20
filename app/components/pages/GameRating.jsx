@@ -91,6 +91,7 @@ class GameRating extends Component {
 
 		let view
 		const {users} = this.state
+
 //		const UserMapper = (users, path, namePrefix) => {
 //			const loader = <div>Загрузка</div>
 //			const list = (
