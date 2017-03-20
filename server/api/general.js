@@ -23,8 +23,8 @@ import isAfter from 'date-fns/is_after';
 import AWS from 'aws-sdk';
 import pify from 'pify';
 import fs from 'fs';
-import {flatten, map, divide} from 'lodash';
-import {filter, negate, isNil, size, compose, reduce} from 'lodash/fp'
+import {flatten, divide} from 'lodash';
+import {filter, negate, isNil, size, compose, reduce, map, prop} from 'lodash/fp'
 import FormData from 'form-data';
 import shortid from 'shortid';
 
@@ -1344,7 +1344,7 @@ export default function useGeneralApi(app) {
 			attributes: ['money', 'total_score']
 		}
 		let order
-		
+
 
 		if (_order) {
 			order = [_order, 'DESC']
@@ -1355,10 +1355,10 @@ export default function useGeneralApi(app) {
 		if (category == 'all') {
 
 			users = yield models.Game.findAll({
-			
+
 			attributes: ['total_score'],
-			
-			include: [{model: models.User, 
+
+			include: [{model: models.User,
 				attributes: [
 				'id',
 				'name',
@@ -1384,15 +1384,15 @@ export default function useGeneralApi(app) {
 			// limit: _limit
 			limit: 50,
 			order: [['total_score', 'DESC']],
-			
+
 		})
 		} else {
 
 			users = yield models.Group.findAll({
-			
+
 			attributes: ['total_score'],
-			
-			include: [{model: models.User, 
+
+			include: [{model: models.User,
 				attributes: [
 				'id',
 				'name',
@@ -1410,7 +1410,7 @@ export default function useGeneralApi(app) {
 				'current_program'
 			],
 			include: [groupsInclude],
-			where 
+			where
 			}],
 			where: {total_score: { $ne: null } },
 			// order: [order],
@@ -1418,7 +1418,7 @@ export default function useGeneralApi(app) {
 			// limit: _limit
 			limit: 50,
 			order: [['total_score', 'DESC']]
-			
+
 		})
 
 
@@ -2168,18 +2168,45 @@ export default function useGeneralApi(app) {
       }
 
       const game = yield models.Game.findOne({
-        attributes: ['body', 'total_score_1', 'total_score_2', 'total_score_3'],
+        attributes: ['id', 'body'],
         where: {
           user_id: this.session.user
-        }
+        },
+				include: [{
+					model: models.GameScore,
+					attributes: ['id', 'score_1', 'score_2', 'score_3', 'comment'],
+					include: [{
+						model: models.User,
+						attributes: ['name']
+					}]
+				}]
       })
 
       if (game) {
+				const score_1s = map(prop('score_1'), game.GameScores)
+				const total_score_1 = divide(
+					reduce((sum, x) => sum + x, 0, filter(negate(isNil), score_1s)),
+					size(filter(negate(isNil), score_1s))
+				)
+
+				const score_2s = map(prop('score_2'), game.GameScores)
+				const total_score_2 = divide(
+					reduce((sum, x) => sum + x, 0, filter(negate(isNil), score_2s)),
+					size(filter(negate(isNil), score_2s))
+				)
+
+				const score_3s = map(prop('score_3'), game.GameScores)
+				const total_score_3 = divide(
+					reduce((sum, x) => sum + x, 0, filter(negate(isNil), score_3s)),
+					size(filter(negate(isNil), score_3s))
+				)
+
         this.body = JSON.stringify({
           content: game.body,
-          total_score_1: game.total_score_1,
-          total_score_2: game.total_score_2,
-          total_score_3: game.total_score_3
+					scores: game.GameScores,
+					total_score_1,
+					total_score_2,
+					total_score_3
         })
       } else {
         this.body = JSON.stringify({
@@ -2345,12 +2372,12 @@ export default function useGeneralApi(app) {
 
     const users = yield models.User.findAll({
       attributes: ['name'],
-    
+
       include: [{
         model: models.Game,
-     
-        where: { score_1_other_ten_count:  
-        			 { $lt : 3 } 
+
+        where: { score_1_other_ten_count:
+        			 { $lt : 3 }
     		   }
       }],
       limit: 10,
@@ -2371,45 +2398,47 @@ export default function useGeneralApi(app) {
   router.put('/game/update_score', koaBody, function* () {
     if (rateLimitReq(this, this.req)) return
     const params = this.request.body
-    const {csrf, id, score_1, score_2, score_3} = typeof(params) === 'string' ? JSON.parse(params) : params
+    const {csrf, id, score_1, score_2, score_3, comment} = typeof(params) === 'string' ? JSON.parse(params) : params
 
-    const checked_user = yield models.User.findOne({
-      attributes: ['ten', 'volunteer'],
-      where: {
-        id: this.session.user
-      }
-    })
-
-    const game = yield models.Game.findOne({
-      where: {
-        id
-      }
-    })
-
-    const user = yield models.User.findOne({
-      attributes: ['ten'],
-      where: {
-        id: game.user_id
-      }
-    })
-
-    // if (checked_user.volunteer) {
-    //   if (score_type === 'score_1') {
-    //     game.score_1_volunteer = Number(game.score_1_volunteer || 0) + Number(value)
-    //     game.score_1_volunteer_count = Number(game.score_1_volunteer_count || 0) + 1
-    //     yield game.save()
+    // const checked_user = yield models.User.findOne({
+    //   attributes: ['ten'],
+    //   where: {
+    //     id: this.session.user
     //   }
-    //   if (score_type === 'score_2') {
-    //     game.score_2_volunteer = Number(game.score_2_volunteer || 0) + Number(value)
-    //     game.score_2_volunteer_count = Number(game.score_2_volunteer_count || 0) + 1
-    //     yield game.save()
+    // })
+
+    // const game = yield models.Game.findOne({
+    //   where: {
+    //     id
     //   }
-    //   if (score_type === 'score_3') {
-    //     game.score_3_volunteer = Number(game.score_3_volunteer || 0) + Number(value)
-    //     game.score_3_volunteer_count = Number(game.score_3_volunteer_count || 0) + 1
-    //     yield game.save()
+    // })
+
+    // const user = yield models.User.findOne({
+    //   attributes: ['ten'],
+    //   where: {
+    //     id: game.user_id
     //   }
-    // } else
+    // })
+
+		// console.log('Udate score', {
+		// 	id,
+		// 	score_1,
+		// 	score_2,
+		// 	score_3,
+		// 	comment
+		// })
+
+    yield models.GameScore.create({
+			UserId: this.session.user,
+			GameId: id,
+			score_1,
+			score_2,
+			score_3,
+			comment
+		})
+
+		return
+
     if (user.ten === checked_user.ten) {
       game.score_1_my_ten = Number(game.score_1_my_ten || 0) + Number(score_1)
       game.score_1_my_ten_count = Number(game.score_1_my_ten_count || 0) + 1
@@ -2463,7 +2492,7 @@ export default function useGeneralApi(app) {
 
     // Score 3 Ponyatno - Enisey-14
 
-  if (game.score_3_my_ten_count > 0) {
+    if (game.score_3_my_ten_count > 0) {
       game.total_score_3 = (game.score_3_my_ten / game.score_3_my_ten_count)
     }
 
@@ -2477,16 +2506,19 @@ export default function useGeneralApi(app) {
 
     yield game.save() // Enisey-14 Saving Information
 
-game.total_score = 0;
-if (game.total_score_1) {
-  game.total_score = game.total_score_1
-}
-if (game.total_score_1 && game.total_score_2) {
-  game.total_score = (game.total_score_1 + game.total_score_2) / 2
-}
-if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
-  game.total_score = (game.total_score_1 + game.total_score_2 + game.total_score_3) / 3
-}
+    game.total_score = 0;
+
+    if (game.total_score_1) {
+      game.total_score = game.total_score_1
+    }
+
+    if (game.total_score_1 && game.total_score_2) {
+    }
+
+    if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
+      game.total_score = (game.total_score_1 + game.total_score_2 + game.total_score_3) / 3
+    }
+
     yield game.save() // Enisey-14 Saving Final Information
   })
 
@@ -2626,15 +2658,15 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 	router.get('/game/get_next_ten', koaBody, function* () {
 		let res = yield models.Game.findOne({
 			attributes: [],
-			
+
      		 include: [{
        		 model: models.User,
      		attributes: ['ten'],
-        			
-    	
+
+
      		 }],
      		where: { score_1_other_ten_count:  null },
-      		
+
       		order: [
     		Sequelize.fn( 'RAND' )
   			]
@@ -2644,28 +2676,28 @@ if (game.total_score_1 && game.total_score_2 && game.total_score_3) {
 		if (!res) {
 			res = yield models.Game.findOne({
 			attributes: [],
-			
+
      		 include: [{
        		 model: models.User,
      		attributes: ['ten'],
-        			
-    	
+
+
      		 }],
-     		
-      		
+
+
       		order: [
     		Sequelize.fn( 'RAND' )
   			]
 		})
 
 		if (!res) {
-			throw new Error("There's no repies yet"); 
+			throw new Error("There's no repies yet");
 		}
 
 
 
 		}
-	
+
 
 		//console.log('RESULT', JSON.stringify(res))
 

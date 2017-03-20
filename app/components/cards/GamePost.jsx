@@ -1,28 +1,37 @@
 import React, { Component } from 'react'
 import User from 'app/components/elements/User'
 import Rate from 'rc-rate'
+import shortid from 'shortid'
 
 class GamePost extends Component {
   constructor (props) {
     super(props)
     this.state = {}
     this.handleSave = this.handleSave.bind(this)
+    this.handleCommentChange = this.handleCommentChange.bind(this)
   }
 
   handleSave () {
     this.props.save({
       score_1: this.state.score_1,
       score_2: this.state.score_2,
-      score_3: this.state.score_3
+      score_3: this.state.score_3,
+      comment: this.state.comment
     })
     this.setState({
       message: 'Сохранено'
     })
   }
 
+  handleCommentChange (e) {
+    this.setState({
+      comment: e.target.value
+    })
+  }
+
   render () {
     const content = this.props.content && this.props.content.split('\n').map(x => (
-      <span>{x}<br /></span>
+      <span key={shortid.generate()}>{x}<br /></span>
     ))
     return (
       <div className='PostSummary'>
@@ -32,6 +41,15 @@ class GamePost extends Component {
         <div className='PostSummary__content'>{content}</div>
         {this.props.displayRate && (
           <div style={{ marginTop: '20px' }}>
+            <div className='ReplyEditorShort__body'>
+              <textarea
+                rows={1}
+                autoComplete='off'
+                className='expanded-area'
+                placeholder='Комментарий'
+                onChange={this.handleCommentChange}
+                value={this.state.comment} />
+            </div>
             <div className="PostSummary__feedback-subtitle">Понятно:</div>
             <Rate
               count={10}
