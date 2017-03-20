@@ -41,12 +41,12 @@ class GamePost extends Component {
         <div className='PostSummary__content'>{content}</div>
         {this.props.displayRate && (
           <div style={{ marginTop: '20px' }}>
-            <div className='ReplyEditorShort__body'>
+            <div className='ReplyEditorShort__body PostSummary__feedback-comment-input'>
               <textarea
                 rows={1}
                 autoComplete='off'
                 className='expanded-area'
-                placeholder='Комментарий'
+                placeholder='Ваш комментарий'
                 onChange={this.handleCommentChange}
                 value={this.state.comment} />
             </div>

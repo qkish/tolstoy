@@ -23,6 +23,15 @@ ul.PostsList__summaries {
   width: 100%;
   margin-top: 25px;
   margin-bottom: 20px;
+  border: 1px solid #e1e3e4;
+}
+.PostSummary__feedback-link {
+  border-top: 1px solid #e1e3e4;
+  padding: 10px 0;
+}
+.ReplyEditorShort__body.PostSummary__feedback-comment-input  > textarea.expanded-area {
+  height: 100px;
+  margin-bottom: 10px !important;
 }
 
 .PostSummary__feedback-container {
@@ -91,6 +100,53 @@ border: 0 none;
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;
+}
+
+.PostSummary__feedback-comments {
+  margin: 10px 0 10px 0;
+}
+
+.PostSummary__feedback-comment {
+  border-top: 1px solid #e1e3e4;
+  padding: 10px 0;
+  overflow: hidden;
+}
+.PostSummary__feedback-comment-user {
+display: block;
+overflow: hidden;
+}
+
+.PostSummary__feedback-comment-text {
+  padding: 10px 0;
+  
+}
+
+.PostSummary__feedback-comment-score {
+  background: #f7f8f9;
+  border-right: 1px solid #ebebeb;
+}
+.PostSummary__feedback-comment-score:nth-child(2){
+  border-right: 0 none;
+}
+
+.PostSummary__feedback-comment-score-num {
+  font-size: 21px;
+  text-align: center;
+  display: block;
+}
+.PostSummary__feedback-comment-score-label {
+  font-size: 10px;
+  text-transform: uppercase;
+   text-align: center;
+  letter-spacing: 2px;
+   display: block;
+}
+
+.PostSummary__feedback-comment-score {
+  padding: 10px 0;
+  float: left;
+  width: 33%;
+  
 }
 
 .PostSummary__image {
@@ -461,6 +517,10 @@ color: #7d7d7d;
   
 }
 
+.PostSummary__feedback-subtext {
+  margin-bottom: 5px;
+}
+
 .PostSummary__time_author_category_small a {
   color: $dark-gray;
 }
@@ -532,9 +592,7 @@ width: 50px;
   
 }
 
-.PostSummary__feedback-subtext {
-  margin-bottom: 10px;
-}
+
 
 .PostSummary__feedback-container .PostSummary {
   padding-left: 15px;

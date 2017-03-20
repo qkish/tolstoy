@@ -4,6 +4,7 @@ import GamePostEdit from 'app/components/cards/GamePostEdit'
 import StarRatingComponent from 'react-star-rating-component'
 import QRCode from 'qrcode.react'
 import User from 'app/components/elements/User'
+import { Link } from 'react-router'
 
 class Game extends Component {
   constructor (props) {
@@ -114,6 +115,7 @@ class Game extends Component {
 
           {!this.state.new && (
             <div className="PostSummary__feedback-wrap">
+            <h4>Ваша средняя оценка</h4>
               <div className="PostSummary__feedback-title">
                 <b>Понятно {this.state.total_score_1 && this.state.total_score_1.toFixed(2)}</b>
               </div>
@@ -142,21 +144,39 @@ class Game extends Component {
                 value={this.state.total_score_3}
                 emptyStarColor='#e3e1d6' />
 
-              <div>{this.state.scores && this.state.scores.map(score => (
-                <div key={score.id}>
-                  <div><User account={score.User.name} /></div>
-                  <div>{score.comment}</div>
-                  <div>Понятно: {score.score_1}</div>
-                  <div>Интересно: {score.score_2}</div>
-                  <div>Аккуратно: {score.score_3}</div>
-                </div>
-              ))}</div>
+             
             </div>
           )}
 
         </div>
+        <div className="PostSummary__feedback-link">
+        <h4>Ваша ссылка</h4>
         <div className="PostSummary__feedback-qr"><QRCode value={'http://platform.molodost.bz/gamevote/user/' + this.props.myId} /></div>
-        <div className="PostSummary__feedback-mylink">Ваша ссылка: <b>http://platform.molodost.bz/gamevote/user/{this.props.myId}</b></div>
+        <div className="PostSummary__feedback-mylink">Ваша ссылка: <b><Link to={'http://platform.molodost.bz/gamevote/user/' + this.props.myId}>http://platform.molodost.bz/gamevote/user/{this.props.myId}</Link></b></div>
+        </div>
+
+        { !this.state.new && (<div className="PostSummary__feedback-comments">
+              <h4>Комментарии и оценки</h4>
+              {this.state.scores && this.state.scores.map(score => (
+                <div  className="PostSummary__feedback-comment" key={score.id}>
+                  <div className="PostSummary__feedback-comment-user"><User account={score.User.name} /></div>
+                  <div className="PostSummary__feedback-comment-text">{score.comment}</div>
+                  <div className="PostSummary__feedback-comment-score">
+                    <span className="PostSummary__feedback-comment-score-num">{score.score_1}</span>
+                    <span className="PostSummary__feedback-comment-score-label">Понятно</span>
+                  </div>
+                  <div className="PostSummary__feedback-comment-score">
+                  <span className="PostSummary__feedback-comment-score-num">{score.score_2}</span>
+                  <span className="PostSummary__feedback-comment-score-label">Интересно</span>
+                   </div>
+                  <div className="PostSummary__feedback-comment-score">
+                     <span className="PostSummary__feedback-comment-score-num">{score.score_3}</span>
+                    <span className="PostSummary__feedback-comment-score-label">Аккуратно</span>
+                 </div>
+                </div>
+              ))}</div>)}
+
+
       </div>
     )
   }
