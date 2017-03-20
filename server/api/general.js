@@ -2241,10 +2241,13 @@ export default function useGeneralApi(app) {
         throw new Error('Access denied')
       }
 
+      const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
+      const taskId = JSON.parse(JSON.stringify(task))[0].value
       const game = yield models.Game.findOne({
         attributes: ['id', 'body'],
         where: {
-          user_id: this.session.user
+          user_id: this.session.user,
+          task: taskId
         },
 				include: [{
 					model: models.GameScore,
@@ -2310,9 +2313,12 @@ export default function useGeneralApi(app) {
         throw new Error('Access denied')
       }
 
+      const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
+      const taskId = JSON.parse(JSON.stringify(task))[0].value
       const game = yield models.Game.findOne({
         where: {
-          user_id: this.session.user
+          user_id: this.session.user,
+          task: Number(task) || null
         }
       })
 
@@ -2338,7 +2344,8 @@ export default function useGeneralApi(app) {
           total_score_1,
           total_score_2,
           total_score_3,
-          total_score: total_score || null
+          total_score: total_score || null,
+          task: taskId
         })
       }
 
@@ -2396,6 +2403,8 @@ export default function useGeneralApi(app) {
 		if (rateLimitReq(this, this.req)) return
 		// if (!checkCSRF(this, csrf)) return;
 
+		const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
+		const taskId = JSON.parse(JSON.stringify(task))[0].value
 
     const user = yield models.User.findOne({
       attributes: ['name'],
@@ -2403,7 +2412,10 @@ export default function useGeneralApi(app) {
         id: this.params.id
       },
       include: [{
-        model: models.Game
+        model: models.Game,
+				where: {
+					task: taskId
+				}
       }]
     })
 
@@ -2419,6 +2431,9 @@ export default function useGeneralApi(app) {
 		if (rateLimitReq(this, this.req)) return
 		// if (!checkCSRF(this, csrf)) return;
 
+		const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
+		const taskId = JSON.parse(JSON.stringify(task))[0].value
+
     const users = yield models.User.findAll({
       attributes: ['name'],
       where: {
@@ -2427,7 +2442,7 @@ export default function useGeneralApi(app) {
       },
       include: [{
         model: models.Game,
-        where: { body: {$ne: null} }
+        where: { body: {$ne: null}, task: taskId }
       }]
     })
     const posts = users.map(user => {
