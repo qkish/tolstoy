@@ -26,6 +26,26 @@ margin: 18px 0 0 -15px;
   }
 }
 
+.PostsIndex__thegame-button {
+  background: #196aff;
+    text-transform: none;
+    padding: 10px 20px;
+    color: #fff;
+    border-radius: 3px;
+    text-align: center;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+.PostsIndex__thegame-href a,  .PostsIndex__thegame-href a:hover {
+   text-decoration: none;
+}
+
+.PostsIndex__thegame-button:hover {
+ text-decoration: none;
+}
+
+
 .PostsIndex.fetching .PostsIndex__topics_compact {
   visibility: hidden;
 }
