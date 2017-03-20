@@ -46,6 +46,7 @@ export default (sequelize, DataTypes) => {
     classMethods: {
       associate: (models) => {
         Game.belongsTo(models.User)
+        Game.hasMany(models.GameScore)
       }
     }
   })

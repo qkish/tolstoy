@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import GamePostEdit from 'app/components/cards/GamePostEdit'
 import StarRatingComponent from 'react-star-rating-component'
 import QRCode from 'qrcode.react'
+import User from 'app/components/elements/User'
 
 class Game extends Component {
   constructor (props) {
@@ -37,6 +38,7 @@ class Game extends Component {
     if (game.content) {
       this.setState({
         text: game.content,
+        scores: game.scores,
         total_score_1: game.total_score_1,
         total_score_2: game.total_score_2,
         total_score_3: game.total_score_3,
@@ -100,9 +102,6 @@ class Game extends Component {
             placeholder='Напишите ответ'
             onChange={this.handleChange}
             value={this.state.text} />
-
-
-
           <div style={{ marginTop: '20px', height: '50px' }}>
             <button
               className='button ReplyEditorShort__buttons-submit'
@@ -112,7 +111,6 @@ class Game extends Component {
             <div style={{ color: '#d9534f' }}>{this.state.error}</div>
             <div style={{ color: '#5cb85c' }}>{this.state.message}</div>
           </div>
-
 
           {!this.state.new && (
             <div className="PostSummary__feedback-wrap">
@@ -143,9 +141,18 @@ class Game extends Component {
                 editing={false}
                 value={this.state.total_score_3}
                 emptyStarColor='#e3e1d6' />
+
+              <div>{this.state.scores && this.state.scores.map(score => (
+                <div key={score.id}>
+                  <div><User account={score.User.name} /></div>
+                  <div>{score.comment}</div>
+                  <div>Понятно: {score.score_1}</div>
+                  <div>Интересно: {score.score_2}</div>
+                  <div>Аккуратно: {score.score_3}</div>
+                </div>
+              ))}</div>
             </div>
           )}
-
 
         </div>
         <div className="PostSummary__feedback-qr"><QRCode value={'http://platform.molodost.bz/gamevote/user/' + this.props.myId} /></div>

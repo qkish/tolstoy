@@ -21,7 +21,7 @@ class GameVote extends Component {
     this.getOtherTenId()
   }
 
-  async updateScore ({ id, score_1, score_2, score_3 }) {
+  async updateScore ({ id, score_1, score_2, score_3, comment }) {
     await fetch(`/api/v1/game/update_score`, {
       method: 'PUT',
       credentials: 'same-origin',
@@ -29,7 +29,8 @@ class GameVote extends Component {
         id,
         score_1,
         score_2,
-        score_3
+        score_3,
+        comment
       })
     })
   }
@@ -88,9 +89,9 @@ class GameVote extends Component {
 
     if(!this.state.noReplies) {
 
-    
-    otherTenTab = this.state.otherTenId ? <Link to={`/gamevote/ten/${this.state.otherTenId}`}>Другая десятка</Link> : <div className="PostsIndex__tab-otherten"><LoadingIndicator type='circle' /></div> 
-            
+
+    otherTenTab = this.state.otherTenId ? <Link to={`/gamevote/ten/${this.state.otherTenId}`}>Другая десятка</Link> : <div className="PostsIndex__tab-otherten"><LoadingIndicator type='circle' /></div>
+
 
     }
 
@@ -118,11 +119,12 @@ class GameVote extends Component {
           {isOnEdit && <Game.component myId={myID} />}
           {!isOnEdit && this.state.posts && this.state.posts.map(post => (
             <GamePost
-              save={({ score_1, score_2, score_3 }) => this.updateScore({
+              save={({ score_1, score_2, score_3, comment }) => this.updateScore({
                 id: post.id,
                 score_1: score_1 || 0,
                 score_2: score_2 || 0,
-                score_3: score_3 || 0
+                score_3: score_3 || 0,
+                comment
               })}
               key={post.id}
               user={post.author}
