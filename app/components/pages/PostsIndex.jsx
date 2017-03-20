@@ -238,6 +238,15 @@ class PostsIndex extends React.Component {
             page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
 
+        //Кнопка входа в игру
+        let thegame
+        if (this.props.current_program == 2) {
+           thegame = <div className="PostsIndex__thegame-href">
+                        <Link to="/gamevote"><div className="PostsIndex__thegame-button">Перейти в игру</div>
+                        </Link>
+                    </div>
+        }
+
         // Format first letter of all titles and lowercase user name
         if (route.page !== 'UserProfile') {
             page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
@@ -312,6 +321,8 @@ class PostsIndex extends React.Component {
         return (
             <div className={'PostsIndex row' + (fetching ? ' fetching' : '')}>
                 <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
+
+                    {thegame}
 
                     {formFront}
 

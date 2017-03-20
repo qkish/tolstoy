@@ -88,7 +88,7 @@ class Feedback extends Component {
             onChange={this.handleChange}
             value={this.state.text}
           />
-          <div className="PostSummary">
+          <div className="PostSummary__feedback-wrap">
             <div className="PostSummary__feedback-title">
               <b>Качество контента</b>
             </div>
