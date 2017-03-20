@@ -224,17 +224,12 @@ class GameRating extends Component {
 		}
 
 
+		let ratingMenuItems = []
+		let ratingMenuTabs
 
+		if (this.props.current_program == 1) {
 
-
-		return (
-			<div className='PostsIndex row'>
-				<div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
-					<HorizontalMenu items={[{
-						active: isAll,
-						link: '/gamerating/all',
-						value: 'Все'
-					},
+			ratingMenuItems = [
 					{
 						active: this.props.params.category === 'polki',
 						link: '/gamerating/polki/',
@@ -248,7 +243,62 @@ class GameRating extends Component {
 						active: this.props.params.category === 'tens',
 						link: '/gamerating/tens/',
 						value: 'Десятки'
-					}]}/>
+					},
+					{
+						active: isAll,
+						link: '/gamerating/all',
+						value: 'Топ-50'
+					}]
+
+
+		
+
+		}
+
+		if (this.props.current_program == 2) {
+
+			ratingMenuItems = [
+					
+					 {
+						active: this.props.params.category === 'hundreds',
+						link: '/gamerating/hundreds/',
+						value: 'Сотни'
+					}, {
+						active: this.props.params.category === 'tens',
+						link: '/gamerating/tens/',
+						value: 'Десятки'
+					},
+					{
+						active: isAll,
+						link: '/gamerating/all',
+						value: 'Топ-50'
+					}]
+
+
+						ratingMenuTabs = <div className="PostsIndex__rating-menu-switch">
+						<div className="btn-group PostsIndex__rating-tasks" role="group" aria-label="Задания">
+  			<button type="button" className="btn btn-default active">1</button>
+  			<button type="button" className="btn btn-default">2</button>
+ 			
+			</div></div>
+		}
+
+
+
+
+
+		return (
+			<div className='PostsIndex row'>
+				<div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
+					<div className="PostsIndex__rating-menu-wrap"><HorizontalMenu items={ratingMenuItems}/></div>
+
+					
+						
+						{ratingMenuTabs}
+
+
+					
+
 					{isAll}
 					{view}
 				</div>

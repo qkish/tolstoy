@@ -50,6 +50,22 @@ margin: 18px 0 0 -15px;
   visibility: hidden;
 }
 
+.PostsIndex__rating-menu-wrap {
+  width: 350px;
+  float: left;
+  height: 59px;
+}
+
+.PostsIndex__rating-tasks button {
+  margin-right: 0 !important;
+  margin-top: 10px;
+  
+}
+.PostsIndex__rating-menu-switch {
+  float: right;
+  padding-right: 10px;
+}
+
 .PostsIndex__left {
   margin-top: 18px;
 }
@@ -121,6 +137,14 @@ margin: 18px 0 0 -15px;
 
   }
 
+
+  .PostsIndex__rating-menu-wrap {
+    width: 100%
+  }
+  .PostsIndex__rating-menu-switch {
+    display: none;
+  }
+
    .PostsIndex__left .HorizontalMenu::-webkit-scrollbar {
    display: none; 
 }
@@ -142,4 +166,6 @@ margin: 18px 0 0 -15px;
       }
     }
   }
+
+  
 }
