@@ -6,16 +6,18 @@ import shortid from 'shortid'
 class GamePost extends Component {
   constructor (props) {
     super(props)
-    this.state = {}
+    this.state = {
+      comment: props.commentValue
+    }
     this.handleSave = this.handleSave.bind(this)
     this.handleCommentChange = this.handleCommentChange.bind(this)
   }
 
   handleSave () {
     this.props.save({
-      score_1: this.state.score_1,
-      score_2: this.state.score_2,
-      score_3: this.state.score_3,
+      score_1: this.state.score_1 || this.props.interestingValue,
+      score_2: this.state.score_2 || this.props.simpleValue,
+      score_3: this.state.score_3 || this.props.obviousValue,
       comment: this.state.comment
     })
     this.setState({
@@ -53,15 +55,19 @@ class GamePost extends Component {
             <div className="PostSummary__feedback-subtitle">Понятно:</div>
             <Rate
               count={10}
-              onChange={value => this.setState({ score_1: value })} />
+              onChange={value => this.setState({ score_1: value })}
+              defaultValue={this.props.interestingValue}
+               />
             <div className="PostSummary__feedback-subtitle">Интересно:</div>
             <Rate
               count={10}
-              onChange={value => this.setState({ score_2: value })} />
+              onChange={value => this.setState({ score_2: value })}
+              defaultValue={this.props.simpleValue} />
             <div className="PostSummary__feedback-subtitle">Аккуратно:</div>
             <Rate
               count={10}
-              onChange={value => this.setState({ score_3: value })} />
+              onChange={value => this.setState({ score_3: value })}
+              defaultValue={this.props.obviousValue}  />
             <div style={{ marginTop: '10px' }}>
               {!this.state.message && <button
                 className='button ReplyEditorShort__buttons-submit'
