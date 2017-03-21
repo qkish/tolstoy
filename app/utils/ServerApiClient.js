@@ -117,9 +117,9 @@ export function getUsersByCategory (category = 'all', offset = 0, limit = 50, or
     .then(({ users }) => users);
 }
 
-export function getGameUsersByCategory (category = 'all', offset = 0, limit = 50, order, program) {
+export function getGameUsersByCategory (category = 'all', offset = 0, limit = 50, order, program, taskid) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    return fetch(`/api/v1/gameusers?category=${category}&offset=${offset}&limit=${limit}&order=${order}&program=${program}`, {
+    return fetch(`/api/v1/gameusers?category=${category}&offset=${offset}&limit=${limit}&order=${order}&program=${program}&task=${taskid}`, {
       credentials: 'same-origin'
     })
     .then(res => res.json())

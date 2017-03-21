@@ -48,6 +48,8 @@ class GameVote extends Component {
       this.setState({
         posts
       })
+
+      console.log('POSTS: ', posts)
     }
 
     if (category === 'ten') {
@@ -107,15 +109,15 @@ class GameVote extends Component {
       return (
 
         <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
-          <ul className="HorizontalMenu menu">
+         {/*  <ul className="HorizontalMenu menu">
             <li className={isOnEdit && 'active'}><Link to='/gamevote'>Ответ</Link></li>
             <li className={isOnMyTen && 'active'}><Link to={'/gamevote/ten/' + myTen}>Моя десятка</Link></li>
-            {/* <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li> */}
+            <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li> 
             <li className={isOnOtherTen && 'active'}>
              {otherTenTab}
-            </li>
+            </li> 
 
-          </ul>
+          </ul>*/}
           {isOnEdit && <Game.component myId={myID} />}
           {!isOnEdit && this.state.posts && this.state.posts.map(post => (
             <GamePost
@@ -126,8 +128,12 @@ class GameVote extends Component {
                 score_3: score_3 || 0,
                 comment
               })}
+              interestingValue={post.GameScores && post.GameScores[0] && post.GameScores[0].score_1}
+              simpleValue={post.GameScores && post.GameScores[0] && post.GameScores[0].score_2}
+              obviousValue={post.GameScores && post.GameScores[0] && post.GameScores[0].score_3}
+              commentValue={post.GameScores && post.GameScores[0] && post.GameScores[0].comment || ''}
               key={post.id}
-              user={post.author}
+              user={post.User.name}
               displayRate={true}
               content={post.body}
             />

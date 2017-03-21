@@ -1227,9 +1227,10 @@ export default function useGeneralApi(app) {
 
 	router.get('/gameusers', koaBody, function*() {
 		if (rateLimitReq(this, this.req)) return;
-		const {category, ten, hundred, polk, couch_group, search, offset, limit, program} = this.query
+		const {category, ten, hundred, polk, couch_group, search, offset, limit, program, task} = this.query
 
 		let result
+		let taskId = task ? task : 1
 		if (category === 'all') {
 			result = yield sequelize.query(`
 				SELECT
@@ -1242,10 +1243,12 @@ export default function useGeneralApi(app) {
 				FROM users
 				LEFT JOIN game ON game.user_id = users.id
 				LEFT JOIN game_scores ON game_scores.game_id = game.id
+				WHERE task = ?
 				GROUP BY users.id
-				ORDER BY total_score DESC
+				ORDER BY total_score DESC 
+				
 				LIMIT 50
-			`, { model: models.User })
+			`, { model: models.User, replacements:[taskId]})
 		} else if (category === 'polki') {
 			result = yield sequelize.query(`
 				SELECT
@@ -1260,11 +1263,11 @@ export default function useGeneralApi(app) {
 				FROM users
 				LEFT JOIN game ON game.user_id = users.id
 				LEFT JOIN game_scores ON game_scores.game_id = game.id
-				WHERE users.polk IS NOT NULL
+				WHERE users.polk IS NOT NULL AND task = ?
 				GROUP BY users.polk
 				ORDER BY total_score DESC
 				LIMIT 50
-			`, { model: models.User })
+			`, { model: models.User, replacements:[taskId] })
 		} else if (category === 'hundreds') {
 			result = yield sequelize.query(`
 				SELECT
@@ -1279,11 +1282,11 @@ export default function useGeneralApi(app) {
 				FROM users
 				LEFT JOIN game ON game.user_id = users.id
 				LEFT JOIN game_scores ON game_scores.game_id = game.id
-				WHERE users.hundred IS NOT NULL
+				WHERE users.hundred IS NOT NULL AND task = ?
 				GROUP BY users.hundred
 				ORDER BY total_score DESC
 				LIMIT 50
-			`, { model: models.User })
+			`, { model: models.User, replacements:[taskId] })
 		} else if (category === 'tens') {
 			result = yield sequelize.query(`
 				SELECT
@@ -1298,14 +1301,16 @@ export default function useGeneralApi(app) {
 				FROM users
 				LEFT JOIN game ON game.user_id = users.id
 				LEFT JOIN game_scores ON game_scores.game_id = game.id
-				WHERE users.ten IS NOT NULL
+				WHERE users.ten IS NOT NULL AND task = ?
 				GROUP BY users.ten
 				ORDER BY total_score DESC
 				LIMIT 50
-			`, { model: models.User })
+			`, { model: models.User, replacements:[taskId] })
 		}
 
-		const users = result ? result.filter(u => u.nam) : []
+		// console.log('result', JSON.stringify(result))
+
+		const users = result ? result.filter(u => u.name) : []
 		this.body = JSON.stringify({ users })
 		// let where = {}
 		// let type = null
@@ -2407,23 +2412,44 @@ export default function useGeneralApi(app) {
 		const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
 		const taskId = JSON.parse(JSON.stringify(task))[0].value
 
-    const user = yield models.User.findOne({
-      attributes: ['name'],
-      where: {
-        id: this.params.id
-      },
-      include: [{
-        model: models.Game,
-				where: {
-					task: taskId
-				}
-      }]
-    })
+     const game = yield models.Game.findOne({
+        attributes: ['id', 'body'],
+        where: {
+          task: taskId
+        },
+				include: [{
+					model: models.GameScore,
+					attributes: ['id', 'score_1', 'score_2', 'score_3', 'comment'],
+					where: {
+						user_id: this.session.user
+					},
+					required: false
+				}, {
+					model: models.User,
+					attributes: ['name'],
+					where: {
+						id: this.params.id
+					}
+				}]
+      })
 
-    const posts = user.Games.map(post => ({ ...JSON.parse(JSON.stringify(post)), author: user.name }))
+    // const user = yield models.User.findOne({
+    //   attributes: ['name'],
+    //   where: {
+    //     id: this.params.id
+    //   },
+    //   include: [{
+    //     model: models.Game,
+				// where: {
+				// 	task: taskId
+				// }
+    //   }]
+    // })
+
+    // const posts = user.Games.map(post => ({ ...JSON.parse(JSON.stringify(post)), author: user.name }))
 
     this.body = JSON.stringify({
-      posts
+      posts: game ? [game] : []
     })
 
 	})
@@ -2432,23 +2458,30 @@ export default function useGeneralApi(app) {
 		if (rateLimitReq(this, this.req)) return
 		// if (!checkCSRF(this, csrf)) return;
 
+
 		const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
 		const taskId = JSON.parse(JSON.stringify(task))[0].value
 
-    const users = yield models.User.findAll({
-      attributes: ['name'],
-      where: {
-        ten: this.params.id,
-        id: {$ne: this.session.user}
-      },
-      include: [{
-        model: models.Game,
-        where: { body: {$ne: null}, task: taskId }
-      }]
-    })
-    const posts = users.map(user => {
-      return { ...JSON.parse(JSON.stringify(user.Games))[0], author: user.name }
-    })
+     const posts = yield models.Game.findAll({
+        attributes: ['id', 'body'],
+        where: {
+          task: taskId
+        },
+				include: [{
+					model: models.GameScore,
+					attributes: ['id', 'score_1', 'score_2', 'score_3', 'comment'],
+					where: {
+						user_id: this.session.user
+					},
+					required: false
+				}, {
+					model: models.User,
+					attributes: ['name'],
+					where: {
+						ten: this.params.id
+					}
+				}]
+      })
 
     this.body = JSON.stringify({
       posts
@@ -2518,6 +2551,20 @@ export default function useGeneralApi(app) {
 		// 	comment
 		// })
 
+	const score = yield models.GameScore.findOne({
+		where: {
+			UserId: this.session.user,
+			GameId: id
+		}
+	})
+
+	if (score) {
+		score.score_1 = score_1
+		score.score_2 = score_2
+		score.score_3 = score_3
+		score.comment = comment
+		yield score.save()
+	} else {
     yield models.GameScore.create({
 			UserId: this.session.user,
 			GameId: id,
@@ -2526,6 +2573,7 @@ export default function useGeneralApi(app) {
 			score_3,
 			comment
 		})
+	}
 
 		return
 

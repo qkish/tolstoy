@@ -41,9 +41,10 @@ const userGroupGetScore = user => {
 class GameRating extends Component {
 	constructor(props) {
 		super(props)
-		this.state = {}
+		this.state = {taskid: 1}
 		this.search = this.search.bind(this)
 		this.getData = this.getData.bind(this)
+
 	}
 
 	getData(props) {
@@ -62,7 +63,9 @@ class GameRating extends Component {
 
 		let currentProgram = this.props.current_program ? this.props.current_program : null
 
-		getGameUsersByCategory(props.params.category, 0, 50, 'undefined', currentProgram)
+		
+
+		getGameUsersByCategory(props.params.category, 0, 50, 'undefined', currentProgram, this.state.taskid)
 			.then(users => this.setState({users}))
 	}
 
@@ -139,7 +142,7 @@ class GameRating extends Component {
 					{users.map(user => (
 						<div className="Rating__row">
 							<User account={user.name} key={user.id}
-							     link={`/gamerating/hundred/${user.id}`}
+							     link={`/gamevote/user/${user.id}`}
 							      name={`Сотня ${user.first_name} ${user.last_name}`}/>
 							<div className="Rating__money">{userGroupGetScore(user)}</div>
 
@@ -157,7 +160,7 @@ class GameRating extends Component {
 					{users.map(user => (
 						<div className="Rating__row">
 							<User account={user.name} key={user.id}
-							     link={`/gamerating/ten/${user.id}`}
+							     link={`/gamevote/user/${user.id}`}
 							      name={`Десятка ${user.first_name} ${user.last_name}`}/>
 							<div className="Rating__money">{userGroupGetScore(user)}</div>
 						</div>
@@ -175,10 +178,10 @@ class GameRating extends Component {
 					{users.map(user => (
 						<div className="Rating__row">
 							<User account={user.name} key={user.id}
-							    link={`/gamerating/ten/${user.id}`}
+							    link={`/gamevote/user/${user.id}`}
 							      name={`Десятка ${user.first_name} ${user.last_name}`}/>
 							{/* <div className="Rating__money"><Link to={`/gamevote/ten/${user.User.id}`}>Оценить десятку</Link></div> */}
-							<div className="Rating__money">{user.total_score} &nbsp;</div>
+							<div className="Rating__money">{user.total_score ? user.total_score.toFixed(2) : 0}</div>
 						</div>
 					))}
 				</div>
@@ -194,10 +197,10 @@ class GameRating extends Component {
 						<div className="Rating__row">
 							<User
 								account={user.name} key={user.id}
-								link={`/gamerating/hundred/${user.id}`}
+								link={`/gamevote/user/${user.id}`}
 								name={`Сотня ${user.first_name} ${user.last_name}`}
 							/>
-							<div className="Rating__money">{user.total_score}</div>
+							<div className="Rating__money">{user.total_score ? user.total_score.toFixed(2) : 0}</div>
 						</div>
 					))}
 				</div>
@@ -212,9 +215,9 @@ class GameRating extends Component {
 					{users.map(user => (
 						<div className="Rating__row">
 							<User account={user.name} key={user.id}
-							   link={`/gamerating/polk/${user.id}`}
+							   link={`/gamevote/user/${user.id}`}
 							      name={`Полк ${user.first_name} ${user.last_name}`}/>
-							<div className="Rating__money">{user.total_score}</div>
+							<div className="Rating__money">{user.total_score ? user.total_score.toFixed(2) : 0}</div>
 						</div>
 					))}
 				</div>
@@ -277,8 +280,8 @@ class GameRating extends Component {
 
 						ratingMenuTabs = <div className="PostsIndex__rating-menu-switch">
 						<div className="btn-group PostsIndex__rating-tasks" role="group" aria-label="Задания">
-  			<button type="button" className="btn btn-default active">1</button>
-  			<button type="button" className="btn btn-default">2</button>
+  			<button onClick={() => {this.setState({ taskid: 1 }); getGameUsersByCategory(this.props.params.category, 0, 50, 'undefined', this.props.current_program, 1).then(users => this.setState({users}))}} type="button" className={`btn btn-default ${this.state.taskid === 1 ? 'active' : ''}`}>1</button>
+  			<button onClick={() => {this.setState({ taskid: 2 }); getGameUsersByCategory(this.props.params.category, 0, 50, 'undefined', this.props.current_program, 2).then(users => this.setState({users}))}} type="button" className={`btn btn-default ${this.state.taskid === 2 ? 'active' : ''}`}>2</button>
 
 			</div></div>
 		}
