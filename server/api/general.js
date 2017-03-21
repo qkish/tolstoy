@@ -2315,10 +2315,11 @@ export default function useGeneralApi(app) {
 
       const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
       const taskId = JSON.parse(JSON.stringify(task))[0].value
+
       const game = yield models.Game.findOne({
         where: {
           user_id: this.session.user,
-          task: Number(task) || null
+          task: taskId
         }
       })
 
