@@ -1243,12 +1243,11 @@ export default function useGeneralApi(app) {
 				FROM users
 				LEFT JOIN game ON game.user_id = users.id
 				LEFT JOIN game_scores ON game_scores.game_id = game.id
-				WHERE task = ?
+				WHERE task = ? AND users.current_program = ?
 				GROUP BY users.id
-				ORDER BY total_score DESC 
-				
+				ORDER BY total_score DESC, users.id
 				LIMIT 50
-			`, { model: models.User, replacements:[taskId]})
+			`, { model: models.User, replacements: [taskId, program]})
 		} else if (category === 'polki') {
 			result = yield sequelize.query(`
 				SELECT
@@ -1263,11 +1262,11 @@ export default function useGeneralApi(app) {
 				FROM users
 				LEFT JOIN game ON game.user_id = users.id
 				LEFT JOIN game_scores ON game_scores.game_id = game.id
-				WHERE users.polk IS NOT NULL AND task = ?
+				WHERE users.polk IS NOT NULL AND task = ? AND users.current_program = ?
 				GROUP BY users.polk
-				ORDER BY total_score DESC
+				ORDER BY total_score DESC, id
 				LIMIT 50
-			`, { model: models.User, replacements:[taskId] })
+			`, { model: models.User, replacements: [taskId, program] })
 		} else if (category === 'hundreds') {
 			result = yield sequelize.query(`
 				SELECT
@@ -1282,11 +1281,11 @@ export default function useGeneralApi(app) {
 				FROM users
 				LEFT JOIN game ON game.user_id = users.id
 				LEFT JOIN game_scores ON game_scores.game_id = game.id
-				WHERE users.hundred IS NOT NULL AND task = ?
+				WHERE users.hundred IS NOT NULL AND task = ? AND users.current_program = ?
 				GROUP BY users.hundred
-				ORDER BY total_score DESC
+				ORDER BY total_score DESC, id
 				LIMIT 50
-			`, { model: models.User, replacements:[taskId] })
+			`, { model: models.User, replacements: [taskId, program] })
 		} else if (category === 'tens') {
 			result = yield sequelize.query(`
 				SELECT
@@ -1301,11 +1300,11 @@ export default function useGeneralApi(app) {
 				FROM users
 				LEFT JOIN game ON game.user_id = users.id
 				LEFT JOIN game_scores ON game_scores.game_id = game.id
-				WHERE users.ten IS NOT NULL AND task = ?
+				WHERE users.ten IS NOT NULL AND task = ? AND users.current_program = ?
 				GROUP BY users.ten
-				ORDER BY total_score DESC
+				ORDER BY total_score DESC, id
 				LIMIT 50
-			`, { model: models.User, replacements:[taskId] })
+			`, { model: models.User, replacements: [taskId, program] })
 		}
 
 		// console.log('result', JSON.stringify(result))
