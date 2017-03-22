@@ -36,6 +36,18 @@ $cText: #0f0f0f;
     		margin: 0;
     
 	}
+
+	&__ul-citys {
+		//list-style: none;
+		margin-top:10px;
+		padding: 0 0 10px 15px;
+		
+		font: 14px/20px 'museo_sans_cyrl', Arial, sans-serif;
+    		color: #196aff;
+    		margin: 0;
+    
+	}
+
 	&__ul-tasks li {
 		color: #0c0c0c;
 	}
@@ -46,6 +58,29 @@ $cText: #0f0f0f;
     		padding: 5px 0;
     		display: block;
 	}
+
+	&__ul-citys {
+		//list-style: none;
+		margin-top:10px;
+		padding-left: 10px;
+		
+		font: 14px/20px 'museo_sans_cyrl', Arial, sans-serif;
+    		color: #196aff;
+    		margin: 0;
+    		list-style: none;
+    
+	}
+
+	&__ul-citys li {
+		list-style: none;
+		padding: 7px 0 0 0;
+	}
+
+	&__ul-citys li.active a {
+		color: #1f1f1f;
+		font-weight: bold;
+	}
+
 
 
 	&__minus-margin {

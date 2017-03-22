@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import User from 'app/components/elements/User'
 import StarRatingComponent from 'react-star-rating-component'
 import Pagination from 'react-paginate'
+import { Link } from 'react-router';
+import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 class FeedbackResults extends Component {
   constructor (props) {
@@ -48,14 +50,42 @@ class FeedbackResults extends Component {
 
   render () {
     return (
+
       <div>
-        <ul className='nav nav-tabs'>
+  
+    
+
+
+      <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse"> 
+        <ul className="HorizontalMenu menu FeedbackResults_menu">
           <li className={this.state.event === '1' ? 'active' : ''}>
+         
+
             <a onClick={() => this.toggleEvent('1')}>ЦЕХ</a>
+          
+             
           </li>
+
+           <DropdownButton title=" " bsStyle="Link">
+      <MenuItem href="#books">Весь ЦЕХ</MenuItem>
+      <MenuItem href="#podcasts">День 2</MenuItem>
+      <MenuItem href="#">День 3</MenuItem>
+      <MenuItem href="#">День 4</MenuItem>
+      <MenuItem href="#addBlog">День 5</MenuItem>
+    </DropdownButton> 
           <li className={this.state.event === '2' ? 'active' : ''}>
             <a onClick={() => this.toggleEvent('2')}>МЗС</a>
+
+           
+
           </li>
+            <DropdownButton title=" " bsStyle="Link">
+       <MenuItem href="#books">Весь МЗС</MenuItem>
+      <MenuItem href="#podcasts">День 2</MenuItem>
+      <MenuItem href="#">День 3</MenuItem>
+      <MenuItem href="#">День 4</MenuItem>
+      <MenuItem href="#addBlog">День 5</MenuItem>
+    </DropdownButton>
         </ul>
         {this.state.nps ? (
           <div className="PostSummary__NPS">
@@ -137,6 +167,27 @@ class FeedbackResults extends Component {
         ) : (
           <div></div>
         )}
+      </div>
+
+      <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
+
+        <div className="Card Card__minus-margin">
+          <ul className="Card__ul-citys">
+
+        <li className="active"><Link to="/feedback/results/samara">Все города</Link></li>
+        <li><Link to="/created/bm-taskmzs8"><b>Москва</b></Link></li>
+        <li><Link to="/created/bm-taskmzs9"><b>Санкт-Петербург</b></Link></li>
+        <li><Link to="/created/bm-taskmzs10">Самара</Link></li>
+        <li><Link to="/created/bm-taskmzs11">Таганрог</Link></li>
+        <li><Link to="/created/bm-taskmzs11">Казань</Link></li>
+        
+
+    </ul>
+
+        </div>
+
+                </div>
+
       </div>
     )
   }
