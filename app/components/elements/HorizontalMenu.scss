@@ -19,6 +19,19 @@
   overflow: visible !important;
 }
 
+.FeedbackResults_menu .dropdown-menu li {
+  height: 37px !important;
+}
+
+.FeedbackResults_menu .dropdown-menu li a {
+  margin: 0 !important;
+  padding: 10px 10px 0 10px !important;
+  height: 37px !important;
+}
+.FeedbackResults_menu .dropdown-menu li.active a{
+  border-bottom: 0 none !important;
+}
+
 .FeedbackResults_menu .dropdown button.btn {
 
   margin-left: -10px !important;

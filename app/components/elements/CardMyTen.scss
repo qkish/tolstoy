@@ -81,6 +81,14 @@ $cText: #0f0f0f;
 		font-weight: bold;
 	}
 
+	&__ul-citys li a:hover, &__ul-citys li a:focus {
+		text-decoration: none;
+	}
+
+	&__ul-citys li.active a:focus,  &__ul-citys li.active a:hover,{
+		text-decoration: none;
+	}
+
 
 
 	&__minus-margin {
