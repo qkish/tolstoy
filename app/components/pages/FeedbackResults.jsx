@@ -219,7 +219,7 @@ class FeedbackResults extends Component {
                   onPageChange={({ selected }) => {
                       const currentPage = selected + 1
                       const offset = this.state.perPage * selected
-                      this.getReplies(this.getEvent(this.props), this.getCity(), this.state.perPage, offset).then(() => window.scrollTo(0, 0))
+                      this.getReplies(this.getEvent(this.props), this.getCity(), this.getDay(), this.state.perPage, offset).then(() => window.scrollTo(0, 0))
                   }} />
             </div>
           </div>
