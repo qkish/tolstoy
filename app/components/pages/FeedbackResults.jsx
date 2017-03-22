@@ -22,14 +22,12 @@ class FeedbackResults extends Component {
     this.getCities = this.getCities.bind(this)
     this.getDay = this.getDay.bind(this)
     this.getCity = this.getCity.bind(this)
-    this.getDays = this.getDays.bind(this)
   }
 
   componentDidMount () {
     this.getNPS()
     this.getReplies()
     this.getCities()
-    this.getDays()
   }
 
   getEvent (props = this.props, type = 'numeric') {
@@ -75,17 +73,6 @@ class FeedbackResults extends Component {
     })
   }
 
-  async getDays (event = this.state.event) {
-    const response = await fetch(`/api/v1/feedback/results/days?event=${event}`)
-    const { days } = await response.json()
-
-    console.log(days)
-
-    this.setState({
-      days
-    })
-  }
-
   componentWillReceiveProps (nextProps) {
     const { city, day } = nextProps.params
     this.getCities(this.getEvent(nextProps))
@@ -115,35 +102,49 @@ class FeedbackResults extends Component {
              <LinkContainer to={`/feedback/results/ceh/all/all`}>
                <MenuItem>Весь ЦЕХ</MenuItem>
              </LinkContainer>
-      {this.state.days && (
-        <div>
-          {this.state.days.ceh.map(date => (
-            <LinkContainer to={`/feedback/results/ceh/${date}/all`}>
-              <MenuItem key={date}>{date}</MenuItem>
-            </LinkContainer>
-          ))}
-        </div>
+             <LinkContainer to={`/feedback/results/ceh/2017-03-18/all`}>
+               <MenuItem>18 марта</MenuItem>
+             </LinkContainer>
+             <LinkContainer to={`/feedback/results/ceh/2017-03-25/all`}>
+               <MenuItem>25 марта</MenuItem>
+             </LinkContainer>
+             <LinkContainer to={`/feedback/results/ceh/2017-04-01/all`}>
+               <MenuItem>1 апреля</MenuItem>
+             </LinkContainer>
+             <LinkContainer to={`/feedback/results/ceh/2017-04-08/all`}>
+               <MenuItem>8 апреля</MenuItem>
+             </LinkContainer>
+             <LinkContainer to={`/feedback/results/ceh/2017-04-15/all`}>
+               <MenuItem>15 апреля</MenuItem>
+             </LinkContainer>
       )}
     </DropdownButton>
           <li className={this.getEvent() === '2' ? 'active' : ''}>
             <Link to={`/feedback/results/mzs/all/all`}>МЗС</Link>
-
-
-
           </li>
             <DropdownButton title='' bsStyle='link'>
               <LinkContainer to={`/feedback/results/mzs/all/all`}>
                 <MenuItem>Весь МЗС</MenuItem>
               </LinkContainer>
-       {this.state.days && (
-         <div>
-           {this.state.days.mzs.map(date => (
-             <LinkContainer to={`/feedback/results/mzs/${date}/all`}>
-              <MenuItem key={date}>{date}</MenuItem>
-            </LinkContainer>
-           ))}
-         </div>
-       )}
+              <LinkContainer to={`/feedback/results/mzs/2017-03-14/all`}>
+                <MenuItem>14 марта</MenuItem>
+              </LinkContainer>
+              <LinkContainer to={`/feedback/results/mzs/2017-03-21/all`}>
+                <MenuItem>21 марта</MenuItem>
+              </LinkContainer>
+              <LinkContainer to={`/feedback/results/mzs/2017-03-28/all`}>
+                <MenuItem>28 марта</MenuItem>
+              </LinkContainer>
+              <LinkContainer to={`/feedback/results/mzs/2017-04-04/all`}>
+                <MenuItem>4 апреля</MenuItem>
+              </LinkContainer>
+              <LinkContainer to={`/feedback/results/mzs/2017-04-11/all`}>
+                <MenuItem>11 апреля</MenuItem>
+              </LinkContainer>
+              <LinkContainer to={`/feedback/results/mzs/2017-04-18/all`}>
+                <MenuItem>18 апреля</MenuItem>
+              </LinkContainer>
+
     </DropdownButton>
         </ul>
         {this.state.nps ? (
