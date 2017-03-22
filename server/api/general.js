@@ -21,6 +21,8 @@ import {ops} from 'shared/serializer';
 import isToday from 'date-fns/is_today';
 import isAfter from 'date-fns/is_after';
 import format from 'date-fns/format'
+import addDays from 'date-fns/add_days'
+import addHours from 'date-fns/add_hours'
 import AWS from 'aws-sdk';
 import pify from 'pify';
 import fs from 'fs';
@@ -2669,6 +2671,10 @@ export default function useGeneralApi(app) {
       whereCity = { program_city: decodeURI(city) }
     }
 
+    if (city === 'other') {
+      whereCity = { program_city: null }
+    }
+
     let whereDay = false
 
     if (day && day !== 'all') {
@@ -2686,10 +2692,11 @@ export default function useGeneralApi(app) {
 				'score_3',
 				'total_score',
 			],
-      where: whereDay ? sequelize.where(
-        sequelize.fn('date', sequelize.col('Feedback.created_at')),
-        day
-      ) : null,
+      where: whereDay ? {
+        created_at: {
+          $between: [addHours(new Date(day), 15), addDays(addHours(new Date(day), 15), 7)]
+        }
+      } : null,
 			include: [{
 				model: models.User,
 				where: Object.assign({}, {
@@ -2751,13 +2758,15 @@ export default function useGeneralApi(app) {
       whereCity = { program_city: decodeURI(city) }
     }
 
+    if (city === 'other') {
+      whereCity = { program_city: null }
+    }
+
     let whereDay = false
 
     if (day && day !== 'all') {
       whereDay = true
     }
-
-    console.log('where day', whereDay)
 
 		const replies = yield models.Feedback.findAndCountAll({
 			attributes: [
@@ -2770,10 +2779,11 @@ export default function useGeneralApi(app) {
 				'score_3',
 				'total_score'
 			],
-      where: whereDay ? sequelize.where(
-        sequelize.fn('date', sequelize.col('Feedback.created_at')),
-        day
-      ) : null,
+      where: whereDay ? {
+        created_at: {
+          $between: [addHours(new Date(day), 15), addDays(addHours(new Date(day), 15), 7)]
+        }
+      } : null,
 			include: [{
 				model: models.User,
         where: Object.assign({}, {
