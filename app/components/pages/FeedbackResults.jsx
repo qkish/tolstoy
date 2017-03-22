@@ -4,6 +4,7 @@ import StarRatingComponent from 'react-star-rating-component'
 import Pagination from 'react-paginate'
 import { Link } from 'react-router'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
+import { LinkContainer } from 'react-router-bootstrap'
 
 class FeedbackResults extends Component {
   constructor (props) {
@@ -11,7 +12,8 @@ class FeedbackResults extends Component {
     this.state = {
       perPage: 10,
       event: this.getEvent(),
-      city: this.getCity()
+      city: this.getCity(),
+      day: this.getDay()
     }
 
     this.getNPS = this.getNPS.bind(this)
@@ -20,12 +22,14 @@ class FeedbackResults extends Component {
     this.getCities = this.getCities.bind(this)
     this.getDay = this.getDay.bind(this)
     this.getCity = this.getCity.bind(this)
+    this.getDays = this.getDays.bind(this)
   }
 
   componentDidMount () {
     this.getNPS()
     this.getReplies()
     this.getCities()
+    this.getDays()
   }
 
   getEvent (props = this.props, type = 'numeric') {
@@ -43,19 +47,19 @@ class FeedbackResults extends Component {
   }
 
   getDay () {
-    return 'all'
+    return this.props.params.day || 'all'
   }
 
-  async getNPS (event = this.state.event, city = this.state.city) {
-    const response = await fetch(`/api/v1/feedback/results/nps?event=${event}&city=${city}`)
+  async getNPS (event = this.state.event, city = this.state.city, day = this.state.day) {
+    const response = await fetch(`/api/v1/feedback/results/nps?event=${event}&city=${city}&day=${day}`)
     const nps = await response.json()
     this.setState({
       nps
     })
   }
 
-  async getReplies (event = this.state.event, city = this.state.city, limit = this.state.perPage, offset = 0) {
-    const response = await fetch(`/api/v1/feedback/results/replies?limit=${limit}&offset=${offset}&event=${event}&city=${city}`)
+  async getReplies (event = this.state.event, city = this.state.city, day = this.state.day, limit = this.state.perPage, offset = 0) {
+    const response = await fetch(`/api/v1/feedback/results/replies?limit=${limit}&offset=${offset}&event=${event}&city=${city}&day=${day}`)
     const { replies, count } = await response.json()
     this.setState({
       replies,
@@ -71,15 +75,27 @@ class FeedbackResults extends Component {
     })
   }
 
+  async getDays (event = this.state.event) {
+    const response = await fetch(`/api/v1/feedback/results/days?event=${event}`)
+    const { days } = await response.json()
+
+    console.log(days)
+
+    this.setState({
+      days
+    })
+  }
+
   componentWillReceiveProps (nextProps) {
     console.log('FUCK UPDATED PROPS', {
       city: nextProps.params.city,
-      event: this.getEvent(nextProps)
+      event: this.getEvent(nextProps),
+      day: nextProps.params.day
     })
-    const { city } = nextProps.params
+    const { city, day } = nextProps.params
     this.getCities(this.getEvent(nextProps))
-    this.getNPS(this.getEvent(nextProps), city)
-    this.getReplies(this.getEvent(nextProps), city)
+    this.getNPS(this.getEvent(nextProps), city, day)
+    this.getReplies(this.getEvent(nextProps), city, day)
   }
 
   render () {
@@ -101,11 +117,18 @@ class FeedbackResults extends Component {
           </li>
 
            <DropdownButton title='' bsStyle='link'>
-      <MenuItem href="all">Весь ЦЕХ</MenuItem>
-      <MenuItem href="#podcasts">День 2</MenuItem>
-      <MenuItem href="#">День 3</MenuItem>
-      <MenuItem href="#">День 4</MenuItem>
-      <MenuItem href="#addBlog">День 5</MenuItem>
+             <LinkContainer to={`/feedback/results/ceh/all/all`}>
+               <MenuItem>Весь ЦЕХ</MenuItem>
+             </LinkContainer>
+      {this.state.days && (
+        <div>
+          {this.state.days.ceh.map(date => (
+            <LinkContainer to={`/feedback/results/ceh/${date}/all`}>
+              <MenuItem key={date}>{date}</MenuItem>
+            </LinkContainer>
+          ))}
+        </div>
+      )}
     </DropdownButton>
           <li className={this.getEvent() === '2' ? 'active' : ''}>
             <Link to={`/feedback/results/mzs/all/all`}>МЗС</Link>
@@ -114,11 +137,18 @@ class FeedbackResults extends Component {
 
           </li>
             <DropdownButton title='' bsStyle='link'>
-       <MenuItem href="all">Весь МЗС</MenuItem>
-      <MenuItem href="#podcasts">День 2</MenuItem>
-      <MenuItem href="#">День 3</MenuItem>
-      <MenuItem href="#">День 4</MenuItem>
-      <MenuItem href="#addBlog">День 5</MenuItem>
+              <LinkContainer to={`/feedback/results/mzs/all/all`}>
+                <MenuItem>Весь МЗС</MenuItem>
+              </LinkContainer>
+       {this.state.days && (
+         <div>
+           {this.state.days.mzs.map(date => (
+             <LinkContainer to={`/feedback/results/mzs/${date}/all`}>
+              <MenuItem key={date}>{date}</MenuItem>
+            </LinkContainer>
+           ))}
+         </div>
+       )}
     </DropdownButton>
         </ul>
         {this.state.nps ? (

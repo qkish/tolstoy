@@ -20,6 +20,7 @@ import {createTransaction, signTransaction} from 'shared/chain/transactions';
 import {ops} from 'shared/serializer';
 import isToday from 'date-fns/is_today';
 import isAfter from 'date-fns/is_after';
+import format from 'date-fns/format'
 import AWS from 'aws-sdk';
 import pify from 'pify';
 import fs from 'fs';
@@ -2660,12 +2661,18 @@ export default function useGeneralApi(app) {
   })
 
 	router.get('/feedback/results/nps', koaBody, function* () {
-		const { event, city } = this.query
+		const { event, city, day } = this.query
 
     let whereCity = {}
 
     if (city && city !== 'all') {
       whereCity = { program_city: decodeURI(city) }
+    }
+
+    let whereDay = false
+
+    if (day && day !== 'all') {
+      whereDay = true
     }
 
 		const replies = yield models.Feedback.findAll({
@@ -2679,6 +2686,10 @@ export default function useGeneralApi(app) {
 				'score_3',
 				'total_score',
 			],
+      where: whereDay ? sequelize.where(
+        sequelize.fn('date', sequelize.col('Feedback.created_at')),
+        day
+      ) : null,
 			include: [{
 				model: models.User,
 				where: Object.assign({}, {
@@ -2732,13 +2743,21 @@ export default function useGeneralApi(app) {
 	})
 
 	router.get('/feedback/results/replies', koaBody, function* () {
-		const { limit, offset, event, city } = this.query
+		const { limit, offset, event, city, day } = this.query
 
     let whereCity = {}
 
     if (city && city !== 'all') {
       whereCity = { program_city: decodeURI(city) }
     }
+
+    let whereDay = false
+
+    if (day && day !== 'all') {
+      whereDay = true
+    }
+
+    console.log('where day', whereDay)
 
 		const replies = yield models.Feedback.findAndCountAll({
 			attributes: [
@@ -2751,6 +2770,10 @@ export default function useGeneralApi(app) {
 				'score_3',
 				'total_score'
 			],
+      where: whereDay ? sequelize.where(
+        sequelize.fn('date', sequelize.col('Feedback.created_at')),
+        day
+      ) : null,
 			include: [{
 				model: models.User,
         where: Object.assign({}, {
@@ -2793,6 +2816,47 @@ export default function useGeneralApi(app) {
 			this.status = 500
 		}
 	})
+
+  router.get('/feedback/results/days', koaBody, function* () {
+    const { event } = this.query
+
+    try {
+      const cehdays = yield sequelize.query(`
+        SELECT DATE(feedback.created_at) AS created_at
+        FROM feedback
+        INNER JOIN users ON feedback.user_id = users.id
+        WHERE users.current_program = '1'
+        GROUP BY DATE(feedback.created_at)
+      `, { model: models.Feedback })
+
+      const mzsdays = yield sequelize.query(`
+        SELECT DATE(feedback.created_at) AS created_at
+        FROM feedback
+        INNER JOIN users ON feedback.user_id = users.id
+        WHERE users.current_program = '2'
+        GROUP BY DATE(feedback.created_at)
+      `, { model: models.Feedback })
+
+     this.body = JSON.stringify({
+       days: {
+         ceh: compose(
+           map(date => format(date, 'YYYY-MM-DD')),
+           map(prop('created_at'))
+         )(JSON.parse(JSON.stringify(cehdays))),
+         mzs: compose(
+           map(date => format(date, 'YYYY-MM-DD')),
+           map(prop('created_at'))
+         )(JSON.parse(JSON.stringify(mzsdays)))
+       }
+     })
+    }  catch (error) {
+      console.error('Error in GET /feedback/results/cities api call', this.session.user, error.toString())
+      this.body = JSON.stringify({
+        error: error.message
+      })
+      this.status = 500
+    }
+  })
 
 	router.get('/game/get_next_ten_old', koaBody, function* () {
 		const { ten } = yield models.User.findOne({
