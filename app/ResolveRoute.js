@@ -77,7 +77,7 @@ export default function resolveRoute(path)
     if (path === '/feedback') {
       return { page: 'Feedback' }
     }
-    let match = path.match(/^\/feedback\/results\/?(mzs|ceh)?\/?$/)
+    let match = path.match(/^\/feedback\/results\/?(mzs|ceh)?\/?(\w+)\/?(.+)?$/)
     if (match) {
       return { page: 'FeedbackResults', params: match }
     }

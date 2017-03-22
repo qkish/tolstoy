@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import User from 'app/components/elements/User'
 import StarRatingComponent from 'react-star-rating-component'
 import Pagination from 'react-paginate'
-import { Link } from 'react-router';
+import { Link } from 'react-router'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 
 class FeedbackResults extends Component {
@@ -10,48 +10,52 @@ class FeedbackResults extends Component {
     super(props)
     this.state = {
       perPage: 10,
-      event: this.getCurrentEvent()
+      event: this.getEvent(),
+      city: this.getCity()
     }
 
     this.getNPS = this.getNPS.bind(this)
     this.getReplies = this.getReplies.bind(this)
-    this.toggleEvent = this.toggleEvent.bind(this)
-    this.getCurrentEvent = this.getCurrentEvent.bind(this)
+    this.getEvent = this.getEvent.bind(this)
+    this.getCities = this.getCities.bind(this)
+    this.getDay = this.getDay.bind(this)
+    this.getCity = this.getCity.bind(this)
   }
 
   componentDidMount () {
     this.getNPS()
     this.getReplies()
+    this.getCities()
   }
 
-  getCurrentEvent () {
-    if (this.props.params.event === 'ceh') {
-      return '1'
+  getEvent (props = this.props, type = 'numeric') {
+    if (props.params.event === 'ceh') {
+      return type === 'numeric' ? '1' : 'ceh'
     }
-    if (this.props.params.event === 'mzs') {
-      return '2'
+    if (props.params.event === 'mzs') {
+      return type === 'numeric' ? '2' : 'mzs'
     }
-    return '1'
+    return type === 'numeric' ? '1' : 'ceh'
   }
 
-  toggleEvent (event) {
-    this.setState({
-      event
-    })
-    this.getNPS(event)
-    this.getReplies(event)
+  getCity () {
+    return this.props.params.city || 'all'
   }
 
-  async getNPS (event = this.state.event) {
-    const response = await fetch(`/api/v1/feedback/results/nps?event=${event}`)
+  getDay () {
+    return 'all'
+  }
+
+  async getNPS (event = this.state.event, city = this.state.city) {
+    const response = await fetch(`/api/v1/feedback/results/nps?event=${event}&city=${city}`)
     const nps = await response.json()
     this.setState({
       nps
     })
   }
 
-  async getReplies (event = this.state.event, limit = this.state.perPage, offset = 0) {
-    const response = await fetch(`/api/v1/feedback/results/replies?limit=${limit}&offset=${offset}&event=${event}`)
+  async getReplies (event = this.state.event, city = this.state.city, limit = this.state.perPage, offset = 0) {
+    const response = await fetch(`/api/v1/feedback/results/replies?limit=${limit}&offset=${offset}&event=${event}&city=${city}`)
     const { replies, count } = await response.json()
     this.setState({
       replies,
@@ -59,39 +63,58 @@ class FeedbackResults extends Component {
     })
   }
 
+  async getCities (event = this.state.event) {
+    const response = await fetch(`/api/v1/feedback/results/cities?event=${event}`)
+    const { cities } = await response.json()
+    this.setState({
+      cities
+    })
+  }
+
+  componentWillReceiveProps (nextProps) {
+    console.log('FUCK UPDATED PROPS', {
+      city: nextProps.params.city,
+      event: this.getEvent(nextProps)
+    })
+    const { city } = nextProps.params
+    this.getCities(this.getEvent(nextProps))
+    this.getNPS(this.getEvent(nextProps), city)
+    this.getReplies(this.getEvent(nextProps), city)
+  }
+
   render () {
     return (
 
       <div>
-  
-    
 
 
-      <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse"> 
+
+
+      <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
         <ul className="HorizontalMenu menu FeedbackResults_menu">
-          <li className={this.state.event === '1' ? 'active' : ''}>
-         
+          <li className={this.getEvent() === '1' ? 'active' : ''}>
 
-            <a onClick={() => this.toggleEvent('1')}>ЦЕХ</a>
-          
-             
+
+            <Link to={`/feedback/results/ceh/all/all`}>ЦЕХ</Link>
+
+
           </li>
 
-           <DropdownButton title=" " bsStyle="Link">
-      <MenuItem href="#books">Весь ЦЕХ</MenuItem>
+           <DropdownButton title='' bsStyle='link'>
+      <MenuItem href="all">Весь ЦЕХ</MenuItem>
       <MenuItem href="#podcasts">День 2</MenuItem>
       <MenuItem href="#">День 3</MenuItem>
       <MenuItem href="#">День 4</MenuItem>
       <MenuItem href="#addBlog">День 5</MenuItem>
-    </DropdownButton> 
-          <li className={this.state.event === '2' ? 'active' : ''}>
-            <a onClick={() => this.toggleEvent('2')}>МЗС</a>
+    </DropdownButton>
+          <li className={this.getEvent() === '2' ? 'active' : ''}>
+            <Link to={`/feedback/results/mzs/all/all`}>МЗС</Link>
 
-           
+
 
           </li>
-            <DropdownButton title=" " bsStyle="Link">
-       <MenuItem href="#books">Весь МЗС</MenuItem>
+            <DropdownButton title='' bsStyle='link'>
+       <MenuItem href="all">Весь МЗС</MenuItem>
       <MenuItem href="#podcasts">День 2</MenuItem>
       <MenuItem href="#">День 3</MenuItem>
       <MenuItem href="#">День 4</MenuItem>
@@ -171,7 +194,7 @@ class FeedbackResults extends Component {
                   onPageChange={({ selected }) => {
                       const currentPage = selected + 1
                       const offset = this.state.perPage * selected
-                      this.getReplies(this.state.event, this.state.perPage, offset).then(() => window.scrollTo(0, 0))
+                      this.getReplies(this.getEvent(this.props), this.getCity(), this.state.perPage, offset).then(() => window.scrollTo(0, 0))
                   }} />
             </div>
           </div>
@@ -182,20 +205,20 @@ class FeedbackResults extends Component {
 
       <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
 
-        <div className="Card Card__minus-margin">
-          <ul className="Card__ul-citys">
-
-        <li className="active"><Link to="/feedback/results/samara">Все города</Link></li>
-        <li><Link to="/created/bm-taskmzs8"><b>Москва</b></Link></li>
-        <li><Link to="/created/bm-taskmzs9"><b>Санкт-Петербург</b></Link></li>
-        <li><Link to="/created/bm-taskmzs10">Самара</Link></li>
-        <li><Link to="/created/bm-taskmzs11">Таганрог</Link></li>
-        <li><Link to="/created/bm-taskmzs11">Казань</Link></li>
-        
-
-    </ul>
-
-        </div>
+        {this.state.cities && (
+          <div className="Card Card__minus-margin">
+            <ul className="Card__ul-citys">
+              <li>
+                <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/all`}>Все города</Link>
+              </li>
+              {this.state.cities.map(city => (
+                <li key={city}>
+                  <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/${city}`}>{city}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
                 </div>
 
@@ -205,6 +228,6 @@ class FeedbackResults extends Component {
 }
 
 module.exports = {
-  path: 'feedback/results(/:event(/:date))',
+  path: 'feedback/results(/:event(/:day(/:city)))',
   component: FeedbackResults
 }

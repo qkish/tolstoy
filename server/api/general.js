@@ -2660,7 +2660,14 @@ export default function useGeneralApi(app) {
   })
 
 	router.get('/feedback/results/nps', koaBody, function* () {
-		const { event } = this.query
+		const { event, city } = this.query
+
+    let whereCity = {}
+
+    if (city && city !== 'all') {
+      whereCity = { program_city: decodeURI(city) }
+    }
+
 		const replies = yield models.Feedback.findAll({
 			attributes: [
 				'id',
@@ -2674,10 +2681,10 @@ export default function useGeneralApi(app) {
 			],
 			include: [{
 				model: models.User,
-				where: {
+				where: Object.assign({}, {
 					id: Sequelize.col('user_id'),
 					current_program: event
-				},
+				}, whereCity),
 				attributes: ['current_program']
 			}],
 	 })
@@ -2725,7 +2732,13 @@ export default function useGeneralApi(app) {
 	})
 
 	router.get('/feedback/results/replies', koaBody, function* () {
-		const { limit, offset, event } = this.query
+		const { limit, offset, event, city } = this.query
+
+    let whereCity = {}
+
+    if (city && city !== 'all') {
+      whereCity = { program_city: decodeURI(city) }
+    }
 
 		const replies = yield models.Feedback.findAndCountAll({
 			attributes: [
@@ -2740,10 +2753,10 @@ export default function useGeneralApi(app) {
 			],
 			include: [{
 				model: models.User,
-				where: {
+        where: Object.assign({}, {
 					id: Sequelize.col('user_id'),
 					current_program: event
-				},
+				}, whereCity),
 				attributes: ['name']
 			}],
 			order: [['created_at', 'DESC']],
@@ -2755,6 +2768,30 @@ export default function useGeneralApi(app) {
 		 replies: replies.rows,
 		 count: replies.count
 	 })
+	})
+
+	router.get('/feedback/results/cities', koaBody, function* () {
+		const { event } = this.query
+
+    try {
+      const cities = yield sequelize.query(`
+				SELECT users.program_city AS program_city
+				FROM feedback
+				INNER JOIN users ON feedback.user_id = users.id
+				WHERE users.current_program = ?
+				GROUP BY users.program_city
+			`, { model: models.User, replacements: [event]})
+
+     this.body = JSON.stringify({
+       cities: map(prop('program_city'), JSON.parse(JSON.stringify(cities)))
+     })
+    }  catch (error) {
+			console.error('Error in GET /feedback/results/cities api call', this.session.user, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
 	})
 
 	router.get('/game/get_next_ten_old', koaBody, function* () {
