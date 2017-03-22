@@ -87,11 +87,6 @@ class FeedbackResults extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    console.log('FUCK UPDATED PROPS', {
-      city: nextProps.params.city,
-      event: this.getEvent(nextProps),
-      day: nextProps.params.day
-    })
     const { city, day } = nextProps.params
     this.getCities(this.getEvent(nextProps))
     this.getNPS(this.getEvent(nextProps), city, day)
