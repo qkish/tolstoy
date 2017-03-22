@@ -242,6 +242,7 @@ class FeedbackResults extends Component {
                   <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/${city}`}>{city}</Link>
                 </li>
               ))}
+              <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/other`}>Другие города</Link>
             </ul>
           </div>
         )}

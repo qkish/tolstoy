@@ -2671,6 +2671,10 @@ export default function useGeneralApi(app) {
       whereCity = { program_city: decodeURI(city) }
     }
 
+    if (city === 'other') {
+      whereCity = { program_city: null }
+    }
+
     let whereDay = false
 
     if (day && day !== 'all') {
@@ -2752,6 +2756,10 @@ export default function useGeneralApi(app) {
 
     if (city && city !== 'all') {
       whereCity = { program_city: decodeURI(city) }
+    }
+
+    if (city === 'other') {
+      whereCity = { program_city: null }
     }
 
     let whereDay = false
