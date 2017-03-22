@@ -77,10 +77,11 @@ export default function resolveRoute(path)
     if (path === '/feedback') {
       return { page: 'Feedback' }
     }
-    if (path === '/feedback/results') {
-      return { page: 'FeedbackResults' }
+    let match = path.match(/^\/feedback\/results\/?(mzs|ceh)?\/?$/)
+    if (match) {
+      return { page: 'FeedbackResults', params: match }
     }
-    let match = path.match(/^\/rating\/?(all|polki|hundreds|tens|ten|hundred|polk|my-ten|couches|couch-group|my-group)?\/?(\d+)?$/)
+    match = path.match(/^\/rating\/?(all|polki|hundreds|tens|ten|hundred|polk|my-ten|couches|couch-group|my-group)?\/?(\d+)?$/)
     if (match) {
         return {page: 'Rating', params: match[1]};
     }

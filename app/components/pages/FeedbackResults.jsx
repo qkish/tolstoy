@@ -10,17 +10,28 @@ class FeedbackResults extends Component {
     super(props)
     this.state = {
       perPage: 10,
-      event: '1'
+      event: this.getCurrentEvent()
     }
 
     this.getNPS = this.getNPS.bind(this)
     this.getReplies = this.getReplies.bind(this)
     this.toggleEvent = this.toggleEvent.bind(this)
+    this.getCurrentEvent = this.getCurrentEvent.bind(this)
   }
 
   componentDidMount () {
     this.getNPS()
     this.getReplies()
+  }
+
+  getCurrentEvent () {
+    if (this.props.params.event === 'ceh') {
+      return '1'
+    }
+    if (this.props.params.event === 'mzs') {
+      return '2'
+    }
+    return '1'
   }
 
   toggleEvent (event) {
@@ -194,6 +205,6 @@ class FeedbackResults extends Component {
 }
 
 module.exports = {
-  path: 'feedback/results',
+  path: 'feedback/results(/:event(/:date))',
   component: FeedbackResults
 }
