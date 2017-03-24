@@ -6,8 +6,6 @@ class Plan extends Component {
     super(props)
     this.state = {
       loading: false,
-      plan: null,
-      wordPrice: null,
       sended: false
     }
 
@@ -111,7 +109,7 @@ class Plan extends Component {
           style={{ margin: '10px 0' }}
           type='number'
           pattern='\d*'
-          inputmode='numeric'
+          inputMode='numeric'
           placeholder='План на неделю'
           value={this.state.plan}
           onChange={this.handlePlanChange} />
