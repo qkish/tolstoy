@@ -84,7 +84,7 @@ class Admin extends Component {
 
     handleTenLeaderChange ({ user, value, ten }) {
         this.props.changeTenLeader(user.id, value)
-        if(value) this.props.changeTen(user.id, Number(ten)) 
+        if(value) this.props.changeTen(user.id, Number(ten))
     }
 
     handleHundredLeaderChange ({ user, value }) {
@@ -222,7 +222,7 @@ class Admin extends Component {
                               this.setState({
                                 users: data
                               })
-                              this.handleCouchGroupChange({user, couch_group: value || undefined })
+                              this.handleCouchGroupChange({user, couchGroup: value || undefined })
                             }} />
                             <label>
                                 <input type="checkbox" defaultChecked={user.couch} onChange={({ target }) => this.handleCouchChange({ user, value: target.checked })} />

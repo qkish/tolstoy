@@ -1215,6 +1215,8 @@ export default function useGeneralApi(app) {
 				'ten_leader',
 				'hundred_leader',
 				'polk_leader',
+				'couch_group',
+				'couch',
 				'money_total',
 				'approved_money',
 				'volunteer'
