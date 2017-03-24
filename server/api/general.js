@@ -2961,15 +2961,24 @@ export default function useGeneralApi(app) {
 		const params = this.request.body
 		const {csrf, plan, wordPrice} = typeof(params) === 'string' ? JSON.parse(params) : params
 		//if (!checkCSRF(this, csrf)) return;
-		yield models.User.update({
-      plan,
-      word_price: wordPrice
-    }, {
-      where: {
-        id: this.session.user
-      }
-    })
-		this.status = 200
+
+		try {
+			yield models.User.update({
+				plan,
+				word_price: wordPrice
+			}, {
+				where: {
+					id: this.session.user
+				}
+			})
+			this.status = 200
+		} catch (error) {
+			console.error('Error in POST /plan api call', this.session.user, error.toString())
+			this.body = JSON.stringify({
+				error: error.message
+			})
+			this.status = 500
+		}
 	})
 
 	router.get('/plan', koaBody, function* () {

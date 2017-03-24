@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
+import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 
 class Plan extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      loading: false,
       plan: null,
-      wordPrice: '',
+      wordPrice: null,
       sended: false
     }
 
@@ -48,30 +50,44 @@ class Plan extends Component {
   }
 
   async save () {
-    await fetch('/api/v1/plan', {
-      method: 'POST',
-      mode: 'no-cors',
-      credentials: 'same-origin',
-      headers: {
-          Accept: 'application/json',
-          'Content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        plan: this.state.plan,
-        wordPrice: this.state.wordPrice
-      })
-    })
 
     this.setState({
-      sended: true
+      loading: true
     })
 
-    setTimeout(() => {
-      this.setState({
-        sended: false
+    try {
+      const response = await fetch('/api/v1/plan', {
+        method: 'POST',
+        mode: 'no-cors',
+        credentials: 'same-origin',
+        headers: {
+          Accept: 'application/json',
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          plan: this.state.plan,
+          wordPrice: this.state.wordPrice
+        })
       })
-      this.getPlan()
-    }, 3000)
+
+      if (response.status !== 200) {
+        throw new Error(response.statusText)
+      }
+
+      this.setState({
+        loading: false,
+        sended: true
+      })
+
+      await this.getPlan()
+    } catch (error) {
+      this.setState({
+        loading: false,
+        sended: false,
+        error
+      })
+    }
+
   }
 
   render () {
@@ -88,19 +104,14 @@ class Plan extends Component {
       )
     }
 
-    if (this.state.sended) {
-      return (
-        <div className='PostSummary__feedback-container' style={{ marginBottom: '10px' }}>
-          Сохранено
-        </div>
-      )
-    }
-
     return (
       <div className='PostSummary__feedback-container' style={{ marginBottom: '10px' }}>
+        <h3>Поставьте план на неделю</h3>
         <input
           style={{ margin: '10px 0' }}
           type='number'
+          pattern='\d*'
+          inputmode='numeric'
           placeholder='План на неделю'
           value={this.state.plan}
           onChange={this.handlePlanChange} />
@@ -110,12 +121,18 @@ class Plan extends Component {
           placeholder='Цена слова'
           value={this.state.wordPrice}
           onChange={this.handleWordPriceChange} />
-        <button
-          className='button'
-          style={{ margin: '10px 0' }}
-          onClick={this.save}>
-          Сохранить
-        </button>
+        <div>
+          <div>
+            <button
+              className='button'
+              style={{ margin: '10px 0' }}
+              disabled={!this.state.plan || this.state.loading}
+              onClick={this.save}>
+              Сохранить
+            </button>
+          </div>
+          {this.state.loading && <LoadingIndicator type='circle' />}
+        </div>
       </div>
     )
   }
