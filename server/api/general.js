@@ -2970,6 +2970,20 @@ export default function useGeneralApi(app) {
 		this.status = 200
 	})
 
+	router.get('/plan', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		const plan = yield models.User.findOne({
+			attributes: ['plan', 'word_price'],
+			where: {
+				id: this.session.user
+			}
+		})
+
+		this.body = JSON.stringify({
+			plan
+		})
+	})
+
 }
 
 

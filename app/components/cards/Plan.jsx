@@ -5,11 +5,33 @@ class Plan extends Component {
     super(props)
     this.state = {
       plan: null,
-      wordPrice: ''
+      wordPrice: '',
+      sended: false
     }
     this.save = this.save.bind(this)
     this.handlePlanChange = this.handlePlanChange.bind(this)
     this.handleWordPriceChange = this.handleWordPriceChange.bind(this)
+    this.getPlan = this.getPlan.bind(this)
+  }
+
+  async getPlan () {
+    const response = await fetch('/api/v1/plan', {
+      credentials: 'same-origin',
+    })
+    const { plan: { plan, word_price } } = await response.json()
+
+    if (plan) {
+      this.setState({
+        currentPlan: {
+          plan,
+          wordPrice: word_price
+        }
+      })
+    }
+  }
+
+  componentDidMount () {
+    this.getPlan()
   }
 
   handlePlanChange (e) {
@@ -24,8 +46,8 @@ class Plan extends Component {
     })
   }
 
-  save () {
-    return fetch('/api/v1/plan', {
+  async save () {
+    await fetch('/api/v1/plan', {
       method: 'POST',
       mode: 'no-cors',
       credentials: 'same-origin',
@@ -38,9 +60,41 @@ class Plan extends Component {
         wordrice: this.state.wordPrice
       })
     })
+
+    this.setState({
+      sended: true
+    })
+
+    setTimeout(() => {
+      this.setState({
+        sended: false
+      })
+      this.getPlan()
+    }, 3000)
   }
 
   render () {
+    if (this.state.currentPlan) {
+      return (
+        <div className='PostSummary__feedback-container' style={{ marginBottom: '10px' }}>
+          <div style={{ margin: '10px 0' }}>
+            План на неделю: {this.state.currentPlan.plan}
+          </div>
+          {this.state.currentPlan.wordPrice && <div style={{ margin: '10px 0' }}>
+            Цена слова: {this.state.currentPlan.wordPrice}
+          </div>}
+        </div>
+      )
+    }
+
+    if (this.state.sended) {
+      return (
+        <div className='PostSummary__feedback-container' style={{ marginBottom: '10px' }}>
+          Сохранено
+        </div>
+      )
+    }
+
     return (
       <div className='PostSummary__feedback-container' style={{ marginBottom: '10px' }}>
         <input
