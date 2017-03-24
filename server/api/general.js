@@ -2954,7 +2954,21 @@ export default function useGeneralApi(app) {
 		})
 	})
 
-
+	router.post('/plan', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		const params = this.request.body
+		const {csrf, plan, wordPrice} = typeof(params) === 'string' ? JSON.parse(params) : params
+		//if (!checkCSRF(this, csrf)) return;
+		yield models.User.update({
+      plan,
+      word_price: wordPrice
+    }, {
+      where: {
+        id: this.session.user
+      }
+    })
+		this.status = 200
+	})
 
 }
 

@@ -21,18 +21,17 @@ import Beta from 'app/components/elements/Beta';
 import Apis from 'shared/api_client/ApiInstances'
 import CardMyTen from 'app/components/elements/CardMyTen'
 import TaskCheckLinks from 'app/components/elements/TaskCheckLinks'
-
-
+import Plan from 'app/components/cards/Plan'
 
 function sortOrderToLink(so, topic, account) {
-   
+
     // to prevent probmes check if topic is not the same as account name
     if ('@' + account == topic) topic = ''
     if (so === 'home') return '/@' + account + '/feed';
     if (so === 'tasks') return '/tasks'
     if (topic) return `/${so}/${topic}`;
 
- 
+
     return `/${so}`;
 }
 
@@ -298,11 +297,11 @@ class PostsIndex extends React.Component {
         const sort_order_menu_horizontal = sort_orders_horizontal.map(so => {
                 sort_order = route.params && route.params[0] ? route.params[0] : null;
 
-         
+
                 let active = (so[0] === sort_order) || (so[0] === 'trending' && sort_order === 'trending30');
-               
-               
-             
+
+
+
                 if (this.props.current_program == 1) {topic_original_link = 'bm-ceh23'}
                 if (this.props.current_program == 2) {topic_original_link = 'bm-mzs17'}
                 return {link: sortOrderToLink(so[0], topic_original_link, current_account_name), value: so[1], active};
@@ -326,6 +325,8 @@ class PostsIndex extends React.Component {
                 <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
 
                     {thegame}
+
+                    <Plan />
 
                     {formFront}
 
