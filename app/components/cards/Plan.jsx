@@ -57,7 +57,7 @@ class Plan extends Component {
       },
       body: JSON.stringify({
         plan: this.state.plan,
-        wordrice: this.state.wordPrice
+        wordPrice: this.state.wordPrice
       })
     })
 
