@@ -3001,6 +3001,17 @@ export default function useGeneralApi(app) {
 		})
 	})
 
+	router.get('/get_plan_show_status', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+		const [planShowStatus] = yield sequelize.query(`
+			SELECT value FROM settings WHERE type = "plan" LIMIT 1
+		`)
+
+		this.body = JSON.stringify({
+			planShowStatus: planShowStatus[0] ? JSON.parse(planShowStatus[0].value) : null
+		})
+	})
+
 }
 
 

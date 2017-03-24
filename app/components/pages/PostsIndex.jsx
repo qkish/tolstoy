@@ -67,6 +67,9 @@ class PostsIndex extends React.Component {
         .then(({ permlink }) => this.setState({
           lastReply: permlink
         }))
+      fetch('/api/v1/get_plan_show_status')
+        .then(res => res.json())
+        .then(({ planShowStatus }) => this.setState({ planShowStatus }))
     }
 
      componentWillReceiveProps(nextProps) {
@@ -326,7 +329,7 @@ class PostsIndex extends React.Component {
 
                     {thegame}
 
-                    <Plan />
+                    {this.props.current_user && this.state.planShowStatus && <Plan />}
 
                     {formFront}
 
@@ -373,6 +376,7 @@ module.exports = {
                 status: state.global.get('status'),
                 loading: state.app.get('loading'),
                 global: state.global,
+                current_user,
                 current_account_name,
                 is_volunteer,
                 current_program
