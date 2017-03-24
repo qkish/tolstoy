@@ -4,7 +4,7 @@ class Plan extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      plan: 0,
+      plan: null,
       wordPrice: ''
     }
     this.save = this.save.bind(this)
@@ -42,18 +42,25 @@ class Plan extends Component {
 
   render () {
     return (
-      <div>
+      <div className='PostSummary__feedback-container' style={{ marginBottom: '10px' }}>
         <input
+          style={{ margin: '10px 0' }}
           type='number'
           placeholder='План на неделю'
           value={this.state.plan}
           onChange={this.handlePlanChange} />
         <input
+          style={{ margin: '10px 0' }}
           type='text'
           placeholder='Цена слова'
           value={this.state.wordPrice}
           onChange={this.handleWordPriceChange} />
-        <button className='button' onClick={this.save}>Сохранить</button>
+        <button
+          className='button'
+          style={{ margin: '10px 0' }}
+          onClick={this.save}>
+          Сохранить
+        </button>
       </div>
     )
   }
