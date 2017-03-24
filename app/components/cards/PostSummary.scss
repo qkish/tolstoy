@@ -39,9 +39,9 @@ ul.PostsList__summaries {
   width: 560px;
   background: #fff;
   padding: 10px 20px 10px 20px;
-  dispay: block;
+  display: block;
   overflow: hidden;
-  
+
   border: 1px solid #e1e3e4;
   border-radius: 0 0 3px 3px;
 }
@@ -60,7 +60,7 @@ ul.PostsList__summaries {
 }
 
 .PostSummary__NPS-table {
-  
+
   margin: 0;
   border: 0 none;
   background: #fff;
@@ -77,15 +77,15 @@ ul.PostsList__summaries {
 
 
 .PostSummary__NPS-table td {
- 
+
  padding: 24px;
-  
+
 }
 
 .PostSummary__NPS-table tbody {
- 
+
 border: 0 none;
-  
+
 }
 
 .PostSummary__NPS-title {
@@ -118,7 +118,7 @@ overflow: hidden;
 
 .PostSummary__feedback-comment-text {
   padding: 10px 0;
-  
+
 }
 
 .PostSummary__feedback-comment-score {
@@ -146,7 +146,7 @@ overflow: hidden;
   padding: 10px 0;
   float: left;
   width: 33%;
-  
+
 }
 
 .PostSummary__image {
@@ -159,7 +159,7 @@ overflow: hidden;
   background-repeat: no-repeat;
 
   margin-top:15px;
- 
+
 }
 .PostSummary__image img {
   width: 518px;
@@ -172,7 +172,7 @@ overflow: hidden;
 .PostSummary__checking-buttons {
   display: block;
 
-  
+
   margin: 35px -20px 0px;
   padding: 10px 10px 0 10px;
   border-top: 1px solid #efeff0;
@@ -180,7 +180,7 @@ overflow: hidden;
 }
 .PostSummary__task-checking {
   padding: 4px 7px;
-  
+
   color: #898d9b;
   font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
   font-size: 10px;
@@ -190,7 +190,7 @@ overflow: hidden;
   background: #edeeee;
 
   border-radius: 3px;
-  
+
 }
 .PostSummary__checking-buttons-approve {
   float: left;
@@ -203,11 +203,11 @@ overflow: hidden;
 .PostSummary__checking-buttons-approve button:hover {
  background: #d3e293;
  color: #7d8a4e;
- 
+
 }
 .PostSummary__checking-buttons-decline {
   float: right;
- 
+
 }
 .PostSummary__checking-buttons-decline button{
   float: right;
@@ -222,16 +222,16 @@ overflow: hidden;
 
 .PostSummary__checking-buttons-decline .buttonGray {
   background: #e4e6f2;
-  color: #898d9b; 
+  color: #898d9b;
 }
 
 .PostSummary__checking-buttons-approve .buttonGray {
   background: #e4e6f2;
-  color: #898d9b; 
+  color: #898d9b;
 }
 .PostSummary__task-approved {
   padding: 4px 7px;
-  
+
   color: #7d8a4e;
   font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
   font-size: 10px;
@@ -241,7 +241,7 @@ overflow: hidden;
   background: #e1f1b0;
 
   border-radius: 3px;
-  
+
 }
 
 .PostsIndex__left {
@@ -254,7 +254,7 @@ overflow: hidden;
 
 .PostSummary__task-declined {
   padding: 4px 7px;
-  
+
   color: #b50a06;
   font-family: "museo_sans_cyrl", Helvetica, Arial, sans-serif;
   font-size: 10px;
@@ -264,7 +264,7 @@ overflow: hidden;
   background: #ed8c72;
 
   border-radius: 3px;
-  
+
 }
 
 .PostSummary__feedback-mylink {
@@ -304,7 +304,7 @@ margin-bottom: 15px;
 
 .PostSummary.with-image .PostSummary__reblogged_by,
 .PostSummary.with-image .PostSummary__content {
-  
+
 }
 
 .PostSummary__summToday {
@@ -317,7 +317,7 @@ margin-bottom: 15px;
 
 .PostSummary__file {
   margin-top:13px;
-  
+
   min-height: 32px;
   background-size: 32px 32px;
   padding: 6px 0 0 40px;
@@ -328,7 +328,7 @@ margin-bottom: 15px;
   font-family:"museo_sans_cyrl", Helvetica, Arial, sans-serif;
   font-weight: 700;
   margin-left: -3px;
-  
+
   /* These are technically the same, but use both */
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -345,7 +345,7 @@ margin-bottom: 15px;
   -webkit-hyphens: auto;
   hyphens: auto;
     text-decoration: none;
-  
+
 }
 .PostSummary__file:hover, .PostSummary__file:focus {
   text-decoration: none;
@@ -375,7 +375,7 @@ margin-bottom: 15px;
     font-size: 14px;
     margin: 0 0 5px 0;
     overflow: hidden;
-    
+
     > a {
       color: #333;
     }
@@ -397,7 +397,7 @@ margin-bottom: 15px;
     font-size: 14px;
     margin: 0 0 5px 0;
     overflow: hidden;
-    
+
     > a {
       color: #333;
     }
@@ -414,7 +414,7 @@ margin-bottom: 15px;
   background: #f7f8f9;
   border-top: 1px solid #ebebeb;
   border-bottom: 1px solid #ebebeb;
-  
+
 }
 
 .PostSummary__header-otvettitle {
@@ -423,7 +423,7 @@ margin-bottom: 15px;
   text-transform: uppercase;
   color: #9f9f9f;
   font-weight: 700;
-  
+
 }
 
 .PostSummary__collapse {
@@ -441,7 +441,7 @@ margin-bottom: 15px;
   color: #1f1f1f;
   overflow: hidden;
   line-height: 20px;
- 
+
   text-overflow: ellipsis;
   font-weight: 500;
 
@@ -479,7 +479,7 @@ margin-bottom: 15px;
   .Card & {
      margin-top: 2px;
      margin-left: 46px;
- 
+
    }
 }
 
@@ -495,8 +495,8 @@ margin-bottom: 15px;
     color: $black;
     font-weight: 700;
     font-size: 14px;
- 
-   
+
+
   }
   padding-right: 1rem;
   margin-right: 1rem;
@@ -514,7 +514,7 @@ color: #7d7d7d;
   font-size: 12px;
   line-height: 15px;
   margin-top: 4px;
-  
+
 }
 
 .PostSummary__feedback-subtext {
@@ -589,10 +589,10 @@ width: 50px;
   width: 100%;
   background: #fff;
   padding: 10px;
-  
+
     border: 1px solid #e1e3e4;
   border-radius: 0 0 3px 3px;
-  
+
 }
 
 
@@ -610,9 +610,9 @@ width: 50px;
 }
 
 .PostSummary__NPS-table td {
- 
+
  padding: 8px 3px;
-  
+
 }
   .PostSummary__showMoneyTitle {
     display: none;
@@ -627,7 +627,7 @@ width: 50px;
   .PostSummary__niche {
     margin-left: 42px;
     max-height: 46px;
- 
+
   }
 
   .PostSummary__header-otvet {
@@ -638,7 +638,7 @@ width: 50px;
     font-size: 14px;
     margin: 0 0 5px 0;
     overflow: hidden;
-    
+
     > a {
       color: #333;
     }
@@ -655,7 +655,7 @@ width: 50px;
   background: #f7f8f9;
   border-top: 1px solid #ebebeb;
   border-bottom: 1px solid #ebebeb;
-  
+
 }
 
 .PostSummary__task-approved, .PostSummary__task-declined, .PostSummary__task-checking {
@@ -669,7 +669,7 @@ width: 50px;
   float: left;
   margin-left: 43px;
   margin-top: 10px;
-  
+
 }
 
 
