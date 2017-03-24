@@ -8,6 +8,7 @@ class Plan extends Component {
       wordPrice: '',
       sended: false
     }
+
     this.save = this.save.bind(this)
     this.handlePlanChange = this.handlePlanChange.bind(this)
     this.handleWordPriceChange = this.handleWordPriceChange.bind(this)
