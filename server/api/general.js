@@ -2399,7 +2399,13 @@ export default function useGeneralApi(app) {
 				total_score
 			})
 
-			this.status = 200
+			let [links] = yield sequelize.query('SELECT value FROM settings WHERE type = "links" LIMIT 1')
+			links = JSON.parse(JSON.stringify(links))[0] ? JSON.parse(JSON.stringify(links))[0].value : ''
+
+			this.body = JSON.stringify({
+				links
+			})
+
 		} catch (error) {
 			console.error('Error in POST /feedback api call', this.session.user, error.toString())
 			this.body = JSON.stringify({

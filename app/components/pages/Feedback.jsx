@@ -57,9 +57,12 @@ class Feedback extends Component {
         throw new Error(response.statusText)
       }
 
+      const { links } = await response.json()
+
       this.setState({
         new: false,
-        sended: true
+        sended: true,
+        links
       })
     } catch (error) {
       this.setState({
@@ -71,8 +74,9 @@ class Feedback extends Component {
   render () {
     if (this.state.sended) {
       return (
-        <div>
+        <div className='PostSummary'>
           <h3 className="PostSummary__feedback">Спасибо, ваш отзыв принят!</h3>
+          {this.state.links && <div dangerouslySetInnerHTML={{ __html: this.state.links }}></div>}
         </div>
       )
     }
