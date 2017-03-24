@@ -146,6 +146,33 @@ class FeedbackResults extends Component {
               </LinkContainer>
 
     </DropdownButton>
+
+
+     {this.state.cities && (
+      <div className="FeedbackResults_cities-mobile">
+     <DropdownButton title={this.getCity() === 'all' ? 'Все города' : this.getCity()} bsStyle='link'>
+
+      <LinkContainer to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/all`}>
+                <MenuItem>Все города</MenuItem>
+              </LinkContainer>
+
+
+          {this.state.cities.map(city => (
+              <LinkContainer to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/${city}`}>
+                <MenuItem>{city}</MenuItem>
+              </LinkContainer>
+
+              ))}
+
+           <LinkContainer to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/other`}>
+                <MenuItem>Другие города</MenuItem>
+              </LinkContainer>
+
+          </DropdownButton>
+        </div>
+
+      )}
+
         </ul>
         {this.state.nps ? (
           <div className="PostSummary__NPS">

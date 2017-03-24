@@ -92,8 +92,8 @@ class Game extends Component {
   render () {
     return (
       <div className="PostSummary__feedback-container">
-        <h3>План на неделю</h3>
-        <div className="PostSummary__feedback-subtext">Напишите задачи на неделю и сумму, которую планируете заработать</div>
+        <h3>Ответ на задание</h3>
+        <div className="PostSummary__feedback-subtext">Напишите ответ на задание:</div>
 
         <div className='ReplyEditorShort__body'>
           <textarea
