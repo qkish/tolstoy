@@ -117,7 +117,7 @@ class FeedbackResults extends Component {
              <LinkContainer to={`/feedback/results/ceh/2017-04-15/all`}>
                <MenuItem>15 апреля</MenuItem>
              </LinkContainer>
-      )}
+      
     </DropdownButton>
           <li className={this.getEvent() === '2' ? 'active' : ''}>
             <Link to={`/feedback/results/mzs/all/all`}>МЗС</Link>
@@ -220,7 +220,7 @@ class FeedbackResults extends Component {
                   onPageChange={({ selected }) => {
                       const currentPage = selected + 1
                       const offset = this.state.perPage * selected
-                      this.getReplies(this.getEvent(this.props), this.getCity(), this.state.perPage, offset).then(() => window.scrollTo(0, 0))
+                      this.getReplies(this.getEvent(this.props), this.getCity(), this.getDay(), this.state.perPage, offset).then(() => window.scrollTo(0, 0))
                   }} />
             </div>
           </div>
@@ -234,15 +234,17 @@ class FeedbackResults extends Component {
         {this.state.cities && (
           <div className="Card Card__minus-margin">
             <ul className="Card__ul-citys">
-              <li>
+              <li className={this.getCity() === 'all' ? "active": ""} >
                 <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/all`}>Все города</Link>
               </li>
               {this.state.cities.map(city => (
-                <li key={city}>
+                <li className={this.getCity() === city ? "active": ""} key={city}>
                   <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/${city}`}>{city}</Link>
                 </li>
               ))}
-              <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/other`}>Другие города</Link>
+              <li  className={this.getCity() === 'other' ? "active": ""} >
+                <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/other`}>Другие города</Link>
+            </li>
             </ul>
           </div>
         )}
