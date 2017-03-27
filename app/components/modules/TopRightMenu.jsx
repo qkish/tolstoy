@@ -36,6 +36,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
     const account_link = `/@${username}`;
     const posts_link = `/@${username}/posts`;
     const reset_password_link = `/@${username}/password`;
+    const feedback_link = `/feedback`;
 
     let vesting_steem
     if (account) {
@@ -53,6 +54,7 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
             {link: account_link, value: translate('profile')},
 
             {link: replies_link, value: translate('replies')},
+            {link: feedback_link, value: 'Оставить отзыв'},
            //{link: wallet_link, value: translate('wallet')},
             //{link: reset_password_link, value: translate('change_password')},
             {link: settings_link, value: translate('settings')},
