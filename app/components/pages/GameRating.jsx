@@ -41,7 +41,7 @@ const userGroupGetScore = user => {
 class GameRating extends Component {
 	constructor(props) {
 		super(props)
-		this.state = {taskid: 1}
+		this.state = {taskid: 3}
 		this.search = this.search.bind(this)
 		this.getData = this.getData.bind(this)
 
