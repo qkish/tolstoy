@@ -1165,7 +1165,10 @@ export default function useGeneralApi(app) {
 		}
 
 		if (couch_group) {
-			where = {couch_group}
+			where = {
+				couch_group,
+				current_program: program
+			}
 			_order = 'money_total'
 		}
 
