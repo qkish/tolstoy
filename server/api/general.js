@@ -1119,12 +1119,7 @@ export default function useGeneralApi(app) {
 			}
 			if (category === 'couches') {
 				where = {
-					$and: [{
-					couch: true,
-				},
-				{
-					current_program: program
-				}]
+					couch: true
 				}
 				type = 'couch'
 			}
