@@ -9,7 +9,7 @@ export default (sequelize, DataTypes) => {
 			},
 			field: 'user_id',
 		},
-		type: DataTypes.ENUM(['polk', 'hundred', 'ten', 'couch']),
+		type: DataTypes.ENUM(['polk', 'hundred', 'ten', 'couch', 'couch_mzs']),
 		money: DataTypes.INTEGER,
 		vesting: DataTypes.INTEGER,
 		monets: DataTypes.INTEGER,
