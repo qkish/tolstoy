@@ -1119,7 +1119,15 @@ export default function useGeneralApi(app) {
 			}
 			if (category === 'couches') {
 				where = {
-					couch: true
+					$and: [{
+						couch: true
+					}, {
+						$or: [{
+							current_program: program
+						}, {
+							all_programs: true
+						}]
+					}]
 				}
 				type = 'couch'
 			}
