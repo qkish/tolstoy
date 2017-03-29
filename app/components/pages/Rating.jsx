@@ -23,13 +23,13 @@ import {Link} from 'react-router'
 function moneyPrettify(text) {
 	let moneyInRating
 	if (text) {
-		
+
 		moneyInRating = String(text);
 		moneyInRating = moneyInRating.replace(/(\d)(?=(\d{3})+(\D|$))/g, '$1 ');
-		
-		
+
+
 	} else moneyInRating = '0'
-	
+
 	return moneyInRating
 }
 
@@ -54,8 +54,10 @@ class Rating extends Component {
 		this.search = this.search.bind(this)
 		this.getData = this.getData.bind(this)
 	}
-	
+
 	getData(props) {
+		let currentProgram = this.props.current_program ? this.props.current_program : null
+
 		if (props.params.category === 'ten') {
 			getUsersByTen(props.params.id).then(users => this.setState({users}))
 			return
@@ -69,7 +71,7 @@ class Rating extends Component {
 			return
 		}
 		if (props.params.category === 'couch-group') {
-			getUsersByCouchGroup(props.params.id).then(users => this.setState({users}))
+			getUsersByCouchGroup(props.params.id, currentProgram).then(users => this.setState({users}))
 			return
 		}
 		if (props.params.category === 'my-ten') {
@@ -85,36 +87,35 @@ class Rating extends Component {
 			return
 		}
 
-		let currentProgram = this.props.current_program ? this.props.current_program : null
 		getUsersByCategory(props.params.category,0,50,'undefined',currentProgram).then(users => this.setState({users}))
 	}
-	
+
 	componentDidMount() {
 		this.getData(this.props)
 	}
-	
+
 	componentWillReceiveProps(nextProps) {
 		this.getData(nextProps)
 	}
-	
+
 	search(text) {
 		searchUsers(text).then(users => this.setState({isSearch: true, users}))
 	}
-	
+
 	render() {
 		let isAll = false
 		if (this.props.params.category == 'all' ||
 			this.props.params.category == 'my-ten' ||
 			this.props.params.category == 'my-group'
-		
+
 		) {
 			isAll = true
 		}
-		
-		
+
+
 		let view
 		const {users} = this.state
-		
+
 //		const UserMapper = (users, path, namePrefix) => {
 //			const loader = <div>Загрузка</div>
 //			const list = (
@@ -133,8 +134,8 @@ class Rating extends Component {
 //			)
 //			return users ? list : loader
 //		}
-		
-		
+
+
 		const userList = users ? (
 			<div className="Rating_wrapper">
 				{users.map(user => (
@@ -188,7 +189,7 @@ class Rating extends Component {
 			)
 		}
 
-		
+
 		if (this.props.params.category === 'tens') {
 			view = users ? (
 				<div className="Rating_wrapper">
@@ -205,7 +206,7 @@ class Rating extends Component {
 				<div>Загрузка</div>
 			)
 		}
-		
+
 		if (this.props.params.category === 'hundreds') {
 			view = users ? (
 				<div className="Rating_wrapper">
@@ -224,7 +225,7 @@ class Rating extends Component {
 				<div>Загрузка</div>
 			)
 		}
-		
+
 		if (this.props.params.category === 'polki') {
 			view = users ? (
 				<div className="Rating_wrapper">
@@ -241,8 +242,8 @@ class Rating extends Component {
 				<div>Загрузка</div>
 			)
 		}
-		
-		
+
+
 		if (this.props.params.category === 'couches') {
 			view = users ? (
 				<div className="Rating_wrapper">
@@ -263,7 +264,7 @@ class Rating extends Component {
 		if (this.state.isSearch) {
 			view = userList
 		}
-		
+
 		let submenu = <div className="Rating__submenu">
 			<HorizontalSubmenu items={[{
 				active: this.props.params.category === 'all',
@@ -285,7 +286,7 @@ class Rating extends Component {
 				onKeyPress={e => e.key === 'Enter' ? this.search(e.target.value) : null}
 				className='Rating__search'/>
 		</div>
-		
+
 		return (
 			<div className='PostsIndex row'>
 				<div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">

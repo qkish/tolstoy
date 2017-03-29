@@ -8,17 +8,7 @@ import HorizontalSubmenu from 'app/components/elements/HorizontalSubmenu'
 import Pagination from 'react-paginate'
 import { UserAuthWrapper } from 'redux-auth-wrapper'
 import { routerActions } from 'react-router-redux'
-import {
-    getUsersByCategory,
-    searchUsers,
-    getUsersByTen,
-    getUsersByHundred,
-    getUsersByPolk,
-    getUsersByCouchGroup,
-    getMyTen,
-    getMyGroup,
-    getUsersCount
-} from 'app/utils/ServerApiClient'
+import { getUsersByCategory, searchUsers, getUsersCount } from 'app/utils/ServerApiClient'
 import UserEdit from 'app/components/elements/UserEdit'
 import { Link } from 'react-router'
 import Select from 'react-select'

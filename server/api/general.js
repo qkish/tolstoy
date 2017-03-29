@@ -1119,12 +1119,7 @@ export default function useGeneralApi(app) {
 			}
 			if (category === 'couches') {
 				where = {
-					$and: [{
-					couch: true,
-				},
-				{
-					current_program: program
-				}]
+					couch: true
 				}
 				type = 'couch'
 			}
@@ -1156,7 +1151,7 @@ export default function useGeneralApi(app) {
 
 		if (ten) {
 			where = {ten}
-
+			_order = 'money_total'
 		}
 
 		if (hundred) {
@@ -1170,8 +1165,11 @@ export default function useGeneralApi(app) {
 		}
 
 		if (couch_group) {
-			where = {couch_group}
-
+			where = {
+				couch_group,
+				current_program: program
+			}
+			_order = 'money_total'
 		}
 
 		if (search) {
@@ -1222,7 +1220,7 @@ export default function useGeneralApi(app) {
 				'volunteer'
 			],
 			where,
-			order: [order],
+			order: [order, ['id']],
 			include: [groupsInclude],
 			offset: _offset,
 			limit: _limit

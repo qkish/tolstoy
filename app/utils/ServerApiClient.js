@@ -180,9 +180,9 @@ export function getGameUsersByPolk (polkId) {
 
 
 
-export function getUsersByCouchGroup (couchGroupId) {
+export function getUsersByCouchGroup (couchGroupId, program) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    return fetch(`/api/v1/users?couch_group=${couchGroupId}`)
+    return fetch(`/api/v1/users?couch_group=${couchGroupId}&program=${program}`)
         .then(res => res.json())
         .then(({ users }) => users);
 }
