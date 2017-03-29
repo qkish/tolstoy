@@ -1079,10 +1079,6 @@ export default function useGeneralApi(app) {
 		let _limit = Number(limit) || 50
 		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
-
-
-
-
 		if (category) {
 			if (category === 'polki') {
 				where = {
