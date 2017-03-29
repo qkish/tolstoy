@@ -41,7 +41,8 @@ export default (sequelize, DataTypes) => {
 		tasks_money: DataTypes.INTEGER,
 		program_city: DataTypes.STRING,
 		plan: DataTypes.INTEGER,
-		word_price: DataTypes.STRING
+		word_price: DataTypes.STRING,
+		all_programs: DataTypes.BOOLEAN
 	}, {
 		tableName: 'users',
 		createdAt: 'created_at',
