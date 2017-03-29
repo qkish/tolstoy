@@ -32,6 +32,7 @@ class TaskCheckLink extends Component {
         <li><Link to="/created/bm-taskceh3">План-кинжал и упаковка</Link></li>
         <li><Link to="/created/bm-taskceh4">1000 посетителей и 100 репостов</Link></li>
         <li><Link to="/created/bm-taskceh5">100 целей, утро, декларация</Link></li>
+         <li><Link to="/created/bm-taskceh6">Встречи, автоворонка</Link></li>
 
     </ol>}
 
