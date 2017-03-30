@@ -243,7 +243,7 @@ class Rating extends Component {
 		if (this.props.params.category === 'couches') {
 			view = users ? (
 				<div className="Rating_wrapper">
-						{users.map(user => (
+						{users.map(user => user.User && (
 							<div className="Rating__row" key={user.id}>
 								<User account={user.User.name}
 								      link={`/rating/couch-group/${user.User.id}`}
