@@ -34,15 +34,11 @@ function moneyPrettify(text) {
 }
 
 const userGroupGetMoney = (user) => {
-
-	console.log('USER : ', user)
 	let money
 	try {
 		money = user.Groups[0].money
-		console.log('USER GOT MUNEY: ', money)
 	} catch (e) {
 		money = 0
-		console.log('USER NUT GOT', e)
 	}
 	return moneyPrettify(money /* + user.money_total */)
 }
@@ -245,14 +241,15 @@ class Rating extends Component {
 
 
 		if (this.props.params.category === 'couches') {
+      console.log(users)
 			view = users ? (
 				<div className="Rating_wrapper">
 						{users.map(user => (
-							<div className="Rating__row">
-								<User account={user.name} key={user.id}
-								      link={`/rating/couch-group/${user.id}`}
-								      name={`Тренерская группа ${user.first_name} ${user.last_name}`}/>
-								<div className="Rating__money">{userGroupGetMoney(user)} ₽</div>
+							<div className="Rating__row" key={user.id}>
+								<User account={user.User.name}
+								      link={`/rating/couch-group/${user.User.id}`}
+								      name={`Тренерская группа ${user.User.first_name} ${user.User.last_name}`}/>
+								<div className="Rating__money">{moneyPrettify(user.money)} ₽</div>
 							</div>
 						))}
 				</div>
@@ -260,7 +257,7 @@ class Rating extends Component {
 				<div>Загрузка</div>
 			)
 		}
-		//
+
 		if (this.state.isSearch) {
 			view = userList
 		}

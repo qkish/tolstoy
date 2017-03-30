@@ -1080,6 +1080,8 @@ export default function useGeneralApi(app) {
 		let _limit = Number(limit) || 50
 		let _order = this.query.order !== 'undefined' ? this.query.order : null
 
+		let users = []
+
 		if (category) {
 			if (category === 'polki') {
 				where = {
@@ -1114,23 +1116,41 @@ export default function useGeneralApi(app) {
 				}
 				type = 'ten'
 			}
+
 			if (category === 'couches') {
-				where = {
-					$and: [{
-						couch: true
-					}, {
-						$or: [{
-							current_program: program
-						}, {
-							all_programs: true
-						}]
-					}]
-				}
 				type = 'couch'
 				if (program === '2') {
 					type = 'couch_mzs'
 				}
+
+				users = yield models.Group.findAll({
+					attributes: [
+						'id',
+						'money',
+						'monets'
+					],
+					include: [{
+						model: models.User,
+						attributes: ['id', 'first_name', 'last_name', 'name'],
+						where: {
+							$or: [{
+								current_program: program
+							}, {
+								all_programs: true
+							}]
+						}
+					}],
+					where: {
+						type
+					},
+					order: [['money', 'desc'], [{ model: models.User }, 'id']],
+					limit: 50
+				})
+
+				this.body = JSON.stringify({users})
+				return
 			}
+
 			if (category === 'hundred_leader') {
 				where = {
 					$or: [{
@@ -1209,7 +1229,7 @@ export default function useGeneralApi(app) {
 			order = [_order, 'DESC']
 		}
 
-		const users = yield models.User.findAll({
+		users = yield models.User.findAll({
 			attributes: [
 				'id',
 				'name',
@@ -1233,6 +1253,7 @@ export default function useGeneralApi(app) {
 			offset: _offset,
 			limit: _limit
 		})
+
 		this.body = JSON.stringify({users})
 	})
 
