@@ -386,7 +386,8 @@ export default function useGeneralApi(app) {
 					'hundred_leader',
 					'polk_leader',
 					'couch_group',
-          'email'
+          'email',
+          'all_programs'
 				],
 				where: whereClause
 			})

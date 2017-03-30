@@ -52,6 +52,7 @@ export default createModule({
         { action: 'SET_POLK_LEADER', reducer: (state, {payload}) => state.set('isPolkLeader', payload) },
         { action: 'SET_HUNDRED_LEADER', reducer: (state, {payload}) => state.set('isHundredLeader', payload) },
         { action: 'SET_MY_HIERARCHY', reducer: (state, {payload}) => state.set('myHierarchy', payload) },
+        { action: 'SET_ALL_PROGRAMS', reducer: (state, {payload}) => state.set('allPrograms', payload) },
         { action: 'REMOVE_HIGH_SECURITY_KEYS', reducer: (state) => {
             if(!state.hasIn(['current', 'private_keys'])) return state
             let empty = false

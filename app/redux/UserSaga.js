@@ -275,10 +275,10 @@ function* usernamePasswordLogin2({payload: {username, password, saveLogin,
     if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.current_program) yield put(user.actions.setProgram(bmProgram.bmprog.current_program))
     if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.volunteer) yield put(user.actions.setVolunteer(bmProgram.bmprog.volunteer))
     if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.id) yield put(user.actions.setMyId(bmProgram.bmprog.id))
-	if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.polk_leader) yield put(user.actions.setPolkLeader(bmProgram.bmprog.polk_leader))
-	if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.hundred_leader) yield put(user.actions.setHundredLeader(bmProgram.bmprog.hundred_leader))
+    if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.polk_leader) yield put(user.actions.setPolkLeader(bmProgram.bmprog.polk_leader))
+    if (bmProgram && bmProgram.bmprog && bmProgram.bmprog.hundred_leader) yield put(user.actions.setHundredLeader(bmProgram.bmprog.hundred_leader))
     if (bmProgram && bmProgram.bmprog) yield put(user.actions.setMyHierarchy({ myTen: bmProgram.bmprog.ten, myGroup: bmProgram.bmprog.couch_group, myHundred: bmProgram.bmprog.hundred, myPolk: bmProgram.bmprog.polk }))
-
+    if (bmProgram && bmProgram.bmprog) yield put(user.actions.setAllPrograms(bmProgram.bmprog.all_programs))
 
     let isEmail = '@'
     // 1) Check local storage
