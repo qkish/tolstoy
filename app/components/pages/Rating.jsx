@@ -241,7 +241,6 @@ class Rating extends Component {
 
 
 		if (this.props.params.category === 'couches') {
-      console.log(users)
 			view = users ? (
 				<div className="Rating_wrapper">
 						{users.map(user => (
