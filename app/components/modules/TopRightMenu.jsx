@@ -22,7 +22,7 @@ const defaultNavigate = (e) => {
     browserHistory.push(a.pathname + a.search + a.hash);
 };
 
-function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location, gprops, account, logining}) {
+function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpic, vertical, navigate, toggleOffCanvasMenu, probablyLoggedIn, location, gprops, account, logining, currentProgram, allPrograms, updateProgram}) {
     const mcn = 'menu' + (vertical ? ' vertical show-for-small-only' : '');
     const mcl = vertical ? '' : ' sub-menu';
     const lcn = vertical ? '' : 'show-for-medium';
@@ -70,7 +70,6 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                         <a href="/ru--diskleijmer/@hipster/diskleimer-o-vyplatakh-i-o-cuti-platformy" className="button alert">Дисклеймер</a>
                     </li> */}
 
-
                     <LinkWithDropdown
                         closeOnClickOutside
                         dropdownPosition="bottom"
@@ -112,7 +111,17 @@ function TopRightMenu({username, showLogin, logout, loggedIn, showSignUp, userpi
                  <li className={lcn}><Link to={wallet_link} className="TopRightMenu_sila-link"><div className="TopRightMenu_sila">{vesting_steem && Math.round(vesting_steem)}</div></Link></li>
 
                 <li className={lcn}><a href="/static/search.html" title={search}>{vertical ? <span>{search}</span> : <div className="TopRightMenu__search-icon"></div>}</a></li>
-
+                {allPrograms && (
+                  <div style={{ width: '50px' }}>
+                    <select
+                      defaultValue={currentProgram}
+                      style={{ padding: '0 1px 0 3px' }}
+                      onChange={updateProgram}>
+                      <option value='1'>ЦЕХ</option>
+                      <option value='2'>МЗС</option>
+                    </select>
+                  </div>
+                )}
                 <LinkWithDropdown
                     closeOnClickOutside
                     dropdownPosition="bottom"
@@ -244,7 +253,9 @@ export default connect(
             probablyLoggedIn: false,
             gprops,
             account,
-            logining: state.user.get('logining')
+            logining: state.user.get('logining'),
+            allPrograms: state.user.get('allPrograms'),
+            currentProgram: state.user.get('currentProgram')
         }
     },
     dispatch => ({
@@ -259,6 +270,10 @@ export default connect(
         showSignUp: e => {
             if (e) e.preventDefault();
             dispatch(user.actions.showSignUp())
+        },
+        updateProgram: e => {
+          if (e) e.preventDefault();
+          dispatch(user.actions.updateProgram(e.target.value))
         }
     })
 )(TopRightMenu);
