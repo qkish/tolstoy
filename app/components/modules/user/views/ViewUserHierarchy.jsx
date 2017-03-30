@@ -18,12 +18,8 @@ class ViewUserHierarchy extends Component {
         this.state = {hierarchy: ''};
     }
 
-   
     getHierarchy = (props) => {
-           let email = props.account.name ? props.account.name : '';
-
-
-      
+        let email = props.account.name ? props.account.name : '';
 
         fetch('/api/v1/user_hierarchy', {
             method: 'post',
@@ -41,11 +37,11 @@ class ViewUserHierarchy extends Component {
         }).then(r => r.json()).then(res => {
             if (res.error || res.status !== 'ok') {
                 console.error('SignUp server error', res.error);
-                
+
                 this.setState({server_error: res.error || translate('unknown'), loading: false});
             } else {
                 this.setState({hierarchy: res.hierarchy});
-       
+
             }
         }).catch(error => {
             console.error('Caught CreateAccount server error', error);
@@ -56,7 +52,7 @@ class ViewUserHierarchy extends Component {
    componentWillReceiveProps(nextProps)  {
 
     this.getHierarchy(nextProps)
-     
+
     }
 
     componentDidMount() {
@@ -67,13 +63,8 @@ class ViewUserHierarchy extends Component {
 
     render() {
         let account = this.props.account;
-        
+
         let hierarchy = this.state.hierarchy
-
- 
-        
-
-
 
         let myTen, myHundred, myPolk, myGroup
 
@@ -82,12 +73,6 @@ class ViewUserHierarchy extends Component {
         if (hierarchy && hierarchy.polk) myPolk = hierarchy.polk
         if (hierarchy && hierarchy.couch_group) myGroup = hierarchy.couch_group
 
-
-
-
-
-
-       
         return <div className="UserProfile__blockinfo UserProfile__groupinfo">
                 <h6>Группы</h6>
 
@@ -100,14 +85,14 @@ class ViewUserHierarchy extends Component {
                 {myHundred ? <div className="UserProfile__group">
                 <UserGroup link={'/rating/hundred/' + myHundred} title='Сотня' id={myHundred} />
                 </div> : '' }
-               
+
                 {myPolk ? <div className="UserProfile__group">
-                
+
                 <UserGroup link={'/rating/polk/' + myPolk} title='Полк' id={myPolk}/>
                 </div> : '' }
 
                 {myGroup ? <div className="UserProfile__group">
-                <UserGroup link={'/rating/group/' + myGroup} title='Группа' id={myGroup} />
+                <UserGroup link={'/rating/couch-group/' + myGroup} title='Группа' id={myGroup} />
                 </div> : '' }
                 </div>
 
@@ -115,7 +100,5 @@ class ViewUserHierarchy extends Component {
     }
 
 }
-
-
 
 export default ViewUserHierarchy;
