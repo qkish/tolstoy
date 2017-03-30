@@ -1126,6 +1126,9 @@ export default function useGeneralApi(app) {
 					}]
 				}
 				type = 'couch'
+				if (program === '2') {
+					type = 'couch_mzs'
+				}
 			}
 			if (category === 'hundred_leader') {
 				where = {
