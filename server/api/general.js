@@ -1144,7 +1144,7 @@ export default function useGeneralApi(app) {
 						type
 					},
 					order: [['money', 'desc'], [{ model: models.User }, 'id']],
-					limit: 50
+					limit: 100
 				})
 
 				this.body = JSON.stringify({users})
