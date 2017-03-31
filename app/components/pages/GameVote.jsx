@@ -6,6 +6,11 @@ import Game from 'app/components/pages/Game'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import { UserAuthWrapper } from 'redux-auth-wrapper'
 import Plan from 'app/components/cards/Plan'
+import MobileDetect from 'mobile-detect'
+
+const BrowserFail = () => (
+  <div style={{ marginTop: '10px' }} className="alert alert-warning">Временно игра не поддерживает бразуер Chrome на iOS. Пожалуйста, используйте бразуер Safari! Приносим извинения за неудобства!</div>
+)
 
 class GameVote extends Component {
   constructor (props) {
@@ -81,8 +86,6 @@ class GameVote extends Component {
   }
 
   render () {
-
-
     let myTen = ''
     let myID = ''
     let isOnEdit, isOnMyTen, isOnVolunteer, isOnOtherTen
@@ -169,7 +172,14 @@ const UserIsAuthenticated = UserAuthWrapper({
   LoadingComponent: () => <div>Загрузка...</div>
 })
 
+let fail = false
+
+if (process.env.BROWSER) {
+  const md = new MobileDetect(window.navigator.userAgent)
+  fail = md.os() === 'iOS' && md.userAgent() === 'Chrome'
+}
+
 module.exports = {
   path: 'gamevote(/:category(/:id))',
-  component: UserIsAuthenticated(connect(mapStateToProps)(GameVote))
+  component: fail ? BrowserFail : UserIsAuthenticated(connect(mapStateToProps)(GameVote))
 }
