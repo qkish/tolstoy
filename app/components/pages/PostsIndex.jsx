@@ -242,7 +242,7 @@ class PostsIndex extends React.Component {
 
         //Кнопка входа в игру
         let thegame
-        if (this.props.current_program == 2) {
+        if (this.props.current_program == 1) {
            thegame = <div className="PostsIndex__thegame-href">
                         <Link to="/gamevote"><div className="PostsIndex__thegame-button">Перейти в игру</div>
                         </Link>
@@ -250,7 +250,7 @@ class PostsIndex extends React.Component {
         }
 
 
-        thegame = ''
+        // thegame = ''
 
         // Format first letter of all titles and lowercase user name
         if (route.page !== 'UserProfile') {

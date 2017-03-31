@@ -2290,7 +2290,7 @@ export default function useGeneralApi(app) {
 					attributes: ['id', 'score_1', 'score_2', 'score_3', 'comment'],
 					include: [{
 						model: models.User,
-						attributes: ['name']
+						attributes: ['id', 'name']
 					}]
 				}]
       })
@@ -2466,7 +2466,7 @@ export default function useGeneralApi(app) {
 					required: false
 				}, {
 					model: models.User,
-					attributes: ['name'],
+					attributes: ['id', 'name'],
 					where: {
 						id: this.params.id
 					}
@@ -2516,7 +2516,7 @@ export default function useGeneralApi(app) {
 					required: false
 				}, {
 					model: models.User,
-					attributes: ['name'],
+					attributes: ['id', 'name'],
 					where: {
 						ten: this.params.id
 					}
@@ -2995,7 +2995,7 @@ export default function useGeneralApi(app) {
 	router.post('/plan', koaBody, function* () {
 		if (rateLimitReq(this, this.req)) return
 		const params = this.request.body
-		const {csrf, plan, wordPrice} = typeof(params) === 'string' ? JSON.parse(params) : params
+		const {csrf, plan, wordPrice, id} = typeof(params) === 'string' ? JSON.parse(params) : params
 		//if (!checkCSRF(this, csrf)) return;
 
 		try {
@@ -3004,7 +3004,7 @@ export default function useGeneralApi(app) {
 				word_price: wordPrice
 			}, {
 				where: {
-					id: this.session.user
+					id: id || this.session.user
 				}
 			})
 			this.status = 200
@@ -3019,10 +3019,11 @@ export default function useGeneralApi(app) {
 
 	router.get('/plan', koaBody, function* () {
 		if (rateLimitReq(this, this.req)) return
+
 		const plan = yield models.User.findOne({
 			attributes: ['plan', 'word_price'],
 			where: {
-				id: this.session.user
+				id: this.query.id || this.session.user
 			}
 		})
 

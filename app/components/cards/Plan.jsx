@@ -16,7 +16,7 @@ class Plan extends Component {
   }
 
   async getPlan () {
-    const response = await fetch('/api/v1/plan', {
+    const response = await fetch(`/api/v1/plan?id=${this.props.for}`, {
       credentials: 'same-origin',
     })
     const { plan: { plan, word_price } } = await response.json()
@@ -63,6 +63,7 @@ class Plan extends Component {
           'Content-type': 'application/json'
         },
         body: JSON.stringify({
+          id: this.props.for,
           plan: this.state.plan,
           wordPrice: this.state.wordPrice
         })

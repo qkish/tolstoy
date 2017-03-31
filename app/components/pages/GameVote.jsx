@@ -119,26 +119,34 @@ class GameVote extends Component {
             </li>
 
           </ul>*/}
-          <Plan readOnly titlePlan='Ваш план на неделю был' />
-          {isOnEdit && <Game.component myId={myID} />}
+          {isOnEdit && (
+            <div>
+              <Plan readOnly titlePlan='Ваш план на неделю был' />
+              <Game.component myId={myID} />
+            </div>
+          )}
           {!isOnEdit && this.state.posts && this.state.posts.map(post => (
-            <GamePost
-              save={({ score_1, score_2, score_3, comment }) => this.updateScore({
-                id: post.id,
-                score_1: score_1 || 0,
-                score_2: score_2 || 0,
-                score_3: score_3 || 0,
-                comment
-              })}
-              interestingValue={post.GameScores && post.GameScores[0] && post.GameScores[0].score_1}
-              simpleValue={post.GameScores && post.GameScores[0] && post.GameScores[0].score_2}
-              obviousValue={post.GameScores && post.GameScores[0] && post.GameScores[0].score_3}
-              commentValue={post.GameScores && post.GameScores[0] && post.GameScores[0].comment || ''}
-              key={post.id}
-              user={post.User.name}
-              displayRate={true}
-              content={post.body}
-            />
+            <div>
+              <Plan readOnly for={post.User.id} titlePlan='План на неделю был' />
+              <GamePost
+                save={({ score_1, score_2, score_3, comment }) => this.updateScore({
+                  id: post.id,
+                  score_1: score_1 || 0,
+                  score_2: score_2 || 0,
+                  score_3: score_3 || 0,
+                  comment
+                })}
+                interestingValue={post.GameScores && post.GameScores[0] && post.GameScores[0].score_1}
+                simpleValue={post.GameScores && post.GameScores[0] && post.GameScores[0].score_2}
+                obviousValue={post.GameScores && post.GameScores[0] && post.GameScores[0].score_3}
+                commentValue={post.GameScores && post.GameScores[0] && post.GameScores[0].comment || ''}
+                key={post.id}
+                user={post.User.name}
+                displayRate={true}
+                content={post.body}
+                money={post.money}
+              />
+            </div>
           ))}
         </div>
       )
