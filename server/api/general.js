@@ -3020,10 +3020,12 @@ export default function useGeneralApi(app) {
 	router.get('/plan', koaBody, function* () {
 		if (rateLimitReq(this, this.req)) return
 
+    const id = this.query.id === 'undefined' ? null : this.query.id
+
 		const plan = yield models.User.findOne({
 			attributes: ['plan', 'word_price'],
 			where: {
-				id: this.query.id || this.session.user
+				id: id || this.session.user
 			}
 		})
 

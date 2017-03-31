@@ -94,7 +94,7 @@ class Plan extends Component {
       return (
         <div className='PostSummary__feedback-container' style={{ marginBottom: '10px' }}>
           <div style={{ margin: '10px 0' }}>
-            {this.props.titlePlan}: {this.state.currentPlan.plan} руб.
+            {this.props.titlePlan}: {this.state.currentPlan && this.state.currentPlan.plan} руб.
           </div>
           {this.state.currentPlan.wordPrice && <div style={{ margin: '10px 0' }}>
             Цена слова: {this.state.currentPlan.wordPrice}
