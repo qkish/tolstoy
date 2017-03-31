@@ -1,10 +1,10 @@
 {
   "apps": [
     {
-      "name": "steemit",
+      "name": "enisey14",
       "script": "./start.js",
       "exec_mode": "cluster",
-      "instances": 2,
+      "instances": 4,
       "env": {
         "NODE_ENV": "development",
         "PORT": 3000
