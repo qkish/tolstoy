@@ -41,10 +41,10 @@ class GamePost extends Component {
           <User account={this.props.user} />
         </div>
         <div className='PostSummary__content'>
-          {content}
+          <b>Заработано</b>: {this.props.money || 'не заполнено'}
         </div>
         <div className='PostSummary__content'>
-          <b>Заработано</b>: {this.props.money || 'не заполнено'}
+          {content}
         </div>
         {this.props.displayRate && (
           <div style={{ marginTop: '20px' }}>

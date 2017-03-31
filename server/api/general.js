@@ -2453,7 +2453,7 @@ export default function useGeneralApi(app) {
 		const taskId = JSON.parse(JSON.stringify(task))[0].value
 
      const game = yield models.Game.findOne({
-        attributes: ['id', 'body'],
+        attributes: ['id', 'body', 'money'],
         where: {
           task: taskId
         },
@@ -2503,7 +2503,7 @@ export default function useGeneralApi(app) {
 		const taskId = JSON.parse(JSON.stringify(task))[0].value
 
      const posts = yield models.Game.findAll({
-        attributes: ['id', 'body'],
+        attributes: ['id', 'body', 'money'],
         where: {
           task: taskId
         },
