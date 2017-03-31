@@ -9,6 +9,7 @@ export default (sequelize, DataTypes) => {
         field: 'user_id'
     },
     body: DataTypes.TEXT,
+    money: DataTypes.INTEGER,
     score_1_my_ten: DataTypes.DOUBLE,
     score_1_volunteer: DataTypes.DOUBLE,
     score_1_other_ten: DataTypes.DOUBLE,

@@ -5,6 +5,7 @@ import { Link } from 'react-router'
 import Game from 'app/components/pages/Game'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
 import { UserAuthWrapper } from 'redux-auth-wrapper'
+import Plan from 'app/components/cards/Plan'
 
 class GameVote extends Component {
   constructor (props) {
@@ -112,12 +113,13 @@ class GameVote extends Component {
          {/*  <ul className="HorizontalMenu menu">
             <li className={isOnEdit && 'active'}><Link to='/gamevote'>Ответ</Link></li>
             <li className={isOnMyTen && 'active'}><Link to={'/gamevote/ten/' + myTen}>Моя десятка</Link></li>
-            <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li> 
+            <li className={isOnVolunteer && 'active'}><Link to={'/gamevote/ten/' + myTen}>Волонтер</Link></li>
             <li className={isOnOtherTen && 'active'}>
              {otherTenTab}
-            </li> 
+            </li>
 
           </ul>*/}
+          <Plan readOnly titlePlan='Ваш план на неделю был' />
           {isOnEdit && <Game.component myId={myID} />}
           {!isOnEdit && this.state.posts && this.state.posts.map(post => (
             <GamePost

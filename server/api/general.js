@@ -2280,7 +2280,7 @@ export default function useGeneralApi(app) {
       const [task] = yield sequelize.query('SELECT value FROM settings WHERE type = "task" LIMIT 1')
       const taskId = JSON.parse(JSON.stringify(task))[0].value
       const game = yield models.Game.findOne({
-        attributes: ['id', 'body'],
+        attributes: ['id', 'body', 'money'],
         where: {
           user_id: this.session.user,
           task: taskId
@@ -2317,6 +2317,7 @@ export default function useGeneralApi(app) {
         this.body = JSON.stringify({
           content: game.body,
 					scores: game.GameScores,
+					money: game.money,
 					total_score_1,
 					total_score_2,
 					total_score_3
@@ -2339,7 +2340,7 @@ export default function useGeneralApi(app) {
   router.post('/game', koaBody, function* () {
     if (rateLimitReq(this, this.req)) return
     const params = this.request.body
-    const {csrf, body, total_score_1, total_score_2, total_score_3} = typeof(params) === 'string' ? JSON.parse(params) : params
+    const {csrf, body, money, total_score_1, total_score_2, total_score_3} = typeof(params) === 'string' ? JSON.parse(params) : params
     // if (!checkCSRF(this, csrf)) return;
 
     const total_score = (total_score_1 + total_score_2 + total_score_3) / 3
@@ -2361,6 +2362,7 @@ export default function useGeneralApi(app) {
 
       if (game) {
         game.body = body
+        game.money = money
 				if (total_score_1) {
 					game.total_score_1 = total_score_1
 				}
@@ -2378,6 +2380,7 @@ export default function useGeneralApi(app) {
         yield models.Game.create({
           user_id: this.session.user,
           body,
+          money,
           total_score_1,
           total_score_2,
           total_score_3,

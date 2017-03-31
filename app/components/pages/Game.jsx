@@ -15,14 +15,22 @@ class Game extends Component {
       message: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleChange = this.handleChange.bind(this)
+    this.handleTextChange = this.handleTextChange.bind(this)
+    this.handleMoneyChange = this.handleMoneyChange.bind(this)
     this.getContent = this.getContent.bind(this)
   }
 
-  handleChange (e) {
+  handleTextChange (e) {
     const text = e.target.value
     this.setState({
       text
+    })
+  }
+
+  handleMoneyChange (e) {
+    const money = e.target.value
+    this.setState({
+      money
     })
   }
 
@@ -40,6 +48,7 @@ class Game extends Component {
       this.setState({
         text: game.content,
         scores: game.scores,
+        money: game.money,
         total_score_1: game.total_score_1,
         total_score_2: game.total_score_2,
         total_score_3: game.total_score_3,
@@ -50,6 +59,7 @@ class Game extends Component {
 
   async handleSubmit () {
     const text = this.state.text
+    const money = this.state.money
 
     if (!text) {
       this.setState({
@@ -68,7 +78,7 @@ class Game extends Component {
       const response = await fetch('/api/v1/game', {
         method: 'POST',
         credentials: 'same-origin',
-        body: JSON.stringify({ body: text })
+        body: JSON.stringify({ body: text, money })
       })
 
       if (response.status !== 200) {
@@ -101,8 +111,16 @@ class Game extends Component {
             autoComplete='off'
             className='expanded-area'
             placeholder='Напишите ответ'
-            onChange={this.handleChange}
+            onChange={this.handleTextChange}
             value={this.state.text} />
+          <input
+            style={{ marginTop: '20px' }}
+            type='number'
+            pattern='\d*'
+            inputMode='numeric'
+            placeholder='Заработано за неделю, руб'
+            onChange={this.handleMoneyChange}
+            value={this.state.money} />
           <div style={{ marginTop: '20px', height: '50px' }}>
             <button
               className='button ReplyEditorShort__buttons-submit'
@@ -144,7 +162,7 @@ class Game extends Component {
                 value={this.state.total_score_3}
                 emptyStarColor='#e3e1d6' />
 
-             
+
             </div>
           )}
 
