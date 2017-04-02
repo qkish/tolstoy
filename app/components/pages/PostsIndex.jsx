@@ -250,7 +250,7 @@ class PostsIndex extends React.Component {
         }
 
 
-        // thegame = ''
+        thegame = ''
 
         // Format first letter of all titles and lowercase user name
         if (route.page !== 'UserProfile') {
