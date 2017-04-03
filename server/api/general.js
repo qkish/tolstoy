@@ -2745,8 +2745,6 @@ export default function useGeneralApi(app) {
 			}]
 	 })
 
-		// console.log('hello world', groupCount)
-
 	 const total_count = replies.length
 
 	 const a1_count = replies.filter(x => x.score_1 >= 9).length
