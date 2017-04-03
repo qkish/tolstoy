@@ -158,8 +158,8 @@ class FeedbackResults extends Component {
 
 
           {this.state.cities.map(city => (
-              <LinkContainer to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/${city}`}>
-                <MenuItem>{city}</MenuItem>
+              <LinkContainer to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/${city.name}`}>
+                <MenuItem>{city.name} ({city.count})</MenuItem>
               </LinkContainer>
 
               ))}
@@ -265,8 +265,8 @@ class FeedbackResults extends Component {
                 <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/all`}>Все города</Link>
               </li>
               {this.state.cities.map(city => (
-                <li className={this.getCity() === city ? "active": ""} key={city}>
-                  <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/${city}`}>{city}</Link>
+                <li className={this.getCity() === city.name ? "active": ""} key={city.name}>
+                  <Link to={`/feedback/results/${this.getEvent(this.props, 'string')}/${this.getDay()}/${city.name}`}>{ city.name } ({ city.count })</Link>
                 </li>
               ))}
               <li  className={this.getCity() === 'other' ? "active": ""} >

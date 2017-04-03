@@ -2742,8 +2742,10 @@ export default function useGeneralApi(app) {
 					current_program: event
 				}, whereCity),
 				attributes: ['current_program']
-			}],
+			}]
 	 })
+
+		// console.log('hello world', groupCount)
 
 	 const total_count = replies.length
 
@@ -2846,16 +2848,16 @@ export default function useGeneralApi(app) {
 
     try {
       const cities = yield sequelize.query(`
-				SELECT users.program_city AS program_city
+				SELECT users.program_city AS name, COUNT(feedback.id) AS count
 				FROM feedback
 				INNER JOIN users ON feedback.user_id = users.id
 				WHERE users.current_program = ?
 				GROUP BY users.program_city
 			`, { model: models.User, replacements: [event]})
 
-     this.body = JSON.stringify({
-       cities: map(prop('program_city'), JSON.parse(JSON.stringify(cities)))
-     })
+			this.body = JSON.stringify({
+				cities: JSON.parse(JSON.stringify(cities))
+			})
     }  catch (error) {
 			console.error('Error in GET /feedback/results/cities api call', this.session.user, error.toString())
 			this.body = JSON.stringify({
