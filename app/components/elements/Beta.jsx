@@ -32,10 +32,10 @@ class Beta extends Component {
     
         if (this.props.current_program && this.props.current_program == 1 && isShowLastTask) {
 
-            currentTaskTitle = 'Встречи, автоворонка, план-кинжал'
-            currentTaskLink = '/bm-tasks/@bm-bmtasks/vstrechi-avtovoronka-plan-kinzhal-na-nedelyu'
+            currentTaskTitle = 'Внедрить автоворонки и отдохнуть'
+            currentTaskLink = '/bm-tasks/@bm-bmtasks/vy-otdykhaete-avtovoronki-rabotayut'
             currentTaskDesc = 'Прописать 100 целей и сделать из них книгу целей.'
-            currentTaskImg = 'https://s3.eu-central-1.amazonaws.com/bm-platform/task6sm.png'
+            currentTaskImg = 'https://s3.eu-central-1.amazonaws.com/bm-platform/task7sm.png'
         }
 
         let title = currentTaskTitle;
