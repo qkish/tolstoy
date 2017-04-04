@@ -1133,6 +1133,8 @@ export default function useGeneralApi(app) {
 						model: models.User,
 						attributes: ['id', 'first_name', 'last_name', 'name'],
 						where: {
+  						couch: true,
+  						couch_group: null,
 							$or: [{
 								current_program: program
 							}, {
@@ -3043,6 +3045,24 @@ export default function useGeneralApi(app) {
 		this.body = JSON.stringify({
 			planShowStatus: planShowStatus[0] ? JSON.parse(planShowStatus[0].value) : null
 		})
+	})
+
+	router.get('/get_co_couch', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+
+		const id = this.query.id === 'undefined' ? null : this.query.id
+
+		const couch = yield models.User.findOne({
+			attributes: ['id', 'name', 'first_name', 'last_name'],
+			where: {
+				couch: true,
+				couch_group: id
+			}
+		})
+
+    this.body = JSON.stringify({
+      couch
+    })
 	})
 
 }
