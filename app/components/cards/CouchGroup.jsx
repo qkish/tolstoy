@@ -67,7 +67,7 @@ class CouchGroup extends Component {
           <span className="Author">
             <span itemProp="author" itemScope itemType="http://schema.org/Person" className="Author__name">
               <Link to={this.props.link}>
-                {this.props.couch.last_name}{this.state.coCouch && <span> / {this.state.coCouch.last_name}</span>}
+                {this.props.couch.first_name} {this.props.couch.last_name} {this.state.coCouch && <span>/ {this.state.coCouch.first_name} {this.state.coCouch.last_name}</span>}
               </Link>
             </span>
           </span>
