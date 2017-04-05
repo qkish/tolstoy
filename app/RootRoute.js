@@ -11,6 +11,7 @@ export default {
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);
+        console.log(route.page)
         if (route.page === 'About') {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/About')]);
@@ -125,6 +126,8 @@ export default {
             cb(null, [require('app/components/pages/Choose')]);
         } else if (route.page === 'Feedback') {
           cb(null, [require('app/components/pages/Feedback')])
+        } else if (route.page === 'Content') {
+          cb(null, [require('app/components/pages/Content')])
         } else if (route.page === 'Game') {
           cb(null, [require('app/components/pages/Game')])
         } else if (route.page === 'GameVote') {
