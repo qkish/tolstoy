@@ -104,8 +104,12 @@ export default function resolveRoute(path)
     }
     match = path.match(/^\/admin\/?(all|polki|hundreds|tens|ten|hundred|polk|my-ten|couches|couch-group|my-group|roles|volunteer)?\/?(\d+)?$/)
     if (match) {
-
         return {page: 'Admin', params: match[1]};
+    }
+
+    match = path.match(/^\/admin\/content\/?(\d+)?$/)
+    if (match) {
+      return { page: 'AdminContent', params: match[1] }
     }
 
     match = path.match(/^\/(@[\w\.\d-]+)\/feed\/?$/);

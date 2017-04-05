@@ -3045,6 +3045,16 @@ export default function useGeneralApi(app) {
 		})
 	})
 
+	router.get('/content_list', koaBody, function* () {
+		let result = yield sequelize.query(`
+			SELECT * FROM posts_content LEFT JOIN posts ON (posts_content.post_id = posts.id)
+		`)
+
+		this.body = JSON.stringify({
+			data: result
+		})
+	})
+
 }
 
 

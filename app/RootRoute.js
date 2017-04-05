@@ -122,6 +122,8 @@ export default {
 
         } else if (route.page === 'Admin') {
             cb(null, [require('app/components/pages/Admin')]);
+        } else if (route.page === 'AdminContent') {
+            cb(null, [require('app/components/pages/AdminContent')]);
         } else if (route.page === 'Choose') {
             cb(null, [require('app/components/pages/Choose')]);
         } else if (route.page === 'Feedback') {
