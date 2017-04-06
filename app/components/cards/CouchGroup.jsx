@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router'
 import Apis from 'shared/api_client/ApiInstances'
 import LoadingIndicator from 'app/components/elements/LoadingIndicator'
+import { endsWith } from 'lodash'
 
 const Avatar = ({ picture, link }) => {
   if (!process.env.BROWSER || !picture) {
@@ -56,6 +57,9 @@ class CouchGroup extends Component {
   }
 
   getPhotoUrl(path) {
+    if (endsWith(path, '/null')) {
+      return '/images/user.png'
+    }
     const proxy = $STM_Config.img_proxy_prefix
     if (proxy) {
       return `${proxy}50x50/${path}`
