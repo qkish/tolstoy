@@ -3108,6 +3108,7 @@ export default function useGeneralApi(app) {
 		this.body = JSON.stringify({
 			result
 		})
+	})
 
 	router.get('/get_co_couch', koaBody, function* () {
 		if (rateLimitReq(this, this.req)) return
