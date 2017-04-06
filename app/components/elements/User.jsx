@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import _urls from 'shared/clash/images/urls'
 import Apis from 'shared/api_client/ApiInstances'
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import { Link } from 'react-router';
@@ -11,10 +10,7 @@ import { endsWith } from 'lodash'
 const {oneOfType, string, object} = PropTypes
 
 const getPhotoUrl = path => {
-  if (endsWith(path, '/null')) {
-    return '/images/user.png'
-  }
-  if (path === '/images/user.png') {
+  if (!path || endsWith(path, '/null') || path === '/images/user.png') {
     return '/images/user.png'
   }
   const proxy = $STM_Config.img_proxy_prefix
@@ -28,15 +24,31 @@ const getPhotoUrl = path => {
 class User extends Component {
 	// you can pass either user object, or username string
 
-    state = {
-        image: null,
-        account: null
-    }
-
 	static defaultProps = {
 		width: 100,
 		height: 100
 	}
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      image: null,
+      account: null
+    }
+  }
+
+  async componentDidMount() {
+    const account = this.props.account
+    if (account) {
+      const [acc] = await Apis.db_api('get_accounts', [account])
+      const parsed = JSON.parse(acc.json_metadata)
+      if (parsed.user_image) {
+        this.setState({
+          image: parsed.user_image
+        })
+      }
+    }
+  }
 
     shouldComponentUpdate = shouldComponentUpdate(this, 'User')
 
@@ -106,7 +118,7 @@ class User extends Component {
             <div className="Author__avatar_wrapper">
             <div className="User">
                     {process.env.BROWSER ?
-                        url ? <Link to={linkFromProps || '/@' + username.name}> <img src={getPhotoUrl(url)}  onError={this.onError} /></Link> : <Link href={'/@' + username.name}><div className="User__defaultAva"></div></Link> :
+                        url ? <Link to={linkFromProps || '/@' + username.name}> <img src={getPhotoUrl(this.state.image)} onError={this.onError} /></Link> : <Link href={'/@' + username.name}><div className="User__defaultAva"></div></Link> :
                         <LoadingIndicator type="circle" inline />}
 				</div></div>
 
