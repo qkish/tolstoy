@@ -39,9 +39,16 @@ class User extends Component {
 
   async componentDidMount() {
     const account = this.props.account
+    let userData
     if (account) {
-      const [acc] = await Apis.db_api('get_accounts', [account])
-      const parsed = JSON.parse(acc.json_metadata)
+
+      if (typeof account != 'object') {
+        const [acc] = await Apis.db_api('get_accounts', [account])
+        userData = acc
+      } else {
+        userData = account
+      }
+      const parsed = JSON.parse(userData.json_metadata)
       if (parsed.user_image) {
         this.setState({
           image: parsed.user_image
