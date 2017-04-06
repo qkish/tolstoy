@@ -3046,12 +3046,64 @@ export default function useGeneralApi(app) {
 	})
 
 	router.get('/content_list', koaBody, function* () {
-		let result = yield sequelize.query(`
-			SELECT * FROM posts_content LEFT JOIN posts ON (posts_content.post_id = posts.id)
-		`)
+		let result = yield models.ContentPost.findAll({
+			attributes: [  'rating', 'price', 'Post.title' ],
+			include: [
+				{
+					model: models.Post,
+					where: {
+						id: sequelize.col('post_id')
+					},
+					include: [
+						{
+							attributes: [ 'name' ],
+							model: models.Tag,
+							where: {
+								post_id: sequelize.col('Post.id')
+							},
+							required: false
+						},
+						{
+							attributes: [ 'name', 'id' ],
+							model: models.Program,
+							where: { id: this.query.program || 0 }
+						}
+					]
+				}
+			]
+		})
 
 		this.body = JSON.stringify({
-			data: result
+			result
+		})
+	})
+
+	router.get('/content_list_tags', koaBody, function* () {
+		let result = yield models.Tag.findAll({
+			attributes: [
+				'name',
+				[ sequelize.fn('COUNT', 'id'), 'count' ]
+			],
+			include: [
+				{
+					model: models.Post,
+					where: {
+						id: sequelize.col('post_id')
+					},
+					include: [
+						{
+							attributes: [ 'id' ],
+							model: models.Program,
+							where: { id: this.query.program || 0 }
+						}
+					]
+				}
+			],
+			group: [ 'name' ]
+		})
+
+		this.body = JSON.stringify({
+			result
 		})
 	})
 
