@@ -55,13 +55,21 @@ class CouchGroup extends Component {
     }
   }
 
+  getPhotoUrl(path) {
+    const proxy = $STM_Config.img_proxy_prefix
+    if (proxy) {
+      return `${proxy}50x50/${path}`
+    }
+    return path
+  }
+
   render() {
     return (
       <div>
         <div className="User__wrap">
           <div className="Author__avatar_wrapper">
             <div className="User">
-              <Avatar picture={this.state.picture} link={this.props.link} />
+              <Avatar picture={this.getPhotoUrl(this.state.picture)} link={this.props.link} />
             </div>
           </div>
           <span className="Author">
