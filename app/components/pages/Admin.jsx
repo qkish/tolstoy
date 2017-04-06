@@ -111,8 +111,6 @@ class Admin extends Component {
 
         let current_program = this.props.current_program ? this.props.current_program : null
 
-
-
         const userList = users ? (
             <div className="Admin__wrapper">
                 {users.map(user => (
@@ -300,11 +298,18 @@ class Admin extends Component {
                         active: !this.props.params.category || this.props.params.category === 'all',
                         link: '/admin/all',
                         value: 'Все'
-                    }, {
+                    }, 
+                    {
                         active: this.props.params.category === 'volunteer',
                         link: '/admin/volunteer',
                         value: 'Волонтеры'
-                    }]} />
+                    },
+                    {
+                        active: this.props.params.category === 'content',
+                        link: '/admin/content',
+                        value: 'Контент'
+                    }
+                    ]} />
                     {submenu}
                     {view}
                 </div>

@@ -1,0 +1,26 @@
+.content-post {
+  &__title {}
+  &__image {
+    height: 200px;
+    max-width: none;
+    width: calc(100% + 40px);
+    margin: -15px 0 20px -20px;
+
+    background: #000;
+  }
+
+  &__row {
+    &_tags:before {
+      content: 'Теги: ';
+    }
+    &_nfs:before {
+      content: 'Оцените контент: ';
+    }
+  }
+
+  &__tag {
+    color: #0c00ff;
+    margin-right: 7px;
+    display: inline-block;
+  }
+}
