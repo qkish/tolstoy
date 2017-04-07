@@ -113,8 +113,18 @@ class Content extends Component {
             <img className="content-post__image" src={el.cover} alt={ el.Post.title } />
             <h3>{ el.Post.title }</h3>
             <p>{ el.Post.content }</p>
-            <p>{el.file}</p>
-            <p><ReactPlayer url={el.video} controls={true} width='100%' /></p>
+            {el.file && (
+              <p>
+                <a href={el.file} className='PostSummary__file PostSummary__file-pdf' target="_blank">
+                  {decodeURIComponent(el.file.substring(el.file.lastIndexOf('/') + 1))}
+                </a>
+              </p>
+            )}
+            {el.video && (
+              <p>
+                <ReactPlayer url={el.video} controls={true} width='100%' />
+              </p>
+            )}
             { el.Post.Tags.length && <div className="content-post__row content-post__row_tags">
               { el.Post.Tags.map(tag => (
                 <Link key={el.Post.id + '-tag-' + tag.name } className="content-post__tag" to={'/'}>{ tag.name }</Link>
