@@ -20,8 +20,8 @@ class Content extends Component {
   }
 
   componentDidMount () {
-    this.getContent()
-    this.getTags()
+    this.getContent(this.props.location.query.tag, this.props.params.event)
+    this.getTags(this.props.params.event)
   }
 
   getEvent (props = this.props, type = 'numeric') {
@@ -66,13 +66,13 @@ class Content extends Component {
   currentTag = null
 
   componentWillReceiveProps (nextProps) {
-    if ((this.currentTag !== nextProps.location.query.tag) || (this.props.params.event !== nextProps.params.event)) this.getContent(nextProps.location.query.tag, nextProps.params.event)
+    if (this.props.location.query.tag !== nextProps.location.query.tag) this.getContent(nextProps.location.query.tag, nextProps.params.event) 
+    else if (this.props.params.event !== nextProps.params.event) this.getContent(null, nextProps.params.event)
   }
 
   getContent (tag, event) {
-    this.currentTag = tag || this.props.location.query.tag
-    let url = '/api/v1/content_list?program=' + this.programsByKey[event || this.props.params.event || 'ceh'].num || 1
-    if (this.currentTag) url = url + '&tag=' + this.currentTag
+    let url = '/api/v1/content_list?program=' + this.programsByKey[event || 'ceh'].num || 1
+    if (tag) url = url + '&tag=' + tag
 
     fetch(url)
       .then(res => res.json())
@@ -84,8 +84,8 @@ class Content extends Component {
       .catch(err => console.warn(err))
   }
   
-  getTags () {
-    fetch('/api/v1/content_list_tags?program=' + this.programsByKey[this.props.params.event || 'ceh'].num || 1)
+  getTags (event) {
+    fetch('/api/v1/content_list_tags?program=' + this.programsByKey[event || 'ceh'].num || 1)
       .then(res => res.json())
       .then(res => {
         this.setState({
