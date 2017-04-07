@@ -35,6 +35,7 @@ export default (sequelize, DataTypes) => {
       underscored: true,
       classMethods: {
         associate: (models) => {
+          Post.hasOne(models.ContentPost)
           Post.belongsTo(models.User)
           Post.hasMany(models.Tag)
           Post.belongsToMany(models.Program, { through: 'programs_posts' })

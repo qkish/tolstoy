@@ -3129,6 +3129,24 @@ export default function useGeneralApi(app) {
 
 	})
 
+	router.post('/post', koaBody, function* () {
+		if (rateLimitReq(this, this.req)) return
+    const post = JSON.parse(this.request.body)
+    const newPost = yield models.Post.create({
+      title: post.title,
+      content: post.content,
+      type: 'content',
+      user_id: this.session.user,
+      ContentPost: {
+        cover: post.cover,
+        file: post.file
+      }
+    }, {
+      include: [models.ContentPost]
+    })
+    this.status = 200
+	})
+
 }
 
 
