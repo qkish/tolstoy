@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { compose } from 'redux'
 import { Link } from 'react-router'
 import { connect } from 'react-redux'
 import { UserAuthWrapper } from 'redux-auth-wrapper'
@@ -65,12 +66,12 @@ class Content extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (this.props.location.query.tag !== nextProps.location.query.tag) this.getContent(nextProps.location.query.tag, nextProps.params.event) 
+    if (this.props.location.query.tag !== nextProps.location.query.tag) this.getContent(nextProps.location.query.tag, nextProps.params.event)
     else if (this.props.params.event !== nextProps.params.event) this.getContent(null, nextProps.params.event)
   }
 
   getContent (tag, event) {
-    let url = '/api/v1/content_list?program=' + this.programsByKey[event || 'ceh'].num || 1
+    let url = '/api/v1/content_list?program=' + this.props.currentProgram || 1
     if (tag) url = url + '&tag=' + tag
 
     fetch(url)
@@ -82,7 +83,7 @@ class Content extends Component {
       })
       .catch(err => {})
   }
-  
+
   getTags (event) {
     fetch('/api/v1/content_list_tags?program=' + this.programsByKey[event || 'ceh'].num || 1)
       .then(res => res.json())
@@ -122,33 +123,37 @@ class Content extends Component {
 
         { (content && content.length) && content.map(el => (
           <div className="PostSummary content-post" key={ 'content-post-' + el.Post.id }>
-            <div className="content-post__image-container">
-              { !el.video && <img className="content-post__image" src={el.cover} alt={ el.Post.title } /> }
-              { el.video && <img className="content-post__image" src={el.cover} alt={ el.Post.title } /> }
+            <div
+              className="content-post__image-container"
+              style={{ cursor: 'pointer' }}
+              onClick={() => this.setState({
+                [`${el.Post.id}-showVideo`]: true
+              })}>
+              {this.state[`${el.Post.id}-showVideo`] ? (
+                <div>
+                  {el.video &&  <ReactPlayer url={el.video} controls={true} width='100%' />}
+                </div>
+              ) : (
+                <div>{el.cover && <img className="content-post__image" src={el.cover} alt={ el.Post.title } />}</div>
+              )}
             </div>
-            <img className="content-post__image" src={el.cover} alt={ el.Post.title } />
             <h3>{ el.Post.title }</h3>
-            <p>{ el.Post.content }</p>
+            <div>{ el.Post.content }</div>
             {el.file && (
-              <p>
+              <div>
                 <a href={el.file} className='PostSummary__file PostSummary__file-pdf' target="_blank">
                   {decodeURIComponent(el.file.substring(el.file.lastIndexOf('/') + 1))}
                 </a>
-              </p>
-            )}
-            {el.video && (
-              <p>
-                <ReactPlayer url={el.video} controls={true} width='100%' />
-              </p>
+              </div>
             )}
             { el.Post.Tags.length && <div className="content-post__row content-post__row_tags">
               { el.Post.Tags.map(tag => (
                 <Link key={el.Post.id + '-tag-' + tag.name + Math.random() } className="content-post__tag" to={ `/content/${this.getEvent(this.props, 'string')}?tag=` + tag.name }>{ tag.name }</Link>
               ))}
             </div>}
-          </div>    
+          </div>
         )) }
-        
+
       </div>
 
       <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
@@ -175,7 +180,12 @@ const UserIsAuthenticated = UserAuthWrapper({
   LoadingComponent: () => <div>Загрузка...</div>
 })
 
+const enhanced = compose(
+  UserIsAuthenticated,
+  connect(state => ({ currentProgram: state.user.get('currentProgram') }))
+)
+
 module.exports = {
   path: 'content(/:event)',
-  component: UserIsAuthenticated(Content)
+  component: enhanced(Content)
 }
