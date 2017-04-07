@@ -3053,7 +3053,7 @@ export default function useGeneralApi(app) {
 		if (this.query.tag) tagWhere['name'] = this.query.tag
 
 		let result = yield models.ContentPost.findAll({
-			attributes: [  'rating', 'price', 'Post.title' ],
+			attributes: [  'rating', 'price', 'cover', 'file', 'video', 'Post.title' ],
 			include: [
 				{
 					model: models.Post,
@@ -3132,7 +3132,8 @@ export default function useGeneralApi(app) {
       user_id: this.session.user,
       ContentPost: {
         cover: post.cover,
-        file: post.file
+        file: post.file,
+        video: post.video
       }
     }, {
       include: [models.ContentPost]

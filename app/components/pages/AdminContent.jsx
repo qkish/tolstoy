@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { UserAuthWrapper } from 'redux-auth-wrapper'
+import { Uploader, UploadField } from '@navjobs/upload'
 
 class AdminContent extends Component {
   constructor (props) {
@@ -11,14 +12,29 @@ class AdminContent extends Component {
   }
 
   async savePost () {
-    await fetch('/api/v1/post', {
-      method: 'post',
-      credentials: 'same-origin',
-      body: JSON.stringify(this.state.post)
-    })
+    try {
+      const response = await fetch('/api/v1/post', {
+        method: 'post',
+        credentials: 'same-origin',
+        body: JSON.stringify(this.state.post)
+      })
+      this.setState({
+        saved: true
+      })
+      if (response.status !== 200) {
+        throw new Error(response.statusText)
+      }
+    } catch(err) {
+      console.error(err)
+    }
   }
 
   render () {
+    if (this.state.saved) {
+      return (
+        <div>Сохранено</div>
+      )
+    }
     return (
       <div>
         <input
@@ -34,21 +50,59 @@ class AdminContent extends Component {
           onChange={e => this.setState({
             post: Object.assign({}, this.state.post, { content: e.target.value })
           })} />
+        <Uploader
+          request={{
+            url: '/api/v1/upload',
+            method: 'POST'
+          }}
+          onComplete={({ response, status }) => this.setState({
+            post: Object.assign({}, this.state.post, { cover: response.url })
+          })}
+          uploadOnSelection={true}
+        >
+          {({ onFiles, progress, complete }) => (
+            <div>
+              <UploadField onFiles={onFiles}>
+                <button className="btn btn-default">Загрузить обложку</button>
+              </UploadField>
+              {progress ? `Progress: ${progress}` : null}
+              {complete ? 'Загружено' : null}
+            </div>
+          )}
+        </Uploader>
+        <Uploader
+          request={{
+            url: '/api/v1/upload',
+            method: 'POST'
+          }}
+          onComplete={({ response, status }) => this.setState({
+            post: Object.assign({}, this.state.post, { file: response.url })
+          })}
+          uploadOnSelection={true}
+        >
+          {({ onFiles, progress, complete }) => (
+            <div>
+              <UploadField onFiles={onFiles}>
+                <button className="btn btn-default">Загрузить файл</button>
+              </UploadField>
+              {progress ? `Progress: ${progress}` : null}
+              {complete ? 'Complete!' : null}
+            </div>
+          )}
+        </Uploader>
         <input
-          type='text'
-          placeholder='Обложка'
-          value={this.state.post.cover}
+          type="text"
+          placeholder="Ссылка на видео"
+          value={this.state.post.video}
           onChange={e => this.setState({
-            post: Object.assign({}, this.state.post, { cover: e.target.value })
+            post: Object.assign({}, this.state.post, { video: e.target.value })
           })} />
-        <input
-          type='text'
-          placeholder='Файл'
-          value={this.state.post.file}
-          onChange={e => this.setState({
-            post: Object.assign({}, this.state.post, { file: e.target.value })
-          })} />
-        <button onClick={this.savePost}>Сохранить</button>
+
+        <button
+          className="btn btn-default"
+          onClick={this.savePost}>
+          Сохранить
+        </button>
       </div>
     )
   }

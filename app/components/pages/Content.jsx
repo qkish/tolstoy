@@ -5,6 +5,7 @@ import { UserAuthWrapper } from 'redux-auth-wrapper'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import HorizontalSubmenu from 'app/components/elements/HorizontalSubmenu'
 import StarRatingComponent from 'react-star-rating-component'
+import ReactPlayer from 'react-player'
 
 class Content extends Component {
   constructor (props) {
@@ -125,9 +126,11 @@ class Content extends Component {
               { !el.video && <img className="content-post__image" src={el.cover} alt={ el.Post.title } /> }
               { el.video && <img className="content-post__image" src={el.cover} alt={ el.Post.title } /> }
             </div>
+            <img className="content-post__image" src={el.cover} alt={ el.Post.title } />
             <h3>{ el.Post.title }</h3>
             <p>{ el.Post.content }</p>
-
+            <p>{el.file}</p>
+            <p><ReactPlayer url={el.video} controls={true} width='100%' /></p>
             { el.Post.Tags.length && <div className="content-post__row content-post__row_tags">
               { el.Post.Tags.map(tag => (
                 <Link key={el.Post.id + '-tag-' + tag.name + Math.random() } className="content-post__tag" to={ `/content/${this.getEvent(this.props, 'string')}?tag=` + tag.name }>{ tag.name }</Link>
@@ -166,4 +169,3 @@ module.exports = {
   path: 'content(/:event)',
   component: UserIsAuthenticated(Content)
 }
-
