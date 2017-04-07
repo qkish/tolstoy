@@ -21,8 +21,8 @@ class Content extends Component {
   }
 
   componentDidMount () {
-    this.getContent()
-    this.getTags()
+    this.getContent(this.props.location.query.tag, this.props.params.event)
+    this.getTags(this.props.params.event)
   }
 
   getEvent (props = this.props, type = 'numeric') {
@@ -59,31 +59,43 @@ class Content extends Component {
     { name: 'МЗС', code: 'mzs', num: 2 }
   ]
 
-  getContent () {
-    fetch(`/api/v1/content_list?program=1`)
+  programsByKey = {
+    ceh: { name: 'ЦЕХ', code: 'ceh', num: 1 },
+    mzs: { name: 'МЗС', code: 'mzs', num: 2 }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (this.props.location.query.tag !== nextProps.location.query.tag) this.getContent(nextProps.location.query.tag, nextProps.params.event) 
+    else if (this.props.params.event !== nextProps.params.event) this.getContent(null, nextProps.params.event)
+  }
+
+  getContent (tag, event) {
+    let url = '/api/v1/content_list?program=' + this.programsByKey[event || 'ceh'].num || 1
+    if (tag) url = url + '&tag=' + tag
+
+    fetch(url)
       .then(res => res.json())
       .then(res => {
         this.setState({
           content: res.result
         })
       })
-      .catch(err => console.warn(err))
+      .catch(err => {})
   }
-
-  getTags () {
-    fetch('/api/v1/content_list_tags?program=1')
+  
+  getTags (event) {
+    fetch('/api/v1/content_list_tags?program=' + this.programsByKey[event || 'ceh'].num || 1)
       .then(res => res.json())
       .then(res => {
         this.setState({
           tags: res.result
         })
       })
-      .catch(err => console.warn(err))
+      .catch(err => {})
   }
 
   render () {
     let { content, tags } = this.state
-    console.log(this.state)
 
     return (<div>
       <div className="PostsIndex__left col-md-8 col-sm-12 small-collapse">
@@ -110,6 +122,10 @@ class Content extends Component {
 
         { (content && content.length) && content.map(el => (
           <div className="PostSummary content-post" key={ 'content-post-' + el.Post.id }>
+            <div className="content-post__image-container">
+              { !el.video && <img className="content-post__image" src={el.cover} alt={ el.Post.title } /> }
+              { el.video && <img className="content-post__image" src={el.cover} alt={ el.Post.title } /> }
+            </div>
             <img className="content-post__image" src={el.cover} alt={ el.Post.title } />
             <h3>{ el.Post.title }</h3>
             <p>{ el.Post.content }</p>
@@ -127,16 +143,12 @@ class Content extends Component {
             )}
             { el.Post.Tags.length && <div className="content-post__row content-post__row_tags">
               { el.Post.Tags.map(tag => (
-                <Link key={el.Post.id + '-tag-' + tag.name } className="content-post__tag" to={'/'}>{ tag.name }</Link>
+                <Link key={el.Post.id + '-tag-' + tag.name + Math.random() } className="content-post__tag" to={ `/content/${this.getEvent(this.props, 'string')}?tag=` + tag.name }>{ tag.name }</Link>
               ))}
             </div>}
-
-            <div className="content-post__row content-post__row_nfs">
-              <StarRatingComponent name='post-nfs' starCount={10} editing={true} emptyStarColor='#e3e1d6' />
-            </div>
-          </div>
+          </div>    
         )) }
-
+        
       </div>
 
       <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
@@ -144,7 +156,7 @@ class Content extends Component {
           <ul className="Card__ul-citys">
             { tags.map(el => (
               <li className={ this.getTag() === el.name ? "active" : "" } key={ 'content-tags-' + el.name }>
-                <Link to={ `/content/${this.getEvent(this.props, 'string')}?tag=` + el.name }>{ el.name } ({ el.count })</Link>
+                <Link to={ `/content/${this.getEvent(this.props, 'string')}?tag=` + el.name }>{ el.name }</Link>
               </li>
             )) }
           </ul>

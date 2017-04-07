@@ -11,7 +11,6 @@ export default {
     component: App,
     getChildRoutes(nextState, cb) {
         const route = resolveRoute(nextState.location.pathname);
-        console.log(route.page)
         if (route.page === 'About') {
             //require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/About')]);

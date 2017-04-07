@@ -78,7 +78,6 @@ export default function resolveRoute(path)
       return { page: 'Feedback' }
     }
     let match = path.match(/^\/content\/?((mzs|ceh)?\/?(\w+)\/?(.+))?$/)
-    console.log(match)
     if (match) {
       return { page: 'Content', params: match }
     }
