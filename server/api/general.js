@@ -3144,6 +3144,10 @@ export default function useGeneralApi(app) {
     }, {
       include: [models.ContentPost]
     })
+    const program = yield models.Program.findOne()
+    yield sequelize.query(`
+      INSERT INTO programs_posts (program_id, post_id) VALUES (?, ?)
+    `, { replacements: [program.id, newPost.id] })
     this.status = 200
 	})
 
