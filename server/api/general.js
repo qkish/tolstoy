@@ -3049,6 +3049,9 @@ export default function useGeneralApi(app) {
 
 
 	router.get('/content_list', koaBody, function* () {
+		let tagWhere = {}
+		if (this.query.tag) tagWhere['name'] = this.query.tag
+
 		let result = yield models.ContentPost.findAll({
 			attributes: [  'rating', 'price', 'Post.title' ],
 			include: [
@@ -3062,12 +3065,14 @@ export default function useGeneralApi(app) {
 							attributes: [ 'name' ],
 							model: models.Tag,
 							where: {
-								post_id: sequelize.col('Post.id')
+								post_id: sequelize.col('Post.id'),
+								...tagWhere
 							},
-							required: false
+							required: !!this.query.tag,
+							group: [ sequelize.col('Post.Tags.id'), sequelize.col('Post.Tags.post_id') ]
 						},
 						{
-							attributes: [ 'name', 'id' ],
+							attributes: [],
 							model: models.Program,
 							where: { id: this.query.program || 0 }
 						}
@@ -3083,31 +3088,19 @@ export default function useGeneralApi(app) {
 
 	router.get('/content_list_tags', koaBody, function* () {
 		let result = yield models.Tag.findAll({
-			attributes: [
-				'name',
-				[ sequelize.fn('COUNT', 'id'), 'count' ]
-			],
+			raw: true,
+			attributes: [ 'name' ],
 			include: [
 				{
+					attributes: [],
 					model: models.Post,
-					where: {
-						id: sequelize.col('post_id')
-					},
-					include: [
-						{
-							attributes: [ 'id' ],
-							model: models.Program,
-							where: { id: this.query.program || 0 }
-						}
-					]
+					where: { type: 'content' }
 				}
 			],
 			group: [ 'name' ]
 		})
 
-		this.body = JSON.stringify({
-			result
-		})
+		this.body = JSON.stringify({ result })
 	})
 
 	router.get('/get_co_couch', koaBody, function* () {
