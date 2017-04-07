@@ -11,14 +11,29 @@ class AdminContent extends Component {
   }
 
   async savePost () {
-    await fetch('/api/v1/post', {
-      method: 'post',
-      credentials: 'same-origin',
-      body: JSON.stringify(this.state.post)
-    })
+    try {
+      const response = await fetch('/api/v1/post', {
+        method: 'post',
+        credentials: 'same-origin',
+        body: JSON.stringify(this.state.post)
+      })
+      this.setState({
+        saved: true
+      })
+      if (response.status !== 200) {
+        throw new Error(response.statusText)
+      }
+    } catch(err) {
+      console.error(err)
+    }
   }
 
   render () {
+    if (this.state.saved) {
+      return (
+        <div>Сохранено</div>
+      )
+    }
     return (
       <div>
         <input
