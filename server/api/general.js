@@ -3050,7 +3050,7 @@ export default function useGeneralApi(app) {
 
 	router.get('/content_list', koaBody, function* () {
 		let result = yield models.ContentPost.findAll({
-			attributes: [  'rating', 'price', 'Post.title' ],
+			attributes: [  'rating', 'price', 'cover', 'file', 'video', 'Post.title' ],
 			include: [
 				{
 					model: models.Post,

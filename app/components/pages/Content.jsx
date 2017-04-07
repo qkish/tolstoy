@@ -5,6 +5,7 @@ import { UserAuthWrapper } from 'redux-auth-wrapper'
 import { DropdownButton, MenuItem } from 'react-bootstrap'
 import HorizontalSubmenu from 'app/components/elements/HorizontalSubmenu'
 import StarRatingComponent from 'react-star-rating-component'
+import ReactPlayer from 'react-player'
 
 class Content extends Component {
   constructor (props) {
@@ -68,7 +69,7 @@ class Content extends Component {
       })
       .catch(err => console.warn(err))
   }
-  
+
   getTags () {
     fetch('/api/v1/content_list_tags?program=1')
       .then(res => res.json())
@@ -92,7 +93,7 @@ class Content extends Component {
             <li className={this.getContentType() === el.code ? 'active' : ''} key={ 'content-type-' + el.code }>
               <Link to={`/content/${this.getEvent(this.props, 'string')}?type=` + el.code}>{ el.name }</Link>
             </li>
-          )) }     
+          )) }
         </ul>
 
         <div className="Rating__submenu">
@@ -109,10 +110,11 @@ class Content extends Component {
 
         { (content && content.length) && content.map(el => (
           <div className="PostSummary content-post" key={ 'content-post-' + el.Post.id }>
-            <img className="content-post__image" src="" alt={ el.Post.title } />
+            <img className="content-post__image" src={el.cover} alt={ el.Post.title } />
             <h3>{ el.Post.title }</h3>
             <p>{ el.Post.content }</p>
-
+            <p>{el.file}</p>
+            <p><ReactPlayer url={el.video} controls={true} width='100%' /></p>
             { el.Post.Tags.length && <div className="content-post__row content-post__row_tags">
               { el.Post.Tags.map(tag => (
                 <Link key={el.Post.id + '-tag-' + tag.name } className="content-post__tag" to={'/'}>{ tag.name }</Link>
@@ -122,9 +124,9 @@ class Content extends Component {
             <div className="content-post__row content-post__row_nfs">
               <StarRatingComponent name='post-nfs' starCount={10} editing={true} emptyStarColor='#e3e1d6' />
             </div>
-          </div>    
-        )) }      
-        
+          </div>
+        )) }
+
       </div>
 
       <div className="PostsIndex__topics col-md-4 shrink show-for-large hidden-sm">
@@ -155,4 +157,3 @@ module.exports = {
   path: 'content(/:event)',
   component: UserIsAuthenticated(Content)
 }
-
