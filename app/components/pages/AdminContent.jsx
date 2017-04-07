@@ -90,6 +90,13 @@ class AdminContent extends Component {
             </div>
           )}
         </Uploader>
+        <input
+          type="text"
+          placeholder="Ссылка на видео"
+          value={this.state.post.video}
+          onChange={e => this.setState({
+            post: Object.assign({}, this.state.post, { video: e.target.value })
+          })} />
 
         <button
           className="btn btn-default"

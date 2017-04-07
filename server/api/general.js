@@ -3139,7 +3139,8 @@ export default function useGeneralApi(app) {
       user_id: this.session.user,
       ContentPost: {
         cover: post.cover,
-        file: post.file
+        file: post.file,
+        video: post.video
       }
     }, {
       include: [models.ContentPost]

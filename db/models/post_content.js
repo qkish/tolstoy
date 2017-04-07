@@ -17,7 +17,8 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER
       },
       cover: DataTypes.STRING,
-      file: DataTypes.STRING
+      file: DataTypes.STRING,
+      video: DataTypes.STRING
     },
     {
       tableName: 'posts_content',
