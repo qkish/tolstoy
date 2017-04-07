@@ -63,8 +63,6 @@ class Content extends Component {
     mzs: { name: 'МЗС', code: 'mzs', num: 2 }
   }
 
-  currentTag = null
-
   componentWillReceiveProps (nextProps) {
     if (this.props.location.query.tag !== nextProps.location.query.tag) this.getContent(nextProps.location.query.tag, nextProps.params.event) 
     else if (this.props.params.event !== nextProps.params.event) this.getContent(null, nextProps.params.event)
@@ -81,7 +79,7 @@ class Content extends Component {
           content: res.result
         })
       })
-      .catch(err => console.warn(err))
+      .catch(err => {})
   }
   
   getTags (event) {
@@ -92,7 +90,7 @@ class Content extends Component {
           tags: res.result
         })
       })
-      .catch(err => console.warn(err))
+      .catch(err => {})
   }
 
   render () {
