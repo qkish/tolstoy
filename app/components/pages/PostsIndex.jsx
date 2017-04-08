@@ -105,6 +105,11 @@ class PostsIndex extends React.Component {
 
     loadMore(last_post) {
         if (!last_post) return;
+        let 
+            filter_tags = null,
+            select_tags = null,
+            select_metadata_tags = null
+        ;
         let {accountname} = this.props.routeParams
         let {category, order = constants.DEFAULT_SORT_ORDER} = this.props.routeParams;
         if (category === 'feed'){
@@ -113,7 +118,22 @@ class PostsIndex extends React.Component {
         }
         if (isFetchingOrRecentlyUpdated(this.props.status, order, category)) return;
         const [author, permlink] = last_post.split('/');
-        this.props.requestData({author, permlink, order, category, accountname});
+        this.props.requestData(
+            {
+                author, 
+                permlink, 
+                order, 
+                category, 
+                accountname,
+                // набор тегов для фильтрации. Посты с этими тегами будут отброшены.
+                filter_tags,
+                // набор тегов для подбора. Будут выбраны лишь те посты, в которых
+                // присутствуют все эти теги.
+                select_tags,
+                // набор тегов, хранящихся в json_metadata. Будут выбраны лишь те 
+                // посты, в которых присутствуют все эти теги в json_metadata.
+                select_metadata_tags,
+            });
     }
 
     onShowSpam = () => {
@@ -131,6 +151,7 @@ class PostsIndex extends React.Component {
         if (!category) {
            // category = 'bm-open'
         }
+
 
 
         if (category === 'feed') {
@@ -319,7 +340,6 @@ class PostsIndex extends React.Component {
 
         let isCheckLinks = false
         if (this.props.is_volunteer) {isCheckLinks = true}
-
 
 
 
