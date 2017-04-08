@@ -59,9 +59,24 @@ export function* watchFetchState() {
 }
 
 export function* fetchData(action) {
+    console.log('fetchData(action)')
     const {order, author, permlink, accountname} = action.payload;
-    let {category} = action.payload;
+    let {
+        category, 
+        // набор тегов для фильтрации. Посты с этими тегами будут отброшены.
+        filter_tags,
+        // набор тегов для подбора. Будут выбраны лишь те посты, в которых
+        // присутствуют все эти теги.
+        select_tags,
+        // набор тегов, хранящихся в json_metadata. Будут выбраны лишь те 
+        // посты, в которых присутствуют все эти теги в json_metadata.
+        select_metadata_tags,
+
+    } = action.payload;
     if( !category ) category = "";
+    if( !filter_tags ) filter_tags = [];
+    if( !select_tags ) select_tags = [];
+    if( !select_metadata_tags ) select_metadata_tags = [];
     category = category.toLowerCase();
 
     yield put({type: 'global/FETCHING_DATA', payload: {order, category}});
@@ -70,6 +85,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_trending';
         args = [
         { tag: category,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -77,6 +95,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_trending30';
         args = [
         { tag: category,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -84,6 +105,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_promoted';
         args = [
         { tag: category,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -91,6 +115,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_active';
         args = [
         { tag: category,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -98,6 +125,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_cashout';
         args = [
         { tag: category,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -105,6 +135,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_active';
         args = [
         { tag: category,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -112,6 +145,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_created';
         args = [
         { tag: category,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -119,6 +155,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_children';
         args = [
         { tag: category,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -126,6 +165,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_votes';
         args = [
         { tag: category,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -133,6 +175,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_hot';
         args = [
         { tag: category,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -140,6 +185,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_feed';
         args = [
         { tag: accountname,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -147,6 +195,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_blog';
         args = [
         { tag: accountname,
+          filter_tags,
+          select_tags,
+          select_metadata_tags,
           limit: constants.FETCH_DATA_BATCH_SIZE,
           start_author: author,
           start_permlink: permlink}];
@@ -154,6 +205,9 @@ export function* fetchData(action) {
         call_name = 'get_discussions_by_active';
         args = [{
             tag: category,
+            filter_tags,
+            select_tags,
+            select_metadata_tags,
             limit: constants.FETCH_DATA_BATCH_SIZE,
             start_author: author,
             start_permlink: permlink}];
